@@ -1,0 +1,21 @@
+{
+  "apiVersion": 2,
+  "name": "excelsior-bootstrap/accordion-item",
+  "title": "Accordion",
+  "category": "excelsior-bootstrap-blocks",
+  "icon": "list-view",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Accordion Item"
+    },
+    "content": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "editorScript": "file:./index.js"
+}

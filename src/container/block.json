@@ -1,0 +1,16 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap/container",
+    "title": "Container",
+    "category": "excelsior-bootstrap-blocks",
+    "icon": "layout",
+    "supports": {
+        "html": false,
+        "multiple": false,
+        "inserter": false,
+        "removable": false,
+        "lock": true
+    },
+    "attributes": {},
+    "editorScript": "file:./index.js"
+}
