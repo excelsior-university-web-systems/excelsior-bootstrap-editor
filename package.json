@@ -1,0 +1,16 @@
+{
+  "name": "excelsior-bootstrap-editor",
+  "version": "1.0.0",
+  "description": "A WordPress plugin that helps with creating Excelsior Bootstrap pages.",
+  "main": "index.js",
+  "scripts": {
+    "build": "wp-scripts build",
+    "start": "wp-scripts start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@wordpress/scripts": "^28.4.0"
+  }
+}
