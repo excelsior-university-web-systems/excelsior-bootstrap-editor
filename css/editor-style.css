@@ -1,0 +1,8 @@
+.editor-visual-editor__post-title-wrapper.edit-post-visual-editor__post-title-wrapper {
+    margin-top: 2rem !important;
+}
+.wp-block-post-title {
+    font-size: 1rem !important;
+    margin-bottom: 14px !important;
+    color: rgba( 0, 0, 0, 0.5 ) !important;
+}
