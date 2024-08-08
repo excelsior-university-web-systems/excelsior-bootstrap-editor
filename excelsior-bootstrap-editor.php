@@ -10,5 +10,5 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
-require_once plugin_dir_path( __FILE__ ) . 'includes/custom-post-type.php';
-require_once plugin_dir_path( __FILE__ ) . 'includes/custom-block.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/post-type.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/blocks.php';
