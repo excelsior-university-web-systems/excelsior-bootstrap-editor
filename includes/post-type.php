@@ -1,25 +1,27 @@
 <?php
-// Actions
-add_action( 'init', 'register_excelsior_bootstrap_post_type' );
-add_action( 'init', 'add_excelsior_bootstrap_capabilities' );
-add_action( 'admin_enqueue_scripts', 'load_excelsior_bootstrap_editor_assets' );
-
 function register_excelsior_bootstrap_post_type() {
     $args = array(
-        'labels'              => array(
-            'name'               => 'Excelsior Bootstrap Editor',
-            'singular_name'      => 'Page',
-            'add_new'            => 'Add New Page',
-            'add_new_item'       => 'Add New Page',
-            'edit_item'          => 'Edit Page',
-            'new_item'           => 'New Page',
-            'view_item'          => 'View Page',
-            'view_items'         => 'View Pages',
-            'search_items'       => 'Search Pages',
-            'not_found'          => 'No pages found',
-            'not_found_in_trash' => 'No pages found in trash',
-            'all_items'          => 'All Pages',
-            'attributes'         => 'Page Attributes',
+        'labels'                    => array(
+            'name'                  => 'Excelsior Bootstrap Editor',
+            'singular_name'         => 'Page',
+            'add_new'               => 'Add New Page',
+            'add_new_item'          => 'Add New Page',
+            'edit_item'             => 'Edit Page',
+            'new_item'              => 'New Page',
+            'view_item'             => 'View Page',
+            'view_items'            => 'View Pages',
+            'search_items'          => 'Search Pages',
+            'not_found'             => 'No pages found',
+            'not_found_in_trash'    => 'No pages found in trash',
+            'all_items'             => 'All Pages',
+            'insert_into_item'      => 'Insert into page',
+            'uploaded_to_this_item' => 'Uploaded to this page',
+            'attributes'            => 'Page Attributes',
+            'filter_items_list'     => 'Filter pages list',
+            'items_list'            => 'Pages list',
+            'item_published'        => 'Page published',
+            'item_updated'          => 'Page updated',
+            'item_trashed'          => 'Page trashed'
         ),
         'public'              => false,
         'show_ui'             => true,
@@ -47,11 +49,12 @@ function register_excelsior_bootstrap_post_type() {
         'template'            => array(
             array( 'excelsior-bootstrap/namespace' ),
         ),
-        'template_lock'       => 'all',
+        'template_lock'       => 'insert',
     );
 
     register_post_type( 'excelsior_bootstrap', $args );
 }
+add_action( 'init', 'register_excelsior_bootstrap_post_type' );
 
 function add_excelsior_bootstrap_capabilities() {
     $roles = array( 'administrator', 'editor' );
@@ -72,14 +75,25 @@ function add_excelsior_bootstrap_capabilities() {
 
     }
 }
+add_action( 'init', 'add_excelsior_bootstrap_capabilities' );
 
 function load_excelsior_bootstrap_editor_assets( $hook ) {
     global $post;
     
     if ( $hook == 'post-new.php' || $hook == 'post.php' ) {
         if ( 'excelsior_bootstrap' === $post->post_type ) {
-            wp_enqueue_style( 'excelsior-bootstrap-editor-style', plugin_dir_url(__FILE__) . '../css/excelsior-bootstrap.css' );
+
+            wp_dequeue_style( 'wc-block-style' );
+            wp_dequeue_style( 'wp-block-library' );
+            wp_dequeue_style( 'wp-block-library-theme' );
+            wp_dequeue_style( 'classic-theme-styles' );
+
+            wp_enqueue_style( 'excelsior-bootstrap-editor-style', plugin_dir_url(__FILE__) . '../css/editor-style.css', array(), false );
+            wp_enqueue_style( 'excelsior-bootstrap-style', plugin_dir_url(__FILE__) . '../css/excelsior-bootstrap.css', array(), true );
             // wp_enqueue_script( 'excelsior-bootstrap-editor-script', plugin_dir_url(__FILE__) . '../js/excelsior-bootstrap.js', array('wp-blocks', 'wp-dom-ready', 'wp-edit-post'), filemtime( plugin_dir_path(__FILE__) . '../js/excelsior-bootstrap.js' ), true );
         }
     }
 }
+add_action( 'admin_enqueue_scripts', 'load_excelsior_bootstrap_editor_assets' );
+
+?>
