@@ -1,13 +1,12 @@
-import { InnerBlocks, useBlockProps, BlockControls  } from '@wordpress/block-editor';
+import { InnerBlocks, useBlockProps  } from '@wordpress/block-editor';
+import { ALLOWED_BLOCKS } from './allowed-blocks';
 
 const TEMPLATE = [
     ['core/heading', { placeholder: 'Add heading...' }],
     ['core/paragraph', { placeholder: 'The start of something new!' }]
 ];
 
-const ALLOWED_BLOCKS = ['core/heading', 'core/paragraph',  'excelsior-bootstrap/accordion'];
-
-export default function Edit({ attributes, setAttributes }) {
+export default function Edit({ attributes }) {
 
     const { additionalClass = '' } = attributes;
 
