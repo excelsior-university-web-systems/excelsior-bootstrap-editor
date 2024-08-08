@@ -1,10 +1,10 @@
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 
 export default function Save({ attributes }) {
-    const { additionalClass = '' } = attributes;
+    const { additionalClass = '', backToTop } = attributes;
 
     const blockProps = useBlockProps.save({
-        className: `page-container ${additionalClass ? additionalClass : ''}`.trim(),
+        className: `page-container ${additionalClass ? additionalClass : ''} ${backToTop ? 'back-to-top' : ''}`.trim(),
     });
 
     return (
