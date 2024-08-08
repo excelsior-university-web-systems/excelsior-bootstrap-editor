@@ -1,11 +1,8 @@
 {
   "apiVersion": 2,
-  "name": "excelsior-bootstrap/container",
-  "title": "Container",
+  "name": "excelsior-bootstrap/namespace",
+  "title": "Excelsior Bootstrap",
   "category": "excelsior-bootstrap-blocks",
-  "parent": [
-    "excelsior-bootstrap/namespace"
-  ],
   "icon": "layout",
   "supports": {
     "html": false,
@@ -13,11 +10,6 @@
     "inserter": false,
     "removable": false
   },
-  "attributes": {
-    "additionalClass": {
-      "type": "string",
-      "default": ""
-    }
-  },
+  "attributes": {},
   "editorScript": "file:./index.js"
 }

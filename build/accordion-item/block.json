@@ -1,7 +1,7 @@
 {
   "apiVersion": 2,
   "name": "excelsior-bootstrap/accordion-item",
-  "title": "Accordion",
+  "title": "Accordion Item",
   "category": "excelsior-bootstrap-blocks",
   "icon": "list-view",
   "supports": {

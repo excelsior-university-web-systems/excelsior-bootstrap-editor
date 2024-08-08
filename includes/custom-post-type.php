@@ -8,7 +8,7 @@ function register_excelsior_bootstrap_post_type() {
     $args = array(
         'labels'              => array(
             'name'               => 'Excelsior Bootstrap Editor',
-            'singular_name'      => 'Excelsior Bootstrap Page',
+            'singular_name'      => 'Page',
             'add_new'            => 'Add New Page',
             'add_new_item'       => 'Add New Page',
             'edit_item'          => 'Edit Page',
@@ -45,9 +45,9 @@ function register_excelsior_bootstrap_post_type() {
         'menu_icon'           => 'dashicons-welcome-widgets-menus',
         'delete_with_user'    => false,
         'template'            => array(
-            array( 'excelsior-bootstrap/container' ),
+            array( 'excelsior-bootstrap/namespace' ),
         ),
-        'template_lock'       => 'insert',
+        'template_lock'       => 'all',
     );
 
     register_post_type( 'excelsior_bootstrap', $args );
@@ -79,7 +79,7 @@ function load_excelsior_bootstrap_editor_assets( $hook ) {
     if ( $hook == 'post-new.php' || $hook == 'post.php' ) {
         if ( 'excelsior_bootstrap' === $post->post_type ) {
             wp_enqueue_style( 'excelsior-bootstrap-editor-style', plugin_dir_url(__FILE__) . '../css/excelsior-bootstrap.css' );
-            wp_enqueue_script( 'excelsior-bootstrap-editor-script', plugin_dir_url(__FILE__) . '../js/excelsior-bootstrap.js', array('wp-blocks', 'wp-dom-ready', 'wp-edit-post'), filemtime( plugin_dir_path(__FILE__) . '../js/excelsior-bootstrap.js' ), true );
+            // wp_enqueue_script( 'excelsior-bootstrap-editor-script', plugin_dir_url(__FILE__) . '../js/excelsior-bootstrap.js', array('wp-blocks', 'wp-dom-ready', 'wp-edit-post'), filemtime( plugin_dir_path(__FILE__) . '../js/excelsior-bootstrap.js' ), true );
         }
     }
 }

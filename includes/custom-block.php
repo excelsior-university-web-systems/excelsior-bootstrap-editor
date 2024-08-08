@@ -1,6 +1,7 @@
 <?php
 
 function register_excelsior_bootstrap_blocks() {
+    register_block_type( plugin_dir_path( __FILE__ ) . '../build/namespace' );
     register_block_type( plugin_dir_path( __FILE__ ) . '../build/container' );
     register_block_type( plugin_dir_path( __FILE__ ) . '../build/accordion' );
     register_block_type( plugin_dir_path( __FILE__ ) . '../build/accordion-item' );

@@ -1,25 +1,28 @@
-import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+import { InnerBlocks, useBlockProps, BlockControls  } from '@wordpress/block-editor';
 
 const TEMPLATE = [
     ['core/heading', { placeholder: 'Add heading...' }],
     ['core/paragraph', { placeholder: 'The start of something new!' }]
 ];
-const ALLOWED_BLOCKS = ['core/paragraph', 'core/heading', 'excelsior-bootstrap/accordion'];
 
-export default function Edit() {
-    const blockProps = useBlockProps();
+const ALLOWED_BLOCKS = ['core/heading', 'core/paragraph',  'excelsior-bootstrap/accordion'];
+
+export default function Edit({ attributes, setAttributes }) {
+
+    const { additionalClass = '' } = attributes;
+
+    const blockProps = useBlockProps({
+        className: `page-container ${additionalClass ? additionalClass : ''}`.trim(),
+    });
+
     return (
         <div {...blockProps}>
-            <div id='excelsior-bootstrap'>
-                <div className="page-container">
-                    <InnerBlocks
-                        allowedBlocks={ALLOWED_BLOCKS}
-                        template={TEMPLATE}
-                        templateLock={false}
-                        renderAppender={() => <InnerBlocks.ButtonBlockAppender />}
-                    />
-                </div>
-            </div>
+            <InnerBlocks
+                allowedBlocks={ALLOWED_BLOCKS}
+                template={TEMPLATE}
+                templateLock={false}
+                renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
+            />
         </div>
     );
 }
