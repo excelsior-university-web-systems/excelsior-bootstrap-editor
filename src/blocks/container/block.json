@@ -12,10 +12,6 @@
         "removable": false
     },
     "attributes": {
-        "additionalClass": {
-            "type": "string",
-            "default": ""
-        },
         "backToTop": {
             "type": "boolean",
             "default": false

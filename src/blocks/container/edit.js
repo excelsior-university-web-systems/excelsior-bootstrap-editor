@@ -8,10 +8,10 @@ const TEMPLATE = [
 ];
 
 export default function Edit({ attributes, setAttributes }) {
-    const { additionalClass, backToTop, mainLandmarkRole } = attributes;
+    const { backToTop, mainLandmarkRole } = attributes;
 
     const blockProps = useBlockProps({
-        className: `page-container${backToTop ? ' back-to-top' : ''}${additionalClass ? ' ' + additionalClass : ''}`.trim(),
+        className: `page-container${backToTop ? ' back-to-top' : ''}`.trim(),
         role: mainLandmarkRole ? 'main' : undefined,
     });
 
