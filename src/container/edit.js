@@ -1,4 +1,4 @@
-import { InnerBlocks, InspectorControls, useBlockProps  } from '@wordpress/block-editor';
+import { InnerBlocks, InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { PanelBody, ToggleControl } from '@wordpress/components';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 
@@ -8,11 +8,10 @@ const TEMPLATE = [
 ];
 
 export default function Edit({ attributes, setAttributes }) {
+    const { additionalClass = "", backToTop = false } = attributes;
 
-    const { additionalClass, backToTop } = attributes;
-
-    const blockProps = useBlockProps.save({
-        className: `page-container${backToTop ? ' back-to-top' : ''}${additionalClass ? ' ' + additionalClass : ''} `.trim(),
+    const blockProps = useBlockProps({
+        className: `page-container${backToTop ? ' back-to-top' : ''}${additionalClass ? ' ' + additionalClass : ''}`.trim(),
     });
 
     return (
@@ -20,7 +19,8 @@ export default function Edit({ attributes, setAttributes }) {
             <InspectorControls>
                 <PanelBody title="Settings">
                     <ToggleControl
-                        label="Include back to top button"
+                        label="Back to top button"
+                        help="Add a fixed-position button at the bottom right of the page to scroll long content back to the top."
                         checked={backToTop}
                         onChange={(value) => setAttributes({ backToTop: value })}
                     />
