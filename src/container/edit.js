@@ -1,6 +1,5 @@
 import { InnerBlocks, InspectorControls, useBlockProps  } from '@wordpress/block-editor';
 import { PanelBody, ToggleControl } from '@wordpress/components';
-import { useState } from '@wordpress/element';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 
 const TEMPLATE = [
