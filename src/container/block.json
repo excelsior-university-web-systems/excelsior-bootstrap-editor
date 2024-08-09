@@ -19,6 +19,10 @@
         "backToTop": {
             "type": "boolean",
             "default": false
+        },
+        "mainLandmarkRole": {
+            "type": "boolean",
+            "default": false
         }
     },
     "editorScript": "file:./index.js"

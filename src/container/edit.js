@@ -8,10 +8,11 @@ const TEMPLATE = [
 ];
 
 export default function Edit({ attributes, setAttributes }) {
-    const { additionalClass, backToTop } = attributes;
+    const { additionalClass, backToTop, mainLandmarkRole } = attributes;
 
     const blockProps = useBlockProps({
         className: `page-container${backToTop ? ' back-to-top' : ''}${additionalClass ? ' ' + additionalClass : ''}`.trim(),
+        role: mainLandmarkRole ? 'main' : undefined,
     });
 
     return (
@@ -23,6 +24,12 @@ export default function Edit({ attributes, setAttributes }) {
                         help="Add a fixed-position button at the bottom right of the page to scroll long content back to the top."
                         checked={backToTop}
                         onChange={(value) => setAttributes({ backToTop: value })}
+                    />
+                    <ToggleControl
+                        label="Main ARIA landmark role"
+                        help="Add role='main' to the container to identify it as the primary content for screen readers. Avoid adding it if the platform (e.g., Canvas) already defines a main role landmark."
+                        checked={mainLandmarkRole}
+                        onChange={(value) => setAttributes({ mainLandmarkRole: value })}
                     />
                 </PanelBody>
             </InspectorControls>
