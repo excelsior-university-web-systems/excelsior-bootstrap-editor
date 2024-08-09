@@ -9,10 +9,10 @@ const TEMPLATE = [
 
 export default function Edit({ attributes, setAttributes }) {
 
-    const { additionalClass = '', backToTop } = attributes;
+    const { additionalClass, backToTop } = attributes;
 
-    const blockProps = useBlockProps({
-        className: `page-container ${additionalClass ? additionalClass : ''} ${backToTop ? 'back-to-top' : ''}`.trim(),
+    const blockProps = useBlockProps.save({
+        className: `page-container${backToTop ? ' back-to-top' : ''}${additionalClass ? ' ' + additionalClass : ''} `.trim(),
     });
 
     return (
