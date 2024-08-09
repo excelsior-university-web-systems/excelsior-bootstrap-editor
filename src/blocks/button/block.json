@@ -1,0 +1,30 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap/button",
+    "title": "Button",
+    "category": "excelsior-bootstrap-blocks",
+    "parent": ["core/paragraph"],
+    "icon": "button",
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "href": {
+            "type": "string",
+            "default": "#"
+        },
+        "target": {
+            "type": "string",
+            "default": ""
+        },
+        "text": {
+            "type": "string",
+            "default": ""
+        },
+        "styleType": {
+            "type": "string",
+            "default": "btn-internal"
+        }
+    },
+    "editorScript": "file:./index.js"
+}
