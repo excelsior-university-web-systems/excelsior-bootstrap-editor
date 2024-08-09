@@ -1,10 +1,11 @@
 <?php
 
 function register_excelsior_bootstrap_blocks() {
-    register_block_type( plugin_dir_path( __FILE__ ) . '../build/blocks/namespace' );
-    register_block_type( plugin_dir_path( __FILE__ ) . '../build/blocks/container' );
-    register_block_type( plugin_dir_path( __FILE__ ) . '../build/blocks/accordion' );
-    register_block_type( plugin_dir_path( __FILE__ ) . '../build/blocks/accordion-item' );
+    $blocks_dir = plugin_dir_path( __FILE__ ) . '../build/blocks/';
+    
+    foreach (glob($blocks_dir . '*', GLOB_ONLYDIR) as $block_dir) {
+        register_block_type($block_dir);
+    }
 }
 
 add_action('init', 'register_excelsior_bootstrap_blocks');
