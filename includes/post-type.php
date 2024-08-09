@@ -37,7 +37,7 @@ function register_excelsior_bootstrap_post_type() {
             'publish_posts'      => 'publish_excelsior_bootstraps',
             'read_private_posts' => 'read_private_excelsior_bootstraps',
         ),
-        'supports'            => array( 'title', 'editor', 'author', 'revisions' ),
+        'supports'            => array( 'title', 'editor', 'author' ),
         'has_archive'         => false,
         'exclude_from_search' => true,
         'publicly_queryable'  => false,
