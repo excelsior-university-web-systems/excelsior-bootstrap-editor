@@ -8,7 +8,7 @@ const TEMPLATE = [
 ];
 
 export default function Edit({ attributes, setAttributes }) {
-    const { additionalClass = "", backToTop = false } = attributes;
+    const { additionalClass, backToTop } = attributes;
 
     const blockProps = useBlockProps({
         className: `page-container${backToTop ? ' back-to-top' : ''}${additionalClass ? ' ' + additionalClass : ''}`.trim(),
