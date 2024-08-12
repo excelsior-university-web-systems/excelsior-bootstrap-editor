@@ -23,6 +23,10 @@
         "styleType": {
             "type": "string",
             "default": "btn-internal"
+        },
+        "subsequent": {
+            "type": "boolean",
+            "default": false
         }
     },
     "editorScript": "file:./index.js"

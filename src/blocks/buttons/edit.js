@@ -12,6 +12,7 @@ export default function Edit() {
                 allowedBlocks={ALLOWED_BLOCKS}
                 template={TEMPLATE}
                 templateLock={false}
+                orientation="horizontal"
                 renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
             />
         </p>
