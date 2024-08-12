@@ -1,0 +1,22 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap/image-banner",
+    "title": "Image Banner",
+    "category": "excelsior-bootstrap-blocks",
+    "icon": "format-image",
+    "parent": [],
+    "supports": {
+        "html": false,
+        "multiple": false
+    },
+    "attributes": {
+        "url": {
+            "type": "string"
+        },
+        "alt": {
+            "type": "string",
+            "default": ""
+        }
+    },
+    "editorScript": "file:./index.js"
+}
