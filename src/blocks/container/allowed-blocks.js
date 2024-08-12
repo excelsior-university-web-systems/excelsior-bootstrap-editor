@@ -1,9 +1,8 @@
 export const ALLOWED_BLOCKS = [
     "excelsior-bootstrap/accordion",
-    "excelsior-bootstrap/button",
+    "excelsior-bootstrap/buttons",
     "core/paragraph",
-    "core/image",
     "core/heading",
     "core/list",
-    "core/list-item",
+    "core/list-item"
 ];

@@ -1,0 +1,11 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap/buttons",
+    "title": "Buttons",
+    "category": "excelsior-bootstrap-blocks",
+    "supports": {
+        "html": false
+    },
+    "attributes": {},
+    "editorScript": "file:./index.js"
+}
