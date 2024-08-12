@@ -7,13 +7,13 @@ const TEMPLATE = [
     ['core/paragraph', { placeholder: 'The start of something new!' }]
 ];
 
-export default function Edit({ attributes, setAttributes }) {
+export default function Edit( { attributes, setAttributes } ) {
     const { backToTop, mainLandmarkRole } = attributes;
 
-    const blockProps = useBlockProps({
+    const blockProps = useBlockProps( {
         className: `page-container${backToTop ? ' back-to-top' : ''}`.trim(),
         role: mainLandmarkRole ? 'main' : undefined,
-    });
+    } );
 
     return (
         <>
