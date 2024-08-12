@@ -4,7 +4,6 @@
     "title": "Container",
     "category": "excelsior-bootstrap-blocks",
     "parent": ["excelsior-bootstrap/namespace"],
-    "icon": "layout",
     "supports": {
         "html": false,
         "multiple": false,
