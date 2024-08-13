@@ -8,6 +8,7 @@ function register_excelsior_bootstrap_blocks() {
     }
 }
 
+
 add_action('init', 'register_excelsior_bootstrap_blocks');
 
 function excelsior_bootstrap_block_category( $categories, $post ) {
@@ -23,5 +24,14 @@ function excelsior_bootstrap_block_category( $categories, $post ) {
 }
 
 add_filter( 'block_categories_all', 'excelsior_bootstrap_block_category', 10, 2 );
+
+function enqueue_icon_format_script() {
+    wp_enqueue_script(
+        'excelsior-bootstrap-inline-icon',
+        plugins_url( '/build/icons/index.js', dirname(__FILE__) ),
+        array( 'wp-rich-text', 'wp-element', 'wp-editor' )
+    );
+}
+add_action( 'enqueue_block_editor_assets', 'enqueue_icon_format_script' );
 
 ?>
