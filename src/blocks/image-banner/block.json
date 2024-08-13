@@ -4,7 +4,7 @@
     "title": "Image Banner",
     "category": "excelsior-bootstrap-blocks",
     "icon": "format-image",
-    "parent": [],
+    "parent": ["excelsior-bootstrap/container"],
     "supports": {
         "html": false,
         "multiple": false
@@ -12,10 +12,6 @@
     "attributes": {
         "url": {
             "type": "string"
-        },
-        "alt": {
-            "type": "string",
-            "default": ""
         }
     },
     "editorScript": "file:./index.js"
