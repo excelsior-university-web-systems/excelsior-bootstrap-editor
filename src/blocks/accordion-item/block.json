@@ -3,6 +3,7 @@
     "name": "excelsior-bootstrap/accordion-item",
     "title": "Accordion Item",
     "category": "excelsior-bootstrap-blocks",
+    "parent": ["excelsior-bootstrap/accordion"],
     "icon": "minus",
     "supports": {
         "html": false
