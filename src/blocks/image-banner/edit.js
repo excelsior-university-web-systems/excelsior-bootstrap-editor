@@ -1,5 +1,5 @@
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, Button, TextControl  } from '@wordpress/components';
+import { PanelBody, Button, TextControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 
 export default function Edit ({ attributes, setAttributes }) {
