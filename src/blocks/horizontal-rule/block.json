@@ -1,0 +1,25 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap/horizontal-rule",
+    "title": "Horizontal Rule",
+    "category": "excelsior-bootstrap-blocks",
+    "parent": ["excelsior-bootstrap/container"],
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "selectedIcon": {
+            "type": "string",
+            "default": "bi-house-door-fill"
+        },
+        "size": {
+            "type": "string",
+            "default": "large"
+        },
+        "decorative": {
+            "type": "boolean",
+            "default": true
+        }
+    },
+    "editorScript": "file:./index.js"
+}
