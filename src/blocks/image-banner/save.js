@@ -2,11 +2,13 @@ import { useBlockProps } from '@wordpress/block-editor';
 
 export default function Save({ attributes }) {
     const { url } = attributes;
-    const blockProps = useBlockProps.save();
+    const blockProps = useBlockProps.save( {
+        className: 'decorative-banner'
+    } );
 
     return (
-        <div {...blockProps}>
-            {url && <img src={url} alt="" role="presentation" />}
-        </div>
+        <>
+        { url && <img {...blockProps} src={url} alt="" role="presentation" />}
+        </>
     );
 }

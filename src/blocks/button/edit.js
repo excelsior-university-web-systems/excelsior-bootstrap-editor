@@ -34,12 +34,14 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             <InspectorControls>
                 <PanelBody title='Settings'>
                     <TextControl
-                        label='URL'
+                        label="URL"
+                        help="Enter the button's URL."
                         value={href}
                         onChange={(value) => setAttributes({ href: value.trim() })}
                     />
                     <SelectControl
-                        label='Styles'
+                        label="Styles"
+                        help="Internal (red) is for links within the site. Resource (blue) is for external links and will open a new tab/window."
                         value={styleType}
                         options={[
                             { label: 'Internal', value: 'btn-internal' },
