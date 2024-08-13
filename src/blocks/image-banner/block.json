@@ -3,7 +3,6 @@
     "name": "excelsior-bootstrap/image-banner",
     "title": "Image Banner",
     "category": "excelsior-bootstrap-blocks",
-    "icon": "format-image",
     "parent": ["excelsior-bootstrap/container"],
     "supports": {
         "html": false,
