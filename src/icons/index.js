@@ -1,34 +1,42 @@
 import { registerFormatType, insert, create } from '@wordpress/rich-text';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
-import { Fragment } from '@wordpress/element';
+import { Fragment, useState, createElement } from '@wordpress/element';
+import { Modal, Button, __experimentalGrid as Grid } from '@wordpress/components';
+
+// Array of available icons
+const ICONS = [
+    { name: 'bi-house-door-fill' },
+    { name: 'bi-bookmark-star-fill' },
+    { name: 'bi-bookmark-check-fill' },
+    { name: 'bi-chat-square-dots-fill' },
+    { name: 'bi-journal-text' },
+    { name: 'bi-x-diamond-fill' },
+    { name: 'bi-search' },
+    { name: 'bi-pencil-fill' },
+    { name: 'bi-people-fill' },
+    { name: 'bi-clipboard-check-fill' }
+];
 
 // Register the format type
-registerFormatType('excelsior-bootstrap/inline-icon', {
+registerFormatType( 'excelsior-bootstrap/inline-icon', {
     title: 'Insert Icon',
     tagName: 'i',
     className: null,
     edit({ isActive, value, onChange }) {
-        const openIconPrompt = () => {
-            const iconName = prompt(
-                'Enter the Bootstrap Icon class (e.g., bi-house-door-fill):'
+
+        const [isOpen, setOpen] = useState(false);
+        const openIconModal = () => setOpen(true);
+        const closeIconModal = () => setOpen(false);
+
+        const handleIconSelect = (iconName) => {
+            const iconHTML = `<i class="bi ${iconName}" role="presentation" aria-hidden="true"></i>`;
+            const newValue = insert(
+                value,
+                create( { html: iconHTML } ),
+                value.start
             );
-
-            if (iconName) {
-                // Create the icon HTML
-                const iconHTML = `<i class="bi ${iconName}" role="presentation" aria-hidden="true"></i>`;
-
-                // Insert the icon at the cursor position
-                const newValue = insert(
-                    value,
-                    create({
-                        html: iconHTML,
-                    }),
-                    value.start
-                );
-
-                // Update the content
-                onChange(newValue);
-            }
+            onChange(newValue);
+            closeIconModal();
         };
 
         return (
@@ -36,9 +44,34 @@ registerFormatType('excelsior-bootstrap/inline-icon', {
                 <RichTextToolbarButton
                     icon="smiley"
                     title="Insert Icon"
-                    onClick={openIconPrompt}
+                    onClick={openIconModal}
                     isActive={isActive}
                 />
+                {isOpen && (
+                    <Modal
+                        title="Choose an Icon"
+                        onRequestClose={closeIconModal}
+                    >
+                        <Grid columns={4} gap={8}>
+                            {ICONS.map((icon) => (
+                                <Button
+                                    key={icon.name}
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        height: '80px',
+                                        fontSize: '2rem',
+                                        border: '1px solid #f2f2f2'
+                                    }}
+                                    onClick={() => handleIconSelect(icon.name)}
+                                >
+                                    {createElement('i', { className: `bi ${icon.name}`, style: { fontSize: '3rem' } })}
+                                </Button>
+                            ))}
+                        </Grid>
+                    </Modal>
+                )}
             </Fragment>
         );
     },
