@@ -3,20 +3,7 @@ import { Fragment, useState, createElement } from '@wordpress/element';
 import { Modal, Button, __experimentalGrid as Grid } from '@wordpress/components';
 import { BlockControls } from '@wordpress/block-editor';
 import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
-
-// Array of available icons
-const ICONS = [
-    { name: 'bi-house-door-fill' },
-    { name: 'bi-bookmark-star-fill' },
-    { name: 'bi-bookmark-check-fill' },
-    { name: 'bi-chat-square-dots-fill' },
-    { name: 'bi-journal-text' },
-    { name: 'bi-x-diamond-fill' },
-    { name: 'bi-search' },
-    { name: 'bi-pencil-fill' },
-    { name: 'bi-people-fill' },
-    { name: 'bi-clipboard-check-fill' }
-];
+import { ICONS } from './icons';
 
 // Register the format type
 registerFormatType('excelsior-bootstrap/inline-icon', {
@@ -100,7 +87,7 @@ registerFormatType('excelsior-bootstrap/inline-icon', {
                         title="Choose an Icon"
                         onRequestClose={closeIconModal}
                     >
-                        <Grid columns={4} gap={8}>
+                        <Grid columns={6} gap={6}>
                             {ICONS.map((icon) => (
                                 <Button
                                     key={icon.name}
@@ -109,7 +96,7 @@ registerFormatType('excelsior-bootstrap/inline-icon', {
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                         height: '80px',
-                                        fontSize: '2rem',
+                                        fontSize: '1.8rem',
                                         border: '1px solid #f2f2f2'
                                     }}
                                     onClick={() => handleIconSelect(icon.name)}
