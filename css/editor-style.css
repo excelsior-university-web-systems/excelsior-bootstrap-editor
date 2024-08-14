@@ -1,6 +1,7 @@
 .editor-visual-editor__post-title-wrapper.edit-post-visual-editor__post-title-wrapper {
     margin-top: 2rem !important;
 }
+
 .wp-block-post-title {
     font-size: 1rem !important;
     margin-bottom: 14px !important;
@@ -15,7 +16,28 @@
     margin-top: 0 !important;
     margin-bottom: 0 !important;
 }
+
 .excelsior-image-url-insert {
     border: 1px dashed #ccc;
     padding: 10px;
+}
+
+/* The <i> element */
+i.bi {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    width: 1em;
+    height: 1em;
+}
+
+/* The ::before pseudo-element */
+i.bi::before {
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
 }

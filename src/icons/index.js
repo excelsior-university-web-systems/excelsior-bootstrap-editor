@@ -18,7 +18,7 @@ const ICONS = [
 ];
 
 // Register the format type
-registerFormatType( 'excelsior-bootstrap/inline-icon', {
+registerFormatType('excelsior-bootstrap/inline-icon', {
     title: 'Insert Icon',
     tagName: 'i',
     className: null,
