@@ -1,4 +1,4 @@
-import { registerFormatType, insert, create } from '@wordpress/rich-text';
+import { registerFormatType, insert, create, applyFormat, removeFormat } from '@wordpress/rich-text';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
 import { Fragment, useState, createElement } from '@wordpress/element';
 import { Modal, Button, __experimentalGrid as Grid } from '@wordpress/components';
@@ -29,14 +29,35 @@ registerFormatType( 'excelsior-bootstrap/inline-icon', {
         const closeIconModal = () => setOpen(false);
 
         const handleIconSelect = (iconName) => {
-            const iconHTML = `<i class="bi ${iconName}" role="presentation" aria-hidden="true"></i>`;
-            const newValue = insert(
-                value,
-                create( { html: iconHTML } ),
-                value.start
-            );
+            const iconHTML = `<i class="bi ${iconName}" role="presentation" aria-hidden="true">&nbsp;</i>`;
+
+            const newValue = isActive
+                ? applyFormat(
+                      removeFormat(value, 'excelsior-bootstrap/inline-icon', value.start, value.end),
+                      {
+                          type: 'excelsior-bootstrap/inline-icon',
+                          attributes: {
+                              class: `bi ${iconName}`,
+                              role: 'presentation',
+                              'aria-hidden': 'true',
+                          },
+                      },
+                      value.start,
+                      value.end
+                  )
+                : insert(
+                      value,
+                      create({ html: iconHTML }),
+                      value.start
+                  );
+
             onChange(newValue);
             closeIconModal();
+        };
+
+        const handleIconDelete = () => {
+            const newValue = removeFormat(value, 'excelsior-bootstrap/inline-icon', value.start, value.end);
+            onChange(newValue);
         };
 
         return (
@@ -45,6 +66,12 @@ registerFormatType( 'excelsior-bootstrap/inline-icon', {
                     icon="smiley"
                     title="Insert Icon"
                     onClick={openIconModal}
+                    isActive={isActive}
+                />
+                <RichTextToolbarButton
+                    icon="trash"
+                    title="Remove Icon"
+                    onClick={handleIconDelete}
                     isActive={isActive}
                 />
                 {isOpen && (
