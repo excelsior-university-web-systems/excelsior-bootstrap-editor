@@ -1,7 +1,8 @@
 import { registerFormatType, insert, create, applyFormat, removeFormat } from '@wordpress/rich-text';
-import { RichTextToolbarButton } from '@wordpress/block-editor';
 import { Fragment, useState, createElement } from '@wordpress/element';
 import { Modal, Button, __experimentalGrid as Grid } from '@wordpress/components';
+import { BlockControls } from '@wordpress/block-editor';
+import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
 
 // Array of available icons
 const ICONS = [
@@ -76,22 +77,24 @@ registerFormatType('excelsior-bootstrap/inline-icon', {
         
         return (
             <Fragment>
-                {isActive && (
-                    <RichTextToolbarButton
-                        icon="trash"
-                        title="Remove Icon"
-                        onClick={handleIconDelete}
-                        isActive={isActive}
-                        priority={10}
-                    />
-                )}
-                <RichTextToolbarButton
-                    icon="smiley"
-                    title="Insert Icon"
-                    onClick={openIconModal}
-                    isActive={isActive}
-                    priority={10}
-                />
+                <BlockControls>
+                    <ToolbarGroup>
+                        <ToolbarButton
+                            icon="smiley"
+                            title={isActive ? "Replace Icon" : "Insert Icon"}
+                            onClick={openIconModal}
+                            isActive={isActive}
+                        />
+                        {isActive && (
+                            <ToolbarButton
+                                icon="trash"
+                                title="Remove Icon"
+                                onClick={handleIconDelete}
+                                isActive={isActive}
+                            />
+                        )}
+                    </ToolbarGroup>
+                </BlockControls>
                 {isOpen && (
                     <Modal
                         title="Choose an Icon"
