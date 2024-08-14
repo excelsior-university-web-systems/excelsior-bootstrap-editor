@@ -29,6 +29,7 @@ i.bi {
     text-align: center;
     width: 1em;
     height: 1em;
+    vertical-align: text-top;
 }
 
 /* The ::before pseudo-element */

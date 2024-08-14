@@ -76,17 +76,21 @@ registerFormatType('excelsior-bootstrap/inline-icon', {
         
         return (
             <Fragment>
+                {isActive && (
+                    <RichTextToolbarButton
+                        icon="trash"
+                        title="Remove Icon"
+                        onClick={handleIconDelete}
+                        isActive={isActive}
+                        priority={10}
+                    />
+                )}
                 <RichTextToolbarButton
                     icon="smiley"
                     title="Insert Icon"
                     onClick={openIconModal}
                     isActive={isActive}
-                />
-                <RichTextToolbarButton
-                    icon="trash"
-                    title="Remove Icon"
-                    onClick={handleIconDelete}
-                    isActive={isActive}
+                    priority={10}
                 />
                 {isOpen && (
                     <Modal

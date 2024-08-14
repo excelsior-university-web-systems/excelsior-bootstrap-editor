@@ -58,7 +58,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                 value={text}
                 placeholder='Button Text'
                 onChange={(value) => setAttributes({ text: value })}
-                allowedFormats={[]}
+                allowedFormats={['excelsior-bootstrap/inline-icon']}
             />
         </>
     );
