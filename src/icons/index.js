@@ -56,10 +56,24 @@ registerFormatType('excelsior-bootstrap/inline-icon', {
         };
 
         const handleIconDelete = () => {
-            const newValue = removeFormat(value, 'excelsior-bootstrap/inline-icon', value.start, value.end);
+            // Remove the format
+            let newValue = removeFormat(value, 'excelsior-bootstrap/inline-icon', value.start, value.end);
+            
+            const start = newValue.start;
+            const end = newValue.end;
+        
+            // Adjust the text to remove the non-breaking space
+            const adjustedText = newValue.text.slice(0, start) + newValue.text.slice(end);
+        
+            // Update the content with the adjusted text
+            newValue = {
+                ...newValue,
+                text: adjustedText,
+            };
+        
             onChange(newValue);
         };
-
+        
         return (
             <Fragment>
                 <RichTextToolbarButton
