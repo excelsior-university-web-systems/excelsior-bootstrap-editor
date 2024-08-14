@@ -16,7 +16,8 @@ const blockEntries = fs.readdirSync(blocksDir).reduce((entries, dir) => {
 
 // Add other static entry points if necessary
 const otherEntries = {
-    'icons': './src/icons/index.js'
+    'icons': './src/icons/index.js',
+    'editor': './src/editor/index.js'
 };
 
 // Merge dynamic and static entries
