@@ -30,6 +30,19 @@
     padding: 10px;
 }
 
+/* EXCELSIOR BOOTSTRAP EDITOR
+   IFRAME EMBED */
+
+.excelsior-iframe-embed-insert {
+    border: 1px dashed #ccc;
+    padding: 10px;
+    margin-bottom: 1rem;
+}
+
+.homepage-content .wp-block-excelsior-bootstrap-iframe-embed {
+    margin-top: 0 !important;
+}
+
 /* BOOTSTRAP ICON ADJUSTMENTS */
 
 i.bi {
