@@ -3,8 +3,7 @@ import { PanelBody, ToggleControl } from '@wordpress/components';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 
 const TEMPLATE = [
-    ['core/heading', { placeholder: 'Add heading...' }],
-    ['core/paragraph', { placeholder: 'The start of something new!' }]
+    ['core/paragraph']
 ];
 
 export default function Edit( { attributes, setAttributes } ) {
