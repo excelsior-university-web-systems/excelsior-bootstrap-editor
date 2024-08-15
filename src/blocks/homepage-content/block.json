@@ -6,7 +6,8 @@
     "parent": ["excelsior-bootstrap/container"],
     "supports": {
         "html": false,
-        "multiple": false
+        "multiple": false,
+        "inserter": false
     },
     "attributes": {},
     "editorScript": "file:./index.js"
