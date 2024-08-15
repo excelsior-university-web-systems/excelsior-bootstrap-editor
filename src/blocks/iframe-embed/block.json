@@ -1,0 +1,17 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap/iframe-embed",
+    "title": "iFrame Embed",
+    "category": "excelsior-bootstrap-blocks",
+    "parent": ["excelsior-bootstrap/container"],
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "embedCode": {
+            "type": "string",
+            "default": ""
+        }
+    },
+    "editorScript": "file:./index.js"
+}
