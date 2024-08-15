@@ -87,7 +87,7 @@ registerFormatType('excelsior-bootstrap/inline-icon', {
                         title="Choose an Icon"
                         onRequestClose={closeIconModal}
                     >
-                        <Grid columns={6} gap={6}>
+                        <Grid columns={8} gap={6}>
                             {ICONS.map((icon) => (
                                 <Button
                                     key={icon.name}
@@ -96,9 +96,14 @@ registerFormatType('excelsior-bootstrap/inline-icon', {
                                         justifyContent: 'center',
                                         alignItems: 'center',
                                         height: '80px',
-                                        fontSize: '1.8rem',
                                         border: '1px solid #f2f2f2'
                                     }}
+                                    isPressed={ 
+                                        value.activeFormats[0] && 
+                                        value.activeFormats[0].unregisteredAttributes &&
+                                        value.activeFormats[0].unregisteredAttributes.class &&
+                                        value.activeFormats[0].unregisteredAttributes.class === "bi " + icon.name
+                                    }
                                     onClick={() => handleIconSelect(icon.name)}
                                 >
                                     {createElement('i', { className: `bi ${icon.name}`, style: { fontSize: '3rem' } })}
