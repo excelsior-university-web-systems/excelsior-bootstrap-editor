@@ -53,6 +53,7 @@ function register_excelsior_bootstrap_post_type() {
     );
 
     register_post_type( 'excelsior_bootstrap', $args );
+    
 }
 add_action( 'init', 'register_excelsior_bootstrap_post_type' );
 
