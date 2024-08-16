@@ -1,8 +1,9 @@
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 
-const ALLOWED_BLOCKS = ['excelsior-bootstrap/accordion-item'];
+const ALLOWED_BLOCKS = [XCLSR_BTSTRP_EDITOR_PREFIX + '/accordion-item'];
 const TEMPLATE = [
-    ['excelsior-bootstrap/accordion-item']
+    [XCLSR_BTSTRP_EDITOR_PREFIX + '/accordion-item']
 ];
 
 export default function Edit() {

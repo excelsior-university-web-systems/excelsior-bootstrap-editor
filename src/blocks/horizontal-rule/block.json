@@ -1,9 +1,9 @@
 {
     "apiVersion": 2,
-    "name": "excelsior-bootstrap/horizontal-rule",
+    "name": "excelsior-bootstrap-editor/horizontal-rule",
     "title": "Horizontal Rule",
-    "category": "excelsior-bootstrap-blocks",
-    "parent": ["excelsior-bootstrap/container"],
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {
         "html": false
     },

@@ -1,9 +1,9 @@
 {
     "apiVersion": 2,
-    "name": "excelsior-bootstrap/accordion-item",
+    "name": "excelsior-bootstrap-editor/accordion-item",
     "title": "Accordion Item",
-    "category": "excelsior-bootstrap-blocks",
-    "parent": ["excelsior-bootstrap/accordion"],
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/accordion"],
     "icon": "minus",
     "supports": {
         "html": false

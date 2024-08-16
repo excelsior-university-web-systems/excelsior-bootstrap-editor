@@ -42,7 +42,7 @@ export default function Edit( { attributes, setAttributes } ) {
 
             ) : (
 
-                <div className='block-editor-block-list__block wp-block-excelsior-bootstrap-iframe-embed excelsior-iframe-embed-insert '>
+                <div className='block-editor-block-list__block wp-block-excelsior-bootstrap-editor-iframe-embed excelsior-iframe-embed-insert '>
                     <TextareaControl
                         label="Embed Code"
                         value={embedCode}

@@ -1,7 +1,8 @@
+import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 export const ALLOWED_BLOCKS = [
-    "excelsior-bootstrap/buttons",
-    "excelsior-bootstrap/horizontal-rule",
-    "excelsior-bootstrap/iframe-embed",
+    XCLSR_BTSTRP_EDITOR_PREFIX + "/buttons",
+    XCLSR_BTSTRP_EDITOR_PREFIX + "/horizontal-rule",
+    XCLSR_BTSTRP_EDITOR_PREFIX + "/iframe-embed",
     "core/paragraph",
     "core/heading",
     "core/list",

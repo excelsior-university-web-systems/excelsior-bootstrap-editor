@@ -4,9 +4,12 @@ import { Modal, Button, __experimentalGrid as Grid } from '@wordpress/components
 import { BlockControls } from '@wordpress/block-editor';
 import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
 import { ICONS } from './icons';
+import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../constants';
+
+const ICON_FORMAT_NAME = XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon';
 
 // Register the format type
-registerFormatType('excelsior-bootstrap/inline-icon', {
+registerFormatType( ICON_FORMAT_NAME, {
     title: 'Insert Icon',
     tagName: 'i',
     className: null,
@@ -21,9 +24,9 @@ registerFormatType('excelsior-bootstrap/inline-icon', {
 
             const newValue = isActive
                 ? applyFormat(
-                      removeFormat(value, 'excelsior-bootstrap/inline-icon', value.start, value.end),
+                      removeFormat(value, ICON_FORMAT_NAME, value.start, value.end),
                       {
-                          type: 'excelsior-bootstrap/inline-icon',
+                          type: ICON_FORMAT_NAME,
                           attributes: {
                               class: `bi ${iconName}`,
                               role: 'presentation',
@@ -45,7 +48,7 @@ registerFormatType('excelsior-bootstrap/inline-icon', {
 
         const handleIconDelete = () => {
             // Remove the format
-            let newValue = removeFormat(value, 'excelsior-bootstrap/inline-icon', value.start, value.end);
+            let newValue = removeFormat(value, ICON_FORMAT_NAME, value.start, value.end);
             
             const start = newValue.start;
             const end = newValue.end;

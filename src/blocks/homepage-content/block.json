@@ -1,9 +1,9 @@
 {
     "apiVersion": 2,
-    "name": "excelsior-bootstrap/homepage-content",
+    "name": "excelsior-bootstrap-editor/homepage-content",
     "title": "Homepage Content",
-    "category": "excelsior-bootstrap-blocks",
-    "parent": ["excelsior-bootstrap/container"],
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {
         "html": false,
         "multiple": false,

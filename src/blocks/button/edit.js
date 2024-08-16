@@ -1,14 +1,15 @@
 import { useBlockProps, RichText, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, TextControl, SelectControl } from '@wordpress/components';
+import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
 
     const { href, styleType, text, subsequent } = attributes;
 
-    // Get the parent container (excelsior-bootstrap/buttons)
+    // Get the parent container (excelsior-bootstrap-editor/buttons)
     const parents = wp.data.select( 'core/block-editor' ).getBlockParents( clientId );
     const parent = parents.filter( ( parent ) => {
-        return wp.data.select( 'core/block-editor' ).getBlock( parent ).name === 'excelsior-bootstrap/buttons';
+        return wp.data.select( 'core/block-editor' ).getBlock( parent ).name === ( XCLSR_BTSTRP_EDITOR_PREFIX + '/buttons' );
     } );
 
     // Get the sibling blocks in the parent container
@@ -58,7 +59,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                 value={text}
                 placeholder='Button Text'
                 onChange={(value) => setAttributes({ text: value })}
-                allowedFormats={['excelsior-bootstrap/inline-icon']}
+                allowedFormats={[XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
             />
         </>
     );

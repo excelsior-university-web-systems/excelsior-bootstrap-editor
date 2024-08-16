@@ -1,9 +1,9 @@
 {
     "apiVersion": 2,
-    "name": "excelsior-bootstrap/start-here-banner",
+    "name": "excelsior-bootstrap-editor/start-here-banner",
     "title": "Start Here Banner",
-    "category": "excelsior-bootstrap-blocks",
-    "parent": ["excelsior-bootstrap/container"],
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {
         "html": false,
         "multiple": false,

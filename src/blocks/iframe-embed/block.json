@@ -1,9 +1,9 @@
 {
     "apiVersion": 2,
-    "name": "excelsior-bootstrap/iframe-embed",
+    "name": "excelsior-bootstrap-editor/iframe-embed",
     "title": "iFrame Embed",
-    "category": "excelsior-bootstrap-blocks",
-    "parent": ["excelsior-bootstrap/container"],
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {
         "html": false
     },

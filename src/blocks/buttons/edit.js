@@ -1,8 +1,9 @@
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 
-const ALLOWED_BLOCKS = ['excelsior-bootstrap/button'];
+const ALLOWED_BLOCKS = [XCLSR_BTSTRP_EDITOR_PREFIX + '/button'];
 const TEMPLATE = [
-    ['excelsior-bootstrap/button']
+    [XCLSR_BTSTRP_EDITOR_PREFIX + '/button']
 ];
 
 export default function Edit() {

@@ -1,6 +1,7 @@
 import { addFilter } from '@wordpress/hooks';
+import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../constants';
 
-function removeBlockAlignment(settings) {
+function removeBlockAlignment( settings ) {
     // Check if the block supports alignment and remove it
     if (settings.supports && settings.supports.align) {
         settings.supports = {
@@ -15,7 +16,7 @@ function removeBlockAlignment(settings) {
 // Add filter to modify block settings
 addFilter(
     'blocks.registerBlockType',
-    'excelsior-bootstrap/remove-block-alignment',
+    XCLSR_BTSTRP_EDITOR_PREFIX + '/remove-block-alignment',
     removeBlockAlignment
 );
 

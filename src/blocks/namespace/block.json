@@ -1,8 +1,8 @@
 {
     "apiVersion": 2,
-    "name": "excelsior-bootstrap/namespace",
+    "name": "excelsior-bootstrap-editor/namespace",
     "title": "Excelsior Bootstrap",
-    "category": "excelsior-bootstrap-blocks",
+    "category": "excelsior-bootstrap-editor-blocks",
     "icon": "layout",
     "supports": {
         "html": false,

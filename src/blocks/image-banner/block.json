@@ -1,9 +1,9 @@
 {
     "apiVersion": 2,
-    "name": "excelsior-bootstrap/image-banner",
+    "name": "excelsior-bootstrap-editor/image-banner",
     "title": "Image Banner",
-    "category": "excelsior-bootstrap-blocks",
-    "parent": ["excelsior-bootstrap/container"],
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {
         "html": false,
         "multiple": false

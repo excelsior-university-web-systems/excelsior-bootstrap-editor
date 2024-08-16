@@ -1,9 +1,9 @@
 {
     "apiVersion": 2,
-    "name": "excelsior-bootstrap/button",
+    "name": "excelsior-bootstrap-editor/button",
     "title": "Button",
-    "category": "excelsior-bootstrap-blocks",
-    "parent": ["excelsior-bootstrap/buttons"],
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/buttons"],
     "supports": {
         "html": false
     },

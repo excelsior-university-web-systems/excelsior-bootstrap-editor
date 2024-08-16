@@ -1,9 +1,9 @@
 {
     "apiVersion": 2,
-    "name": "excelsior-bootstrap/container",
+    "name": "excelsior-bootstrap-editor/container",
     "title": "Container",
-    "category": "excelsior-bootstrap-blocks",
-    "parent": ["excelsior-bootstrap/namespace"],
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/namespace"],
     "supports": {
         "html": false,
         "multiple": false,
