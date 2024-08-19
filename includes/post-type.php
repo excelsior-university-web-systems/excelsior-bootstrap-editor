@@ -34,16 +34,23 @@ add_action( 'init', function() {
         'public'              => false,
         'show_ui'             => true,
         'show_in_menu'        => true,
-        'capability_type'     => 'page',
+        'capability_type'     => array( XCLSR_BTSTRP_POST_TYPE, XCLSR_BTSTRP_POST_TYPE.'s' ),
         'map_meta_cap'        => true,
         'capabilities'        => array(
-            'edit_post'          => 'edit_'.XCLSR_BTSTRP_POST_TYPE,
-            'read_post'          => 'read_'.XCLSR_BTSTRP_POST_TYPE,
-            'delete_post'        => 'delete_'.XCLSR_BTSTRP_POST_TYPE,
-            'edit_posts'         => 'edit_'.XCLSR_BTSTRP_POST_TYPE.'s',
-            'edit_others_posts'  => 'edit_others_'.XCLSR_BTSTRP_POST_TYPE.'s',
-            'publish_posts'      => 'publish_'.XCLSR_BTSTRP_POST_TYPE.'s',
-            'read_private_posts' => 'read_private_'.XCLSR_BTSTRP_POST_TYPE.'s',
+            'read'                   => 'read',
+            'edit_post'              => 'edit_'.XCLSR_BTSTRP_POST_TYPE,
+            'read_post'              => 'read_'.XCLSR_BTSTRP_POST_TYPE,
+            'delete_post'            => 'delete_'.XCLSR_BTSTRP_POST_TYPE,
+            'edit_posts'             => 'edit_'.XCLSR_BTSTRP_POST_TYPE.'s',
+            'edit_others_posts'      => 'edit_others_'.XCLSR_BTSTRP_POST_TYPE.'s',
+            'publish_posts'          => 'publish_'.XCLSR_BTSTRP_POST_TYPE.'s',
+            'read_private_posts'     => 'read_private_'.XCLSR_BTSTRP_POST_TYPE.'s',
+            'delete_private_posts'   => 'delete_private_'.XCLSR_BTSTRP_POST_TYPE.'s',
+            'delete_published_posts' => 'delete_published_'.XCLSR_BTSTRP_POST_TYPE.'s',
+            'delete_others_posts'    => 'delete_others_'.XCLSR_BTSTRP_POST_TYPE.'s',
+            'edit_private_posts'     => 'edit_private_'.XCLSR_BTSTRP_POST_TYPE.'s',
+            'edit_published_posts'   => 'edit_published_'.XCLSR_BTSTRP_POST_TYPE.'s',
+            'create_posts'           => 'edit_'.XCLSR_BTSTRP_POST_TYPE.'s'
         ),
         'supports'            => array( 'title', 'editor', 'author' ),
         'has_archive'         => false,
@@ -78,6 +85,7 @@ function add_excelsior_bootstrap_capabilities() {
         
         if ( !$role ) continue;
 
+        $role->add_cap( 'read' );
         $role->add_cap( 'edit_'.XCLSR_BTSTRP_POST_TYPE );
         $role->add_cap( 'read_'.XCLSR_BTSTRP_POST_TYPE );
         $role->add_cap( 'delete_'.XCLSR_BTSTRP_POST_TYPE );
@@ -85,6 +93,11 @@ function add_excelsior_bootstrap_capabilities() {
         $role->add_cap( 'edit_others_'.XCLSR_BTSTRP_POST_TYPE.'s' );
         $role->add_cap( 'publish_'.XCLSR_BTSTRP_POST_TYPE.'s' );
         $role->add_cap( 'read_private_'.XCLSR_BTSTRP_POST_TYPE.'s' );
+        $role->add_cap( 'delete_private_'.XCLSR_BTSTRP_POST_TYPE.'s' );
+        $role->add_cap( 'delete_published_'.XCLSR_BTSTRP_POST_TYPE.'s' );
+        $role->add_cap( 'delete_others_'.XCLSR_BTSTRP_POST_TYPE.'s' );
+        $role->add_cap( 'edit_private_'.XCLSR_BTSTRP_POST_TYPE.'s' );
+        $role->add_cap( 'edit_published_'.XCLSR_BTSTRP_POST_TYPE.'s' );
 
     }
 }
@@ -98,15 +111,6 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
     
     if ( $hook == 'post-new.php' || $hook == 'post.php' ) {
         if ( $post && XCLSR_BTSTRP_POST_TYPE === $post->post_type ) {
-            
-            //removes default WordPress styles that are usually loaded in the block editor
-            wp_dequeue_style( 'wc-block-style' );
-            wp_dequeue_style( 'wp-block-library' );
-            wp_dequeue_style( 'wp-block-library-theme' );
-            wp_dequeue_style( 'classic-theme-styles' );
-
-            // CSS specifically for the block editor
-            wp_enqueue_style( XCLSR_BTSTRP_EDITOR_PREFIX.'-style', plugin_dir_url(__FILE__) . '../css/editor-style.css', array(), false );
 
             // Main Excelsior Bootstrap style
             wp_enqueue_style( 'excelsior-bootstrap-style', plugin_dir_url(__FILE__) . '../css/excelsior-bootstrap.css', array(), true );

@@ -1,31 +1,18 @@
 const defaultConfig = require('@wordpress/scripts/config/webpack.config');
+const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 const path = require('path');
-const fs = require('fs');
-
-// Path to the blocks directory
-const blocksDir = path.resolve(__dirname, 'src/blocks');
-
-// Dynamically generate entries for each block
-const blockEntries = fs.readdirSync(blocksDir).reduce((entries, dir) => {
-    const fullPath = path.resolve(blocksDir, dir, 'index.js');
-    if (fs.existsSync(fullPath)) {
-        entries[`blocks/${dir}`] = fullPath;
-    }
-    return entries;
-}, {});
 
 // Add other static entry points if necessary
-const otherEntries = {
+const entries = {
+    'blocks': './src/blocks/index.js',
     'icons': './src/icons/index.js',
     'editor': './src/editor/index.js'
 };
 
 // Merge dynamic and static entries
 const entry = {
-    ...blockEntries,
-    ...otherEntries
+    ...entries
 };
-
 module.exports = {
     ...defaultConfig,
     entry: entry,
@@ -33,4 +20,16 @@ module.exports = {
         path: path.resolve(__dirname, 'build'),
         filename: '[name]/index.js',  // Output to the respective directories in the build folder
     },
+    plugins: [
+        ...defaultConfig.plugins,
+        new WebpackShellPluginNext( {
+            onBuildEnd: {
+                scripts: [
+                    'node src/generate-blocks.js'
+                ],
+                blocking: false,
+                parallel: true
+            }
+        } )
+    ]
 };

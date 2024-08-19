@@ -12,6 +12,5 @@
         "url": {
             "type": "string"
         }
-    },
-    "editorScript": "file:./index.js"
+    }
 }

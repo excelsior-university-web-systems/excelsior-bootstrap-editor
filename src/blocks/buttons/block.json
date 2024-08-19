@@ -7,6 +7,5 @@
     "supports": {
         "html": false
     },
-    "attributes": {},
-    "editorScript": "file:./index.js"
+    "attributes": {}
 }
