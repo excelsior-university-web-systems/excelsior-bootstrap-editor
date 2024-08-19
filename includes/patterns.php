@@ -9,7 +9,7 @@ add_action( 'current_screen', function() {
     if ( $screen && $screen->post_type === XCLSR_BTSTRP_POST_TYPE ) {
 
         // Unregister all block patterns
-        $patterns = WP_Block_Patterns_Registry::get_instance()->get_all_registered();
+        $patterns = \WP_Block_Patterns_Registry::get_instance()->get_all_registered();
 
         foreach ( $patterns as $pattern_name => $pattern ) {
             unregister_block_pattern( $pattern_name );
@@ -22,7 +22,7 @@ add_action( 'current_screen', function() {
         );
 
         // Register homepage pattern
-        register_excelsior_bootstrap_editor_homepage_pattern();
+        \ExcelsiorBootstrapEditor\register_excelsior_bootstrap_editor_homepage_pattern();
 
     }
 

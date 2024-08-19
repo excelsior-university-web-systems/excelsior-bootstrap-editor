@@ -31,6 +31,7 @@ add_action( 'init', function() {
             'item_updated'          => 'Page updated',
             'item_trashed'          => 'Page trashed'
         ),
+        'public'              => false,
         'show_ui'             => true,
         'show_in_menu'        => true,
         'capability_type'     => 'page',
@@ -38,13 +39,17 @@ add_action( 'init', function() {
         'capabilities'        => array(
             'edit_post'          => 'edit_'.XCLSR_BTSTRP_POST_TYPE,
             'read_post'          => 'read_'.XCLSR_BTSTRP_POST_TYPE,
-            'delete_post'        => 'delete_'XCLSR_BTSTRP_POST_TYPE,
-            'edit_posts'         => 'edit_'.XCLSR_BTSTRP_POST_TYPE,
-            'edit_others_posts'  => 'edit_others_'.XCLSR_BTSTRP_POST_TYPE,
-            'publish_posts'      => 'publish_'.XCLSR_BTSTRP_POST_TYPE,
-            'read_private_posts' => 'read_private_'.XCLSR_BTSTRP_POST_TYPE,
+            'delete_post'        => 'delete_'.XCLSR_BTSTRP_POST_TYPE,
+            'edit_posts'         => 'edit_'.XCLSR_BTSTRP_POST_TYPE.'s',
+            'edit_others_posts'  => 'edit_others_'.XCLSR_BTSTRP_POST_TYPE.'s',
+            'publish_posts'      => 'publish_'.XCLSR_BTSTRP_POST_TYPE.'s',
+            'read_private_posts' => 'read_private_'.XCLSR_BTSTRP_POST_TYPE.'s',
         ),
         'supports'            => array( 'title', 'editor', 'author' ),
+        'has_archive'         => false,
+        'exclude_from_search' => true,
+        'publicly_queryable'  => false,
+        'show_in_nav_menus'   => false,
         'show_in_admin_bar'   => false,
         'show_in_rest'        => true,
         'menu_icon'           => 'dashicons-welcome-widgets-menus',
@@ -56,7 +61,7 @@ add_action( 'init', function() {
     );
 
     register_post_type( XCLSR_BTSTRP_POST_TYPE, $args );
-    add_excelsior_bootstrap_editor_capabilities();
+    \ExcelsiorBootstrapEditor\add_excelsior_bootstrap_capabilities();
 
 } );
 
@@ -64,24 +69,22 @@ add_action( 'init', function() {
   Assign custom capabilities (defined during post type registration)
   to administrator and editor user roles
 */
-function add_excelsior_bootstrap_editor_capabilities() {
-
+function add_excelsior_bootstrap_capabilities() {
     $roles = array( 'administrator', 'editor' );
 
     foreach ( $roles as $role_name ) {
 
-        $role = get_role($role_name );
+        $role = get_role ($role_name );
         
         if ( !$role ) continue;
 
-        // editing, reading, deleting, and publishing, as well as editing posts created by others
         $role->add_cap( 'edit_'.XCLSR_BTSTRP_POST_TYPE );
         $role->add_cap( 'read_'.XCLSR_BTSTRP_POST_TYPE );
         $role->add_cap( 'delete_'.XCLSR_BTSTRP_POST_TYPE );
-        $role->add_cap( 'edit_'.XCLSR_BTSTRP_POST_TYPE );
-        $role->add_cap( 'edit_others_'.XCLSR_BTSTRP_POST_TYPE );
-        $role->add_cap( 'publish_'.XCLSR_BTSTRP_POST_TYPE );
-        $role->add_cap( 'read_private_'.XCLSR_BTSTRP_POST_TYPE );
+        $role->add_cap( 'edit_'.XCLSR_BTSTRP_POST_TYPE.'s' );
+        $role->add_cap( 'edit_others_'.XCLSR_BTSTRP_POST_TYPE.'s' );
+        $role->add_cap( 'publish_'.XCLSR_BTSTRP_POST_TYPE.'s' );
+        $role->add_cap( 'read_private_'.XCLSR_BTSTRP_POST_TYPE.'s' );
 
     }
 }
@@ -94,8 +97,8 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
     global $post;
     
     if ( $hook == 'post-new.php' || $hook == 'post.php' ) {
-        if ( XCLSR_BTSTRP_POST_TYPE === $post->post_type ) {
-
+        if ( $post && XCLSR_BTSTRP_POST_TYPE === $post->post_type ) {
+            
             //removes default WordPress styles that are usually loaded in the block editor
             wp_dequeue_style( 'wc-block-style' );
             wp_dequeue_style( 'wp-block-library' );
