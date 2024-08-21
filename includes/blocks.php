@@ -13,6 +13,12 @@ add_action( 'init', function() {
         return;
     }
 
+    wp_register_script(
+        XCLSR_BTSTRP_EDITOR_PREFIX.'-blocks-script',
+        plugins_url( '/build/blocks/index.js', dirname(__FILE__) ),
+        array( 'wp-blocks', 'wp-dom-ready', 'wp-element' )
+    );
+
     $blocks_file = plugin_dir_path(__FILE__) . '../build/blocks/blocks.json';
     $blocks = json_decode( file_get_contents( $blocks_file ), true );
 
@@ -56,12 +62,6 @@ add_action( 'enqueue_block_editor_assets', function() {
 
         // CSS specifically for the block editor
         wp_enqueue_style( XCLSR_BTSTRP_EDITOR_PREFIX.'-style', plugin_dir_url(__FILE__) . '../css/editor-style.css', array(), false );
-
-        wp_enqueue_script(
-            XCLSR_BTSTRP_EDITOR_PREFIX.'-blocks-script',
-            plugins_url( '/build/blocks/index.js', dirname(__FILE__) ),
-            array( 'wp-blocks', 'wp-element', 'wp-editor' )
-        );
 
         // editor modification script
         wp_enqueue_script(
