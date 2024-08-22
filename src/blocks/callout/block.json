@@ -1,0 +1,16 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap-editor/callout",
+    "title": "Callout",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container"],
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "styleType": {
+            "type": "string",
+            "default": "guide"
+        }
+    }
+}

@@ -9,3 +9,4 @@ import './iframe-embed';
 import './image-banner';
 import './namespace';
 import './start-here-banner';
+import './callout';
