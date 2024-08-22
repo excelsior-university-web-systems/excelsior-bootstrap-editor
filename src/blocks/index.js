@@ -11,3 +11,5 @@ import './namespace';
 import './start-here-banner';
 import './callout';
 import './tipbox';
+import './columns';
+import './column';

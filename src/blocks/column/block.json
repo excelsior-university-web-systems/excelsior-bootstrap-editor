@@ -1,0 +1,11 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap-editor/column",
+    "title": "Column",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/columns"],
+    "supports": {
+        "html": false
+    },
+    "attributes": {}
+}

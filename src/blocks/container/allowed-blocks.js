@@ -9,6 +9,7 @@ export const ALLOWED_BLOCKS = [
     XCLSR_BTSTRP_EDITOR_PREFIX + "/start-here-banner",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/callout",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/tipbox",
+    XCLSR_BTSTRP_EDITOR_PREFIX + "/columns",
     "core/paragraph",
     "core/heading",
     "core/list"
