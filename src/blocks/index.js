@@ -10,3 +10,4 @@ import './image-banner';
 import './namespace';
 import './start-here-banner';
 import './callout';
+import './tipbox';

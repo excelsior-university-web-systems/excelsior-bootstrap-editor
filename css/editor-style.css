@@ -63,6 +63,13 @@
     margin-bottom: 0 !important;
 }
 
+/* EXCELSIOR BOOTSTRAP EDITOR
+   TIP BOX */
+
+.wp-block-excelsior-bootstrap-editor-tipbox > .block-editor-inner-blocks > .block-editor-block-list__layout > *:nth-last-child(2) {
+    margin-bottom: 0 !important;
+}
+
 /* BOOTSTRAP ICON ADJUSTMENTS */
 
 i.bi {

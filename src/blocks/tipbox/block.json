@@ -1,0 +1,20 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap-editor/tipbox",
+    "title": "Tip Box",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container"],
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "styleType": {
+            "type": "string",
+            "default": ""
+        },
+        "narrowWidth": {
+            "type": "boolean",
+            "default": false
+        }
+    }
+}
