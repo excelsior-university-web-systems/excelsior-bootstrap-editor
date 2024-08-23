@@ -1,0 +1,16 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap-editor/cards",
+    "title": "Cards",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container"],
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "colSize": {
+            "type": "string",
+            "default": "3"
+        }
+    }
+}

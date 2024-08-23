@@ -1,0 +1,23 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap-editor/card",
+    "title": "Card",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/cards"],
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "useImg": {
+            "type": "boolean",
+            "default": true
+        },
+        "imgUrl": {
+            "type": "string"
+        },
+        "imgAltText": {
+            "type": "string",
+            "default": ""
+        }
+    }
+}
