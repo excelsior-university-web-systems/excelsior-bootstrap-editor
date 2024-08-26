@@ -1,10 +1,16 @@
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { BaseControl, PanelBody, Button, TextControl, ToggleControl } from '@wordpress/components';
+import {
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
+} from '@wordpress/components';
 import { useState } from '@wordpress/element';
+import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 
-export default function Edit ( { attributes, setAttributes } ) {
+export default function Edit ( { attributes, setAttributes, context } ) {
 
-    const { url, alignment, caption, altText, mobileResponsive } = attributes;
+    const { url, alignment, alignmentSize, caption, altText, mobileResponsive } = attributes;
+    const alignmentEnabled = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/alignmentEnabled'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/alignmentEnabled'] : false;
     const [tempUrl, setTempUrl] = useState('');
     const [tempAltText, setTempAltText] = useState('');
     const [tempCaption, setTempCaption] = useState('');
@@ -19,6 +25,10 @@ export default function Edit ( { attributes, setAttributes } ) {
     const handleImageError = () => {
         setHasError(true); 
     };
+
+    if ( alignmentEnabled && alignment.length <= 0 ) {
+        setAttributes( {alignment: "float-start me-3 mb-1"} );
+    }
 
     return (
         <>
@@ -53,33 +63,63 @@ export default function Edit ( { attributes, setAttributes } ) {
                     />
                 </BaseControl>
 
+                { alignmentEnabled ? (
+                    <>
+                    <ToggleGroupControl
+                        label="Align"
+                        help="Align image to the left of right and allows texts to be wrapped."
+                        value={alignment}
+                        onChange={(value) => setAttributes({ alignment: value, mobileResponsive: false })}
+                        isBlock
+                        >
+                        <ToggleGroupControlOption value="float-start me-3 mb-1" label="Left" />
+                        <ToggleGroupControlOption value="float-end ms-3 mb-1" label="Right" />
+                    </ToggleGroupControl>
+
+                    <ToggleGroupControl
+                        label="Image Size"
+                        help="An image won't scale beyond its original size. For instance, a 200-pixel-wide image won't exceed 200 pixels, even at 50% scale."
+                        value={alignmentSize}
+                        onChange={(value) => setAttributes({ alignmentSize: value })}
+                        isBlock
+                        >
+                        <ToggleGroupControlOption value="" label="Actual" />
+                        <ToggleGroupControlOption value="w-25" label="25%" />
+                        <ToggleGroupControlOption value="w-50" label="50%" />
+                    </ToggleGroupControl>
+                    </>
+
+                ) : (
+
+                    <ToggleControl
+                        label="Mobile Responsive"
+                        help="Scale image to size of the container width. Responsive image will never scale bigger than its actual size."
+                        checked={mobileResponsive}
+                        onChange={(value) => setAttributes({ mobileResponsive: value })}
+                    />
+
+                )}
                 
-                <ToggleControl
-                    label="Mobile Responsive"
-                    help="Scale image to size of the container width. Responsive image will never scale bigger than its actual size."
-                    checked={mobileResponsive}
-                    onChange={(value) => setAttributes({ mobileResponsive: value })}
-                />
             </PanelBody>
         </InspectorControls>
         { url && !hasError ? 
         
             altText.length || caption.length ? (
 
-                <figure {...useBlockProps({className: "figure"})}>
+                <figure {...useBlockProps({className: `figure${ alignmentEnabled ? " " + alignment + " " + alignmentSize : ""}`})}>
                     <img className={`figure-img${ mobileResponsive ? " img-fluid" : "" }`} src={url} alt={altText || ''} onError={handleImageError} />
                     { caption && <figcaption className='figure-caption'>{caption}</figcaption> }
                 </figure>
 
             ) : (
 
-                <img {...useBlockProps( {className: mobileResponsive ? "img-fluid" : ""} )} src={url} alt="" role="presentation" onError={handleImageError} />
+                <img {...useBlockProps( {className: `${mobileResponsive ? "img-fluid" : ""}${ alignmentEnabled ? " " + alignment + " " + alignmentSize : ""}`} )} src={url} alt="" role="presentation" onError={handleImageError} />
 
             ) 
         
         : (
 
-            <div {...useBlockProps()}>
+            <div {...useBlockProps({className: `${ alignmentEnabled ? alignment : ""}`})}>
                 { hasError ? (
                     <div className="excelsior-image-error">
                         <div className="alert alert-warning my-0"><p className='my-0'><strong>Failed to load image.</strong> The image at <a href={url} target='_blank'>{url}</a> cannot be displayed. Please check the URL in Settings. If the image is from a website requiring authentication (like Canvas LMS), sign in first, then reload the editor.</p></div>

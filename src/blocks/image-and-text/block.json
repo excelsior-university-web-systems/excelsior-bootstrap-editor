@@ -1,0 +1,19 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap-editor/image-and-text",
+    "title": "Image and Text",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container"],
+    "supports": {
+        "html": false
+    },
+    "providesContext": {
+        "excelsior-bootstrap-editor/alignmentEnabled": "alignmentEnabled"
+    },
+    "attributes": {
+        "alignmentEnabled": {
+            "type": "boolean",
+            "default": true
+        }
+    }
+}

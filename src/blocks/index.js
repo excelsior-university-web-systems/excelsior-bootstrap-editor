@@ -8,6 +8,7 @@ import './horizontal-rule';
 import './iframe-embed';
 import './image-banner';
 import './image';
+import './image-and-text';
 import './namespace';
 import './start-here-banner';
 import './callout';

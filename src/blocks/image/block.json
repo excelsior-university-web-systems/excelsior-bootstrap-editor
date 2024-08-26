@@ -7,13 +7,18 @@
     "supports": {
         "html": false
     },
+    "usesContext": ["excelsior-bootstrap-editor/alignmentEnabled"],
     "attributes": {
         "url": {
             "type": "string"
         },
         "alignment": {
             "type": "string",
-            "default": "left"
+            "default": ""
+        },
+        "alignmentSize": {
+            "type": "string",
+            "default": "w-25"
         },
         "mobileResponsive": {
             "type": "boolean",
