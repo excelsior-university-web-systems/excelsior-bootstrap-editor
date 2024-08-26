@@ -11,6 +11,7 @@ export const ALLOWED_BLOCKS = [
     XCLSR_BTSTRP_EDITOR_PREFIX + "/tipbox",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/columns",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/cards",
+    XCLSR_BTSTRP_EDITOR_PREFIX + "/image",
     "core/paragraph",
     "core/heading",
     "core/list"

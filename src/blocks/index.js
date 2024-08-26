@@ -7,6 +7,7 @@ import './homepage-content';
 import './horizontal-rule';
 import './iframe-embed';
 import './image-banner';
+import './image';
 import './namespace';
 import './start-here-banner';
 import './callout';

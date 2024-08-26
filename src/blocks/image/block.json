@@ -1,0 +1,29 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap-editor/image",
+    "title": "Image",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container"],
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "url": {
+            "type": "string"
+        },
+        "alignment": {
+            "type": "string",
+            "default": "left"
+        },
+        "mobileResponsive": {
+            "type": "boolean",
+            "default": false
+        },
+        "caption": {
+            "type": "string"
+        },
+        "altText": {
+            "type": "string"
+        }
+    }
+}
