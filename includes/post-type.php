@@ -102,24 +102,4 @@ function add_excelsior_bootstrap_capabilities() {
     }
 }
 
-/*
-  Manage the styles loaded when editing or creating Excelsior Bootstrap Editor pages
-*/
-add_action( 'admin_enqueue_scripts', function ( $hook ) {
-
-    global $post;
-    
-    if ( $hook == 'post-new.php' || $hook == 'post.php' ) {
-        if ( $post && XCLSR_BTSTRP_POST_TYPE === $post->post_type ) {
-
-            // Main Excelsior Bootstrap style
-            wp_enqueue_style( 'excelsior-bootstrap-style', plugin_dir_url(__FILE__) . '../css/excelsior-bootstrap.css', array(), true );
-
-            // wp_enqueue_script( 'excelsior-bootstrap-editor-script', plugin_dir_url(__FILE__) . '../js/excelsior-bootstrap.js', array('wp-blocks', 'wp-dom-ready', 'wp-edit-post'), filemtime( plugin_dir_path(__FILE__) . '../js/excelsior-bootstrap.js' ), true );
-
-        }
-    }
-
-} );
-
 ?>

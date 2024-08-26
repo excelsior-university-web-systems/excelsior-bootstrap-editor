@@ -19,6 +19,18 @@ add_action( 'init', function() {
         array( 'wp-blocks', 'wp-dom-ready', 'wp-element' )
     );
 
+    wp_register_style(
+        XCLSR_BTSTRP_EDITOR_PREFIX.'-style',
+        plugin_dir_url(__FILE__) . '../css/editor-style.css',
+        false
+    );
+
+    wp_register_style(
+        XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-style',
+        plugin_dir_url(__FILE__) . '../css/excelsior-bootstrap.css',
+        false
+    );
+
     $blocks_file = plugin_dir_path(__FILE__) . '../build/blocks/blocks.json';
     $blocks = json_decode( file_get_contents( $blocks_file ), true );
 
@@ -26,6 +38,8 @@ add_action( 'init', function() {
         foreach ( $blocks['blocks'] as $block ) {
             register_block_type( plugin_dir_path(__FILE__) . '../build/blocks/' . $block, array(
                 'editor_script' => XCLSR_BTSTRP_EDITOR_PREFIX.'-blocks-script',
+                'editor_style'  => XCLSR_BTSTRP_EDITOR_PREFIX.'-style',
+                'style'         => XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-style'
             ) );
         }
     }
@@ -59,9 +73,6 @@ add_action( 'enqueue_block_editor_assets', function() {
     global $post_type;
 
     if ( $post_type === XCLSR_BTSTRP_POST_TYPE ) {
-
-        // CSS specifically for the block editor
-        wp_enqueue_style( XCLSR_BTSTRP_EDITOR_PREFIX.'-style', plugin_dir_url(__FILE__) . '../css/editor-style.css', array(), false );
 
         // editor modification script
         wp_enqueue_script(
