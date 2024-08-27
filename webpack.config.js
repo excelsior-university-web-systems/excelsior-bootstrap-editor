@@ -6,6 +6,7 @@ const path = require('path');
 const entries = {
     'blocks': './src/blocks/index.js',
     'icons': './src/icons/index.js',
+    'table': './src/table/index.js',
     'editor': './src/editor/index.js'
 };
 
