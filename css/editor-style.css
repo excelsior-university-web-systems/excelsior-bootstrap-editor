@@ -141,17 +141,8 @@
 /* EXCELSIOR BOOTSTRAP EDITOR
    TABLE */
 
-.wp-block-excelsior-bootstrap-editor-container figure figcaption {
+.wp-block-excelsior-bootstrap-editor-container figure.wp-block-table figcaption {
     display: none;
-}
-
-.wp-block-excelsior-bootstrap-editor-container table thead,
-.wp-block-excelsior-bootstrap-editor-container table tfoot,
-.wp-block-excelsior-bootstrap-editor-container table tr,
-.wp-block-excelsior-bootstrap-editor-container table td,
-.wp-block-excelsior-bootstrap-editor-container table th {
-    border-width: 1px !important;
-    border-color: #f2f2f2 !important;
 }
 
 /* BOOTSTRAP ICON ADJUSTMENTS */

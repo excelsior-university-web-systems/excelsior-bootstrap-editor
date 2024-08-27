@@ -2,7 +2,11 @@ import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { Fragment, useEffect } from '@wordpress/element';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
-import { PanelBody, ToggleControl } from '@wordpress/components';
+import { PanelBody, ToggleControl, BaseControl } from '@wordpress/components';
+import {
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
+} from '@wordpress/components';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../constants';
 
 // Function to modify the core/table block
@@ -17,18 +21,22 @@ function modifyTableBlock(settings, name) {
         delete settings.attributes.caption;
     }
 
-     // Remove the 'hasFixedLayout' attribute if it exists
-     if (settings.attributes && settings.attributes.hasFixedLayout) {
-        delete settings.attributes.hasFixedLayout;
-    }
-
-    console.log(settings.attributes);
-
-    // Modify default attribute
-    // settings.attributes.hasFixedLayout = {
-    //     type: 'boolean',
-    //     default: false
-    // };
+    // Add custom attributes
+    settings.attributes = {
+        ...settings.attributes,
+        isCompact: {
+            type: "boolean",
+            default: false
+        },
+        border: {
+            type: "string",
+            default: "table-bordered"
+        },
+        isStriped: {
+            type: "boolean",
+            default: false
+        }
+    };
 
     // Modify supports
     settings.supports = {
@@ -49,65 +57,115 @@ addFilter(
 );
 
 // Create a Higher-Order Component (HOC) to add a custom class in the editor
-const withCustomTableClass = createHigherOrderComponent((BlockEdit) => {
+const modifyTableEditor = createHigherOrderComponent((BlockEdit) => {
     return (props) => {
         if (props.name !== 'core/table') {
             return <BlockEdit {...props} />;
         }
 
-        const blockProps = useBlockProps();
+        const { border, isStriped, isCompact } = props.attributes;
 
-        useEffect(() => {
-            const tableElement = document.querySelector(`[data-block="${props.clientId}"] table`);
+        const applyClasses = (tableElement) => {
 
             if (tableElement) {
-                tableElement.classList.add('table'); // Add your custom class here
+                const classArray = ['table', border, isStriped ? 'table-striped' : '', isCompact ? 'table-sm' : ''].filter(Boolean);
+                tableElement.classList.add(...classArray);
             }
 
-            // Cleanup function to remove the class when the block is unmounted or re-rendered
+        };
+
+        useEffect(() => {
+
+            const blockElement = document.querySelector(`[data-block="${props.clientId}"]`);
+
+            if (!blockElement) return;
+
+            // Create a MutationObserver to watch for changes in the block element
+            const observer = new MutationObserver(() => {
+                const tableElement = blockElement.querySelector('table');
+                applyClasses(tableElement);
+            });
+
+            // Start observing the block element for childList changes
+            observer.observe(blockElement, {
+                childList: true,
+                subtree: true,
+            });
+
+            // Initial application of classes
+            const initialTableElement = blockElement.querySelector('table');
+            applyClasses(initialTableElement);
+
+            // Cleanup observer on unmount
             return () => {
-                if (tableElement) {
-                    tableElement.classList.remove('table');
+                observer.disconnect();
+                if (initialTableElement) {
+                    const classArray = ['table', border, isStriped ? 'table-striped' : '', isCompact ? 'table-sm' : ''].filter(Boolean);
+                    initialTableElement.classList.remove(...classArray);
                 }
             };
-        }, [props.clientId]);
+        }, [props.clientId, border, isStriped, isCompact]);
 
-        return <BlockEdit {...props} {...blockProps} />;
-        // return (
-        //     <Fragment>
-        //         <InspectorControls>
-        //             {props.isSelected && (
-        //                 <PanelBody title="Table Settings">
-        //                     {/* Insert your custom controls here or modify existing ones */}
-        //                     {/* Other table settings will go here */}
-        //                     {/* You can also remove specific controls by not rendering them */}
-        //                 </PanelBody>
-        //             )}
-        //         </InspectorControls>
-        //         <BlockEdit {...props} {...blockProps} />
-        //     </Fragment>
-        // );
+        return (
+            <Fragment>
+                <BlockEdit {...props} {...useBlockProps()} />
+                <InspectorControls>
+                    {props.isSelected && (
+                        <PanelBody>
+                            <BaseControl label="Styles">
+                                <ToggleControl
+                                    label="Striped"
+                                    checked={isStriped}
+                                    onChange={(value) => props.setAttributes({ isStriped: value })}
+                                />
+                                <ToggleControl
+                                    label="Compact"
+                                    checked={isCompact}
+                                    onChange={(value) => props.setAttributes({ isCompact: value })}
+                                />
+                            </BaseControl>
+                            <ToggleGroupControl
+                                label="Border"
+                                value={border}
+                                onChange={(value) => props.setAttributes({ border: value })}
+                                isBlock
+                            >
+                                <ToggleGroupControlOption value="" label="Simple" />
+                                <ToggleGroupControlOption value="table-bordered" label="Bordered" />
+                                <ToggleGroupControlOption value="table-borderless" label="Borderless" />
+                            </ToggleGroupControl>
+                        </PanelBody>
+                    )}
+                </InspectorControls>
+            </Fragment>
+        );
     };
-}, 'withCustomTableClass');
+}, 'modifyTableEditor');
 
 // Hook into the editor.BlockEdit filter
 addFilter(
     'editor.BlockEdit',
-    XCLSR_BTSTRP_EDITOR_PREFIX + '/add-custom-table-class',
-    withCustomTableClass
+    XCLSR_BTSTRP_EDITOR_PREFIX + '/modify-table-editor',
+    modifyTableEditor
 );
 
 // Function to filter the save element
-function filterTableSave(element, blockType) {
+function filterTableSave(element, blockType, attributes) {
     if (blockType.name !== 'core/table') {
         return element;
     }
 
     // Ensure the element is valid and is a figure
     if (element && element.type === 'figure') {
+
         // Extract the children of the figure element (usually the table and optionally the caption)
         const tableElement = element.props.children.find((child) => child.type === 'table');
-        tableElement.props.className = `${tableElement.props.className || ''} table`.trim();
+        
+        const {border, isStriped, isCompact} = attributes;
+        const classes = `table${border.length ? ' ' + border : ''}${isStriped ? ' table-striped' : ''}${isCompact ? ' table-sm' : ''}`;
+
+        tableElement.props.className = `${tableElement.props.className || ''} ${classes}`.trim();
+
         return tableElement; // Return only the table element
     }
 
