@@ -34,7 +34,6 @@ add_action( 'init', function() {
         'public'              => false,
         'show_ui'             => true,
         'show_in_menu'        => true,
-        'capability_type'     => array( XCLSR_BTSTRP_POST_TYPE, XCLSR_BTSTRP_POST_TYPE.'s' ),
         'map_meta_cap'        => true,
         'capabilities'        => array(
             'read'                   => 'read',
