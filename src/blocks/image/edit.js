@@ -129,11 +129,13 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         <TextControl label="Image URL" value={tempUrl} onChange={(newUrl) => setTempUrl(newUrl)} />
                         <TextControl label="Image Alt Text" value={tempAltText} onChange={(newAltText) => setTempAltText(newAltText)} placeholder='Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration.' />
                         <TextControl label="Image Caption" value={tempCaption} onChange={(newCaption) => setTempCaption(newCaption)} placeholder='Displays a caption or description for the entire image. Can be left blank if not needed.' />
-                        <ToggleControl
+                        { !alignmentEnabled ? (
+                            <ToggleControl
                             label="Mobile Responsive"
                             checked={mobileResponsive}
                             onChange={(value) => setAttributes({ mobileResponsive: value })}
                         />
+                        ) : '' }
                         <Button onClick={onInsertUrl} variant="primary">Insert</Button>
                     </div>
                 ) }
