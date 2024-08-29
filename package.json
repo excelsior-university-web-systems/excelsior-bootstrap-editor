@@ -12,6 +12,10 @@
   "license": "ISC",
   "devDependencies": {
     "@wordpress/scripts": "^28.6.0",
+    "babel-plugin-prismjs": "^2.1.0",
     "webpack-shell-plugin-next": "^2.3.2"
+  },
+  "dependencies": {
+    "prismjs": "^1.29.0"
   }
 }
