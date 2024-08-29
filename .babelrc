@@ -8,7 +8,7 @@
             "languages": ["javascript", "css", "markup", "java", "python", "r"],
             "plugins": ["line-numbers", "normalize-whitespace"],
             "theme": "default",
-            "css": true
+            "css": false
         }]
     ]
 }

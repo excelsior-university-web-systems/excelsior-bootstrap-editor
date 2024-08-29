@@ -95,6 +95,13 @@ add_action( 'enqueue_block_editor_assets', function() {
             array( 'wp-rich-text', 'wp-element', 'wp-editor' )
         );
 
+        //insert inline code script
+        wp_enqueue_script(
+            XCLSR_BTSTRP_EDITOR_PREFIX.'-inline-code',
+            plugins_url( '/build/inline-code/index.js', dirname(__FILE__) ),
+            array( 'wp-rich-text', 'wp-element', 'wp-editor' )
+        );
+
     }
 
 } );
