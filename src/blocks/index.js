@@ -17,3 +17,4 @@ import './columns';
 import './column';
 import './cards';
 import './card';
+import './code-block';

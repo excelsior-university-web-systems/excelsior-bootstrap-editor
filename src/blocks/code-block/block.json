@@ -1,0 +1,23 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap-editor/code-block",
+    "title": "Code Block",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container"],
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "content": {
+			"type": "string"
+		},
+        "language": {
+			"type": "string",
+			"default": "markup"
+		},
+        "showLineNumbers": {
+            "type": "boolean",
+			"default": false
+		}
+    }
+}
