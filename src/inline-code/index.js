@@ -7,9 +7,6 @@ import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../constants';
 const INLINE_CODE_FORMAT_NAME = XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-code';
 
 wp.domReady(() => {
-
-    window.Prism = window.Prism || {};
-    Prism.manual = true;
     
     // Unregistered core/code inline code format
     wp.richText.unregisterFormatType('core/code');
@@ -29,8 +26,6 @@ wp.domReady(() => {
     
             const [language, setLanguage] = useState(initialLanguage);
             const [isVisible, setIsVisible] = useState(false);
-
-            console.log('Active Format:', activeFormat, 'Initial Language:', initialLanguage, 'Current Language:', language);
     
             const applyLanguageClass = (lang) => {
 
@@ -62,15 +57,6 @@ wp.domReady(() => {
                     setIsVisible(false);
                 }
             }, [activeFormat]);
-    
-            // Apply PrismJS syntax highlighting when the content or language changes
-            useEffect(() => {
-
-                if ( isActive ) {
-                    Prism.highlightAll();
-                }
-                
-            }, [language, value]);
     
             return (
                 <>
