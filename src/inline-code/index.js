@@ -1,4 +1,4 @@
-import { registerFormatType, unregisterFormatType, applyFormat, removeFormat, getActiveFormat } from '@wordpress/rich-text';
+import { registerFormatType, applyFormat, removeFormat, getActiveFormat } from '@wordpress/rich-text';
 import { useState, useEffect } from '@wordpress/element';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
 import { Popover, SelectControl } from '@wordpress/components';
