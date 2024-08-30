@@ -22,7 +22,6 @@ addFilter(
 
 wp.domReady(() => {
     wp.richText.unregisterFormatType('core/image');        // Remove inline image
-    wp.richText.unregisterFormatType('core/code');         // Remove inline code
     wp.richText.unregisterFormatType('core/text-color');   // Remove text color/highlight
     wp.richText.unregisterFormatType('core/language');     // Example for language button
     wp.richText.unregisterFormatType('core/keyboard');     // Example for keyboard input button
