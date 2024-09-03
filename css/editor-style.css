@@ -14,6 +14,14 @@
     line-height: 1.5 !important;
 }
 
+.inline-code-preview-modal .excelsior-bootstrap-code-preview {
+    font-size: 1rem !important;
+}
+
+.inline-code-preview-modal .excelsior-bootstrap-code-preview code {
+    color: #d63384 !important;
+}
+
 /* EXCELSIOR BOOTSTRAP EDITOR
    BUTTON */
 

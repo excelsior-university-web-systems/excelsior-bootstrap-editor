@@ -1,12 +1,15 @@
 import { registerFormatType, applyFormat, removeFormat, getActiveFormat } from '@wordpress/rich-text';
-import { useState, useEffect } from '@wordpress/element';
+import { useState, useEffect, createElement } from '@wordpress/element';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
-import { Popover, SelectControl } from '@wordpress/components';
+import { Popover, SelectControl, Button, Modal } from '@wordpress/components';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../constants';
 
 const INLINE_CODE_FORMAT_NAME = XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-code';
 
 wp.domReady(() => {
+
+    window.Prism = window.Prism || {};
+    Prism.manual = true;
     
     // Unregistered core/code inline code format
     wp.richText.unregisterFormatType('core/code');
@@ -23,9 +26,12 @@ wp.domReady(() => {
     
             const activeFormat = getActiveFormat(value, INLINE_CODE_FORMAT_NAME);
             const initialLanguage = activeFormat?.attributes?.class?.match(/language-(\w+)/)?.[1] || activeFormat?.unregisteredAttributes?.class?.match(/language-(\w+)/)?.[1] || '';
-    
+            const previewHTML = wp.richText.toHTMLString({ value });
             const [language, setLanguage] = useState(initialLanguage);
             const [isVisible, setIsVisible] = useState(false);
+            const [isPreviewing, setPreviewing] = useState(false);
+            const openPreviewModal = () => setPreviewing(true);
+            const closePreviewModal = () => setPreviewing(false);
     
             const applyLanguageClass = (lang) => {
 
@@ -57,6 +63,14 @@ wp.domReady(() => {
                     setIsVisible(false);
                 }
             }, [activeFormat]);
+
+            // Effect to hightlight the code when the preview modal is opened
+            useEffect(()=>{
+                if ( isPreviewing ) {
+                    const modalContent = document.querySelector('.inline-code-preview-modal');
+                    Prism.highlightAllUnder(modalContent);
+                }
+            }, [isPreviewing]);
     
             return (
                 <>
@@ -95,8 +109,25 @@ wp.domReady(() => {
                                     ]}
                                     onChange={onLanguageChange}
                                 />
+                                <Button
+                                    text='Preview'
+                                    variant='secondary'
+                                    onClick={openPreviewModal}
+                                />
                             </div>
                         </Popover>
+                    )}
+                    {isPreviewing && (
+                        <Modal
+                            title="Preview"
+                            className="inline-code-preview-modal"
+                            onRequestClose={closePreviewModal}
+                            shouldCloseOnClickOutside={false}
+                            shouldCloseOnEsc={true}
+                            size="large"
+                        >
+                            {createElement('div', { className: 'excelsior-bootstrap-code-preview', dangerouslySetInnerHTML: { __html: previewHTML } })}
+                        </Modal>
                     )}
                 </>
             );
