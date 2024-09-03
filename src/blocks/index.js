@@ -18,3 +18,5 @@ import './column';
 import './cards';
 import './card';
 import './code-block';
+import './task-group';
+import './task';

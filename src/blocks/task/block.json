@@ -1,0 +1,18 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap-editor/task",
+    "title": "Task",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/task-group"],
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "task": {
+            "type": "string"
+        },
+        "dueDate": {
+            "type": "string"
+        }
+    }
+}
