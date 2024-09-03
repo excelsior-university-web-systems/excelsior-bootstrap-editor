@@ -3,34 +3,39 @@ import { PanelBody, Button, TextControl, ToggleControl } from '@wordpress/compon
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 import { addFilter } from '@wordpress/hooks';
 import { useState } from '@wordpress/element';
+import { createHigherOrderComponent } from '@wordpress/compose';
 
 const TEMPLATE = [
     ['core/heading', { placeholder: "Card Title", level: 4, className: "h5 card-title" }],
     ['core/paragraph', { placeholder: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." }]
 ];
 
-const withCustomClasses = (settings, name) => {
+const withCustomClasses = createHigherOrderComponent((BlockEdit) => {
+    return (props) => {
 
-    if (name === 'core/paragraph') {
-        const newSettings = {
-            ...settings,
-            attributes: {
-                ...settings.attributes,
-                className: {
-                    type: 'string',
-                    default: 'card-text',
-                },
-            },
-        };
-        return newSettings;
-    }
+        const { name, clientId, attributes, setAttributes } = props;
+        const { className = '' } = attributes;
 
-    return settings;
-};
+        if (name !== 'core/paragraph') {
+            return <BlockEdit {...props} />;
+        }
+
+        const parentBlockId = wp.data.select('core/block-editor').getBlockParents(clientId).slice(-1)[0];
+        const parentBlockName = parentBlockId ? wp.data.select('core/block-editor').getBlockName(parentBlockId) : null;
+
+        if (parentBlockName === 'excelsior-bootstrap-editor/card' && !className.includes('card-text')) {
+            setAttributes({
+                className: `${className ? className + ' ' : ''}card-text`,
+            });
+        }
+
+        return <BlockEdit {...props} />;
+    };
+}, 'withCustomClasses');
 
 addFilter(
-    'blocks.registerBlockType',
-    'excelsior-bootstrap-editor/card',
+    'editor.BlockEdit',
+    'excelsior-bootstrap-editor/with-custom-classes',
     withCustomClasses
 );
 
