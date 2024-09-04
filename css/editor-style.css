@@ -14,6 +14,32 @@
     line-height: 1.5 !important;
 }
 
+/* EXCELSIOR BOOTSTRAP EDITOR
+   TASK GROUP */
+
+.wp-block-excelsior-bootstrap-editor-task-group .list-group-item {
+    border-width: 0 0 var(--bs-list-group-border-width) !important;
+}
+
+.MuiFormControl-root .MuiInputBase-root {
+    position: relative;
+    padding: 0 !important;
+}
+
+.MuiFormControl-root .MuiInputBase-root .MuiInputAdornment-root {
+    position: absolute;
+    top: 4px;
+    right: 16px;
+    margin: 0;
+}
+
+.MuiFormControl-root .MuiInputBase-root .MuiInputAdornment-root .MuiButtonBase-root {
+    padding: 0;
+}
+
+/* EXCELSIOR BOOTSTRAP EDITOR
+   INLINE CODE FORMAT */
+
 .inline-code-preview-modal .excelsior-bootstrap-code-preview {
     font-size: 1rem !important;
 }

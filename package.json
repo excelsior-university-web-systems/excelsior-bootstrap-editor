@@ -16,6 +16,8 @@
     "webpack-shell-plugin-next": "^2.3.2"
   },
   "dependencies": {
+    "@mui/x-date-pickers": "^7.15.0",
+    "dayjs": "^1.11.13",
     "prismjs": "^1.29.0"
   }
 }
