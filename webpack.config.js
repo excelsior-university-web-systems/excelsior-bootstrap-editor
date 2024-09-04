@@ -33,5 +33,11 @@ module.exports = {
                 parallel: true
             }
         } )
-    ]
+    ],
+    performance: {
+        ...defaultConfig.performance,
+        hints: false,
+        maxEntrypointSize: 600000,
+        maxAssetSize: 600000
+    }
 };
