@@ -4,18 +4,19 @@
     "title": "Accordion Item",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/accordion"],
-    "icon": "minus",
     "supports": {
         "html": false
     },
     "attributes": {
         "title": {
-            "type": "string",
-            "default": "Accordion Item"
+            "type": "string"
         },
-        "content": {
-            "type": "string",
-            "default": ""
+        "uniqueId": {
+            "type": "string"
+        },
+        "open": {
+            "type": "boolean",
+            "default": true
         }
-        }
+    }
 }

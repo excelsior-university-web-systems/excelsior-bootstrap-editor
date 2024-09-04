@@ -4,7 +4,6 @@
     "title": "Accordion",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/container"],
-    "icon": "menu",
     "supports": {
         "html": false
     },
