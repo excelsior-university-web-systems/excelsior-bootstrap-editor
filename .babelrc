@@ -6,7 +6,7 @@
     "plugins": [
         ["prismjs", {
             "languages": ["javascript", "css", "markup", "java", "python", "r"],
-            "plugins": ["line-numbers", "normalize-whitespace"],
+            "plugins": ["line-numbers", "normalize-whitespace", "keep-markup"],
             "theme": "default",
             "css": false
         }]

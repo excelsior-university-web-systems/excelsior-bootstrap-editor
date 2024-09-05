@@ -15,6 +15,32 @@
 }
 
 /* EXCELSIOR BOOTSTRAP EDITOR
+   GET CODE BUTTON */
+
+.components-modal__frame.get-code-modal .cta-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.components-panel__body.get-code-btn-panel {
+    display: block !important;
+    width: 100%;
+}
+
+.components-panel__body.get-code-btn-panel .components-button.get-code-btn {
+    width: 100%;
+    font-weight: bold;
+    justify-content: center;
+    background: #561e66;
+    color: #fff;
+}
+
+.components-panel__body.get-code-btn-panel .components-button.get-code-btn:hover {
+    color: #fff;
+}
+
+/* EXCELSIOR BOOTSTRAP EDITOR
    TASK GROUP */
 
 .wp-block-excelsior-bootstrap-editor-task-group .list-group-item {
