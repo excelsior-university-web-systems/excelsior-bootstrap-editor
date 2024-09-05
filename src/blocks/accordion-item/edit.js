@@ -6,7 +6,7 @@ import { useEffect } from '@wordpress/element';
 
 function generateHtmlId() {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+    const chars = letters + '0123456789';
     const timestamp = Date.now().toString(36);
     const randomLength = 6;
     let randomPart = '';
@@ -40,7 +40,7 @@ export default function Edit({ attributes, setAttributes }) {
             <InspectorControls>
                 <PanelBody title="Accordion Item Settings">
                     <ToggleControl
-                        label="Shown when page loads"
+                        label="Open when page loads"
                         help="Content is displayed immediately upon page load."
                         checked={open}
                         onChange={(value) => setAttributes({ open: value })}
