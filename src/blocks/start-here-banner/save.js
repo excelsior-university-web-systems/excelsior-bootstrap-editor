@@ -8,7 +8,9 @@ export default function Save() {
 
     return (
         <div {...blockProps}>
-            <InnerBlocks.Content />
+            <div className='col offset-md-5'>
+                <InnerBlocks.Content />
+            </div>
         </div>
     );
 }

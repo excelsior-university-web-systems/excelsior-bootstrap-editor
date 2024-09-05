@@ -70,22 +70,23 @@ function register_excelsior_bootstrap_editor_homepage_pattern() {
 
     <!-- wp:excelsior-bootstrap-editor/start-here-banner -->
     <div class="wp-block-excelsior-bootstrap-editor-start-here-banner start-here-banner">
-        <!-- wp:heading {"level":3} -->
-        <h3 class="wp-block-heading">Ready to get started?</h3>
-        <!-- /wp:heading -->
+        <div class="col offset-md-5">
+            <!-- wp:heading {"level":3} -->
+            <h3 class="wp-block-heading">Ready to get started?</h3>
+            <!-- /wp:heading -->
 
-        <!-- wp:paragraph -->
-        <p>Before diving into the course and starting your exploration of the contents, visit the Getting Started icon to review course essentials (use of Canvas, Policies, and Support Resources), plan for success in the course, and introduce yourself.</p>
-        <!-- /wp:paragraph -->
+            <!-- wp:paragraph -->
+            <p>Before diving into the course and starting your exploration of the contents, visit the Getting Started icon to review course essentials (use of Canvas, Policies, and Support Resources), plan for success in the course, and introduce yourself.</p>
+            <!-- /wp:paragraph -->
 
-        <!-- wp:excelsior-bootstrap-editor/buttons {"className":"mb-0"} -->
-        <p class="wp-block-excelsior-bootstrap-editor-buttons mb-0">
-            <!-- wp:excelsior-bootstrap-editor/button {"text":"Start Here","className":"btn-start-here btn-lg"} -->
-            <a class="wp-block-excelsior-bootstrap-editor-button btn btn-internal btn-start-here btn-lg" href="#">Start Here</a>
-            <!-- /wp:excelsior-bootstrap-editor/button -->
-        </p>
-        <!-- /wp:excelsior-bootstrap-editor/buttons -->
-
+            <!-- wp:excelsior-bootstrap-editor/buttons {"className":"mb-0"} -->
+            <p class="wp-block-excelsior-bootstrap-editor-buttons mb-0">
+                <!-- wp:excelsior-bootstrap-editor/button {"text":"Start Here","className":"btn-start-here btn-lg"} -->
+                <a class="wp-block-excelsior-bootstrap-editor-button btn btn-internal btn-start-here btn-lg" href="#">Start Here</a>
+                <!-- /wp:excelsior-bootstrap-editor/button -->
+            </p>
+            <!-- /wp:excelsior-bootstrap-editor/buttons -->
+        </div>
     </div>
     <!-- /wp:excelsior-bootstrap-editor/start-here-banner -->
     ';
