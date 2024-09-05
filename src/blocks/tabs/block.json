@@ -1,0 +1,11 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap-editor/tabs",
+    "title": "Tabs",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container"],
+    "supports": {
+        "html": false
+    },
+    "attributes": {}
+}

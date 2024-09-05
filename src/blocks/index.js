@@ -20,3 +20,5 @@ import './card';
 import './code-block';
 import './task-group';
 import './task';
+import './tabs';
+import './tab';
