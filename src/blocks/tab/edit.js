@@ -1,6 +1,4 @@
 import { useBlockProps, InnerBlocks, RichText } from '@wordpress/block-editor';
-import { ALLOWED_BLOCKS } from './allowed-blocks';
-import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 import { useEffect } from '@wordpress/element';
 
 function generateHtmlId() {
@@ -9,22 +7,21 @@ function generateHtmlId() {
     const timestamp = Date.now().toString(36);
     const randomLength = 6;
     let randomPart = '';
-  
-    // Generate random characters from valid set for the rest of the ID
+
     for (let i = 0; i < randomLength; i++) {
-      randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
+        randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-  
-    // Ensure the first character is a letter
+
     const firstChar = letters.charAt(Math.floor(Math.random() * letters.length));
-  
     return firstChar + timestamp + randomPart;
 }
 
 export default function Edit({ attributes, setAttributes }) {
-
     const { title, uniqueId } = attributes;
-    const blockProps = useBlockProps();
+    const blockProps = useBlockProps( {
+        className: "tab-pane",
+        role: "tabpanel"
+    } );
 
     useEffect(() => {
         if (!uniqueId) {
@@ -33,24 +30,16 @@ export default function Edit({ attributes, setAttributes }) {
     }, [uniqueId]);
 
     return (
-        <div {...blockProps}>
+        <div {...blockProps} id={`${uniqueId}-pane`} aria-labelledby={`${uniqueId}-tab`}>
             <RichText
                 tagName="h2"
-                placeholder="Accordion Item Title"
+                placeholder="Tab Title"
+                className='h4'
                 value={title}
                 onChange={(value) => setAttributes({ title: value })}
-                allowedFormats={['core/bold', 'core/italic', XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
+                allowedFormats={['core/bold', 'core/italic']}
             />
-            <div id={uniqueId}>
-                <div>
-                    <InnerBlocks
-                        allowedBlocks={ALLOWED_BLOCKS}
-                        template={[['core/paragraph']]}
-                        templateLock={false}
-                        renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
-                    />
-                </div>
-            </div>
+            <InnerBlocks template={[['core/paragraph']]} templateLock={false} />
         </div>
     );
 }

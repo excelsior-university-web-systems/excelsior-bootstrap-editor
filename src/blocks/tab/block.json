@@ -9,10 +9,16 @@
     },
     "attributes": {
         "title": {
-            "type": "string"
+            "type": "string",
+            "default": "Tab Title"
         },
         "uniqueId": {
-            "type": "string"
+            "type": "string",
+            "default": ""
         }
+    },
+    "providesContext": {
+        "excelsior-bootstrap-editor/tabTitle": "title",
+        "excelsior-bootstrap-editor/tabId": "uniqueId"
     }
 }
