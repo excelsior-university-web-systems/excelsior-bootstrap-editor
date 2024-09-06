@@ -29,7 +29,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
     // Update the parent block's "tabs" attribute when child tabs change
     useEffect(() => {
-        setAttributes({ tabs: childTabs });
+        // Compare current childTabs with attributes.tabs
+        if (JSON.stringify(childTabs) !== JSON.stringify(attributes.tabs)) {
+            setAttributes({ tabs: childTabs });
+        }
     }, [childTabs]);
 
     return (
