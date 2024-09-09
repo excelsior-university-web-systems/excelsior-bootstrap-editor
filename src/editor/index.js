@@ -12,6 +12,7 @@ window.Prism = window.Prism || {};
 Prism.manual = true;
 
 function removeBlockAlignment( settings ) {
+
     // Check if the block supports alignment and remove it
     if (settings.supports && settings.supports.align) {
         settings.supports = {
@@ -21,6 +22,7 @@ function removeBlockAlignment( settings ) {
     }
 
     return settings;
+
 }
 
 // Add filter to modify block settings
@@ -35,6 +37,22 @@ wp.domReady(() => {
     wp.richText.unregisterFormatType('core/text-color');   // Remove text color/highlight
     wp.richText.unregisterFormatType('core/language');     // Example for language button
     wp.richText.unregisterFormatType('core/keyboard');     // Example for keyboard input button
+
+    setTimeout( function() {
+        
+        wp.data.dispatch( 'core/block-editor' ).updateSettings({
+            typography: {},
+            fontSizes: [],
+            disableCustomFontSizes: true, 
+            colors: [],
+            disableCustomColors: true,
+            disableCustomGradients: true,
+            gradients: [],
+            __experimentalFeatures: []
+        });
+
+    }, 3000);
+    
 });
 
 // Define the button component
