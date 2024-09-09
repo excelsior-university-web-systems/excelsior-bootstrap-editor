@@ -27,6 +27,13 @@ export default function Edit({ attributes, setAttributes, clientId }) {
         [clientId]
     );
 
+    // The first tab is always active
+    useEffect(() => {
+        if (childTabs.length > 0 && (!attributes.activeTab || attributes.activeTab !== childTabs[0].uniqueId)) {
+            setAttributes({ activeTab: childTabs[0].uniqueId });
+        }
+    }, [childTabs]);
+
     // Update the parent block's "tabs" attribute when child tabs change
     useEffect(() => {
         // Compare current childTabs with attributes.tabs
@@ -50,9 +57,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                             aria-controls={`${tab.uniqueId}-pane`}
                             aria-selected={index === 0 ? 'true' : 'false'}
                             onClick={(e)=>{e.preventDefault()}}
-                        >
-                            {tab.title || `Tab ${index + 1}`}
-                        </a>
+                            dangerouslySetInnerHTML = { {__html: tab.title || `Tab ${index + 1}`}}
+                        />
                     </li>
                 ))}
             </ul>

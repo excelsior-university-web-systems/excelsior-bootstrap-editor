@@ -19,9 +19,8 @@ export default function Save({ attributes }) {
                             data-bs-target={`#${tab.uniqueId}-pane`}
                             aria-controls={`${tab.uniqueId}-pane`}
                             aria-selected={index === 0 ? 'true' : 'false'}
-                        >
-                            {tab.title || `Tab ${index + 1}`}
-                        </a>
+                            dangerouslySetInnerHTML = { {__html: tab.title || `Tab ${index + 1}`}}
+                        />
                     </li>
                 ))}
             </ul>

@@ -3,14 +3,20 @@
     "name": "excelsior-bootstrap-editor/tabs",
     "title": "Tabs",
     "category": "excelsior-bootstrap-editor-blocks",
-    "parent": ["excelsior-bootstrap-editor/container"],
-    "supports": {
-        "html": false
-    },
     "attributes": {
         "tabs": {
             "type": "array",
             "default": []
+        },
+        "activeTab": {
+            "type": "string",
+            "default": ""
         }
+    },
+    "providesContext": {
+        "excelsior-bootstrap-editor/activeTab": "activeTab"
+    },
+    "supports": {
+        "html": false
     }
 }

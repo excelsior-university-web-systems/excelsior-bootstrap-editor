@@ -4,21 +4,24 @@
     "title": "Tab",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/tabs"],
-    "supports": {
-        "html": false
-    },
     "attributes": {
         "title": {
             "type": "string",
-            "default": "Tab Title"
+            "default": ""
         },
         "uniqueId": {
             "type": "string",
             "default": ""
+        },
+        "isActive": {
+            "type": "boolean",
+            "default": false
         }
     },
-    "providesContext": {
-        "excelsior-bootstrap-editor/tabTitle": "title",
-        "excelsior-bootstrap-editor/tabId": "uniqueId"
+    "usesContext": [
+        "excelsior-bootstrap-editor/activeTab"
+    ],
+    "supports": {
+        "html": false
     }
 }

@@ -205,6 +205,19 @@
     display: none;
 }
 
+/* EXCELSIOR BOOTSTRAP EDITOR
+   TABS */
+
+.wp-block-excelsior-bootstrap-editor-tabs .tab-content .block-editor-inner-blocks .block-editor-block-list__layout .wp-block-excelsior-bootstrap-editor-tab {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    border-top: 1px dashed #ccc;
+}
+
+.wp-block-excelsior-bootstrap-editor-tabs .tab-content .block-editor-inner-blocks .block-editor-block-list__layout .wp-block-excelsior-bootstrap-editor-tab:first-child {
+    border-top: none;
+}
+
 /* BOOTSTRAP ICON ADJUSTMENTS */
 
 i.bi {
