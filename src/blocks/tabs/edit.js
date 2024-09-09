@@ -1,8 +1,12 @@
-import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-editor';
+import { PanelBody, SelectControl } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 
 export default function Edit({ attributes, setAttributes, clientId }) {
+
+    const {tabHeadingLevel, tabHeadingLevelClass} = attributes;
+
     const blockProps = useBlockProps({
         className: 'excelsior-tabs',
     });
@@ -43,6 +47,38 @@ export default function Edit({ attributes, setAttributes, clientId }) {
     }, [childTabs]);
 
     return (
+        <>
+        <InspectorControls>
+            <PanelBody title='Settings'>
+                <SelectControl
+                    label="Heading Level"
+                    help="The heading level of the first heading that appears in the tab's content."
+                    value={tabHeadingLevel}
+                    options={[
+                        { label: 'H2', value: 'h2' },
+                        { label: 'H3', value: 'h3' },
+                        { label: 'H4', value: 'h4' },
+                        { label: 'H5', value: 'h5' },
+                        { label: 'H6', value: 'h6' },
+                    ]}
+                    onChange={(value) => setAttributes({ tabHeadingLevel: value })}
+                />
+                <SelectControl
+                    label="Heading Level Size"
+                    help="Set the font size of the first heading to use the size of a different heading level."
+                    value={tabHeadingLevelClass}
+                    options={[
+                        { label: 'H1', value: 'h1' },
+                        { label: 'H2', value: 'h2' },
+                        { label: 'H3', value: 'h3' },
+                        { label: 'H4', value: 'h4' },
+                        { label: 'H5', value: 'h5' },
+                        { label: 'H6', value: 'h6' },
+                    ]}
+                    onChange={(value) => setAttributes({ tabHeadingLevelClass: value })}
+                />
+            </PanelBody>
+        </InspectorControls>
         <div {...blockProps}>
             <ul className="nav nav-tabs" role="tablist">
                 {childTabs.map((tab, index) => (
@@ -71,5 +107,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                 />
             </div>
         </div>
+        </>
     );
 }
