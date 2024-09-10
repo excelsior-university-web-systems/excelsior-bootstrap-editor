@@ -89,6 +89,9 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                         label="Language"
                         value={language}
                         options={[
+                            { label: 'C', value: 'c' },
+                            { label: 'C#', value: 'csharp' },
+                            { label: 'C++', value: 'cpp' },
                             { label: 'CSS', value: 'css' },
                             { label: 'HTML/XML', value: 'markup' },
                             { label: 'Java', value: 'java' },

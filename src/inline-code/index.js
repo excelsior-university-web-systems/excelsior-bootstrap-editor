@@ -100,12 +100,15 @@ wp.domReady(() => {
                                     value={language}
                                     options={[
                                         { label: 'None', value: '' },
+                                        { label: 'C', value: 'c' },
+                                        { label: 'C#', value: 'csharp' },
+                                        { label: 'C++', value: 'cpp' },
                                         { label: 'CSS', value: 'css' },
                                         { label: 'HTML/XML', value: 'markup' },
                                         { label: 'Java', value: 'java' },
                                         { label: 'JavaScript', value: 'javascript' },
                                         { label: 'Python', value: 'python' },
-                                        { label: 'R', value: 'r' },
+                                        { label: 'R', value: 'r' }
                                     ]}
                                     onChange={onLanguageChange}
                                 />
