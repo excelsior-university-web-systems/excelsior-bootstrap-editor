@@ -22,9 +22,10 @@ function generateHtmlId() {
     return firstChar + timestamp + randomPart;
 }
 
-export default function Edit({ attributes, setAttributes }) {
+export default function Edit({ attributes, setAttributes, context }) {
 
-    const { title, uniqueId, open } = attributes;
+    const { title, uniqueId, open, HeadingLevel } = attributes;
+    const accordionHeadingLevel = context?.[XCLSR_BTSTRP_EDITOR_PREFIX + '/accordionHeadingLevel'];
     const blockProps = useBlockProps({
         className: 'accordion-item',
     });
@@ -34,6 +35,14 @@ export default function Edit({ attributes, setAttributes }) {
             setAttributes({ uniqueId: generateHtmlId() });
         }
     }, [uniqueId]);
+
+    useEffect(() => {
+
+        if ( HeadingLevel != accordionHeadingLevel ) {
+            setAttributes( {HeadingLevel: accordionHeadingLevel} );
+        }
+
+    }, [accordionHeadingLevel]);
 
     return (
         <>
@@ -48,7 +57,7 @@ export default function Edit({ attributes, setAttributes }) {
                 </PanelBody>
             </InspectorControls>
             <div {...blockProps}>
-                <h2 class="accordion-header">
+                <HeadingLevel class="accordion-header">
                     <RichText
                         tagName="a"
                         placeholder="Accordion Item Title"
@@ -62,7 +71,7 @@ export default function Edit({ attributes, setAttributes }) {
                         onChange={(value) => setAttributes({ title: value })}
                         allowedFormats={['core/bold', 'core/italic', XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
                     />
-                </h2>
+                </HeadingLevel>
                 <div id={uniqueId} class={`accordion-collapse collapse${open ? ' show' : ''}`}>
                     <div class="accordion-body">
                         <InnerBlocks

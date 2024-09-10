@@ -1,13 +1,33 @@
-import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-editor';
+import { PanelBody, SelectControl } from '@wordpress/components';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 
-export default function Edit() {
+export default function Edit( { attributes, setAttributes} ) {
     
+    const { accordionHeadingLevel } = attributes;
     const blockProps = useBlockProps({
         className: 'accordion',
     });
 
     return (
+        <>
+        <InspectorControls>
+            <PanelBody title='Settings'>
+                <SelectControl
+                    label="Heading Level"
+                    help="The heading level of the accordion item."
+                    value={accordionHeadingLevel}
+                    options={[
+                        { label: 'H2', value: 'h2' },
+                        { label: 'H3', value: 'h3' },
+                        { label: 'H4', value: 'h4' },
+                        { label: 'H5', value: 'h5' },
+                        { label: 'H6', value: 'h6' },
+                    ]}
+                    onChange={(value) => setAttributes({ accordionHeadingLevel: value })}
+                />
+            </PanelBody>
+        </InspectorControls>
         <div {...blockProps}>
             <InnerBlocks
                 allowedBlocks={[XCLSR_BTSTRP_EDITOR_PREFIX + '/accordion-item']}
@@ -16,5 +36,7 @@ export default function Edit() {
                 renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
             />
         </div>
+        </>
+        
     );
 }

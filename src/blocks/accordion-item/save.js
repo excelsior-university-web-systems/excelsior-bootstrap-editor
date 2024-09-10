@@ -2,14 +2,14 @@ import { useBlockProps, InnerBlocks, RichText } from '@wordpress/block-editor';
 
 export default function Save({ attributes }) {
 
-    const { title, uniqueId, open } = attributes;
+    const { title, uniqueId, open, HeadingLevel } = attributes;
     const blockProps = useBlockProps.save( {
         className: 'accordion-item'
     });
 
     return (
         <div {...blockProps}>
-            <h2 class="accordion-header">
+            <HeadingLevel class="accordion-header">
             <RichText.Content
                 tagName="a"
                 value={title}
@@ -20,7 +20,7 @@ export default function Save({ attributes }) {
                 data-bs-toggle="collapse"
                 data-bs-target={'#' + uniqueId}
             />
-            </h2>
+            </HeadingLevel>
             <div id={uniqueId} class={`accordion-collapse collapse${open ? ' show' : ''}`}>
                 <div class="accordion-body">
                     <InnerBlocks.Content />

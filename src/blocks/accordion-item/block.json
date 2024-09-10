@@ -17,6 +17,13 @@
         "open": {
             "type": "boolean",
             "default": true
+        },
+        "HeadingLevel": {
+            "type": "string",
+            "default": "h2"
         }
-    }
+    },
+    "usesContext": [
+        "excelsior-bootstrap-editor/accordionHeadingLevel"
+    ]
 }
