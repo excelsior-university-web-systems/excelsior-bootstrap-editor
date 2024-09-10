@@ -1,5 +1,5 @@
 import { useBlockProps, RichText, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, __experimentalText as Text } from '@wordpress/components';
+import { PanelBody, __experimentalText as Text, SelectControl } from '@wordpress/components';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 
 import dayjs from 'dayjs';
@@ -7,7 +7,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -15,39 +15,47 @@ dayjs.tz.setDefault('America/New_York');
 
 export default function Edit( { attributes, setAttributes } ) {
 
-    const { task, dueDate = dayjs.utc(new Date()) } = attributes;
+    const { task, dueTime = dayjs.utc(new Date()), dueDayOfTheWeek } = attributes;
 
     const blockProps = useBlockProps( {
         className: 'list-group-item'
     } );
 
-    const dateTimeOptions = {
-        weekday: 'long', // day of the week (e.g., Sunday)
-        year: 'numeric', // full year (e.g., 2024)
-        month: 'long',   // full month name (e.g., September)
-        day: 'numeric',  // day of the month (e.g., 22)
+    const timeOptions = {
         hour: 'numeric', // hour
         minute: 'numeric', // minute
         hour12: true,    // 12-hour time format
-        timeZone: 'America/New_York',
-        timeZoneName: 'short' // short timezone name (e.g., PDT)
+        timeZone: 'America/New_York'
     };
 
-    const date = new Date(dueDate);
-    const formattedDate = date.toLocaleString('en-US', dateTimeOptions);
+    const date = new Date(dueTime);
+    const formattedTime = date.toLocaleString('en-US', timeOptions);
 
     return (
         <>
             <InspectorControls>
                 <PanelBody title='Settings'>
-                    <Text>
-                        Task Due Date
+                    <Text as="p" style={{"marginBottom": "16px"}}>
+                        Due Day and Time (in EST/EDT)
                     </Text>
+                    <SelectControl
+                        value={dueDayOfTheWeek}
+                        options={[
+                            { label: 'Sunday', value: 'Sunday' },
+                            { label: 'Monday', value: 'Monday' },
+                            { label: 'Tuesday', value: 'Tuesday' },
+                            { label: 'Wednesday', value: 'Wednesday' },
+                            { label: 'Thursday', value: 'Thursday' },
+                            { label: 'Friday', value: 'Friday' },
+                            { label: 'Saturday', value: 'Saturday' }
+                        ]}
+                        onChange={(value) => setAttributes({ dueDayOfTheWeek: value })}
+                    />
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DateTimePicker
+                        <TimePicker
                             timezone='America/New_York'
-                            value={dayjs.utc(dueDate)}
-                            onChange={(value) => setAttributes({ dueDate: value })}
+                            value={dayjs.utc(dueTime)}
+                            onChange={(value) => setAttributes({ dueTime: value })}
                         />
                     </LocalizationProvider>
                 </PanelBody>
@@ -60,7 +68,7 @@ export default function Edit( { attributes, setAttributes } ) {
                     onChange={(value) => setAttributes({ task: value })}
                     allowedFormats={['core/bold', 'core/italic', XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
                 />
-                <br /> By {formattedDate} 
+                <br /> By {dueDayOfTheWeek} at {formattedTime} ET
             </li> 
         </>
     );

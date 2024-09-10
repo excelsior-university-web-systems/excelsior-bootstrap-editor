@@ -11,7 +11,11 @@
         "task": {
             "type": "string"
         },
-        "dueDate": {
+        "dueDayOfTheWeek": {
+            "type": "string",
+            "default": "Sunday"
+        },
+        "dueTime": {
             "type": "string"
         }
     }
