@@ -8,6 +8,10 @@
             "type": "array",
             "default": []
         },
+        "tabStyle": {
+            "type": "string",
+            "default": "excelsior-tabs"
+        },
         "activeTab": {
             "type": "string",
             "default": ""

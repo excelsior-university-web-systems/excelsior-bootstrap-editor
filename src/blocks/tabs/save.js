@@ -1,8 +1,10 @@
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 
 export default function Save({ attributes }) {
+
+    const { tabStyle } = attributes;
     const blockProps = useBlockProps.save({
-        className: 'excelsior-tabs',
+        className: tabStyle,
     });
 
     return (

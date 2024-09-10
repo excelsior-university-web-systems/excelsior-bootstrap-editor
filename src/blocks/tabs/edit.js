@@ -5,10 +5,10 @@ import { useEffect } from '@wordpress/element';
 
 export default function Edit({ attributes, setAttributes, clientId }) {
 
-    const {tabHeadingLevel, tabHeadingLevelClass} = attributes;
+    const {tabHeadingLevel, tabHeadingLevelClass, tabStyle} = attributes;
 
     const blockProps = useBlockProps({
-        className: 'excelsior-tabs',
+        className: tabStyle,
     });
 
     // Initialize tabs if not present
@@ -50,6 +50,15 @@ export default function Edit({ attributes, setAttributes, clientId }) {
         <>
         <InspectorControls>
             <PanelBody title='Settings'>
+                <SelectControl
+                    label="Tab Style"
+                    value={tabStyle}
+                    options={[
+                        { label: 'Regular', value: 'excelsior-tabs' },
+                        { label: 'Large', value: 'excelsior-lg-tabs' }
+                    ]}
+                    onChange={(value) => setAttributes({ tabStyle: value })}
+                />
                 <SelectControl
                     label="Heading Level"
                     help="The heading level of the first heading that appears in the tab's content."
