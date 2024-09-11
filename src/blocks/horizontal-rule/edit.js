@@ -21,14 +21,14 @@ const ICONS = [
 
 export default function Edit ({ attributes, setAttributes }) {
     
-    const { selectedIcon, size, decorative } = attributes;
+    const { selectedIcon, size, decorative, noIcon } = attributes;
 
     const handleIconSelect = (iconName) => {
         setAttributes({ selectedIcon: iconName });
     };
 
     const blockProps = useBlockProps( {
-        className: `decorative bi ${selectedIcon}${size !== 'regular' ? ' ' + size : '' }`,
+        className: `decorative ${ noIcon ? '' : `bi ${selectedIcon}${size !== 'regular' ? ' ' + size : '' }`}`,
         role: decorative ? 'presentation' : undefined
     } );
 
@@ -36,7 +36,10 @@ export default function Edit ({ attributes, setAttributes }) {
         <>
         <InspectorControls>
             <PanelBody title="Settings">
-                <BaseControl label="Icons">
+
+                { noIcon == false && (
+
+                    <BaseControl label="Icons">
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
                         {ICONS.map((icon) => (
                             <Button
@@ -55,7 +58,16 @@ export default function Edit ({ attributes, setAttributes }) {
                             </Button>
                         ))}
                     </div>
-                </BaseControl>
+                    </BaseControl>
+
+                ) }
+                
+                <ToggleControl
+                    label="No Icon"
+                    help="Toggle on to remove icon."
+                    checked={noIcon}
+                    onChange={(value) => setAttributes({ noIcon: value })}
+                />
                 <ToggleGroupControl
                     label="Size"
                     help="Adjust the size of the icon."
