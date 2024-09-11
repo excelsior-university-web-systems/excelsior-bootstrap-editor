@@ -21,8 +21,9 @@ add_action( 'current_screen', function() {
             array( 'label' => __( XCLSR_BTSTRP_LABEL, XCLSR_BTSTRP_POST_TYPE ) )
         );
 
-        // Register homepage pattern
+        // Register patterns
         \ExcelsiorBootstrapEditor\register_excelsior_bootstrap_editor_homepage_pattern();
+        \ExcelsiorBootstrapEditor\register_excelsior_bootstrap_editor_lesson_pattern();
 
     }
 
@@ -98,6 +99,75 @@ function register_excelsior_bootstrap_editor_homepage_pattern() {
             'title'       => __( 'Homepage', XCLSR_BTSTRP_POST_TYPE ),
             'content'     => trim( $pattern_content ),
             'categories'  => array( XCLSR_BTSTRP_EDITOR_PREFIX.'-patterns' ),
+            'postTypes' => array( XCLSR_BTSTRP_POST_TYPE )
+        )
+    );
+
+}
+
+/*
+  Add a predefined layout (or block pattern) for the lesson page.
+*/
+function register_excelsior_bootstrap_editor_lesson_pattern() {
+
+    $pattern_content = '
+    <!-- wp:excelsior-bootstrap-editor/horizontal-rule {"selectedIcon":"bi-search"} -->
+    <hr class="wp-block-excelsior-bootstrap-editor-horizontal-rule decorative bi bi-search large" role="presentation"/>
+    <!-- /wp:excelsior-bootstrap-editor/horizontal-rule -->
+
+    <!-- wp:paragraph -->
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat <a href="#" target="_blank" rel="noreferrer noopener">cupidatat non proident</a>, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <!-- /wp:paragraph -->
+
+    <!-- wp:list -->
+    <ul class="wp-block-list">
+        <!-- wp:list-item -->
+        <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</li>
+        <!-- /wp:list-item -->
+
+        <!-- wp:list-item -->
+        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
+        <!-- /wp:list-item -->
+
+        <!-- wp:list-item -->
+        <li>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</li>
+        <!-- /wp:list-item -->
+
+        <!-- wp:list-item -->
+        <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
+        <!-- /wp:list-item -->
+    </ul>
+    <!-- /wp:list -->
+
+    <!-- wp:heading -->
+    <h2 class="wp-block-heading">Header</h2>
+    <!-- /wp:heading -->
+
+    <!-- wp:paragraph -->
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea <strong>commodo consequat</strong>. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <!-- /wp:paragraph -->
+
+    <!-- wp:heading {"level":3} -->
+    <h3 class="wp-block-heading">Sub-Header</h3>
+    <!-- /wp:heading -->
+
+    <!-- wp:paragraph -->
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <!-- /wp:paragraph -->
+
+    <!-- wp:excelsior-bootstrap-editor/horizontal-rule {"noIcon":true} -->
+    <hr class="wp-block-excelsior-bootstrap-editor-horizontal-rule decorative" role="presentation"/>
+    <!-- /wp:excelsior-bootstrap-editor/horizontal-rule -->
+    ';
+
+    // Register the pattern
+    register_block_pattern(
+        XCLSR_BTSTRP_POST_TYPE.'/lesson',
+        array(
+            'title'       => __( 'Lesson', XCLSR_BTSTRP_POST_TYPE ),
+            'content'     => trim( $pattern_content ),
+            'categories'  => array( XCLSR_BTSTRP_EDITOR_PREFIX.'-patterns' ),
+            'postTypes' => array( XCLSR_BTSTRP_POST_TYPE )
         )
     );
 
