@@ -1,9 +1,11 @@
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, TextareaControl } from '@wordpress/components';
+import { PanelBody, TextareaControl, Button } from '@wordpress/components';
+import { useState } from '@wordpress/element';
 
 export default function Edit( { attributes, setAttributes } ) {
 
     const { embedCode } = attributes;
+    const [tempEmbedCode, setTempEmbedCode] = useState(embedCode);
 
     // Sanitize to strip out <script> tags
     const sanitizeEmbedCode = ( input ) => {
@@ -18,42 +20,59 @@ export default function Edit( { attributes, setAttributes } ) {
 
     };
 
-    const onChangeEmbedCode = ( value ) => {
-        const sanitizedValue = sanitizeEmbedCode( value );
-        setAttributes( { embedCode: sanitizedValue } );
+    const onInsertEmbedCode = () => {
+        if ( tempEmbedCode ) {
+            setAttributes( { embedCode: sanitizeEmbedCode( tempEmbedCode ) } );
+        }
     };
 
     return (
         <>
         <InspectorControls>
+            
+        { embedCode && (
             <PanelBody title="Settings">
+                
                 <TextareaControl
                     label="Embed Code"
                     help="Replace the embed code to update. No script tags are allowed."
-                    value={embedCode}
-                    onChange={onChangeEmbedCode}
+                    value={tempEmbedCode} 
+                    onChange={(newEmbedCode) => setTempEmbedCode(newEmbedCode)}
                     rows="12"
                 />
-            </PanelBody>
+                <Button
+                    variant='primary'
+                    text='Update'
+                    onClick={onInsertEmbedCode}
+                />
+            </PanelBody>     
+        ) }
+            
         </InspectorControls>
+        <div {...useBlockProps()}>
         { embedCode ? (
             
-            <div {...useBlockProps()} dangerouslySetInnerHTML={{ __html: embedCode }} />
+            <div dangerouslySetInnerHTML={{ __html: embedCode }} />
 
-            ) : (
+        ) : (
 
-                <div className='block-editor-block-list__block wp-block-excelsior-bootstrap-editor-iframe-embed excelsior-iframe-embed-insert '>
-                    <TextareaControl
-                        label="Embed Code"
-                        value={embedCode}
-                        onChange={onChangeEmbedCode}
-                        placeholder="Paste embed code in here. No script tags are allow."
-                        rows="6"
-                    />
-                </div>
+            <div className='excelsior-iframe-embed-insert'>
+                <TextareaControl
+                    label="Embed Code"
+                    value={tempEmbedCode} 
+                    placeholder="Paste embed code in here. No script tags are allow."
+                    onChange={(embedCode) => setTempEmbedCode(embedCode)}
+                    rows="6"
+                />
+                <Button
+                    variant='primary'
+                    text='Insert'
+                    onClick={onInsertEmbedCode}
+                />
+            </div>
 
-            ) }
-        
+        ) }
+        </div>
         </>
         
     );
