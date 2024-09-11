@@ -1,44 +1,24 @@
 import { useBlockProps, RichText, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, __experimentalText as Text, SelectControl } from '@wordpress/components';
+import { PanelBody, SelectControl } from '@wordpress/components';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
-
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault('America/New_York');
+import { convertTo12HourFormat } from '../../commons';
+import { TimeInput } from '@mantine/dates';
+import { MantineProvider } from '@mantine/core';
 
 export default function Edit( { attributes, setAttributes } ) {
 
-    const { task, dueTime = dayjs.utc(new Date()), dueDayOfTheWeek } = attributes;
+    const { task, dueTime, dueDayOfTheWeek, timezone } = attributes;
 
     const blockProps = useBlockProps( {
         className: 'list-group-item'
     } );
 
-    const timeOptions = {
-        hour: 'numeric', // hour
-        minute: 'numeric', // minute
-        hour12: true,    // 12-hour time format
-        timeZone: 'America/New_York'
-    };
-
-    const date = new Date(dueTime);
-    const formattedTime = date.toLocaleString('en-US', timeOptions);
-
     return (
         <>
             <InspectorControls>
-                <PanelBody title='Settings'>
-                    <Text as="p" style={{"marginBottom": "16px"}}>
-                        Due Day and Time (in EST/EDT)
-                    </Text>
+                <PanelBody title='Due Date Settings'>
                     <SelectControl
+                        label="Day of the Week"
                         value={dueDayOfTheWeek}
                         options={[
                             { label: 'Sunday', value: 'Sunday' },
@@ -51,13 +31,25 @@ export default function Edit( { attributes, setAttributes } ) {
                         ]}
                         onChange={(value) => setAttributes({ dueDayOfTheWeek: value })}
                     />
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <TimePicker
-                            timezone='America/New_York'
-                            value={dayjs.utc(dueTime)}
-                            onChange={(value) => setAttributes({ dueTime: value })}
+                    <MantineProvider>
+                        <TimeInput
+                            variant="unstyled"
+                            label="Time"
+                            value={dueTime}
+                            onChange={(event) => setAttributes({dueTime: event.currentTarget.value})}
                         />
-                    </LocalizationProvider>
+                    </MantineProvider>
+                    <SelectControl
+                        label="Time Zone"
+                        value={timezone}
+                        help="Use ET, CT, or PT for consistency across U.S. regions. Other time zones (EST vs EDT, CST vs CDT, and PST vs PDT) may cause confusion."
+                        options={[
+                            { label: 'ET - Eastern Time', value: 'ET' },
+                            { label: 'CT - Central Time', value: 'CT' },
+                            { label: 'PT - Pacific Time', value: 'PT' }
+                        ]}
+                        onChange={(value) => setAttributes({ timezone: value })}
+                    />
                 </PanelBody>
             </InspectorControls>
             <li {...blockProps}>
@@ -68,7 +60,7 @@ export default function Edit( { attributes, setAttributes } ) {
                     onChange={(value) => setAttributes({ task: value })}
                     allowedFormats={['core/bold', 'core/italic', XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
                 />
-                <br /> By {dueDayOfTheWeek} at {formattedTime} ET
+                <br /> By {dueDayOfTheWeek} at {convertTo12HourFormat(dueTime)} {timezone}
             </li> 
         </>
     );

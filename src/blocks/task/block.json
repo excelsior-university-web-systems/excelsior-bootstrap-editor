@@ -16,7 +16,12 @@
             "default": "Sunday"
         },
         "dueTime": {
-            "type": "string"
+            "type": "string",
+            "default": "23:59"
+        },
+        "timezone": {
+            "type": "string",
+            "default": "ET"
         }
     }
 }
