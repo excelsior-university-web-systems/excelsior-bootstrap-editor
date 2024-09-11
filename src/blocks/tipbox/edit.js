@@ -2,11 +2,11 @@ import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-
 import { PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 
-const TEMPLATE = [
-    ['core/paragraph', {placeholder: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.'}]
-];
-
 export default function Edit ({ attributes, setAttributes }) {
+
+    const TEMPLATE = [
+        ['core/paragraph', {placeholder: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.'}]
+    ];
 
     const { styleType, narrowWidth } = attributes;
 

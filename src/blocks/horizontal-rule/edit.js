@@ -20,6 +20,7 @@ const ICONS = [
 ];
 
 export default function Edit ({ attributes, setAttributes }) {
+    
     const { selectedIcon, size, decorative } = attributes;
 
     const handleIconSelect = (iconName) => {

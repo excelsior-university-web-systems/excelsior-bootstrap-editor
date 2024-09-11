@@ -2,13 +2,13 @@ import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-
 import { PanelBody, SelectControl } from '@wordpress/components';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 
-const TEMPLATE = [
-    ['core/heading', {className: 'h5', level: 3, placeholder: 'Heading'}],
-    ['core/paragraph', {placeholder: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.'}]
-];
-
 export default function Edit ({ attributes, setAttributes }) {
 
+    const TEMPLATE = [
+        ['core/heading', {className: 'h5', level: 3, placeholder: 'Heading'}],
+        ['core/paragraph', {placeholder: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.'}]
+    ];
+    
     const { styleType } = attributes;
 
     const blockProps = useBlockProps( {

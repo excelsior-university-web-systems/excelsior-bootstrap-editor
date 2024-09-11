@@ -2,25 +2,8 @@ import { useBlockProps, InnerBlocks, InspectorControls, RichText } from '@wordpr
 import { PanelBody, ToggleControl } from '@wordpress/components';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
+import { generateHtmlId } from '../../commons';
 import { useEffect } from '@wordpress/element';
-
-function generateHtmlId() {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-    const chars = letters + '0123456789';
-    const timestamp = Date.now().toString(36);
-    const randomLength = 6;
-    let randomPart = '';
-  
-    // Generate random characters from valid set for the rest of the ID
-    for (let i = 0; i < randomLength; i++) {
-      randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-  
-    // Ensure the first character is a letter
-    const firstChar = letters.charAt(Math.floor(Math.random() * letters.length));
-  
-    return firstChar + timestamp + randomPart;
-}
 
 export default function Edit({ attributes, setAttributes, context }) {
 

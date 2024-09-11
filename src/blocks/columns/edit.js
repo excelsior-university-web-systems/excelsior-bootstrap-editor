@@ -7,24 +7,20 @@ import {
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 import { useEffect } from '@wordpress/element';
 
-const ALLOWED_BLOCKS = [
-    [XCLSR_BTSTRP_EDITOR_PREFIX + '/column']
-];
-
-const TEMPLATE = [
-    [XCLSR_BTSTRP_EDITOR_PREFIX + '/column', {}, [
-        ['core/paragraph', {placeholder: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi consectetur, eveniet inventore autem cupiditate aliquam. Tempora debitis minima porro, odit error odio accusamus voluptatem laudantium eos, quia officia quo doloremque.'}]
-    ]],
-    [XCLSR_BTSTRP_EDITOR_PREFIX + '/column', {}, [
-        ['core/paragraph', {placeholder: 'A molestias autem hic error. Cupiditate, neque nisi nobis debitis perferendis laborum quos exercitationem in deserunt ducimus harum explicabo aperiam est illum distinctio! Earum soluta ullam voluptas debitis laborum dolorem!'}]
-    ]],
-    [XCLSR_BTSTRP_EDITOR_PREFIX + '/column', {}, [
-        ['core/paragraph', {placeholder: 'Architecto perspiciatis dignissimos, placeat maxime, aspernatur saepe dolores natus, maiores earum odio eaque repudiandae?'}]
-    ]],
-];
-
 export default function Edit( {attributes, setAttributes} ) {
 
+    const TEMPLATE = [
+        [XCLSR_BTSTRP_EDITOR_PREFIX + '/column', {}, [
+            ['core/paragraph', {placeholder: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi consectetur, eveniet inventore autem cupiditate aliquam. Tempora debitis minima porro, odit error odio accusamus voluptatem laudantium eos, quia officia quo doloremque.'}]
+        ]],
+        [XCLSR_BTSTRP_EDITOR_PREFIX + '/column', {}, [
+            ['core/paragraph', {placeholder: 'A molestias autem hic error. Cupiditate, neque nisi nobis debitis perferendis laborum quos exercitationem in deserunt ducimus harum explicabo aperiam est illum distinctio! Earum soluta ullam voluptas debitis laborum dolorem!'}]
+        ]],
+        [XCLSR_BTSTRP_EDITOR_PREFIX + '/column', {}, [
+            ['core/paragraph', {placeholder: 'Architecto perspiciatis dignissimos, placeat maxime, aspernatur saepe dolores natus, maiores earum odio eaque repudiandae?'}]
+        ]],
+    ];
+    
     const { colSize } = attributes;
   
     const blockProps = useBlockProps( {
@@ -71,7 +67,7 @@ export default function Edit( {attributes, setAttributes} ) {
         </InspectorControls>
         <div {...blockProps}>
             <InnerBlocks
-                allowedBlocks={ALLOWED_BLOCKS}
+                allowedBlocks={[XCLSR_BTSTRP_EDITOR_PREFIX + '/column']}
                 template={TEMPLATE}
                 templateLock={false}
                 orientation='horizontal'

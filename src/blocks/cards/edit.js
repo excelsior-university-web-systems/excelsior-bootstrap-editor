@@ -7,17 +7,13 @@ import {
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 import { useEffect } from '@wordpress/element';
 
-const ALLOWED_BLOCKS = [
-    [XCLSR_BTSTRP_EDITOR_PREFIX + '/card']
-];
-
-const TEMPLATE = [
-    [XCLSR_BTSTRP_EDITOR_PREFIX + '/card', {}, []],
-    [XCLSR_BTSTRP_EDITOR_PREFIX + '/card', {}, []],
-    [XCLSR_BTSTRP_EDITOR_PREFIX + '/card', {}, []]
-];
-
 export default function Edit( {attributes, setAttributes} ) {
+
+    const TEMPLATE = [
+        [XCLSR_BTSTRP_EDITOR_PREFIX + '/card', {}, []],
+        [XCLSR_BTSTRP_EDITOR_PREFIX + '/card', {}, []],
+        [XCLSR_BTSTRP_EDITOR_PREFIX + '/card', {}, []]
+    ];
 
     const { colSize } = attributes;
   
@@ -66,7 +62,7 @@ export default function Edit( {attributes, setAttributes} ) {
         </InspectorControls>
         <div {...blockProps}>
             <InnerBlocks
-                allowedBlocks={ALLOWED_BLOCKS}
+                allowedBlocks={[XCLSR_BTSTRP_EDITOR_PREFIX + '/card']}
                 template={TEMPLATE}
                 templateLock={false}
                 orientation='horizontal'

@@ -1,10 +1,6 @@
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 
-const TEMPLATE = [
-    ['core/paragraph']
-];
-
 export default function Edit() {
    
     const blockProps = useBlockProps( {
@@ -15,7 +11,7 @@ export default function Edit() {
         <div {...blockProps}>
             <InnerBlocks
                 allowedBlocks={ALLOWED_BLOCKS}
-                template={TEMPLATE}
+                template={[['core/paragraph']]}
                 templateLock={false}
                 renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
             />

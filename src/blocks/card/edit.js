@@ -5,11 +5,6 @@ import { addFilter } from '@wordpress/hooks';
 import { useState } from '@wordpress/element';
 import { createHigherOrderComponent } from '@wordpress/compose';
 
-const TEMPLATE = [
-    ['core/heading', { placeholder: "Card Title", level: 4, className: "h5 card-title" }],
-    ['core/paragraph', { placeholder: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." }]
-];
-
 const withCustomClasses = createHigherOrderComponent((BlockEdit) => {
     return (props) => {
 
@@ -41,6 +36,10 @@ addFilter(
 
 export default function Edit( {attributes, setAttributes} ) {
    
+    const TEMPLATE = [
+        ['core/heading', { placeholder: "Card Title", level: 4, className: "h5 card-title" }],
+        ['core/paragraph', { placeholder: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." }]
+    ];
     const { imgUrl, imgAltText, useImg } = attributes;
     const [tempUrl, setTempUrl] = useState('');
     const [tempAltTxt, setTempAltTxt] = useState('');

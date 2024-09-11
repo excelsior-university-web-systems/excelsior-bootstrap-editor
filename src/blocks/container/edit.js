@@ -2,11 +2,8 @@ import { InnerBlocks, InspectorControls, useBlockProps } from '@wordpress/block-
 import { PanelBody, ToggleControl } from '@wordpress/components';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 
-const TEMPLATE = [
-    ['core/paragraph']
-];
-
 export default function Edit( { attributes, setAttributes } ) {
+    
     const { backToTop, mainLandmarkRole } = attributes;
 
     const blockProps = useBlockProps( {
@@ -35,7 +32,7 @@ export default function Edit( { attributes, setAttributes } ) {
             <div {...blockProps}>
                 <InnerBlocks
                     allowedBlocks={ALLOWED_BLOCKS}
-                    template={TEMPLATE}
+                    template={[['core/paragraph']]}
                     templateLock={false}
                     renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
                 />
