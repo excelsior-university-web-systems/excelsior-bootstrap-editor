@@ -24,6 +24,7 @@ add_action( 'current_screen', function() {
         // Register patterns
         \ExcelsiorBootstrapEditor\register_excelsior_bootstrap_editor_homepage_pattern();
         \ExcelsiorBootstrapEditor\register_excelsior_bootstrap_editor_lesson_pattern();
+        \ExcelsiorBootstrapEditor\register_excelsior_bootstrap_editor_lesson_with_cards_pattern();
 
     }
 
@@ -165,6 +166,83 @@ function register_excelsior_bootstrap_editor_lesson_pattern() {
         XCLSR_BTSTRP_POST_TYPE.'/lesson',
         array(
             'title'       => __( 'Lesson', XCLSR_BTSTRP_POST_TYPE ),
+            'content'     => trim( $pattern_content ),
+            'categories'  => array( XCLSR_BTSTRP_EDITOR_PREFIX.'-patterns' ),
+            'postTypes' => array( XCLSR_BTSTRP_POST_TYPE )
+        )
+    );
+
+}
+
+
+/*
+  Add a predefined layout (or block pattern) for the lesson page with cards.
+*/
+function register_excelsior_bootstrap_editor_lesson_with_cards_pattern() {
+
+    $pattern_content = '
+    <!-- wp:excelsior-bootstrap-editor/horizontal-rule {"selectedIcon":"bi-search"} -->
+    <hr class="wp-block-excelsior-bootstrap-editor-horizontal-rule decorative bi bi-search large" role="presentation"/>
+    <!-- /wp:excelsior-bootstrap-editor/horizontal-rule -->
+
+    <!-- wp:heading -->
+    <h2 class="wp-block-heading">[Header]</h2>
+    <!-- /wp:heading -->
+
+    <!-- wp:paragraph -->
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <!-- /wp:paragraph -->
+
+    <!-- wp:paragraph -->
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <!-- /wp:paragraph -->
+
+    <!-- wp:heading {"level":3} -->
+    <h3 class="wp-block-heading">Key Concepts</h3>
+    <!-- /wp:heading -->
+
+    <!-- wp:excelsior-bootstrap-editor/cards -->
+    <div class="wp-block-excelsior-bootstrap-editor-cards row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"><!-- wp:excelsior-bootstrap-editor/card {"imgUrl":"/wp-content/plugins/excelsior-bootstrap-editor/images/excelsior_university_logo.png"} -->
+    <div class="wp-block-excelsior-bootstrap-editor-card col"><div class="card h-100"><img class="card-img-top" src="/wp-content/plugins/excelsior-bootstrap-editor/images/excelsior_university_logo.png" alt="" role="presentation"/><div class="card-body"><!-- wp:heading {"level":4,"placeholder":"Card Title","className":"h5 card-title"} -->
+    <h4 class="wp-block-heading h5 card-title">Concept 1</h4>
+    <!-- /wp:heading -->
+
+    <!-- wp:paragraph {"placeholder":"Lorem ipsum dolor sit amet, consectetur adipiscing elit.","className":"card-text"} -->
+    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pharetra et ultrices neque ornare aenean. Commodo elit at imperdiet dui accumsan sit amet. Nunc vel risus commodo viverra maecenas accumsan. Malesuada pellentesque elit eget gravida. Nec ultrices dui sapien eget mi.</p>
+    <!-- /wp:paragraph --></div></div></div>
+    <!-- /wp:excelsior-bootstrap-editor/card -->
+
+    <!-- wp:excelsior-bootstrap-editor/card {"imgUrl":"/wp-content/plugins/excelsior-bootstrap-editor/images/excelsior_university_logo.png"} -->
+    <div class="wp-block-excelsior-bootstrap-editor-card col"><div class="card h-100"><img class="card-img-top" src="/wp-content/plugins/excelsior-bootstrap-editor/images/excelsior_university_logo.png" alt="" role="presentation"/><div class="card-body"><!-- wp:heading {"level":4,"placeholder":"Card Title","className":"h5 card-title"} -->
+    <h4 class="wp-block-heading h5 card-title">Concept 2</h4>
+    <!-- /wp:heading -->
+
+    <!-- wp:paragraph {"placeholder":"Lorem ipsum dolor sit amet, consectetur adipiscing elit.","className":"card-text"} -->
+    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pharetra et ultrices neque ornare aenean. Commodo elit at imperdiet dui accumsan sit amet. Nunc vel risus commodo viverra maecenas accumsan. Malesuada pellentesque elit eget gravida. Nec ultrices dui sapien eget mi.</p>
+    <!-- /wp:paragraph --></div></div></div>
+    <!-- /wp:excelsior-bootstrap-editor/card -->
+
+    <!-- wp:excelsior-bootstrap-editor/card {"imgUrl":"/wp-content/plugins/excelsior-bootstrap-editor/images/excelsior_university_logo.png"} -->
+    <div class="wp-block-excelsior-bootstrap-editor-card col"><div class="card h-100"><img class="card-img-top" src="/wp-content/plugins/excelsior-bootstrap-editor/images/excelsior_university_logo.png" alt="" role="presentation"/><div class="card-body"><!-- wp:heading {"level":4,"placeholder":"Card Title","className":"h5 card-title"} -->
+    <h4 class="wp-block-heading h5 card-title">Concept 3</h4>
+    <!-- /wp:heading -->
+
+    <!-- wp:paragraph {"placeholder":"Lorem ipsum dolor sit amet, consectetur adipiscing elit.","className":"card-text"} -->
+    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pharetra et ultrices neque ornare aenean. Commodo elit at imperdiet dui accumsan sit amet. Nunc vel risus commodo viverra maecenas accumsan. Malesuada pellentesque elit eget gravida. Nec ultrices dui sapien eget mi.</p>
+    <!-- /wp:paragraph --></div></div></div>
+    <!-- /wp:excelsior-bootstrap-editor/card --></div>
+    <!-- /wp:excelsior-bootstrap-editor/cards -->
+
+    <!-- wp:excelsior-bootstrap-editor/horizontal-rule {"noIcon":true} -->
+    <hr class="wp-block-excelsior-bootstrap-editor-horizontal-rule decorative" role="presentation"/>
+    <!-- /wp:excelsior-bootstrap-editor/horizontal-rule -->
+    ';
+
+    // Register the pattern
+    register_block_pattern(
+        XCLSR_BTSTRP_POST_TYPE.'/lessonwithcards',
+        array(
+            'title'       => __( 'Lesson with Cards', XCLSR_BTSTRP_POST_TYPE ),
             'content'     => trim( $pattern_content ),
             'categories'  => array( XCLSR_BTSTRP_EDITOR_PREFIX.'-patterns' ),
             'postTypes' => array( XCLSR_BTSTRP_POST_TYPE )
