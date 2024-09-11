@@ -11,16 +11,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@wordpress/scripts": "^28.6.0",
+    "@wordpress/scripts": "^29.0.0",
     "babel-plugin-prismjs": "^2.1.0",
     "webpack-shell-plugin-next": "^2.3.2"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.3",
-    "@emotion/styled": "^11.13.0",
-    "@mui/material": "^6.0.2",
-    "@mui/x-date-pickers": "^7.15.0",
-    "dayjs": "^1.11.13",
+    "@mantine/core": "^7.12.2",
+    "@mantine/dates": "^7.12.2",
     "js-beautify": "^1.15.1",
     "prismjs": "^1.29.0"
   }
