@@ -104,6 +104,7 @@ wp.domReady(() => {
                                             border: '1px solid #f2f2f2'
                                         }}
                                         isPressed={ 
+                                            value.activeFormats &&
                                             value.activeFormats[0] && 
                                             value.activeFormats[0].unregisteredAttributes &&
                                             value.activeFormats[0].unregisteredAttributes.class &&
