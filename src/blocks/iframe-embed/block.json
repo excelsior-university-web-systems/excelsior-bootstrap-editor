@@ -11,6 +11,10 @@
         "embedCode": {
             "type": "string",
             "default": ""
+        },
+        "floatingClasses": {
+            "type": "string",
+            "default": ""
         }
     }
 }

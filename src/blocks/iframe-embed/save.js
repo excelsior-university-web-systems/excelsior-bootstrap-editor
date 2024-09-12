@@ -2,10 +2,13 @@ import { useBlockProps } from '@wordpress/block-editor';
 
 export default function Save( { attributes } ) {
 
-    const { embedCode } = attributes;
+    const { embedCode, floatingClasses } = attributes;
+    const blockProps = useBlockProps.save( {
+        className: floatingClasses
+    } );
 
     return (
-        <div {...useBlockProps.save()} dangerouslySetInnerHTML={{ __html: embedCode }} />
+        <div {...blockProps} dangerouslySetInnerHTML={{ __html: embedCode }} />
     );
 
 }

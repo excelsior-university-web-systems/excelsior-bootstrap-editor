@@ -4,7 +4,7 @@ import { useState } from '@wordpress/element';
 
 export default function Edit( { attributes, setAttributes } ) {
 
-    const { embedCode } = attributes;
+    const { embedCode, floatingClasses } = attributes;
     const [tempEmbedCode, setTempEmbedCode] = useState(embedCode);
 
     // Sanitize to strip out <script> tags
@@ -52,7 +52,7 @@ export default function Edit( { attributes, setAttributes } ) {
         <div {...useBlockProps()}>
         { embedCode ? (
             
-            <div dangerouslySetInnerHTML={{ __html: embedCode }} />
+            <div className={floatingClasses} dangerouslySetInnerHTML={{ __html: embedCode }} />
 
         ) : (
 
