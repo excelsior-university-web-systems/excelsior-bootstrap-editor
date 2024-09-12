@@ -49,7 +49,7 @@ export default function Edit({ attributes, setAttributes, context }) {
                 onChange={(value) => setAttributes({ title: sanitizeHtml(value) })}
                 allowedFormats={[XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
             />
-            <InnerBlocks template={[['core/paragraph']]} allowedBlocks={ALLOWED_BLOCKS} templateLock={false} />
+            <InnerBlocks template={[['core/heading', {headingSizeClass: "h4"}],['core/paragraph']]} allowedBlocks={ALLOWED_BLOCKS} templateLock={false} />
         </div>
     );
 }

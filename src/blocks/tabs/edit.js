@@ -75,7 +75,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                             aria-controls={`${tab.uniqueId}-pane`}
                             aria-selected={index === 0 ? 'true' : 'false'}
                             onClick={(e)=>{e.preventDefault()}}
-                            dangerouslySetInnerHTML = { {__html: tab.title || ''}}
+                            dangerouslySetInnerHTML = { {__html: tab.title || ' '}}
                         />
                     </li>
                 ))}
