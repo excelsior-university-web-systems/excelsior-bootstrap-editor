@@ -5,15 +5,13 @@ import { generateHtmlId } from '../../commons';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 
 export default function Edit({ attributes, setAttributes, context }) {
-    const { title, uniqueId, isActive, headingLevel, headingClass } = attributes;
+    const { title, uniqueId, isActive } = attributes;
     const blockProps = useBlockProps( {
         className: "tab-pane",
         role: "tabpanel"
     } );
 
     const activeTab = context?.[XCLSR_BTSTRP_EDITOR_PREFIX + '/activeTab'];
-    const tabHeadingLevel = context?.[XCLSR_BTSTRP_EDITOR_PREFIX + '/tabHeadingLevel'];
-    const tabHeadingLevelClass = context?.[XCLSR_BTSTRP_EDITOR_PREFIX + '/tabHeadingLevelClass'];
 
     const sanitizeHtml = ( input ) => {
         
@@ -41,27 +39,15 @@ export default function Edit({ attributes, setAttributes, context }) {
 
     }, [uniqueId]);
 
-    useEffect(() => {
-
-        if ( headingLevel != tabHeadingLevel ) {
-            setAttributes( {headingLevel: tabHeadingLevel} );
-        }
-
-        if ( headingClass != tabHeadingLevelClass ) {
-            setAttributes( {headingClass: tabHeadingLevelClass} );
-        }
-
-    }, [tabHeadingLevel, tabHeadingLevelClass]);
-
     return (
         <div {...blockProps} id={`${uniqueId}-pane`} aria-labelledby={`${uniqueId}-tab`}>
             <RichText
-                tagName={headingLevel}
+                tagName='p'
                 placeholder="Tab Title"
-                className={headingClass}
+                className='fw-bold text-body-secondary'
                 value={title}
                 onChange={(value) => setAttributes({ title: sanitizeHtml(value) })}
-                allowedFormats={['core/bold', 'core/italic', XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
+                allowedFormats={[XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
             />
             <InnerBlocks template={[['core/paragraph']]} allowedBlocks={ALLOWED_BLOCKS} templateLock={false} />
         </div>

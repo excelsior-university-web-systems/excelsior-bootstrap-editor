@@ -16,20 +16,10 @@
         "isActive": {
             "type": "boolean",
             "default": false
-        },
-        "headingLevel": {
-            "type": "string",
-            "default": "h2"
-        },
-        "headingClass": {
-            "type": "string",
-            "default": "h4"
         }
     },
     "usesContext": [
-        "excelsior-bootstrap-editor/activeTab",
-        "excelsior-bootstrap-editor/tabHeadingLevel",
-        "excelsior-bootstrap-editor/tabHeadingLevelClass"
+        "excelsior-bootstrap-editor/activeTab"
     ],
     "supports": {
         "html": false

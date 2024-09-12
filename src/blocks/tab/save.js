@@ -1,7 +1,7 @@
-import { useBlockProps, InnerBlocks, RichText } from '@wordpress/block-editor';
+import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 
 export default function Save({ attributes }) {
-    const { title, uniqueId, isActive, headingLevel, headingClass } = attributes;
+    const { uniqueId, isActive } = attributes;
     
     const blockProps = useBlockProps.save({
         className: `tab-pane fade ${isActive ? 'show active' : ''}`,
@@ -12,11 +12,6 @@ export default function Save({ attributes }) {
 
     return (
         <div {...blockProps}>
-            <RichText.Content
-                tagName={headingLevel}
-                className={headingClass}
-                value={title}
-            />
             <InnerBlocks.Content />
         </div>
     );

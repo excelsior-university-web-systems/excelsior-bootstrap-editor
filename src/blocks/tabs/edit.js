@@ -5,7 +5,7 @@ import { useEffect } from '@wordpress/element';
 
 export default function Edit({ attributes, setAttributes, clientId }) {
 
-    const {tabHeadingLevel, tabHeadingLevelClass, tabStyle} = attributes;
+    const {tabStyle} = attributes;
 
     const blockProps = useBlockProps({
         className: tabStyle,
@@ -59,33 +59,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                     ]}
                     onChange={(value) => setAttributes({ tabStyle: value })}
                 />
-                <SelectControl
-                    label="Heading Level"
-                    help="The heading level of the first heading that appears in the tab's content."
-                    value={tabHeadingLevel}
-                    options={[
-                        { label: 'H2', value: 'h2' },
-                        { label: 'H3', value: 'h3' },
-                        { label: 'H4', value: 'h4' },
-                        { label: 'H5', value: 'h5' },
-                        { label: 'H6', value: 'h6' },
-                    ]}
-                    onChange={(value) => setAttributes({ tabHeadingLevel: value })}
-                />
-                <SelectControl
-                    label="Heading Level Size"
-                    help="Set the font size of the first heading to use the size of a different heading level."
-                    value={tabHeadingLevelClass}
-                    options={[
-                        { label: 'H1', value: 'h1' },
-                        { label: 'H2', value: 'h2' },
-                        { label: 'H3', value: 'h3' },
-                        { label: 'H4', value: 'h4' },
-                        { label: 'H5', value: 'h5' },
-                        { label: 'H6', value: 'h6' },
-                    ]}
-                    onChange={(value) => setAttributes({ tabHeadingLevelClass: value })}
-                />
             </PanelBody>
         </InspectorControls>
         <div {...blockProps}>
@@ -102,7 +75,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                             aria-controls={`${tab.uniqueId}-pane`}
                             aria-selected={index === 0 ? 'true' : 'false'}
                             onClick={(e)=>{e.preventDefault()}}
-                            dangerouslySetInnerHTML = { {__html: tab.title || `Tab ${index + 1}`}}
+                            dangerouslySetInnerHTML = { {__html: tab.title || ''}}
                         />
                     </li>
                 ))}
