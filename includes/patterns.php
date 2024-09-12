@@ -28,7 +28,8 @@ add_action( 'current_screen', function() {
             array( 'slug' => 'lesson', 'title' => 'Lesson', 'file' => 'lesson.html' ),
             array( 'slug' => 'lessonwithcards', 'title' => 'Lesson with Cards', 'file' => 'lesson-with-cards.html' ),
             array( 'slug' => 'lessonwithmedia', 'title' => 'Lesson with media', 'file' => 'lesson-with-media.html' ),
-            array( 'slug' => 'discussion', 'title' => 'Discussion', 'file' => 'discussion.html' )
+            array( 'slug' => 'discussion', 'title' => 'Discussion', 'file' => 'discussion.html' ),
+            array( 'slug' => 'assignment', 'title' => 'Assignment', 'file' => 'assignment.html' )
         );
 
         foreach ( $excelsiorEditorPatterns as $pattern ) {
