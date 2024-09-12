@@ -1,43 +1,25 @@
 import { addFilter } from '@wordpress/hooks';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../constants';
-
 import { registerPlugin } from '@wordpress/plugins';
 import { PluginPostStatusInfo } from '@wordpress/editor';
-import { Button, Modal, Notice, __experimentalText as Text, PanelBody } from '@wordpress/components';
+import { InspectorControls } from '@wordpress/block-editor';
+import { Button, Modal, Notice, __experimentalText as Text, PanelBody, SelectControl } from '@wordpress/components';
+import { createHigherOrderComponent } from '@wordpress/compose';
 import { select, useSelect  } from '@wordpress/data';
-import { useState, useEffect } from '@wordpress/element';
+import { useState, useEffect, Fragment } from '@wordpress/element';
 import beautify from 'js-beautify';
 
 window.Prism = window.Prism || {};
 Prism.manual = true;
 
-function removeBlockAlignment( settings ) {
-
-    // Check if the block supports alignment and remove it
-    if (settings.supports && settings.supports.align) {
-        settings.supports = {
-            ...settings.supports,
-            align: false,
-        };
-    }
-
-    return settings;
-
-}
-
-// Add filter to modify block settings
-addFilter(
-    'blocks.registerBlockType',
-    XCLSR_BTSTRP_EDITOR_PREFIX + '/remove-block-alignment',
-    removeBlockAlignment
-);
-
 wp.domReady(() => {
+
     wp.richText.unregisterFormatType('core/image');        // Remove inline image
     wp.richText.unregisterFormatType('core/text-color');   // Remove text color/highlight
     wp.richText.unregisterFormatType('core/language');     // Example for language button
     wp.richText.unregisterFormatType('core/keyboard');     // Example for keyboard input button
 
+    // remove typography and color settings from core/heading and core/heading blocks
     setTimeout( function() {
         
         wp.data.dispatch( 'core/block-editor' ).updateSettings({
@@ -54,6 +36,8 @@ wp.domReady(() => {
     }, 3000);
     
 });
+
+/* GET CODE BUTTON */
 
 // Define the button component
 const GetCodeButton = () => {
@@ -168,3 +152,78 @@ registerPlugin (XCLSR_BTSTRP_EDITOR_PREFIX + '-get-code-button', {
     render: GetCodeButton,
     icon: 'smiley',
 });
+
+/* ADD SIZE SETTINGS TO CORE/HEADING BLOCK */
+
+addFilter( 'blocks.registerBlockType', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-settings', (settings, name) => {
+    if (name === 'core/heading') {
+        settings.attributes = {
+            ...settings.attributes,
+            headingSizeClass: {
+                type: 'string',
+                default: '',
+            },
+        };
+    }
+    return settings;
+});
+
+// Ensure the class is reflected in the editor preview
+addFilter('editor.BlockListBlock', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-preview-class', (BlockListBlock) => {
+    return (props) => {
+        if (props.name === 'core/heading' && props.attributes.headingSizeClass) {
+            return <BlockListBlock {...props} className={`${props.className} ${props.attributes.headingSizeClass}`} />;
+        }
+        return <BlockListBlock {...props} />;
+    };
+});
+
+// Inject the size class into the block's save props to apply on the front-end
+addFilter('blocks.getSaveContent.extraProps', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-class', (extraProps, blockType, attributes) => {
+    if (blockType.name === 'core/heading' && attributes.headingSizeClass) {
+        extraProps.className = `${extraProps.className || ''} ${attributes.headingSizeClass}`.trim();
+    }
+    return extraProps;
+});
+
+// Add the custom control to the block's inspector
+const addHeadingSizeControl = createHigherOrderComponent((BlockEdit) => {
+    return (props) => {
+
+        if (props.name !== 'core/heading') {
+            return <BlockEdit {...props} />;
+        }
+
+        const headingLevelSizeOptions = [
+            { label: 'Default', value: '' },
+            { label: 'H1', value: 'h1' },
+            { label: 'H2', value: 'h2' },
+            { label: 'H3', value: 'h3' },
+            { label: 'H4', value: 'h4' },
+            { label: 'H5', value: 'h5' },
+            { label: 'H6', value: 'h6' }
+        ];
+
+        const { attributes, setAttributes } = props;
+        const { headingSizeClass } = attributes;
+        
+        return (
+            <Fragment>
+                <BlockEdit {...props} />
+                <InspectorControls>
+                    <PanelBody title="Settings" initialOpen={true}>
+                        <SelectControl
+                            label="Heading Level Size"
+                            help="Set the font size of the heading to use the size of a different heading level."
+                            value={headingSizeClass}
+                            options={headingLevelSizeOptions}
+                            onChange={(value) => setAttributes({ headingSizeClass: value })}
+                        />
+                    </PanelBody>
+                </InspectorControls>
+            </Fragment>
+        );
+    };
+}, 'addHeadingSizeControl');
+
+addFilter('editor.BlockEdit', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-inspector-control', addHeadingSizeControl);

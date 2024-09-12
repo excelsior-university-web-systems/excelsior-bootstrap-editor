@@ -5,7 +5,7 @@ import { ALLOWED_BLOCKS } from './allowed-blocks';
 export default function Edit ({ attributes, setAttributes }) {
 
     const TEMPLATE = [
-        ['core/heading', {className: 'h5', level: 3, placeholder: 'Heading'}],
+        ['core/heading', {headingSizeClass: 'h5', level: 3, placeholder: 'Heading'}],
         ['core/paragraph', {placeholder: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.'}]
     ];
     

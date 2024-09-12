@@ -37,7 +37,7 @@ addFilter(
 export default function Edit( {attributes, setAttributes} ) {
    
     const TEMPLATE = [
-        ['core/heading', { placeholder: "Card Title", level: 4, className: "h5 card-title" }],
+        ['core/heading', { placeholder: "Card Title", level: 4, headingSizeClass: "h5", className: "card-title" }],
         ['core/paragraph', { placeholder: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." }]
     ];
     const { imgUrl, imgAltText, useImg } = attributes;
