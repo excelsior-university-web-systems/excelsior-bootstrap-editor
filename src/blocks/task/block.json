@@ -22,6 +22,10 @@
         "timezone": {
             "type": "string",
             "default": "ET"
+        },
+        "noDueDate": {
+            "type": "boolean",
+            "default": false
         }
     }
 }

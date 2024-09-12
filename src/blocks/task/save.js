@@ -3,7 +3,7 @@ import { convertTo12HourFormat } from '../../commons';
 
 export default function Save( { attributes } ) {
     
-    const { task, dueTime, dueDayOfTheWeek, timezone } = attributes;
+    const { task, dueTime, dueDayOfTheWeek, timezone, noDueDate } = attributes;
 
     const blockProps = useBlockProps.save( {
         className: 'list-group-item'
@@ -13,8 +13,11 @@ export default function Save( { attributes } ) {
         <li {...blockProps}>
             <RichText.Content
             value={task} />
-            <br />
-            By {dueDayOfTheWeek} at {convertTo12HourFormat(dueTime)} {timezone}
+            {!noDueDate && (
+                <>
+                <br /> By {dueDayOfTheWeek} at {convertTo12HourFormat(dueTime)} {timezone}
+                </>
+            ) }
         </li>
     );
 }
