@@ -27,3 +27,27 @@ export const generateHtmlId = () => {
   
     return firstChar + timestamp + randomPart;
 };
+
+export const observeElement = ( selector, callback, options = { childList: true, subtree: true } ) => {
+    
+    const element = document.querySelector( selector );
+
+    if ( element ) {
+        callback( element );
+        return;
+    }
+
+    const observer = new MutationObserver( ( mutations, obs ) => {
+
+        const element = document.querySelector( selector );
+
+        if ( element ) {
+            callback( element );
+            obs.disconnect();
+        }
+
+    } );
+
+    observer.observe( document.body, options );
+
+}

@@ -51,7 +51,7 @@ add_action( 'init', function() {
             'edit_published_posts'   => 'edit_published_'.XCLSR_BTSTRP_POST_TYPE.'s',
             'create_posts'           => 'edit_'.XCLSR_BTSTRP_POST_TYPE.'s'
         ),
-        'supports'            => array( 'title', 'editor', 'author' ),
+        'supports'            => array( 'title', 'editor', 'author', 'custom-fields' ),
         'has_archive'         => false,
         'exclude_from_search' => true,
         'publicly_queryable'  => false,
@@ -67,6 +67,28 @@ add_action( 'init', function() {
     );
 
     register_post_type( XCLSR_BTSTRP_POST_TYPE, $args );
+
+    register_post_meta( XCLSR_BTSTRP_POST_TYPE, XCLSR_BTSTRP_POST_TYPE.'_post_course_number', array(
+        'type' => 'string',
+        'show_in_rest' => true,
+        'single' => true,
+        'default' => '',
+    ) );
+
+    register_post_meta( XCLSR_BTSTRP_POST_TYPE, XCLSR_BTSTRP_POST_TYPE.'_post_page_title', array(
+        'type' => 'string',
+        'show_in_rest' => true,
+        'single' => true,
+        'default' => '',
+    ) );
+
+    register_post_meta( XCLSR_BTSTRP_POST_TYPE, XCLSR_BTSTRP_POST_TYPE.'_post_year', array(
+        'type' => 'string',
+        'show_in_rest' => true,
+        'single' => true,
+        'default' => date("Y"),
+    ) );
+
     \ExcelsiorBootstrapEditor\add_excelsior_bootstrap_capabilities();
 
 } );
@@ -100,5 +122,18 @@ function add_excelsior_bootstrap_capabilities() {
 
     }
 }
+
+add_filter( 'wp_insert_post_data', function( $data ) {
+
+    if ( $data['post_type'] === XCLSR_BTSTRP_POST_TYPE && $data['post_status'] === 'publish' ) {
+
+        if ( empty( $data['post_title'] ) ) {
+            $data['post_status'] = 'draft';
+        }
+    }
+
+    return $data;
+
+}, 10, 2 );
 
 ?>

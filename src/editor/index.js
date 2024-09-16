@@ -1,16 +1,19 @@
 import { addFilter } from '@wordpress/hooks';
-import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../constants';
+import { XCLSR_BTSTRP_EDITOR_PREFIX, XCLSR_BTSTRP_POST_TYPE } from '../constants';
 import { registerPlugin } from '@wordpress/plugins';
 import { PluginPostStatusInfo } from '@wordpress/editor';
 import { InspectorControls } from '@wordpress/block-editor';
-import { Button, Modal, Notice, __experimentalText as Text, PanelBody, SelectControl } from '@wordpress/components';
+import { Button, Modal, TextControl, Notice, __experimentalText as Text, PanelBody, SelectControl } from '@wordpress/components';
 import { createHigherOrderComponent } from '@wordpress/compose';
-import { select, useSelect  } from '@wordpress/data';
+import { select, useSelect, useDispatch, subscribe } from '@wordpress/data';
 import { useState, useEffect, Fragment } from '@wordpress/element';
+import { observeElement } from '../commons';
 import beautify from 'js-beautify';
 
 window.Prism = window.Prism || {};
 Prism.manual = true;
+
+const postTitleMessage = 'Enter the course number, page title, and year in the right sidebar. The page cannot be published without this information, so ensure all fields are filled before saving or publishing.';
 
 wp.domReady(() => {
 
@@ -34,8 +37,133 @@ wp.domReady(() => {
         });
 
     }, 3000);
+
+    // Make the post title not editable and change the placeholder to an instruction
+    observeElement( '.editor-post-title', ( element ) => {
+        element.setAttribute( 'contenteditable', false );
+        element.querySelector( 'span' ).setAttribute( 'data-rich-text-placeholder', postTitleMessage );
+    } );
     
 });
+
+/* ADD COURSE META FIELDS FOR "TITLE" */
+
+let isLocked = false;
+
+const CourseMetaFields = () => {
+
+    const meta = useSelect( (select) => select('core/editor').getEditedPostAttribute('meta') );
+    const currentTitle = useSelect((select) => select('core/editor').getEditedPostAttribute('title'));
+    const { editPost } = useDispatch('core/editor');
+    const courseNumber = meta[XCLSR_BTSTRP_POST_TYPE+'_post_course_number'] || '';
+    const pageTitle = meta[XCLSR_BTSTRP_POST_TYPE+'_post_page_title'] || '';
+    const year = meta[XCLSR_BTSTRP_POST_TYPE+'_post_year'] || '';
+    const combinedTitle = `${courseNumber} - ${pageTitle} - ${year}`;
+
+    // Removes spaces and makes uppercase
+    const formatCourseNumber = (value) => {
+        return value.replace(/\s+/g, '').toUpperCase(); 
+    };
+
+    // Clear the post title if all fields are empty
+    if ( (!courseNumber || !pageTitle || !year) && currentTitle ) {
+        editPost({ title: '' });
+        observeElement( '.editor-post-title span', ( element ) => {
+            if ( element ) {
+                element.setAttribute( 'data-rich-text-placeholder', postTitleMessage );
+            }
+        } );
+    }
+    // Otherwise, update the title if the fields are filled 
+    else if ( courseNumber && pageTitle && year && combinedTitle !== currentTitle ) {
+        editPost({ title: combinedTitle });
+    }
+
+    return (
+        <>
+        <PluginPostStatusInfo>
+            <PanelBody className='course-meta-panel'>
+                <TextControl
+                    isBlock
+                    label="Course Number"
+                    className='required'
+                    help="Example: EGR290, NUR104, etc."
+                    value={meta[XCLSR_BTSTRP_POST_TYPE+'_post_course_number'] || ''}
+                    onChange={(value) => editPost({ meta: { ...meta, excelsior_bootstrap_post_course_number: formatCourseNumber(value) } })}
+                />
+                <TextControl
+                    isBlock
+                    label="Page Title"
+                    className='required'
+                    help="Example: M1.1 - Exploring Computer Science Career Paths"
+                    value={meta[XCLSR_BTSTRP_POST_TYPE+'_post_page_title'] || ''}
+                    onChange={(value) => editPost({ meta: { ...meta, excelsior_bootstrap_post_page_title: value } })}
+                />
+                <TextControl
+                    isBlock
+                    label="Year"
+                    className='required'
+                    type='number'
+                    value={meta[XCLSR_BTSTRP_POST_TYPE+'_post_year'] || ''}
+                    onChange={(value) => editPost({ meta: { ...meta, excelsior_bootstrap_post_year: value } })}
+                />
+            </PanelBody>
+        </PluginPostStatusInfo>
+        </>
+    );
+};
+
+const validateFields = () => {
+
+    const { getEditedPostAttribute } = wp.data.select('core/editor');
+    const meta = getEditedPostAttribute('meta') || {};
+    const courseNumber = meta[XCLSR_BTSTRP_POST_TYPE+'_post_course_number'] || '';
+    const pageTitle = meta[XCLSR_BTSTRP_POST_TYPE+'_post_page_title'] || '';
+    const year = meta[XCLSR_BTSTRP_POST_TYPE+'_post_year'] || '';
+
+    return courseNumber && pageTitle && year;
+
+};
+
+subscribe( () => {
+
+    const { isSavingPost } = wp.data.select('core/editor');
+    const isSaving = isSavingPost();
+    const isValid = validateFields();
+
+    // control the state of the publish button
+    observeElement( '.editor-post-publish-button__button', (element) => {
+        if ( isValid ) {
+            element.removeAttribute( 'disabled', false );
+            element.removeAttribute( 'aria-disabled', true );
+        } else {
+            element.setAttribute( 'disabled', true );
+            element.removeAttribute( 'aria-disabled', false );
+        }
+    } );
+
+    // control the state of the save button
+    if ( isSaving && !isValid && !isLocked ) {
+
+        isLocked = true;
+        wp.data.dispatch('core/editor').lockPostSaving('required-fields');
+        wp.data.dispatch('core/notices').createNotice(
+            'error',
+            'Please fill in all required fields: Course Number, Page Title, and Year.',
+            { isDismissible: true }
+        );
+
+    } else if ( isValid && isLocked ) {
+        isLocked = false;
+        wp.data.dispatch('core/editor').unlockPostSaving('required-fields');
+    }
+
+} );
+
+registerPlugin( XCLSR_BTSTRP_EDITOR_PREFIX + '-course-meta-fields', {
+    render: CourseMetaFields,
+    icon: null,
+} );
 
 /* GET CODE BUTTON */
 
@@ -45,7 +173,6 @@ const GetCodeButton = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [renderedHTML, setRenderedHTML] = useState('');
     const [copySuccess, setCopySuccess] = useState(false);
-
     const { isSaving, hasUnsavedChanges, postStatus } = useSelect((select) => {
         const editorStore = select('core/editor');
         return {

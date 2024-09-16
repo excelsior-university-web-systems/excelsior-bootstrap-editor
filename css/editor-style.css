@@ -4,10 +4,19 @@
     margin-top: 2rem !important;
 }
 
+.components-button.editor-post-save-draft,
+.components-button[aria-label="Save draft"] {
+    display: none !important;
+}
+
 .wp-block-post-title {
     font-size: 1rem !important;
     margin-bottom: 14px !important;
     color: rgba( 0, 0, 0, 0.5 ) !important;
+}
+.wp-block-post-title span[data-rich-text-placeholder] {
+    color: #dc3545 !important;
+    font-weight: normal !important;
 }
 
 :where(.editor-styles-wrapper) p {
@@ -23,7 +32,7 @@
 }
 
 /* EXCELSIOR BOOTSTRAP EDITOR
-   GET CODE BUTTON */
+   COURSE META & GET CODE BUTTON */
 
 .components-modal__frame.get-code-modal .cta-wrapper {
     display: flex;
@@ -31,9 +40,35 @@
     align-items: center;
 }
 
-.components-panel__body.get-code-btn-panel {
+.components-panel__body.get-code-btn-panel,
+.components-panel__body.course-meta-panel {
     display: block !important;
     width: 100%;
+}
+
+.components-panel__body.course-meta-panel {
+    padding-bottom: 0 !important;
+    border-bottom: none;
+}
+
+.components-panel__body.get-code-btn-panel.is-opened,
+.components-panel__body.course-meta-panel.is-opened {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.components-panel__body.course-meta-panel .components-base-control {
+    margin-bottom: 8px;
+}
+
+.components-panel__body.course-meta-panel .components-base-control:last-of-type {
+    margin-bottom: 0;
+}
+
+.components-panel__body.course-meta-panel .required .components-base-control__field .components-base-control__label:after {
+    content: " *";
+    font-weight: bold;
+    color: #dc3545;
 }
 
 .components-panel__body.get-code-btn-panel .components-button.get-code-btn {
