@@ -41,7 +41,7 @@ wp.domReady(() => {
     // Make the post title not editable and change the placeholder to an instruction
     observeElement( '.editor-post-title', ( element ) => {
         element.setAttribute( 'contenteditable', false );
-        element.querySelector( 'span' ).setAttribute( 'data-rich-text-placeholder', postTitleMessage );
+        element.querySelector( 'span' )?.setAttribute( 'data-rich-text-placeholder', postTitleMessage );
     } );
     
 });
@@ -130,17 +130,6 @@ subscribe( () => {
     const { isSavingPost } = wp.data.select('core/editor');
     const isSaving = isSavingPost();
     const isValid = validateFields();
-
-    // control the state of the publish button
-    observeElement( '.editor-post-publish-button__button', (element) => {
-        if ( isValid ) {
-            element.removeAttribute( 'disabled', false );
-            element.removeAttribute( 'aria-disabled', true );
-        } else {
-            element.setAttribute( 'disabled', true );
-            element.removeAttribute( 'aria-disabled', false );
-        }
-    } );
 
     // control the state of the save button
     if ( isSaving && !isValid && !isLocked ) {
