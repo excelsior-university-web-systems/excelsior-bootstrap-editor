@@ -1,0 +1,20 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap-editor/page-navigation",
+    "title": "Page Navigation",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container"],
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "items": {
+            "type": "array",
+            "default": [
+                { "id": "exampleHeading1", "label": "First heading" },
+                { "id": "exampleHeading2", "label": "Second heading" },
+                { "id": "exampleHeading3", "label": "Third heading" }
+            ]
+        }
+    }
+}

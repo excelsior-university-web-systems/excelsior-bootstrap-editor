@@ -28,6 +28,18 @@ export const generateHtmlId = () => {
     return firstChar + timestamp + randomPart;
 };
 
+export const formatAsHtmlId = (input) => {
+    // Replace spaces with hyphens, remove underscores, and ensure no invalid characters
+    let formattedId = input.trim()
+    .replace(/\s+/g, '-')      // Replace spaces with hyphens
+    .replace(/[^a-zA-Z0-9-]/g, '') // Remove any non-alphanumeric characters except hyphens
+
+    // Ensure it doesn't start with a number
+    formattedId = formattedId.replace(/^[0-9]+/, '');
+
+    return formattedId;
+};
+
 export const observeElement = ( selector, callback, options = { childList: true, subtree: true } ) => {
     
     const element = document.querySelector( selector );

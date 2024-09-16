@@ -264,6 +264,15 @@ p.is-selected:focus code[data-rich-text-format-boundary] {
     border-top: none;
 }
 
+/* EXCELSIOR BOOTSTRAP EDITOR
+   PAGE NAVIGATION */
+
+.wp-block-excelsior-bootstrap-editor-page-navigation {
+    border: 1px dashed #ccc;
+    padding: 10px;
+    background-color: rgb(248, 249, 250);
+}
+
 /* BOOTSTRAP ICON ADJUSTMENTS */
 
 i.bi {
