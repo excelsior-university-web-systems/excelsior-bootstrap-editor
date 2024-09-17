@@ -25,6 +25,7 @@ add_action( 'current_screen', function() {
         $patternDirectory = plugin_dir_path( __FILE__ ) . 'patterns/';
         $excelsiorEditorPatterns = array(
             array( 'slug' => 'homepage', 'title' => 'Homepage', 'file' => 'home.html' ),
+            array( 'slug' => 'overview', 'title' => 'Overview', 'file' => 'overview.html' ),
             array( 'slug' => 'lesson', 'title' => 'Lesson', 'file' => 'lesson.html' ),
             array( 'slug' => 'lessonwithcards', 'title' => 'Lesson with Cards', 'file' => 'lesson-with-cards.html' ),
             array( 'slug' => 'lessonwithmedia', 'title' => 'Lesson with media', 'file' => 'lesson-with-media.html' ),
