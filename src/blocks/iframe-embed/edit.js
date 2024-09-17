@@ -1,28 +1,16 @@
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, TextareaControl, Button } from '@wordpress/components';
 import { useState } from '@wordpress/element';
+import { removeScriptTags } from '../../commons';
 
 export default function Edit( { attributes, setAttributes } ) {
 
     const { embedCode, floatingClasses } = attributes;
     const [tempEmbedCode, setTempEmbedCode] = useState(embedCode);
 
-    // Sanitize to strip out <script> tags
-    const sanitizeEmbedCode = ( input ) => {
-        
-        const tempElement = document.createElement( 'div' );
-        tempElement.innerHTML = input;
-
-        const scripts = tempElement.querySelectorAll( 'script' );
-        scripts.forEach( (script) => script.remove() );
-
-        return tempElement.innerHTML;
-
-    };
-
     const onInsertEmbedCode = () => {
         if ( tempEmbedCode ) {
-            setAttributes( { embedCode: sanitizeEmbedCode( tempEmbedCode ) } );
+            setAttributes( { embedCode: removeScriptTags( tempEmbedCode ) } );
         }
     };
 

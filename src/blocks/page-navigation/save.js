@@ -1,4 +1,5 @@
 import { useBlockProps } from '@wordpress/block-editor';
+import { createElement } from '@wordpress/element';
 
 export default function Save( { attributes }) {
 
@@ -15,9 +16,7 @@ export default function Save( { attributes }) {
                 <ul className="nav">
                 {items.map((item, index) => (
                     <li className="nav-item" key={index}>
-                    <a className="nav-link" href={`#${item.id}`}>
-                        {item.label}
-                    </a>
+                    {createElement('a', { className: 'nav-link', href: `#${item.id}`, dangerouslySetInnerHTML: {__html: item.label} })}
                     </li>
                 ))}
                 </ul>

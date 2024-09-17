@@ -5,7 +5,9 @@
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {
-        "html": false
+        "html": false,
+        "multiple": false,
+        "inserter": false
     },
     "attributes": {
         "items": {

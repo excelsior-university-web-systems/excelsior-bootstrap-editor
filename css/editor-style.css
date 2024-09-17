@@ -273,6 +273,17 @@ p.is-selected:focus code[data-rich-text-format-boundary] {
     background-color: rgb(248, 249, 250);
 }
 
+.wp-block-excelsior-bootstrap-editor-page-navigation .input-field {
+    border: 1px solid #949494;
+    border-radius: 2px;
+    box-shadow: 0 0 0 #0000;
+    height: 32px;
+    margin: 0;
+    padding: 6px 8px;
+    transition: box-shadow .1s linear;
+    background-color: #fff;
+}
+
 /* BOOTSTRAP ICON ADJUSTMENTS */
 
 i.bi {

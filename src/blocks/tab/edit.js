@@ -1,7 +1,7 @@
 import { useBlockProps, InnerBlocks, RichText } from '@wordpress/block-editor';
 import { useEffect } from '@wordpress/element';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
-import { generateHtmlId } from '../../commons';
+import { generateHtmlId, removeScriptTags } from '../../commons';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 
 export default function Edit({ attributes, setAttributes, context }) {
@@ -12,18 +12,6 @@ export default function Edit({ attributes, setAttributes, context }) {
     } );
 
     const activeTab = context?.[XCLSR_BTSTRP_EDITOR_PREFIX + '/activeTab'];
-
-    const sanitizeHtml = ( input ) => {
-        
-        const tempElement = document.createElement( 'div' );
-        tempElement.innerHTML = input;
-
-        const scripts = tempElement.querySelectorAll( 'script' );
-        scripts.forEach( (script) => script.remove() );
-
-        return tempElement.innerHTML;
-
-    };
 
     useEffect(() => {
 
@@ -46,7 +34,7 @@ export default function Edit({ attributes, setAttributes, context }) {
                 placeholder="Tab Title"
                 className='fw-bold text-body-secondary'
                 value={title}
-                onChange={(value) => setAttributes({ title: sanitizeHtml(value) })}
+                onChange={(value) => setAttributes({ title: removeScriptTags(value) })}
                 allowedFormats={[XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
             />
             <InnerBlocks template={[['core/heading', {headingSizeClass: "h4"}],['core/paragraph']]} allowedBlocks={ALLOWED_BLOCKS} templateLock={false} />
