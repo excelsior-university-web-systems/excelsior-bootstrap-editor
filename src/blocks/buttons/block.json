@@ -2,10 +2,21 @@
     "apiVersion": 2,
     "name": "excelsior-bootstrap-editor/buttons",
     "title": "Buttons",
+    "description": "Create button to navigate between pages or websites.",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {
         "html": false
     },
-    "attributes": {}
+    "example": {
+        "attributes": {
+            "cover": "images/buttons.webp"
+        }
+    },
+    "attributes": {
+        "cover": {
+            "type": "string",
+            "default": ""
+        }
+    }
 }

@@ -2,9 +2,21 @@
     "apiVersion": 2,
     "name": "excelsior-bootstrap-editor/task-group",
     "title": "Task Group",
+    "description": "Create a task list.",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {
         "html": false
+    },
+    "example": {
+        "attributes": {
+            "cover": "images/task-group.webp"
+        }
+    },
+    "attributes": {
+        "cover": {
+            "type": "string",
+            "default": ""
+        }
     }
 }

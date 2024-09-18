@@ -9,7 +9,7 @@ import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 
 export default function Edit ( { attributes, setAttributes, context } ) {
 
-    const { url, alignment, alignmentSize, caption, altText, mobileResponsive } = attributes;
+    const { url, alignment, alignmentSize, caption, altText, mobileResponsive, cover } = attributes;
     const alignmentEnabled = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/alignmentEnabled'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/alignmentEnabled'] : false;
     const [tempUrl, setTempUrl] = useState('');
     const [tempAltText, setTempAltText] = useState('');
@@ -28,6 +28,14 @@ export default function Edit ( { attributes, setAttributes, context } ) {
 
     if ( alignmentEnabled && alignment.length <= 0 ) {
         setAttributes( {alignment: "float-start me-3 mb-1"} );
+    }
+
+    if ( cover ) {
+        return(
+            <>
+            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
+            </>
+        );
     }
 
     return (

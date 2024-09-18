@@ -8,12 +8,20 @@ export default function Edit ({ attributes, setAttributes }) {
         ['core/paragraph', {placeholder: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.'}]
     ];
 
-    const { styleType, narrowWidth } = attributes;
+    const { styleType, narrowWidth, cover } = attributes;
 
     const blockProps = useBlockProps( {
         className: `tip${styleType.length ? ' ' + styleType : ''}${narrowWidth ? ' w-75 mx-auto' : ''}`,
         role: 'alert'
     } );
+
+    if ( cover ) {
+        return(
+            <>
+            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
+            </>
+        );
+    }
 
     return (
         <>

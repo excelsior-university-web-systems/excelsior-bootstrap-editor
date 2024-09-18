@@ -15,7 +15,7 @@ export default function Edit( {attributes, setAttributes} ) {
         [XCLSR_BTSTRP_EDITOR_PREFIX + '/card', {}, []]
     ];
 
-    const { colSize } = attributes;
+    const { colSize, cover } = attributes;
   
     const blockProps = useBlockProps( {
         className: ''
@@ -43,6 +43,14 @@ export default function Edit( {attributes, setAttributes} ) {
         };
     }, [blockProps['data-block'], colSize]);
 
+    if ( cover ) {
+        return(
+            <>
+            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
+            </>
+        );
+    }
+    
     return (
         <>
         <InspectorControls>

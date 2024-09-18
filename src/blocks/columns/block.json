@@ -2,12 +2,22 @@
     "apiVersion": 2,
     "name": "excelsior-bootstrap-editor/columns",
     "title": "Columns",
+    "description": "Create columns to organize content into a multi-column layout.",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {
         "html": false
     },
+    "example": {
+        "attributes": {
+            "cover": "images/columns.webp"
+        }
+    },
     "attributes": {
+        "cover": {
+            "type": "string",
+            "default": ""
+        },
         "colSize": {
             "type": "string",
             "default": "3"

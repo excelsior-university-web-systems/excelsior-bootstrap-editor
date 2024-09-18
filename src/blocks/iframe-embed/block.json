@@ -2,6 +2,7 @@
     "apiVersion": 2,
     "name": "excelsior-bootstrap-editor/iframe-embed",
     "title": "iFrame Embed",
+    "description": "Insert an iFrame embed code to display external content, such as videos.",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {

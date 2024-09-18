@@ -2,12 +2,22 @@
     "apiVersion": 2,
     "name": "excelsior-bootstrap-editor/tipbox",
     "title": "Tip Box",
+    "description": "Create a tip box to highlight important information.",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {
         "html": false
     },
+    "example": {
+        "attributes": {
+            "cover": "images/tipbox.webp"
+        }
+    },
     "attributes": {
+        "cover": {
+            "type": "string",
+            "default": ""
+        },
         "styleType": {
             "type": "string",
             "default": ""

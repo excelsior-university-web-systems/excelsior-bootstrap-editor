@@ -9,12 +9,20 @@ export default function Edit ({ attributes, setAttributes }) {
         ['core/paragraph', {placeholder: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.'}]
     ];
     
-    const { styleType } = attributes;
+    const { styleType, cover } = attributes;
 
     const blockProps = useBlockProps( {
         className: `callout callout-${styleType}`,
         role: 'complementary'
     } );
+
+    if ( cover ) {
+        return(
+            <>
+            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
+            </>
+        );
+    }
 
     return (
         <>

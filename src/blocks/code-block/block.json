@@ -2,12 +2,22 @@
     "apiVersion": 2,
     "name": "excelsior-bootstrap-editor/code-block",
     "title": "Code Block",
+    "description": "Create code snippet with syntax highlighting.",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {
         "html": false
     },
+    "example": {
+        "attributes": {
+            "cover": "images/code-block.webp"
+        }
+    },
     "attributes": {
+        "cover": {
+            "type": "string",
+            "default": ""
+        },
         "content": {
 			"type": "string"
 		},

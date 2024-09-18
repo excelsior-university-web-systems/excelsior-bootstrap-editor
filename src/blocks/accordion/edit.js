@@ -4,10 +4,18 @@ import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 
 export default function Edit( { attributes, setAttributes} ) {
     
-    const { accordionHeadingLevel } = attributes;
+    const { accordionHeadingLevel, cover } = attributes;
     const blockProps = useBlockProps({
         className: 'accordion',
     });
+
+    if ( cover ) {
+        return(
+            <>
+            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
+            </>
+        );
+    }
 
     return (
         <>

@@ -2,8 +2,18 @@
     "apiVersion": 2,
     "name": "excelsior-bootstrap-editor/tabs",
     "title": "Tabs",
+    "description": "Create tabs to organize information into separate sections.",
     "category": "excelsior-bootstrap-editor-blocks",
+    "example": {
+        "attributes": {
+            "cover": "images/tabs.webp"
+        }
+    },
     "attributes": {
+        "cover": {
+            "type": "string",
+            "default": ""
+        },
         "tabs": {
             "type": "array",
             "default": []

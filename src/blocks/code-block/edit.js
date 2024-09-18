@@ -7,7 +7,7 @@ Prism.manual = true;
 
 export default function Edit({ attributes, setAttributes, isSelected }) {
 
-    const { content, language, showLineNumbers } = attributes;
+    const { content, language, showLineNumbers, cover } = attributes;
     const [tempCode, setTempCode] = useState(content || '');
     const [isEditing, setEditing] = useState(false);
     const blockProps = useBlockProps();
@@ -42,6 +42,14 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 
     }, [content, language, showLineNumbers]);
 
+    if ( cover ) {
+        return(
+            <>
+            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
+            </>
+        );
+    }
+    
     return (
         <>
             {content && (
@@ -122,6 +130,9 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                             label="Language"
                             value={language}
                             options={[
+                                { label: 'C', value: 'c' },
+                                { label: 'C#', value: 'csharp' },
+                                { label: 'C++', value: 'cpp' },
                                 { label: 'CSS', value: 'css' },
                                 { label: 'HTML/XML', value: 'markup' },
                                 { label: 'Java', value: 'java' },

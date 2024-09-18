@@ -2,12 +2,22 @@
     "apiVersion": 2,
     "name": "excelsior-bootstrap-editor/cards",
     "title": "Cards",
+    "description": "Create cards to display content in a compact, organized format, often used for showcasing.",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {
         "html": false
     },
+    "example": {
+        "attributes": {
+            "cover": "images/cards.webp"
+        }
+    },
     "attributes": {
+        "cover": {
+            "type": "string",
+            "default": ""
+        },
         "colSize": {
             "type": "string",
             "default": "3"

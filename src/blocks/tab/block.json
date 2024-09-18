@@ -2,6 +2,7 @@
     "apiVersion": 2,
     "name": "excelsior-bootstrap-editor/tab",
     "title": "Tab",
+    "description": "Create a tab item.",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/tabs"],
     "attributes": {

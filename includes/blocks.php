@@ -81,6 +81,10 @@ add_action( 'enqueue_block_editor_assets', function() {
             array( 'wp-blocks', 'wp-dom-ready', 'wp-edit-post' )
         );
 
+        wp_localize_script(XCLSR_BTSTRP_EDITOR_PREFIX.'-modification', 'xclsr_btstrp_block_preview', array(
+            'pluginUrl' => plugin_dir_url( dirname(__FILE__) )
+        ));
+
         // core table modification
         wp_enqueue_script(
             XCLSR_BTSTRP_EDITOR_PREFIX.'-core-table-modification',

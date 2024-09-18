@@ -2,13 +2,23 @@
     "apiVersion": 2,
     "name": "excelsior-bootstrap-editor/image-banner",
     "title": "Image Banner",
+    "description": "Insert a visually prominent graphic to capture attention, often displayed at the top of a page.",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {
         "html": false,
         "multiple": false
     },
+    "example": {
+        "attributes": {
+            "cover": "images/image-banner.webp"
+        }
+    },
     "attributes": {
+        "cover": {
+            "type": "string",
+            "default": ""
+        },
         "url": {
             "type": "string"
         }

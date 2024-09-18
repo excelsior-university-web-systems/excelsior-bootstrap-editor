@@ -21,7 +21,7 @@ const ICONS = [
 
 export default function Edit ({ attributes, setAttributes }) {
     
-    const { selectedIcon, size, decorative, noIcon } = attributes;
+    const { selectedIcon, size, decorative, noIcon, cover } = attributes;
 
     const handleIconSelect = (iconName) => {
         setAttributes({ selectedIcon: iconName });
@@ -31,6 +31,14 @@ export default function Edit ({ attributes, setAttributes }) {
         className: `decorative ${ noIcon ? '' : `bi ${selectedIcon}${size !== 'regular' ? ' ' + size : '' }`}`,
         role: decorative ? 'presentation' : undefined
     } );
+
+    if ( cover ) {
+        return(
+            <>
+            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
+            </>
+        );
+    }
 
     return (
         <>

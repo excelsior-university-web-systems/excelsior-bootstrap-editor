@@ -21,11 +21,19 @@ export default function Edit( {attributes, setAttributes} ) {
         ]],
     ];
     
-    const { colSize } = attributes;
+    const { colSize, cover } = attributes;
   
     const blockProps = useBlockProps( {
         className: ''
     } );
+
+    if ( cover ) {
+        return(
+            <>
+            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
+            </>
+        );
+    }
 
     useEffect(() => {
         // Select the wrapper that Gutenberg uses to wrap InnerBlocks

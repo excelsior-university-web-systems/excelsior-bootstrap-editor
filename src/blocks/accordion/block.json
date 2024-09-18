@@ -2,12 +2,22 @@
     "apiVersion": 2,
     "name": "excelsior-bootstrap-editor/accordion",
     "title": "Accordion",
+    "description": "Create a collapsible component used to organize content into expandable sections.",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {
         "html": false
     },
+    "example": {
+        "attributes": {
+            "cover": "images/accordion.webp"
+        }
+    },
     "attributes": {
+        "cover": {
+            "type": "string",
+            "default": ""
+        },
         "accordionHeadingLevel": {
             "type": "string",
             "default": "h2"

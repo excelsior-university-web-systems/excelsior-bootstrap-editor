@@ -2,13 +2,23 @@
     "apiVersion": 2,
     "name": "excelsior-bootstrap-editor/image",
     "title": "Image",
+    "description": "Insert an image to display visuals.",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {
         "html": false
     },
     "usesContext": ["excelsior-bootstrap-editor/alignmentEnabled"],
+    "example": {
+        "attributes": {
+            "cover": "images/image.webp"
+        }
+    },
     "attributes": {
+        "cover": {
+            "type": "string",
+            "default": ""
+        },
         "url": {
             "type": "string"
         },

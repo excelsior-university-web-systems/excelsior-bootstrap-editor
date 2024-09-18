@@ -2,6 +2,7 @@
     "apiVersion": 2,
     "name": "excelsior-bootstrap-editor/task",
     "title": "Task",
+    "description": "Create a task item.",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/task-group"],
     "supports": {

@@ -2,12 +2,22 @@
     "apiVersion": 2,
     "name": "excelsior-bootstrap-editor/horizontal-rule",
     "title": "Horizontal Rule",
+    "description": "Create a thematic break or divider between content sections.",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {
         "html": false
     },
+    "example": {
+        "attributes": {
+            "cover": "images/horizontal-rule.webp"
+        }
+    },
     "attributes": {
+        "cover": {
+            "type": "string",
+            "default": ""
+        },
         "selectedIcon": {
             "type": "string",
             "default": "bi-house-door-fill"

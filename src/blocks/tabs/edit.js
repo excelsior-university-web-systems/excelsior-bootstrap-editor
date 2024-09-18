@@ -46,6 +46,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
         }
     }, [childTabs]);
 
+    if ( cover ) {
+        return(
+            <>
+            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
+            </>
+        );
+    }
+    
     return (
         <>
         <InspectorControls>

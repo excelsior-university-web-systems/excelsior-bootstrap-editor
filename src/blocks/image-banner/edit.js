@@ -4,7 +4,7 @@ import { useState } from '@wordpress/element';
 
 export default function Edit ( { attributes, setAttributes } ) {
 
-    const { url } = attributes;
+    const { url, cover } = attributes;
     const [tempUrl, setTempUrl] = useState('');
     const [hasError, setHasError] = useState(false);
 
@@ -21,6 +21,14 @@ export default function Edit ( { attributes, setAttributes } ) {
     const handleImageError = () => {
         setHasError(true); 
     };
+
+    if ( cover ) {
+        return(
+            <>
+            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
+            </>
+        );
+    }
 
     return (
         <>

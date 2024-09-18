@@ -2,6 +2,7 @@
     "apiVersion": 2,
     "name": "excelsior-bootstrap-editor/button",
     "title": "Button",
+    "description": "Create a button item.",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/buttons"],
     "supports": {
