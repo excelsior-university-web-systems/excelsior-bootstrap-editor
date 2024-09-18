@@ -98,7 +98,7 @@ add_action( 'init', function() {
   to administrator and editor user roles
 */
 function add_excelsior_bootstrap_capabilities() {
-    $roles = array( 'administrator', 'editor' );
+    $roles = array( 'administrator' );
 
     foreach ( $roles as $role_name ) {
 
