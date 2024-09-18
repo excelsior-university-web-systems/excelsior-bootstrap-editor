@@ -5,7 +5,7 @@ import { useEffect } from '@wordpress/element';
 
 export default function Edit({ attributes, setAttributes, clientId }) {
 
-    const {tabStyle} = attributes;
+    const { tabStyle, cover } = attributes;
 
     const blockProps = useBlockProps({
         className: tabStyle,

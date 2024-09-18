@@ -13,7 +13,7 @@
     "attributes": {
         "backToTop": {
             "type": "boolean",
-            "default": false
+            "default": true
         },
         "mainLandmarkRole": {
             "type": "boolean",
