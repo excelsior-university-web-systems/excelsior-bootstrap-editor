@@ -15,15 +15,21 @@ add_action( 'current_screen', function() {
             unregister_block_pattern( $pattern_name );
         }
 
-        // Register pattern category for Excelsior Bootstrap
+        // Register pattern category for Excelsior Bootstrap - Online
         register_block_pattern_category(
-            XCLSR_BTSTRP_EDITOR_PREFIX.'-patterns',
-            array( 'label' => __( XCLSR_BTSTRP_LABEL, XCLSR_BTSTRP_POST_TYPE ) )
+            XCLSR_BTSTRP_EDITOR_PREFIX.'-online-patterns',
+            array( 'label' => __( XCLSR_BTSTRP_LABEL.' - Online', XCLSR_BTSTRP_POST_TYPE ) )
+        );
+
+        // Register pattern category for Excelsior Bootstrap - Hybrid
+        register_block_pattern_category(
+            XCLSR_BTSTRP_EDITOR_PREFIX.'-hybrid-patterns',
+            array( 'label' => __( XCLSR_BTSTRP_LABEL.' - Hybrid', XCLSR_BTSTRP_POST_TYPE ) )
         );
 
         // Register patterns
         $patternDirectory = plugin_dir_path( __FILE__ ) . 'patterns/';
-        $excelsiorEditorPatterns = array(
+        $excelsiorEditorOnlinePatterns = array(
             array( 'slug' => 'homepage', 'title' => 'Homepage', 'file' => 'home.html' ),
             array( 'slug' => 'overview', 'title' => 'Overview', 'file' => 'overview.html' ),
             array( 'slug' => 'lesson', 'title' => 'Lesson', 'file' => 'lesson.html' ),
@@ -35,13 +41,13 @@ add_action( 'current_screen', function() {
             array( 'slug' => 'modulereflection', 'title' => 'Module Reflection', 'file' => 'module-reflection.html' )
         );
 
-        foreach ( $excelsiorEditorPatterns as $pattern ) {
+        foreach ( $excelsiorEditorOnlinePatterns as $pattern ) {
 
             register_block_pattern(
                 XCLSR_BTSTRP_POST_TYPE.'/'.$pattern['slug'],
                 array(
                     'title'      => __( $pattern['title'], XCLSR_BTSTRP_POST_TYPE ),
-                    'categories' => array( XCLSR_BTSTRP_EDITOR_PREFIX.'-patterns' ),
+                    'categories' => array( XCLSR_BTSTRP_EDITOR_PREFIX.'-online-patterns' ),
                     'postTypes'  => array( XCLSR_BTSTRP_POST_TYPE ),
                     'blockTypes' => array( XCLSR_BTSTRP_EDITOR_PREFIX.'/container' ),
                     'filePath'   => $patternDirectory.$pattern['file']
