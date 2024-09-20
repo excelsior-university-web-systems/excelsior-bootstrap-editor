@@ -51,7 +51,7 @@ add_action( 'init', function() {
             'edit_published_posts'   => 'edit_published_'.XCLSR_BTSTRP_POST_TYPE.'s',
             'create_posts'           => 'edit_'.XCLSR_BTSTRP_POST_TYPE.'s'
         ),
-        'supports'            => array( 'title', 'editor', 'author', 'custom-fields' ),
+        'supports'            => array( 'title', 'editor', 'author', 'revisions', 'custom-fields' ),
         'has_archive'         => false,
         'exclude_from_search' => true,
         'publicly_queryable'  => false,
