@@ -34,19 +34,22 @@ add_action( 'enqueue_block_editor_assets', function() {
         wp_register_script(
             XCLSR_BTSTRP_EDITOR_PREFIX.'-blocks-script',
             plugins_url( '/build/blocks/index.js', dirname(__FILE__) ),
-            array( 'wp-blocks', 'wp-dom-ready', 'wp-element' )
+            array( 'wp-blocks', 'wp-dom-ready', 'wp-element' ),
+            XCLSR_BTSTRP_EDITOR_VERSION
         );
     
         wp_register_style(
             XCLSR_BTSTRP_EDITOR_PREFIX.'-style',
             plugin_dir_url(__FILE__) . '../css/editor-style.css',
-            false
+            array(),
+            XCLSR_BTSTRP_EDITOR_VERSION
         );
     
         wp_register_style(
             XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-style',
             plugin_dir_url(__FILE__) . '../css/excelsior-bootstrap.css',
-            false
+            array(),
+            '1.0.7'
         );
     
         $blocks_file = plugin_dir_path(__FILE__) . '../build/blocks/blocks.json';
@@ -67,32 +70,36 @@ add_action( 'enqueue_block_editor_assets', function() {
         wp_enqueue_script(
             XCLSR_BTSTRP_EDITOR_PREFIX.'-modification',
             plugins_url( '/build/editor/index.js', dirname(__FILE__) ),
-            array( 'wp-blocks', 'wp-dom-ready', 'wp-edit-post' )
+            array( 'wp-blocks', 'wp-dom-ready', 'wp-edit-post' ),
+            XCLSR_BTSTRP_EDITOR_VERSION
         );
 
-        wp_localize_script(XCLSR_BTSTRP_EDITOR_PREFIX.'-modification', 'xclsr_btstrp_block_preview', array(
+        wp_localize_script( XCLSR_BTSTRP_EDITOR_PREFIX.'-modification', 'xclsr_btstrp_block_preview', array(
             'pluginUrl' => plugin_dir_url( dirname(__FILE__) )
-        ));
+        ) );
 
         // core table modification
         wp_enqueue_script(
             XCLSR_BTSTRP_EDITOR_PREFIX.'-core-table-modification',
             plugins_url( '/build/table/index.js', dirname(__FILE__) ),
-            array( 'wp-blocks', 'wp-dom-ready', 'wp-edit-post' )
+            array( 'wp-blocks', 'wp-dom-ready', 'wp-edit-post' ),
+            XCLSR_BTSTRP_EDITOR_VERSION
         );
 
         // insert icon script
         wp_enqueue_script(
             XCLSR_BTSTRP_EDITOR_PREFIX.'-inline-icon',
             plugins_url( '/build/icons/index.js', dirname(__FILE__) ),
-            array( 'wp-rich-text', 'wp-element', 'wp-editor' )
+            array( 'wp-rich-text', 'wp-element', 'wp-editor' ),
+            XCLSR_BTSTRP_EDITOR_VERSION
         );
 
         //insert inline code script
         wp_enqueue_script(
             XCLSR_BTSTRP_EDITOR_PREFIX.'-inline-code',
             plugins_url( '/build/inline-code/index.js', dirname(__FILE__) ),
-            array( 'wp-rich-text', 'wp-element', 'wp-editor' )
+            array( 'wp-rich-text', 'wp-element', 'wp-editor' ),
+            XCLSR_BTSTRP_EDITOR_VERSION
         );
 
     }
