@@ -8,7 +8,7 @@ export default function Save({ attributes }) {
 
     return (
         <>
-        { url && <img {...blockProps} src={url} alt="" role="presentation" />}
+        { url && <img {...blockProps} src={url} alt="" />}
         </>
     );
 }

@@ -15,7 +15,7 @@ export default function Save({ attributes }) {
 
             ) : (
 
-                <img {...useBlockProps.save({className: `${mobileResponsive ? "img-fluid" : ""}${ alignment.length ? " " + alignment + " " + alignmentSize : ""}`})} src={url} alt="" role="presentation" />
+                <img {...useBlockProps.save({className: `${mobileResponsive ? "img-fluid" : ""}${ alignment.length ? " " + alignment + " " + alignmentSize : ""}`})} src={url} alt="" />
 
             ) 
         }
