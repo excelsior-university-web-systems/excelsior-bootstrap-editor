@@ -19,13 +19,11 @@ export default function Edit({ attributes, setAttributes, context }) {
             setAttributes({ uniqueId: generateHtmlId() });
         }
 
-        if ( !isActive ) {
-            if ( activeTab === uniqueId ) {
-                setAttributes({ isActive: true });
-            }
+        if ( activeTab === uniqueId ) {
+            setAttributes({ isActive: true });
         }
 
-    }, [uniqueId]);
+    }, [uniqueId, activeTab]);
 
     return (
         <div {...blockProps} id={`${uniqueId}-pane`} aria-labelledby={`${uniqueId}-tab`}>
