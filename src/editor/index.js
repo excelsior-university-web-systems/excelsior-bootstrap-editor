@@ -175,7 +175,7 @@ const GetCodeButton = () => {
     // Define the function that will execute when the button is clicked
     const getRenderedHTML = () => {
         const postId = select('core/editor').getCurrentPostId();
-        const restUrl = `${wpApiSettings.root}wp/v2/excelsior_bootstrap/${postId}`;
+        const restUrl = `${wpApiSettings.root}wp/v2/excelsior_bootstrap/${postId}?t=${new Date().getTime()}`;
 
         // Fetch the rendered content via REST API
         fetch(restUrl)
