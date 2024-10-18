@@ -37,9 +37,7 @@ add_action( 'init', function() {
         'map_meta_cap'        => true,
         'capabilities'        => array(
             'read'                   => 'read',
-            'edit_post'              => 'edit_'.XCLSR_BTSTRP_POST_TYPE,
-            'read_post'              => 'read_'.XCLSR_BTSTRP_POST_TYPE,
-            'delete_post'            => 'delete_'.XCLSR_BTSTRP_POST_TYPE,
+            'delete_posts'            => 'delete_'.XCLSR_BTSTRP_POST_TYPE.'s',
             'edit_posts'             => 'edit_'.XCLSR_BTSTRP_POST_TYPE.'s',
             'edit_others_posts'      => 'edit_others_'.XCLSR_BTSTRP_POST_TYPE.'s',
             'publish_posts'          => 'publish_'.XCLSR_BTSTRP_POST_TYPE.'s',
@@ -107,9 +105,7 @@ function add_excelsior_bootstrap_capabilities() {
         if ( !$role ) continue;
 
         $role->add_cap( 'read' );
-        $role->add_cap( 'edit_'.XCLSR_BTSTRP_POST_TYPE );
-        $role->add_cap( 'read_'.XCLSR_BTSTRP_POST_TYPE );
-        $role->add_cap( 'delete_'.XCLSR_BTSTRP_POST_TYPE );
+        $role->add_cap( 'delete_'.XCLSR_BTSTRP_POST_TYPE.'s' );
         $role->add_cap( 'edit_'.XCLSR_BTSTRP_POST_TYPE.'s' );
         $role->add_cap( 'edit_others_'.XCLSR_BTSTRP_POST_TYPE.'s' );
         $role->add_cap( 'publish_'.XCLSR_BTSTRP_POST_TYPE.'s' );
