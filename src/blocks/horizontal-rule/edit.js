@@ -1,5 +1,5 @@
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, BaseControl, Button, ToggleControl } from '@wordpress/components';
+import { PanelBody, BaseControl, Button, ToggleControl, Tooltip } from '@wordpress/components';
 import {
     __experimentalToggleGroupControl as ToggleGroupControl,
     __experimentalToggleGroupControlOption as ToggleGroupControlOption,
@@ -7,16 +7,16 @@ import {
 import { createElement } from '@wordpress/element';
 
 const ICONS = [
-    { name: 'bi-house-door-fill' },
-    { name: 'bi-bookmark-star-fill' },
-    { name: 'bi-bookmark-check-fill' },
-    { name: 'bi-chat-square-dots-fill' },
-    { name: 'bi-journal-text' },
-    { name: 'bi-x-diamond-fill' },
-    { name: 'bi-search' },
-    { name: 'bi-pencil-fill' },
-    { name: 'bi-people-fill' },
-    { name: 'bi-clipboard-check-fill' }
+    { name: 'bi-house-door-fill', label: 'Homepage' },
+    { name: 'bi-bookmark-star-fill', label: 'Getting Started Page' },
+    { name: 'bi-bookmark-check-fill', label: 'Module Reflection Page' },
+    { name: 'bi-chat-square-dots-fill', label: 'Discussion Page' },
+    { name: 'bi-journal-text', label: 'Instructor Notes Page' },
+    { name: 'bi-x-diamond-fill', label: 'Module Overview Page' },
+    { name: 'bi-search', label: 'Lesson or Module Page' },
+    { name: 'bi-pencil-fill', label: 'Assignment Page' },
+    { name: 'bi-people-fill', label: 'Live Session Page' },
+    { name: 'bi-clipboard-check-fill', label: 'Quiz Page' }
 ];
 
 export default function Edit ({ attributes, setAttributes }) {
@@ -50,20 +50,22 @@ export default function Edit ({ attributes, setAttributes }) {
                     <BaseControl label="Icons">
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
                         {ICONS.map((icon) => (
-                            <Button
-                                key={icon.name}
-                                isPressed={selectedIcon === icon.name}
-                                onClick={() => handleIconSelect(icon.name)}
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    padding: '20px',
-                                    fontSize: '1.25rem',
-                                }}
-                            >
-                                {createElement('i', { className: `bi ${icon.name}` })}
-                            </Button>
+                            <Tooltip text={icon.label} delay={500} placement='top'>
+                                <Button
+                                    key={icon.name}
+                                    isPressed={selectedIcon === icon.name}
+                                    onClick={() => handleIconSelect(icon.name)}
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        padding: '20px',
+                                        fontSize: '1.25rem',
+                                    }}
+                                >
+                                    {createElement('i', { className: `bi ${icon.name}` })}
+                                </Button>
+                            </Tooltip>
                         ))}
                     </div>
                     </BaseControl>
