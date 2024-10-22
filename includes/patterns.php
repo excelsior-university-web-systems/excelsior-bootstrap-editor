@@ -38,6 +38,7 @@ add_action( 'current_screen', function() {
             array( 'slug' => 'discussion', 'title' => 'Discussion', 'file' => 'discussion.html' ),
             array( 'slug' => 'assignment', 'title' => 'Assignment', 'file' => 'assignment.html' ),
             array( 'slug' => 'livesession', 'title' => 'Live Session', 'file' => 'live-session.html' ),
+            array( 'slug' => 'quizknowledgecheck', 'title' => 'Quiz / Knowledge Check', 'file' => 'quiz-knowledge-check.html' ),
             array( 'slug' => 'modulereflection', 'title' => 'Module Reflection', 'file' => 'module-reflection.html' )
         );
 
