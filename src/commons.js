@@ -66,13 +66,13 @@ export const observeElement = ( selector, callback, options = { childList: true,
 
 // Sanitize to strip out <script> tags
 export const removeScriptTags = ( input ) => {
-        
+    
     const tempElement = document.createElement( 'div' );
     tempElement.innerHTML = input;
 
     const scripts = tempElement.querySelectorAll( 'script' );
     scripts.forEach( (script) => script.remove() );
-
+    
     return tempElement.innerHTML;
 
 };

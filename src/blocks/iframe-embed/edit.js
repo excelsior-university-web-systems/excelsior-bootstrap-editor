@@ -6,7 +6,11 @@ import { removeScriptTags } from '../../commons';
 export default function Edit( { attributes, setAttributes } ) {
 
     const { embedCode, floatingClasses } = attributes;
-    const [tempEmbedCode, setTempEmbedCode] = useState(embedCode);
+    const [tempEmbedCode, setTempEmbedCode] = useState( embedCode );
+
+    const stripScriptTags = ( html ) => {
+        setTempEmbedCode( removeScriptTags( html ) );
+    };
 
     const onInsertEmbedCode = () => {
         if ( tempEmbedCode ) {
@@ -24,14 +28,14 @@ export default function Edit( { attributes, setAttributes } ) {
                 <TextareaControl
                     label="Embed Code"
                     help="Replace the embed code to update. No script tags are allowed."
-                    value={tempEmbedCode} 
-                    onChange={(newEmbedCode) => setTempEmbedCode(newEmbedCode)}
+                    value={ tempEmbedCode } 
+                    onChange={ ( newEmbedCode ) => stripScriptTags( newEmbedCode ) }
                     rows="12"
                 />
                 <Button
                     variant='primary'
                     text='Update'
-                    onClick={onInsertEmbedCode}
+                    onClick={ onInsertEmbedCode }
                 />
             </PanelBody>     
         ) }
@@ -47,9 +51,9 @@ export default function Edit( { attributes, setAttributes } ) {
             <div className='excelsior-iframe-embed-insert'>
                 <TextareaControl
                     label="Embed Code"
-                    value={tempEmbedCode} 
+                    value={ tempEmbedCode } 
                     placeholder="Paste embed code in here. No script tags are allow."
-                    onChange={(embedCode) => setTempEmbedCode(embedCode)}
+                    onChange={ ( newEmbedCode ) => stripScriptTags( newEmbedCode ) }
                     rows="6"
                 />
                 <Button
