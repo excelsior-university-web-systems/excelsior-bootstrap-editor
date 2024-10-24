@@ -20,6 +20,29 @@ add_filter( 'block_categories_all', function( $categories, $post ) {
 
 } , 10, 2 );
 
+// Register Excelsior Bootstrap frontend style once
+add_action( 'init', function() {
+
+    wp_register_script(
+        XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-script',
+        plugin_dir_url(__FILE__) . '../js/excelsior-bootstrap.js',
+        array(),
+        '1.0.7',
+        array(
+            'strategy' => 'defer',
+            'in_footer' => true
+        )
+    );
+
+    wp_register_style(
+        XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-style',
+        plugin_dir_url(__FILE__) . '../css/excelsior-bootstrap.css',
+        array(),
+        '1.0.7'
+    );
+
+} );
+
 /*
   Automate the registration of custom Gutenberg blocks by dynamically loading
   all block directories from the blocks folder. Load specific JavaScript files that modify
@@ -43,13 +66,6 @@ add_action( 'enqueue_block_editor_assets', function() {
         XCLSR_BTSTRP_EDITOR_VERSION
     );
 
-    wp_register_style(
-        XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-style',
-        plugin_dir_url(__FILE__) . '../css/excelsior-bootstrap.css',
-        array(),
-        '1.0.7'
-    );
-
     $blocks_file = plugin_dir_path(__FILE__) . '../build/blocks/blocks.json';
     $blocks = json_decode( file_get_contents( $blocks_file ), true );
     
@@ -57,9 +73,8 @@ add_action( 'enqueue_block_editor_assets', function() {
     if ( !empty( $blocks['blocks'] ) ) {
         foreach ( $blocks['blocks'] as $block ) {
             register_block_type( plugin_dir_path(__FILE__) . '../build/blocks/' . $block, array(
-                'editor_script' => XCLSR_BTSTRP_EDITOR_PREFIX.'-blocks-script',
-                'editor_style'  => XCLSR_BTSTRP_EDITOR_PREFIX.'-style',
-                'style'         => XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-style'
+                'editor_script_handles' => [XCLSR_BTSTRP_EDITOR_PREFIX.'-blocks-script'],
+                'editor_style_handles'  => [XCLSR_BTSTRP_EDITOR_PREFIX.'-style', XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-style']
             ) );
         }
     }
@@ -112,6 +127,14 @@ add_action( 'enqueue_block_editor_assets', function() {
 
     }
 
+} );
+
+// Enqueue frontend assets
+add_action( 'wp_enqueue_scripts', function() {
+    if ( is_singular() && has_block( XCLSR_BTSTRP_EDITOR_PREFIX.'/namespace' ) ) {
+        wp_enqueue_script( XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-script' );
+        wp_enqueue_style( XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-style' );
+    }
 } );
 
 ?>
