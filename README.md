@@ -1,9 +1,14 @@
 # Excelsior Bootstrap Editor
-_Version 1.0.2_
+_Version 1.0.3_
 
 A WordPress plugin that helps with creating Excelsior Bootstrap content pages.
 
 ## Changelog
+
+### Version 1.0.3 (pending)
+- Excelsior Bootstrap is now available for use in any WordPress post type. To start, insert the "Excelsior Bootstrap" block on to the page.
+- Adjust the lock settings for all templates/patterns.
+- Fix an issue where script tags are not properly striped from iframe embed.
 
 ### Version 1.0.2 (10/23/2024)
 - Remove the `role` attribute from the `img` tag when the `alt` attribute is empty (indicating the image is decorative). For assistive technologies like screen readers, it's not recommended to add the `role` attribute for decorative images, as it can cause confusion. An empty `alt` tag is sufficient for assistive technologies to recognize the image as decorative.
