@@ -24,7 +24,7 @@ export default function Edit() {
                 <InnerBlocks
                     allowedBlocks={ALLOWED_BLOCKS}
                     template={TEMPLATE}
-                    templateLock={true}
+                    templateLock={false}
                 />
             </div>
         </>
