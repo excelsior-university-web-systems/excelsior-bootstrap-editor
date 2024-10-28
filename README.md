@@ -5,7 +5,7 @@ A WordPress plugin that helps with creating Excelsior Bootstrap content pages.
 
 ## Changelog
 
-### Version 1.0.3 (pending)
+### Version 1.0.3 (10/30/2024)
 - Excelsior Bootstrap is now available for use in any WordPress post type. To start, insert the "Excelsior Bootstrap" block on to the page.
 - Adjust the lock settings for all templates/patterns.
 - Fix an issue where script tags are not properly striped from iframe embed.
