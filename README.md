@@ -7,8 +7,10 @@ A WordPress plugin that helps with creating Excelsior Bootstrap content pages.
 
 ### Version 1.0.3 (10/30/2024)
 - Excelsior Bootstrap is now available for use in any WordPress post type. To start, insert the "Excelsior Bootstrap" block on to the page.
-- Adjust the lock settings for all templates/patterns.
+- Adjust the lock settings for all templates/patterns. Patterns added to new pages will now have the updated lock settings, while existing pages (with patterns added before the release) will remain unchanged.
 - Fix an issue where script tags are not properly striped from iframe embed.
+- Change "Review" to "Overview" for assignment and discussion patterns/templates.
+- Change the "list of task" to basic list for the live session.
 
 ### Version 1.0.2 (10/23/2024)
 - Remove the `role` attribute from the `img` tag when the `alt` attribute is empty (indicating the image is decorative). For assistive technologies like screen readers, it's not recommended to add the `role` attribute for decorative images, as it can cause confusion. An empty `alt` tag is sufficient for assistive technologies to recognize the image as decorative.
