@@ -5,11 +5,11 @@ A WordPress plugin that helps with creating Excelsior Bootstrap content pages.
 
 ## Changelog
 
-### Version 1.0.3 (10/30/2024)
+### Version 1.0.3 (11/06/2024)
 - Excelsior Bootstrap is now available for use in any WordPress post type. To start, insert the "Excelsior Bootstrap" block on to the page.
 - Adjust the lock settings for all templates/patterns. Patterns added to new pages will now have the updated lock settings, while existing pages (with patterns added before the release) will remain unchanged.
 - Fix an issue where script tags are not properly striped from iframe embed.
-- Change "Review" to "Overview" for assignment and discussion patterns/templates.
+- Change "Review" to "Overview" tab content for assignment and discussion patterns/templates. Also, remove repeated expectation and grading information in the "Complete" and "Submit" tabs.
 - Change the "list of tasks" under the "Agenda" tab to a basic list for the live session pattern/template.
 
 ### Version 1.0.2 (10/23/2024)
