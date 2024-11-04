@@ -131,10 +131,22 @@ add_action( 'enqueue_block_editor_assets', function() {
 
 // Enqueue frontend assets
 add_action( 'wp_enqueue_scripts', function() {
-    if ( is_singular() && has_block( XCLSR_BTSTRP_EDITOR_PREFIX.'/namespace' ) ) {
-        wp_enqueue_script( XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-script' );
-        wp_enqueue_style( XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-style' );
+
+    if ( has_block( XCLSR_BTSTRP_EDITOR_PREFIX.'/namespace' ) ) {
+
+        if ( is_singular() ) {
+            wp_enqueue_script( XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-script' );
+            wp_enqueue_style( XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-style' );
+        }
+
+        // dequeue and deregister Learning Center Theme's Bootstrap script
+        if ( wp_script_is( 'main-bootstrap' ) || wp_script_is( 'main-bootstrap', 'registered' ) || wp_script_is( 'main-bootstrap', 'done' ) ) {
+            wp_dequeue_script( 'main-bootstrap' );
+            wp_deregister_script( 'main-bootstrap' );
+        }
+
     }
-} );
+
+}, 20 );
 
 ?>
