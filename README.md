@@ -11,6 +11,7 @@ A WordPress plugin that helps with creating Excelsior Bootstrap content pages.
 - Fix an issue where script tags are not properly striped from iframe embed.
 - Change "Review" to "Overview" tab content for assignment and discussion patterns/templates. Also, remove repeated expectation and grading information in the "Complete" and "Submit" tabs.
 - Change the "list of tasks" under the "Agenda" tab to a basic list for the live session pattern/template.
+- Minor backend adjustments
 
 ### Version 1.0.2 (10/23/2024)
 - Remove the `role` attribute from the `img` tag when the `alt` attribute is empty (indicating the image is decorative). For assistive technologies like screen readers, it's not recommended to add the `role` attribute for decorative images, as it can cause confusion. An empty `alt` tag is sufficient for assistive technologies to recognize the image as decorative.
