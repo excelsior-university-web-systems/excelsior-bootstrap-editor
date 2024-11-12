@@ -10,7 +10,7 @@ export default function Save( { attributes } ) {
     return (
         <div {...blockProps}>
             <div class="card h-100">
-                { useImg ? (<img class="card-img-top" src={imgUrl} alt={imgAltText} role={imgAltText.length ? undefined : 'presentation' } />) : '' }
+                { useImg ? (<img class="card-img-top" src={imgUrl} alt={imgAltText} />) : '' }
                 <div class="card-body">
                 <InnerBlocks.Content />
                 </div>

@@ -11,7 +11,7 @@ export default function Save({ attributes }) {
         <div {...blockProps}>
             <ul className="nav nav-tabs" role="tablist">
                 {attributes.tabs.map((tab, index) => (
-                    <li className="nav-item" role="presentation" key={tab.uniqueId}>
+                    <li className="nav-item" key={tab.uniqueId}>
                         <a
                             href="#"
                             id={`${tab.uniqueId}-tab`}

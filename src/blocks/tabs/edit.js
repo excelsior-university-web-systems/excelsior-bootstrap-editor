@@ -72,7 +72,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
         <div {...blockProps}>
             <ul className="nav nav-tabs" role="tablist">
                 {childTabs.map((tab, index) => (
-                    <li className="nav-item" role="presentation" key={tab.uniqueId || index}>
+                    <li className="nav-item" key={tab.uniqueId || index}>
                         <a
                             href="#"
                             id={`${tab.uniqueId}-tab`}

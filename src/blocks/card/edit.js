@@ -102,7 +102,7 @@ export default function Edit( {attributes, setAttributes} ) {
                 { useImg ? (
                     imgUrl && !hasError ? (
 
-                        <img class="card-img-top" src={imgUrl} alt={imgAltText} onError={handleImageError} role={imgAltText.length ? undefined : 'presentation' } />
+                        <img class="card-img-top" src={imgUrl} alt={imgAltText} onError={handleImageError} />
         
                         ) : (
         
