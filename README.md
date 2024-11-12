@@ -1,9 +1,13 @@
 # Excelsior Bootstrap Editor
-_Version 1.0.3_
+_Version 1.0.4_
 
 A WordPress plugin that helps with creating Excelsior Bootstrap content pages.
 
 ## Changelog
+
+### Version 1.0.4
+- Remove unnecessary `role="presentation"` attribute from tabs.
+- Remove unnecessary `role="presentation"` attribute from card top image.
 
 ### Version 1.0.3 (11/06/2024)
 - Excelsior Bootstrap is now available for use in any WordPress post type. To start, insert the "Excelsior Bootstrap" block on to the page.
