@@ -8,6 +8,8 @@ A WordPress plugin that helps with creating Excelsior Bootstrap content pages.
 ### Version 1.0.4
 - Remove unnecessary `role="presentation"` attribute from tabs.
 - Remove unnecessary `role="presentation"` attribute from card top image.
+- Insert inline Excelsior Bootstrap icon button will only appear in the toolbar for blocks within the Excelsior Bootstrap container when used outside the editor.
+- Support up to WordPress version 6.7
 
 ### Version 1.0.3 (11/06/2024)
 - Excelsior Bootstrap is now available for use in any WordPress post type. To start, insert the "Excelsior Bootstrap" block on to the page.
