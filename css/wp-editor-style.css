@@ -30,3 +30,7 @@
 .block-editor-block-list__block .wp-block-list-item {
     line-height: 1.5 !important;
 }
+
+.block-editor-bindings__panel {
+    display: none !important;
+}
