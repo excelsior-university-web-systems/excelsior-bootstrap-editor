@@ -47,7 +47,7 @@ export default function Edit ({ attributes, setAttributes }) {
 
                 { noIcon == false && (
 
-                    <BaseControl label="Icons">
+                    <BaseControl label="Icons" __nextHasNoMarginBottom>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
                         {ICONS.map((icon) => (
                             <Tooltip text={icon.label} delay={500} placement='top'>
@@ -62,6 +62,8 @@ export default function Edit ({ attributes, setAttributes }) {
                                         padding: '20px',
                                         fontSize: '1.25rem',
                                     }}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
                                 >
                                     {createElement('i', { className: `bi ${icon.name}` })}
                                 </Button>
@@ -77,6 +79,7 @@ export default function Edit ({ attributes, setAttributes }) {
                     help="Toggle on to remove icon."
                     checked={noIcon}
                     onChange={(value) => setAttributes({ noIcon: value })}
+                    __nextHasNoMarginBottom
                 />
                 <ToggleGroupControl
                     label="Size"
@@ -84,6 +87,8 @@ export default function Edit ({ attributes, setAttributes }) {
                     value={size}
                     onChange={(value) => setAttributes({ size: value })}
                     isBlock
+                    __nextHasNoMarginBottom
+                    __next40pxDefaultSize
                 >
                     <ToggleGroupControlOption value="small" label="Small" />
                     <ToggleGroupControlOption value="regular" label="Regular" />
@@ -94,6 +99,7 @@ export default function Edit ({ attributes, setAttributes }) {
                     help="Toggle on to set the horizontal rule as decorative."
                     checked={decorative}
                     onChange={(value) => setAttributes({ decorative: value })}
+                    __nextHasNoMarginBottom
                 />
             </PanelBody>
         </InspectorControls>

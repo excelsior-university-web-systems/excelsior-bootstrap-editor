@@ -38,6 +38,8 @@ export default function Edit ({ attributes, setAttributes }) {
                     { label: 'Skills', value: 'skills' },
                 ]}
                 onChange={(value) => setAttributes({ styleType: value })}
+                __nextHasNoMarginBottom
+                __next40pxDefaultSize
             />
             </PanelBody>
         </InspectorControls>

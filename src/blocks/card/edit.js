@@ -1,5 +1,5 @@
 import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, Button, TextControl, ToggleControl } from '@wordpress/components';
+import { PanelBody, Button, TextControl, ToggleControl, __experimentalSpacer as Spacer } from '@wordpress/components';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 import { addFilter } from '@wordpress/hooks';
 import { useState } from '@wordpress/element';
@@ -71,6 +71,7 @@ export default function Edit( {attributes, setAttributes} ) {
                     help="Toggle on to include an image on top. Toggle off will remove the image."
                     checked={useImg}
                     onChange={(value) => setAttributes({ imgUrl: '', imgAltText: '', useImg: value })}
+                    __nextHasNoMarginBottom
                 />
                 { useImg ? (
                     <>
@@ -82,6 +83,8 @@ export default function Edit( {attributes, setAttributes} ) {
                             setAttributes( { imgUrl: value } );
                             setHasError( false );
                         } }
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
                     />
                     <TextControl
                         label="Image Alt Text"
@@ -91,6 +94,8 @@ export default function Edit( {attributes, setAttributes} ) {
                             setAttributes( { imgAltText: value } );
                             setHasError( false );
                         } }
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
                     />
                     </>
                 ) : '' }
@@ -113,10 +118,12 @@ export default function Edit( {attributes, setAttributes} ) {
                                 </div>
                             ) : (
                                 <div className="excelsior-image-url-insert">
-                                    <TextControl label="Image URL" value={tempUrl} onChange={(newUrl) => setTempUrl(newUrl)} />
-                                    <TextControl label="Image Alt Text" value={tempAltTxt} onChange={(newAlt) => setTempAltTxt(newAlt)} />
-                                    <Button onClick={onInsertUrl} variant="primary">Insert</Button>
-                                    <Button onClick={onNoImg} className="ms-1" variant="secondary">Omit Image</Button>
+                                    <TextControl label="Image URL" value={tempUrl} onChange={(newUrl) => setTempUrl(newUrl)} __next40pxDefaultSize __nextHasNoMarginBottom />
+                                    <Spacer />
+                                    <TextControl label="Image Alt Text" value={tempAltTxt} onChange={(newAlt) => setTempAltTxt(newAlt)} __next40pxDefaultSize __nextHasNoMarginBottom />
+                                    <Spacer />
+                                    <Button onClick={onInsertUrl} variant="primary" __next40pxDefaultSize>Insert</Button>
+                                    <Button onClick={onNoImg} className="ms-1" variant="secondary" __next40pxDefaultSize>Omit Image</Button>
                                 </div>
                             ) }
                         </div>

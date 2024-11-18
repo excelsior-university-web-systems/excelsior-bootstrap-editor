@@ -22,6 +22,7 @@ export default function Edit( { attributes, setAttributes } ) {
                         help="Toggle on to remove due date."
                         checked={noDueDate}
                         onChange={(value) => setAttributes({ noDueDate: value })}
+                        __nextHasNoMarginBottom
                     />
                     {!noDueDate && (
                         <>
@@ -38,6 +39,8 @@ export default function Edit( { attributes, setAttributes } ) {
                                 { label: 'Saturday', value: 'Saturday' }
                             ]}
                             onChange={(value) => setAttributes({ dueDayOfTheWeek: value })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         <MantineProvider>
                             <TimeInput
@@ -57,6 +60,8 @@ export default function Edit( { attributes, setAttributes } ) {
                                 { label: 'PT - Pacific Time', value: 'PT' }
                             ]}
                             onChange={(value) => setAttributes({ timezone: value })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                         </>
                     )}

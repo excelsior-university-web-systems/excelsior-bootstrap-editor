@@ -1,5 +1,5 @@
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { BaseControl, PanelBody, Button, TextControl, ToggleControl } from '@wordpress/components';
+import { BaseControl, PanelBody, Button, TextControl, ToggleControl, __experimentalSpacer as Spacer } from '@wordpress/components';
 import {
     __experimentalToggleGroupControl as ToggleGroupControl,
     __experimentalToggleGroupControlOption as ToggleGroupControlOption,
@@ -50,17 +50,21 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         setAttributes( { url: value.trim() } );
                         setHasError( false );
                     } }
+                    __nextHasNoMarginBottom
+                    __next40pxDefaultSize
                 />
-                <BaseControl help="Alt text describes the image for those who cannot see it, while the caption adds context. Together, they enhance accessibility and provide complete information about the image.">
+                <BaseControl help="Alt text describes the image for those who cannot see it, while the caption adds context. Together, they enhance accessibility and provide complete information about the image." __nextHasNoMarginBottom>
                     <TextControl
-                            label="Image Alt Text"
-                            help="Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration."
-                            value={altText}
-                            onChange={(value) => {
-                                setAttributes( { altText: value } );
-                                setHasError( false );
-                            } }
-                        />
+                        label="Image Alt Text"
+                        help="Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration."
+                        value={altText}
+                        onChange={(value) => {
+                            setAttributes( { altText: value } );
+                            setHasError( false );
+                        } }
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
+                    />
                     <TextControl
                         label="Image Caption"
                         help="Displays a caption or description for the entire image. Can be left blank if not needed."
@@ -68,6 +72,8 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         onChange={(value) => {
                             setAttributes( { caption: value } );
                         } }
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
                     />
                 </BaseControl>
 
@@ -79,6 +85,8 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         value={alignment}
                         onChange={(value) => setAttributes({ alignment: value, mobileResponsive: false })}
                         isBlock
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
                         >
                         <ToggleGroupControlOption value="float-start me-3 mb-1" label="Left" />
                         <ToggleGroupControlOption value="float-end ms-3 mb-1" label="Right" />
@@ -90,6 +98,8 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         value={alignmentSize}
                         onChange={(value) => setAttributes({ alignmentSize: value })}
                         isBlock
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
                         >
                         <ToggleGroupControlOption value="" label="Actual" />
                         <ToggleGroupControlOption value="w-25" label="25%" />
@@ -104,6 +114,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         help="Scale image to size of the container width. Responsive image will never scale bigger than its actual size."
                         checked={mobileResponsive}
                         onChange={(value) => setAttributes({ mobileResponsive: value })}
+                        __nextHasNoMarginBottom
                     />
 
                 )}
@@ -133,18 +144,25 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         <div className="alert alert-warning my-0"><p className='my-0'><strong>Failed to load image.</strong> The image at <a href={url} target='_blank'>{url}</a> cannot be displayed. Please check the URL in Settings. If the image is from a website requiring authentication (like Canvas LMS), sign in first, then reload the editor.</p></div>
                     </div>
                 ) : (
-                    <div className="excelsior-image-url-insert">
-                        <TextControl label="Image URL" value={tempUrl} onChange={(newUrl) => setTempUrl(newUrl)} />
-                        <TextControl label="Image Alt Text" value={tempAltText} onChange={(newAltText) => setTempAltText(newAltText)} placeholder='Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration.' />
-                        <TextControl label="Image Caption" value={tempCaption} onChange={(newCaption) => setTempCaption(newCaption)} placeholder='Displays a caption or description for the entire image. Can be left blank if not needed.' />
+                    <div className="excelsior-image-url-insert mb-3">
+                        <TextControl label="Image URL" value={tempUrl} onChange={(newUrl) => setTempUrl(newUrl)} __next40pxDefaultSize __nextHasNoMarginBottom />
+                        <Spacer />
+                        <TextControl label="Image Alt Text" value={tempAltText} onChange={(newAltText) => setTempAltText(newAltText)} placeholder='Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration.' __next40pxDefaultSize __nextHasNoMarginBottom />
+                        <Spacer />
+                        <TextControl label="Image Caption" value={tempCaption} onChange={(newCaption) => setTempCaption(newCaption)} placeholder='Displays a caption or description for the entire image. Can be left blank if not needed.' __next40pxDefaultSize __nextHasNoMarginBottom />
                         { !alignmentEnabled ? (
-                            <ToggleControl
+                        <>
+                        <Spacer />
+                        <ToggleControl
                             label="Mobile Responsive"
                             checked={mobileResponsive}
                             onChange={(value) => setAttributes({ mobileResponsive: value })}
+                            __nextHasNoMarginBottom
                         />
+                        </>
                         ) : '' }
-                        <Button onClick={onInsertUrl} variant="primary">Insert</Button>
+                        <Spacer />
+                        <Button onClick={onInsertUrl} variant="primary" __next40pxDefaultSize __nextHasNoMarginBottom>Insert</Button>
                     </div>
                 ) }
             </div>

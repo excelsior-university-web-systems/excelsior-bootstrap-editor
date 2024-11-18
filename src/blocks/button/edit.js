@@ -39,6 +39,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                         help="Enter the button's URL."
                         value={href}
                         onChange={(value) => setAttributes({ href: value.trim() })}
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                     <SelectControl
                         label="Styles"
@@ -49,6 +51,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                             { label: 'Resource', value: 'btn-resource' },
                         ]}
                         onChange={(value) => setAttributes({ styleType: value })}
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
                     />
                 </PanelBody>
             </InspectorControls>

@@ -66,6 +66,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                         { label: 'Large', value: 'excelsior-lg-tabs' }
                     ]}
                     onChange={(value) => setAttributes({ tabStyle: value })}
+                    __nextHasNoMarginBottom
+                    __next40pxDefaultSize
                 />
             </PanelBody>
         </InspectorControls>

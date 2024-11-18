@@ -36,6 +36,7 @@ export default function Edit({ attributes, setAttributes, context }) {
                         help="Content is displayed immediately upon page load."
                         checked={open}
                         onChange={(value) => setAttributes({ open: value })}
+                        __nextHasNoMarginBottom
                     />
                 </PanelBody>
             </InspectorControls>

@@ -90,6 +90,8 @@ const CourseMetaFields = () => {
                     help="Example: EGR290, NUR104, etc."
                     value={meta[XCLSR_BTSTRP_POST_TYPE+'_post_course_number'] || ''}
                     onChange={(value) => editPost({ meta: { ...meta, excelsior_bootstrap_post_course_number: formatCourseNumber(value) } })}
+                    __next40pxDefaultSize
+                    __nextHasNoMarginBottom
                 />
                 <TextControl
                     isBlock
@@ -98,6 +100,8 @@ const CourseMetaFields = () => {
                     help="Example: M1.1 - Exploring Computer Science Career Paths"
                     value={meta[XCLSR_BTSTRP_POST_TYPE+'_post_page_title'] || ''}
                     onChange={(value) => editPost({ meta: { ...meta, excelsior_bootstrap_post_page_title: value } })}
+                    __next40pxDefaultSize
+                    __nextHasNoMarginBottom
                 />
                 <TextControl
                     isBlock
@@ -106,6 +110,8 @@ const CourseMetaFields = () => {
                     type='number'
                     value={meta[XCLSR_BTSTRP_POST_TYPE+'_post_year'] || ''}
                     onChange={(value) => editPost({ meta: { ...meta, excelsior_bootstrap_post_year: value } })}
+                    __next40pxDefaultSize
+                    __nextHasNoMarginBottom
                 />
             </PanelBody>
         </PluginPostStatusInfo>
@@ -222,7 +228,7 @@ const GetCodeButton = () => {
         <>
         <PluginPostStatusInfo>
             <PanelBody className='get-code-btn-panel'>
-            <Button className='get-code-btn' onClick={getRenderedHTML} disabled={isDisabled}>
+            <Button className='get-code-btn' onClick={getRenderedHTML} disabled={isDisabled} __next40pxDefaultSize>
                 Get Code
             </Button>
             {isDisabled && (
@@ -250,6 +256,7 @@ const GetCodeButton = () => {
                         variant="primary"
                         onClick={copyToClipboard}
                         style={{ marginTop: '15px' }}
+                        __next40pxDefaultSize
                     >
                         Copy Code
                     </Button>
@@ -334,6 +341,8 @@ const addHeadingSizeControl = createHigherOrderComponent((BlockEdit) => {
                             value={headingSizeClass}
                             options={headingLevelSizeOptions}
                             onChange={(value) => setAttributes({ headingSizeClass: value })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
                         />
                     </PanelBody>
                 </InspectorControls>

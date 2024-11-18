@@ -37,12 +37,15 @@ export default function Edit ({ attributes, setAttributes }) {
                         { label: 'Note', value: 'tip-note' },
                     ]}
                     onChange={(value) => setAttributes({ styleType: value })}
+                    __nextHasNoMarginBottom
+                    __next40pxDefaultSize
                 />
                 <ToggleControl
                     label="Narrow Width"
                     help="Toggle on to make the width shorter and center aligned."
                     checked={narrowWidth}
                     onChange={(value) => setAttributes({ narrowWidth: value })}
+                    __nextHasNoMarginBottom
                 />
             </PanelBody>
         </InspectorControls>

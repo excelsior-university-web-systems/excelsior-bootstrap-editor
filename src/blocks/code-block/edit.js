@@ -1,5 +1,5 @@
 import { InspectorControls, useBlockProps, BlockControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, Modal, TextareaControl, Button, ToolbarGroup, ToolbarButton, ToggleControl } from '@wordpress/components';
+import { PanelBody, SelectControl, Modal, TextareaControl, Button, ToolbarGroup, ToolbarButton, ToggleControl, __experimentalSpacer as Spacer } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
 import Prism from 'prismjs';
 
@@ -82,11 +82,15 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                         value={tempCode}
                         onChange={(newCode) => setTempCode(newCode)}
                         rows="10"
+                        __nextHasNoMarginBottom
                     />
+                    <Spacer />
                     <Button
                         variant="primary"
                         onClick={onInsertCode}
                         text="Update"
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
                     />
                 </Modal>
             )}
@@ -108,11 +112,14 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                             { label: 'R', value: 'r' }
                         ]}
                         onChange={updateLanguage}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
                     />
                     <ToggleControl
                         label="Show line numbers"
                         checked={showLineNumbers}
                         onChange={(value) => setAttributes({ showLineNumbers: value })}
+                        __nextHasNoMarginBottom
                     />
                 </PanelBody>
             </InspectorControls>
@@ -141,17 +148,24 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                                 { label: 'R', value: 'r' }
                             ]}
                             onChange={updateLanguage}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
+                        <Spacer />
                         <TextareaControl
                             value={tempCode}
                             placeholder="Enter code..."
                             onChange={(newCode) => setTempCode(newCode)}
                             rows="10"
+                            __nextHasNoMarginBottom
                         />
+                        <Spacer />
                         <Button
                             variant="primary"
                             onClick={onInsertCode}
                             text="Insert Code"
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
                         />
                     </>
                 )}

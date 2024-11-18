@@ -33,6 +33,8 @@ export default function Edit( { attributes, setAttributes} ) {
                         { label: 'H6', value: 'h6' },
                     ]}
                     onChange={(value) => setAttributes({ accordionHeadingLevel: value })}
+                    __nextHasNoMarginBottom
+                    __next40pxDefaultSize
                 />
             </PanelBody>
         </InspectorControls>

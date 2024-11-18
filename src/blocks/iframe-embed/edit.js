@@ -1,5 +1,5 @@
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, TextareaControl, Button } from '@wordpress/components';
+import { PanelBody, TextareaControl, Button, __experimentalSpacer as Spacer } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { removeScriptTags } from '../../commons';
 
@@ -24,18 +24,19 @@ export default function Edit( { attributes, setAttributes } ) {
             
         { embedCode && (
             <PanelBody title="Settings">
-                
                 <TextareaControl
                     label="Embed Code"
                     help="Replace the embed code to update. No script tags are allowed."
                     value={ tempEmbedCode } 
                     onChange={ ( newEmbedCode ) => stripScriptTags( newEmbedCode ) }
                     rows="12"
+                    __nextHasNoMarginBottom
                 />
                 <Button
                     variant='primary'
                     text='Update'
                     onClick={ onInsertEmbedCode }
+                    __next40pxDefaultSize
                 />
             </PanelBody>     
         ) }
@@ -55,11 +56,14 @@ export default function Edit( { attributes, setAttributes } ) {
                     placeholder="Paste embed code in here. No script tags are allow."
                     onChange={ ( newEmbedCode ) => stripScriptTags( newEmbedCode ) }
                     rows="6"
+                    __nextHasNoMarginBottom
                 />
+                <Spacer />
                 <Button
                     variant='primary'
                     text='Insert'
                     onClick={onInsertEmbedCode}
+                    __next40pxDefaultSize
                 />
             </div>
 

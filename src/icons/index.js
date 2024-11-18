@@ -111,6 +111,8 @@ wp.domReady(() => {
                                             value.activeFormats[0].unregisteredAttributes.class === "bi " + icon.name
                                         }
                                         onClick={() => handleIconSelect(icon.name)}
+                                        __next40pxDefaultSize
+                                        __nextHasNoMarginBottom
                                     >
                                         {createElement('i', { className: `bi ${icon.name}`, style: { fontSize: '3rem' } })}
                                     </Button>

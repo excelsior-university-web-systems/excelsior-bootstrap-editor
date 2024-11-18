@@ -1,7 +1,7 @@
 import { registerFormatType, applyFormat, removeFormat, getActiveFormat } from '@wordpress/rich-text';
 import { useState, useEffect, createElement } from '@wordpress/element';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
-import { Popover, SelectControl, Button, Modal } from '@wordpress/components';
+import { Popover, SelectControl, Button, Modal, __experimentalSpacer as Spacer } from '@wordpress/components';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../constants';
 
 const INLINE_CODE_FORMAT_NAME = XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-code';
@@ -111,11 +111,16 @@ wp.domReady(() => {
                                         { label: 'R', value: 'r' }
                                     ]}
                                     onChange={onLanguageChange}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
+                                <Spacer />
                                 <Button
                                     text='Preview'
                                     variant='secondary'
                                     onClick={openPreviewModal}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
                                 />
                             </div>
                         </Popover>

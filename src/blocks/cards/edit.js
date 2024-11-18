@@ -61,6 +61,8 @@ export default function Edit( {attributes, setAttributes} ) {
                 value={colSize}
                 onChange={(value) => setAttributes({ colSize: value })}
                 isBlock
+                __nextHasNoMarginBottom
+                __next40pxDefaultSize
             >
                 <ToggleGroupControlOption value="2" label="2" />
                 <ToggleGroupControlOption value="3" label="3" />

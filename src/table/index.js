@@ -112,16 +112,18 @@ const modifyTableEditor = createHigherOrderComponent((BlockEdit) => {
                 <InspectorControls>
                     {props.isSelected && (
                         <PanelBody>
-                            <BaseControl label="Styles">
+                            <BaseControl label="Styles" __nextHasNoMarginBottom>
                                 <ToggleControl
                                     label="Striped"
                                     checked={isStriped}
                                     onChange={(value) => props.setAttributes({ isStriped: value })}
+                                    __nextHasNoMarginBottom
                                 />
                                 <ToggleControl
                                     label="Compact"
                                     checked={isCompact}
                                     onChange={(value) => props.setAttributes({ isCompact: value })}
+                                    __nextHasNoMarginBottom
                                 />
                             </BaseControl>
                             <ToggleGroupControl
@@ -129,6 +131,8 @@ const modifyTableEditor = createHigherOrderComponent((BlockEdit) => {
                                 value={border}
                                 onChange={(value) => props.setAttributes({ border: value })}
                                 isBlock
+                                __next40pxDefaultSize
+                                __nextHasNoMarginBottom
                             >
                                 <ToggleGroupControlOption value="" label="Simple" />
                                 <ToggleGroupControlOption value="table-bordered" label="Bordered" />

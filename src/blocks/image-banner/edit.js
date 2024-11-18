@@ -1,5 +1,5 @@
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, Button, TextControl } from '@wordpress/components';
+import { PanelBody, Button, TextControl, __experimentalSpacer as Spacer } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 
 export default function Edit ( { attributes, setAttributes } ) {
@@ -42,6 +42,7 @@ export default function Edit ( { attributes, setAttributes } ) {
                         setAttributes( { url: value } );
                         setHasError( false );
                     } }
+                    __nextHasNoMarginBottom
                 />
             </PanelBody>
         </InspectorControls>
@@ -58,8 +59,14 @@ export default function Edit ( { attributes, setAttributes } ) {
                     </div>
                 ) : (
                     <div className="excelsior-image-url-insert">
-                        <TextControl label="Image URL" value={tempUrl} onChange={(newUrl) => setTempUrl(newUrl)} />
-                        <Button onClick={onInsertUrl} variant="primary">Insert</Button>
+                        <TextControl
+                            label="Image URL"
+                            value={tempUrl}
+                            onChange={(newUrl) => setTempUrl(newUrl)}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom />
+                        <Spacer />
+                        <Button onClick={onInsertUrl} variant="primary" __next40pxDefaultSize>Insert</Button>
                     </div>
                 ) }
             </div>
