@@ -50,7 +50,7 @@ add_action( 'init', function() {
 */
 add_action( 'enqueue_block_editor_assets', function() {
 
-    global $post_type;
+    
 
     wp_register_script(
         XCLSR_BTSTRP_EDITOR_PREFIX.'-blocks-script',
@@ -108,6 +108,7 @@ add_action( 'enqueue_block_editor_assets', function() {
         XCLSR_BTSTRP_EDITOR_VERSION
     );
 
+    global $post_type;
     if ( $post_type === XCLSR_BTSTRP_POST_TYPE ) {
 
         // editor modification script/style
@@ -118,6 +119,23 @@ add_action( 'enqueue_block_editor_assets', function() {
             XCLSR_BTSTRP_EDITOR_VERSION
         );
 
+        // wp_enqueue_style(
+        //     XCLSR_BTSTRP_EDITOR_PREFIX.'-wp-editor-style',
+        //     plugin_dir_url(__FILE__) . '../css/wp-editor-style.css',
+        //     array(),
+        //     XCLSR_BTSTRP_EDITOR_VERSION
+        // );
+
+    }
+
+} );
+
+add_action( 'enqueue_block_assets', function() {
+
+    global $post_type;
+
+    if ( $post_type === XCLSR_BTSTRP_POST_TYPE ) {
+
         wp_enqueue_style(
             XCLSR_BTSTRP_EDITOR_PREFIX.'-wp-editor-style',
             plugin_dir_url(__FILE__) . '../css/wp-editor-style.css',
@@ -126,7 +144,7 @@ add_action( 'enqueue_block_editor_assets', function() {
         );
 
     }
-
+    
 } );
 
 // Enqueue frontend assets
