@@ -42,7 +42,7 @@ export default function Edit( { attributes, setAttributes } ) {
         ) }
             
         </InspectorControls>
-        <div {...useBlockProps()}>
+        <div {...useBlockProps({className: 'z-3'})}>
         { embedCode ? (
             
             <div className={floatingClasses} dangerouslySetInnerHTML={{ __html: embedCode }} />
