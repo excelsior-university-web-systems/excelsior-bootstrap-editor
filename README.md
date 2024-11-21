@@ -1,11 +1,15 @@
 # Excelsior Bootstrap Editor
-_Version 1.0.4_
+_Version 1.0.5_
 
 A WordPress plugin that helps with creating Excelsior Bootstrap content pages.
 
 ## Changelog
 
-### Version 1.0.4
+### Version 1.0.5 (pending...)
+- Remove conflicting responsive classes from floated iframe embed block. Floated element is not responsive by nature because it requires fixed width and height.
+- Remove built-in WordPress core block patterns from the editor.
+
+### Version 1.0.4 (11/20/2024)
 - Remove unnecessary `role="presentation"` attribute from tabs.
 - Remove unnecessary `role="presentation"` attribute from card top image.
 - Insert inline Excelsior Bootstrap icon button will only appear in the toolbar for blocks within the Excelsior Bootstrap container when used outside the editor.
