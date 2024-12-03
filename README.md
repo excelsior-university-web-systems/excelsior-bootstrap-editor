@@ -5,7 +5,7 @@ A WordPress plugin that helps with creating Excelsior Bootstrap content pages.
 
 ## Changelog
 
-### Version 1.0.5 (pending...)
+### Version 1.0.5 (12/04/2024)
 - Remove conflicting responsive classes from floated iframe embed block. Floated element is not responsive by nature because it requires fixed width and height.
 - Remove built-in WordPress core block patterns from the editor.
 
