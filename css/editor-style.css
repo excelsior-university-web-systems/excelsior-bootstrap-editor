@@ -46,6 +46,10 @@
     color: #fff;
 }
 
+.components-panel__body.get-code-btn-panel .components-button.get-code-btn:disabled {
+    opacity: 0.5;
+}
+
 .components-panel__body.get-code-btn-panel .components-button.get-code-btn:hover {
     color: #fff;
 }
