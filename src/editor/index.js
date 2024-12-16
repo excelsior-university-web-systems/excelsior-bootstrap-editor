@@ -13,8 +13,6 @@ import beautify from 'js-beautify';
 window.Prism = window.Prism || {};
 Prism.manual = true;
 
-const postTitleMessage = 'Enter the course number, page title, and year in the right sidebar. The page cannot be published without this information, so ensure all fields are filled before saving or publishing.';
-
 wp.domReady(() => {
 
     wp.richText.unregisterFormatType('core/image');        // Remove inline image
@@ -22,26 +20,9 @@ wp.domReady(() => {
     wp.richText.unregisterFormatType('core/language');     // Example for language button
     wp.richText.unregisterFormatType('core/keyboard');     // Example for keyboard input button
 
-    // remove typography and color settings from core/heading and core/heading blocks
-    setTimeout( function() {
-        
-        wp.data.dispatch( 'core/block-editor' ).updateSettings({
-            typography: {},
-            fontSizes: [],
-            disableCustomFontSizes: true, 
-            colors: [],
-            disableCustomColors: true,
-            disableCustomGradients: true,
-            gradients: [],
-            __experimentalFeatures: []
-        });
-
-    }, 3000);
-
     // Make the post title not editable and change the placeholder to an instruction
     observeElement( '.editor-post-title', ( element ) => {
         element.setAttribute( 'contenteditable', false );
-        element.querySelector( 'span' )?.setAttribute( 'data-rich-text-placeholder', postTitleMessage );
     } );
     
 });

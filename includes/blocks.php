@@ -50,8 +50,6 @@ add_action( 'init', function() {
 */
 add_action( 'enqueue_block_editor_assets', function() {
 
-    
-
     wp_register_script(
         XCLSR_BTSTRP_EDITOR_PREFIX.'-blocks-script',
         plugins_url( '/build/blocks/index.js', dirname(__FILE__) ),
@@ -119,13 +117,6 @@ add_action( 'enqueue_block_editor_assets', function() {
             XCLSR_BTSTRP_EDITOR_VERSION
         );
 
-        // wp_enqueue_style(
-        //     XCLSR_BTSTRP_EDITOR_PREFIX.'-wp-editor-style',
-        //     plugin_dir_url(__FILE__) . '../css/wp-editor-style.css',
-        //     array(),
-        //     XCLSR_BTSTRP_EDITOR_VERSION
-        // );
-
     }
 
 } );
@@ -166,5 +157,29 @@ add_action( 'wp_enqueue_scripts', function() {
     }
 
 }, 20 );
+
+add_filter( 'block_editor_settings_all', function( $editor_settings, $editor_context ) {
+    
+    if ( $editor_context->post->post_type === XCLSR_BTSTRP_POST_TYPE ) {
+        $editor_settings['titlePlaceholder'] = TITLE_PLACEHOLDER;
+        $editor_settings['disableCustomFontSizes'] = true;
+        $editor_settings['disableCustomGradients'] = true;
+        $editor_settings['enableCustomLineHeight'] = false;
+        $editor_settings['enableCustomSpacing'] = false;
+        $editor_settings['enableCustomUnits'] = false;
+        $editor_settings['__experimentalFeatures']['typography']['fontStyle'] = false;
+        $editor_settings['__experimentalFeatures']['typography']['letterSpacing'] = false;
+        $editor_settings['__experimentalFeatures']['typography']['dropCap'] = false;
+        $editor_settings['__experimentalFeatures']['typography']['fontSizes'] = [];
+        $editor_settings['__experimentalFeatures']['typography']['fontWeight'] = false;
+        $editor_settings['__experimentalFeatures']['typography']['textDecoration'] = false;
+        $editor_settings['__experimentalFeatures']['typography']['textTransform'] = false;
+        $editor_settings['__experimentalFeatures']['color']['background'] = false;
+        $editor_settings['__experimentalFeatures']['color']['defaultPalette'] = false;
+    }
+
+    return $editor_settings;
+
+}, 10, 2 );
 
 ?>
