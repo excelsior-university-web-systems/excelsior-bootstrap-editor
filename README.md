@@ -1,9 +1,15 @@
 # Excelsior Bootstrap Editor
-_Version 1.0.5_
+_Version 1.0.6_
 
 A WordPress plugin that helps with creating Excelsior Bootstrap content pages.
 
 ## Changelog
+
+### Version 1.0.6 (12/18/2024)
+- Add instructor notes patterns
+- Fix Get Code button disabled state appearance. It is now more prominent that the button is disabled.
+- Remove background colors, preset text colors, and typography settings when creating a Excelsior Bootstrap page. Those settings remain intact when editing outside of Excelsior Bootstrap Editor.
+- Allow WordPress's core classic and custom HTML blocks.
 
 ### Version 1.0.5 (12/04/2024)
 - Remove conflicting responsive classes from floated iframe embed block. Floated element is not responsive by nature because it requires fixed width and height.
