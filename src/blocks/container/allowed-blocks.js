@@ -20,5 +20,7 @@ export const ALLOWED_BLOCKS = [
     "core/paragraph",
     "core/heading",
     "core/list",
-    "core/table"
+    "core/table",
+    "core/freeform",
+    "core/html"
 ];
