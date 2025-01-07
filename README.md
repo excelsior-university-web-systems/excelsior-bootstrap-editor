@@ -1,9 +1,11 @@
 # Excelsior Bootstrap Editor
-_Version 1.0.6_
+_Version 1.0.7_
 
 A WordPress plugin that helps with creating Excelsior Bootstrap content pages.
 
 ## Changelog
+
+### Version 1.0.7 (pending...)
 
 ### Version 1.0.6 (12/18/2024)
 - Add instructor notes patterns

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Excelsior Bootstrap Editor
  * Description: Excelsior Bootstrap Editor enhances the editing experience by providing blocks specifically designed for Excelsior Bootstrap-based content.
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: Ethan Lin
  */
 namespace ExcelsiorBootstrapEditor;
