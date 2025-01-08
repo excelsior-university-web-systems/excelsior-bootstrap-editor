@@ -54,7 +54,8 @@ add_action( 'current_screen', function() {
             array( 'slug' => 'hybrid-modulereflection', 'title' => 'Module Reflection / Key Takeaways (Hybrid)', 'file' => 'hybrid-module-reflection.html' ),
             array( 'slug' => 'hybrid-instructornotes', 'title' => 'Instructor Notes (Hybrid)', 'file' => 'hybrid-instructor-notes.html' ),
             array( 'slug' => 'hybrid-session-sign-up', 'title' => 'Session Sign Up (Hybrid)', 'file' => 'hybrid-session-sign-up.html' ),
-            array( 'slug' => 'hybrid-session', 'title' => 'Session (Hybrid)', 'file' => 'hybrid-session.html' )
+            array( 'slug' => 'hybrid-session', 'title' => 'Session (Hybrid)', 'file' => 'hybrid-session.html' ),
+            array( 'slug' => 'hybrid-presentation-symposium', 'title' => 'Presentation Symposium (Hybrid)', 'file' => 'hybrid-presentation-symposium.html' )
         );
 
         foreach ( $excelsiorEditorOnlinePatterns as $pattern ) {
