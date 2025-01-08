@@ -6,6 +6,8 @@ A WordPress plugin that helps with creating Excelsior Bootstrap content pages.
 ## Changelog
 
 ### Version 1.0.7 (pending...)
+- Add new icons
+- Add hybrid course templates
 
 ### Version 1.0.6 (12/18/2024)
 - Add instructor notes patterns
