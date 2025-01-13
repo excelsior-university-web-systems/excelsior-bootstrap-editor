@@ -2,7 +2,7 @@ import { useBlockProps, InnerBlocks, RichText } from '@wordpress/block-editor';
 import { useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
-import { generateHtmlId, removeScriptTags } from '../../commons';
+import { generateHtmlId, removeScriptTags, getBlocksOfType } from '../../commons';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 
 export default function Edit({ attributes, setAttributes, clientId, context }) {
@@ -13,19 +13,6 @@ export default function Edit({ attributes, setAttributes, clientId, context }) {
     } );
 
     const activeTab = context?.[XCLSR_BTSTRP_EDITOR_PREFIX + '/activeTab'];
-
-    // Recursive function to get all blocks of a specific type
-    const getBlocksOfType = (blocks, blockType) => {
-        return blocks.reduce((acc, block) => {
-            if (block.name === blockType) {
-                acc.push(block);
-            }
-            if (block.innerBlocks?.length) {
-                acc = acc.concat(getBlocksOfType(block.innerBlocks, blockType));
-            }
-            return acc;
-        }, []);
-    };
 
     // Fetch all blocks of the specific type
     const sameTypeBlocks = useSelect((select) => {

@@ -76,3 +76,16 @@ export const removeScriptTags = ( input ) => {
     return tempElement.innerHTML;
 
 };
+
+// Recursive function to get all blocks of a specific type
+export const getBlocksOfType = (blocks, blockType) => {
+    return blocks.reduce((acc, block) => {
+        if (block.name === blockType) {
+            acc.push(block);
+        }
+        if (block.innerBlocks?.length) {
+            acc = acc.concat(getBlocksOfType(block.innerBlocks, blockType));
+        }
+        return acc;
+    }, []);
+};

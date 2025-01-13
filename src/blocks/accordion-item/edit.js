@@ -2,10 +2,11 @@ import { useBlockProps, InnerBlocks, InspectorControls, RichText } from '@wordpr
 import { PanelBody, ToggleControl } from '@wordpress/components';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
-import { generateHtmlId } from '../../commons';
+import { generateHtmlId, getBlocksOfType } from '../../commons';
 import { useEffect } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 
-export default function Edit({ attributes, setAttributes, context }) {
+export default function Edit({ attributes, setAttributes, clientId, context }) {
 
     const { title, uniqueId, open, HeadingLevel } = attributes;
     const accordionHeadingLevel = context?.[XCLSR_BTSTRP_EDITOR_PREFIX + '/accordionHeadingLevel'];
@@ -13,11 +14,22 @@ export default function Edit({ attributes, setAttributes, context }) {
         className: 'accordion-item',
     });
 
+    const sameTypeBlocks = useSelect((select) => {
+        const allBlocks = select('core/block-editor').getBlocks();
+        return getBlocksOfType(allBlocks, 'excelsior-bootstrap-editor/accordion-item');
+    }, []);
+
     useEffect(() => {
-        if (!uniqueId) {
-            setAttributes({ uniqueId: generateHtmlId() });
+
+        const isDuplicate = sameTypeBlocks.some(
+            ( block ) => block.clientId !== clientId && block.attributes.uniqueId === uniqueId
+        );
+
+        if ( !uniqueId || isDuplicate ) {
+            setAttributes( { uniqueId: generateHtmlId() } );
         }
-    }, [uniqueId]);
+
+    }, []);
 
     useEffect(() => {
 
