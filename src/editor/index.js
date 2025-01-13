@@ -162,28 +162,33 @@ const GetCodeButton = () => {
     // Define the function that will execute when the button is clicked
     const getRenderedHTML = () => {
         const postId = select('core/editor').getCurrentPostId();
-        const restUrl = `${wpApiSettings.root}wp/v2/excelsior_bootstrap/${postId}?t=${new Date().getTime()}`;
-
-        // Fetch the rendered content via REST API
-        fetch(restUrl)
-            .then(response => response.json())
-            .then(post => {
-
-                const htmlCode = post.content.rendered.replace(
+        const restUrl = `${wpApiSettings.root}wp/v2/excelsior_bootstrap/${postId}?context=edit&t=${new Date().getTime()}`;
+    
+        // Fetch the raw content via REST API
+        fetch(restUrl, {
+            headers: {
+                'X-WP-Nonce': wpApiSettings.nonce,
+            },
+        })
+            .then((response) => response.json())
+            .then((post) => {
+                const rawContent = post.content.raw.replace(/<!--\s*\/?wp:[^>]+-->/g, '');
+    
+                const htmlCode = rawContent.replace(
                     /<i([^>]*)>(.*?)<\/i>/g,
                     (match, attrs, innerText) => {
                         const nonBreakingText = innerText.replace(/ /g, '&nbsp;');
                         return `<i${attrs}>${nonBreakingText}</i>`;
                     }
                 );
-
-                setRenderedHTML(beautify.html(htmlCode, {preserve_newlines: false}));
+    
+                setRenderedHTML(beautify.html(htmlCode, { preserve_newlines: false }));
                 setIsModalOpen(true);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('Error fetching the post content:', error);
             });
-    };
+    };    
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(renderedHTML)

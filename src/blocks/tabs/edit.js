@@ -31,20 +31,20 @@ export default function Edit({ attributes, setAttributes, clientId }) {
         [clientId]
     );
 
-    // The first tab is always active
-    useEffect(() => {
-        if (childTabs.length > 0 && (!attributes.activeTab || attributes.activeTab !== childTabs[0].uniqueId)) {
-            setAttributes({ activeTab: childTabs[0].uniqueId });
-        }
-    }, [childTabs]);
-
     // Update the parent block's "tabs" attribute when child tabs change
     useEffect(() => {
+        
         // Compare current childTabs with attributes.tabs
-        if (JSON.stringify(childTabs) !== JSON.stringify(attributes.tabs)) {
+        if ( JSON.stringify( childTabs ) !== JSON.stringify( attributes.tabs ) ) {
             setAttributes({ tabs: childTabs });
         }
-    }, [childTabs]);
+
+        // The first tab is always active
+        if ( childTabs.length > 0 && ( !attributes.activeTab || attributes.activeTab !== childTabs[0].uniqueId ) ) {
+            setAttributes({ activeTab: childTabs[0].uniqueId });
+        }
+
+    }, [childTabs] );
 
     if ( cover ) {
         return(
