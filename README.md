@@ -5,9 +5,11 @@ A WordPress plugin that helps with creating Excelsior Bootstrap content pages.
 
 ## Changelog
 
-### Version 1.0.7 (pending...)
-- Add new icons
-- Add hybrid course templates
+### Version 1.0.7 (01/15/2025)
+- Add new icons.
+- Add some hybrid course templates (but not activated).
+- Update Instructor Notes template with the reminder box.
+- Fix the issue where the tab and accordion items duplicate with the same ID and `show active` classes. This causes an ID conflict, resulting in subsequence tab content being displayed unintentionally.
 
 ### Version 1.0.6 (12/18/2024)
 - Add instructor notes patterns
