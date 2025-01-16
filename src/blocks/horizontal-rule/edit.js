@@ -1,5 +1,5 @@
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, BaseControl, Button, ToggleControl, Tooltip } from '@wordpress/components';
+import { PanelBody, BaseControl, Button, ToggleControl, Tooltip, SelectControl } from '@wordpress/components';
 import {
     __experimentalToggleGroupControl as ToggleGroupControl,
     __experimentalToggleGroupControlOption as ToggleGroupControlOption,
@@ -23,14 +23,23 @@ const ICONS = [
 
 export default function Edit ({ attributes, setAttributes }) {
     
-    const { selectedIcon, size, decorative, noIcon, cover } = attributes;
+    const { selectedIcon, size, decorative, noIcon, cover, styleType } = attributes;
 
     const handleIconSelect = (iconName) => {
         setAttributes({ selectedIcon: iconName });
     };
 
+    const determineClassNames = () => {
+        if ( styleType !== 'basic' ) {
+            setAttributes( { noIcon: false, decorative: true } );
+            return `decorative ${styleType !== 'red' ? styleType : '' } ${ noIcon ? '' : `bi ${selectedIcon}${size !== 'regular' ? ' ' + size : '' }`}`
+        }
+        setAttributes( { noIcon: true, decorative: false } );
+        return '';
+    };
+
     const blockProps = useBlockProps( {
-        className: `decorative ${ noIcon ? '' : `bi ${selectedIcon}${size !== 'regular' ? ' ' + size : '' }`}`,
+        className: determineClassNames(),
         role: decorative ? 'presentation' : undefined
     } );
 
@@ -46,6 +55,20 @@ export default function Edit ({ attributes, setAttributes }) {
         <>
         <InspectorControls>
             <PanelBody title="Settings">
+
+                <SelectControl
+                    label="Styles"
+                    value={styleType}
+                    options={[
+                        { label: 'Basic', value: 'basic' },
+                        { label: 'Red (Default)', value: 'red' },
+                        { label: 'Blue', value: 'blue' },
+                        { label: 'Purple', value: 'purple' },
+                    ]}
+                    onChange={(value) => setAttributes({ styleType: value })}
+                    __nextHasNoMarginBottom
+                    __next40pxDefaultSize
+                />
 
                 { noIcon == false && (
 
@@ -75,15 +98,16 @@ export default function Edit ({ attributes, setAttributes }) {
                     </BaseControl>
 
                 ) }
-                
+
                 <ToggleControl
                     label="No Icon"
                     help="Toggle on to remove icon."
                     checked={noIcon}
+                    disabled={styleType === 'basic'}
                     onChange={(value) => setAttributes({ noIcon: value })}
                     __nextHasNoMarginBottom
                 />
-                <ToggleGroupControl
+                { styleType !== 'basic' && ( <ToggleGroupControl
                     label="Size"
                     help="Adjust the size of the icon."
                     value={size}
@@ -96,6 +120,7 @@ export default function Edit ({ attributes, setAttributes }) {
                     <ToggleGroupControlOption value="regular" label="Regular" />
                     <ToggleGroupControlOption value="large" label="Large" />
                 </ToggleGroupControl>
+                )}
                 <ToggleControl
                     label="Decorative"
                     help="Toggle on to set the horizontal rule as decorative."

@@ -33,6 +33,10 @@
         "noIcon": {
             "type": "boolean",
             "default": false
+        },
+        "styleType" : {
+            "type": "string",
+            "default" : "red"
         }
     }
 }
