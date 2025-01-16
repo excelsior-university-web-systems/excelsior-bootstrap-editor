@@ -1,15 +1,19 @@
 # Excelsior Bootstrap Editor
-_Version 1.0.7_
+_Version 1.0.8_
 
 A WordPress plugin that helps with creating Excelsior Bootstrap content pages.
 
 ## Changelog
+
+### Version 1.0.8 (01/22/2025)
+- Add 3 new styles to horizontal rule: basic, red (default), blue, and purple.
 
 ### Version 1.0.7 (01/15/2025)
 - Add new icons.
 - Add some hybrid course templates (but not activated).
 - Update Instructor Notes template with the reminder box.
 - Fix the issue where the tab and accordion items duplicate with the same ID and `show active` classes. This causes an ID conflict, resulting in subsequence tab content being displayed unintentionally.
+- Minor fixes and improvements.
 
 ### Version 1.0.6 (12/18/2024)
 - Add instructor notes patterns
