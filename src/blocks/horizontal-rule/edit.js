@@ -31,10 +31,8 @@ export default function Edit ({ attributes, setAttributes }) {
 
     const determineClassNames = () => {
         if ( styleType !== 'basic' ) {
-            setAttributes( { noIcon: false, decorative: true } );
             return `decorative ${styleType !== 'red' ? styleType : '' } ${ noIcon ? '' : `bi ${selectedIcon}${size !== 'regular' ? ' ' + size : '' }`}`
         }
-        setAttributes( { noIcon: true, decorative: false } );
         return '';
     };
 
@@ -70,7 +68,7 @@ export default function Edit ({ attributes, setAttributes }) {
                     __next40pxDefaultSize
                 />
 
-                { noIcon == false && (
+                { noIcon == false && styleType !== 'basic' && (
 
                     <BaseControl label="Icons" __nextHasNoMarginBottom>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
