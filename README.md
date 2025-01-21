@@ -7,6 +7,7 @@ A WordPress plugin that helps with creating Excelsior Bootstrap content pages.
 
 ### Version 1.0.8 (01/22/2025)
 - Add 3 new styles to horizontal rule: basic, red (default), blue, and purple.
+- Update Excelsior Bootstrap framework
 
 ### Version 1.0.7 (01/15/2025)
 - Add new icons.
