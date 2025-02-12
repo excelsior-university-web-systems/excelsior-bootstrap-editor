@@ -25,7 +25,7 @@ add_action( 'init', function() {
 
     wp_register_script(
         XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-script',
-        plugin_dir_url(__FILE__) . '../js/excelsior-bootstrap.js',
+        plugin_dir_url(__FILE__) . '../public/js/excelsior-bootstrap.js',
         array(),
         '1.0.8',
         array(
@@ -36,7 +36,7 @@ add_action( 'init', function() {
 
     wp_register_style(
         XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-style',
-        plugin_dir_url(__FILE__) . '../css/excelsior-bootstrap.css',
+        plugin_dir_url(__FILE__) . '../public/css/excelsior-bootstrap.css',
         array(),
         '1.0.8'
     );
@@ -59,7 +59,7 @@ add_action( 'enqueue_block_editor_assets', function() {
 
     wp_register_style(
         XCLSR_BTSTRP_EDITOR_PREFIX.'-style',
-        plugin_dir_url(__FILE__) . '../css/editor-style.css',
+        plugin_dir_url(__FILE__) . '../admin/css/editor-style.css',
         array(),
         XCLSR_BTSTRP_EDITOR_VERSION
     );
@@ -129,7 +129,7 @@ add_action( 'enqueue_block_assets', function() {
 
         wp_enqueue_style(
             XCLSR_BTSTRP_EDITOR_PREFIX.'-wp-editor-style',
-            plugin_dir_url(__FILE__) . '../css/wp-editor-style.css',
+            plugin_dir_url(__FILE__) . '../admin/css/wp-editor-style.css',
             array(),
             XCLSR_BTSTRP_EDITOR_VERSION
         );
