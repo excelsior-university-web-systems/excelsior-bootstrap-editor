@@ -6,8 +6,8 @@ Requires at least: 5.0
 Requires PHP: 8.0
 Tested up to: 6.7.2
 Stable tag: 1.0.9
-License: GPLv3 or later
-License URI: https://www.gnu.org/licenses/gpl-3.0.html
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 A WordPress plugin that helps with creating Excelsior Bootstrap content pages.
 
