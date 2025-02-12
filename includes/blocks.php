@@ -161,7 +161,11 @@ add_action( 'wp_enqueue_scripts', function() {
 }, 20 );
 
 add_filter( 'block_editor_settings_all', function( $editor_settings, $editor_context ) {
-    
+
+    if ( !$editor_context->post ) {
+        return $editor_settings;
+    }
+
     if ( $editor_context->post->post_type === XCLSR_BTSTRP_POST_TYPE ) {
         $editor_settings['titlePlaceholder'] = TITLE_PLACEHOLDER;
         $editor_settings['disableCustomFontSizes'] = true;

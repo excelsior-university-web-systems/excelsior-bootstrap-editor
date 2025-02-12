@@ -67,8 +67,7 @@ add_action( 'current_screen', function() {
                     'categories' => array( XCLSR_BTSTRP_EDITOR_PREFIX.'-online-patterns' ),
                     'postTypes'  => array( XCLSR_BTSTRP_POST_TYPE ),
                     'blockTypes' => array( XCLSR_BTSTRP_EDITOR_PREFIX.'/container' ),
-                    'filePath'   => $patternDirectory.$pattern['file'],
-                    'viewportWidth' => 1042
+                    'filePath'   => $patternDirectory.$pattern['file']
                 )
             );
 
@@ -84,7 +83,6 @@ add_action( 'current_screen', function() {
         //             'postTypes'  => array( XCLSR_BTSTRP_POST_TYPE ),
         //             'blockTypes' => array( XCLSR_BTSTRP_EDITOR_PREFIX.'/container' ),
         //             'filePath'   => $patternDirectory.$pattern['file'],
-        //             'viewportWidth' => 1042
         //         )
         //     );
 
