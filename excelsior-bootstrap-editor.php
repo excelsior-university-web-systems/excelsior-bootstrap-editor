@@ -4,8 +4,8 @@
  * Plugin URI:  https://github.com/excelsior-university-web-systems/excelsior-bootstrap-editor
  * Description: Excelsior Bootstrap Editor enhances the editing experience by providing blocks specifically designed for Excelsior Bootstrap-based content.
  * Author:      Ethan Lin
- * Author URI:  https://github.com/Lin87
- * Version:     1.0.9
+ * Author URI:  https://profiles.wordpress.org/eslin87/
+ * Version:     1.0.10
  */
 namespace ExcelsiorBootstrapEditor;
 
