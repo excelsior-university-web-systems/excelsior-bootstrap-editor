@@ -38,6 +38,11 @@ This section describes how to install the plugin and get it working.
 
 ## Changelog ##
 
+### 1.0.9 (02/26/2025) ###
+
+* Add new icons.
+* Add `max-width: 100%` CSS rule to `img` element nested within `figure` element.
+
 ### 1.0.8 (01/22/2025) ###
 
 * Add 3 new styles to horizontal rule: basic, red (default), blue, and purple.

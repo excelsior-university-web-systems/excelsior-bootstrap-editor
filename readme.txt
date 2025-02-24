@@ -5,7 +5,7 @@ Tags: bootstrap, css, js, editor, block, framework, getbootstrap
 Requires at least: 5.0
 Requires PHP: 8.0
 Tested up to: 6.7.2
-Stable tag: 1.0.10
+Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,11 @@ This section describes how to install the plugin and get it working.
 1. An example of Excelsior Bootstrap Editor blocks
 
 == Changelog ==
+
+= 1.0.9 (02/26/2025) =
+
+* Add new icons.
+* Add `max-width: 100%` CSS rule to `img` element nested within `figure` element.
 
 = 1.0.8 (01/22/2025) =
 
