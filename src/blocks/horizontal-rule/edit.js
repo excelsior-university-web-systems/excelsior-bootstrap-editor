@@ -18,7 +18,10 @@ const ICONS = [
     { name: 'bi-people-fill', label: 'Live Session Page' },
     { name: 'bi-clipboard-check-fill', label: 'Quiz or Knowledge Check Page' },
     { name: 'bi-list-check', label: 'Session Sign Up Page' },
-    { name: 'bi-easel', label: 'Verbal Competency Session Page' }
+    { name: 'bi-easel', label: 'Verbal Competency Session Page' },
+    { name: 'bi-compass', label: 'Orientation Page' },
+    { name: 'bi-puzzle-fill', label: 'SkillSource Page'},
+    { name: 'bi-box', label: 'Immersives Page'},
 ];
 
 export default function Edit ({ attributes, setAttributes }) {
