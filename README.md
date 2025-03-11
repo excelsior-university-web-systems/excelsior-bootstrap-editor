@@ -4,8 +4,8 @@
 **Tags:** bootstrap, css, js, editor, block, framework, getbootstrap  
 **Requires at least:** 5.0  
 **Requires PHP:** 8.0  
-**Tested up to:** 6.7.2  
-**Stable tag:** 1.0.9  
+**Tested up to:** 6.7  
+**Stable tag:** 1.0.10  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -37,6 +37,10 @@ This section describes how to install the plugin and get it working.
 
 
 ## Changelog ##
+
+### 1.0.10 (03/12/2025) ###
+
+* Replace Saturday with Sunday in Overview and Discussion patterns.
 
 ### 1.0.9 (02/26/2025) ###
 
