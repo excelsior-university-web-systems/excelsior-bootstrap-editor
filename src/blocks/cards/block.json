@@ -10,7 +10,7 @@
     },
     "example": {
         "attributes": {
-            "cover": "images/cards.webp"
+            "cover": "public/images/cards.webp"
         }
     },
     "attributes": {

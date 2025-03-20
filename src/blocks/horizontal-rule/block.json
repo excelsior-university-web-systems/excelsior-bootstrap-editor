@@ -10,7 +10,7 @@
     },
     "example": {
         "attributes": {
-            "cover": "images/horizontal-rule.webp"
+            "cover": "public/images/horizontal-rule.webp"
         }
     },
     "attributes": {

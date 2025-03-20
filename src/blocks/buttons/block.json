@@ -10,7 +10,7 @@
     },
     "example": {
         "attributes": {
-            "cover": "images/buttons.webp"
+            "cover": "public/images/buttons.webp"
         }
     },
     "attributes": {

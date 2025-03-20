@@ -11,7 +11,7 @@
     },
     "example": {
         "attributes": {
-            "cover": "images/image-banner.webp"
+            "cover": "public/images/image-banner.webp"
         }
     },
     "attributes": {

@@ -7,7 +7,7 @@
     "parent": ["excelsior-bootstrap-editor/container"],
     "example": {
         "attributes": {
-            "cover": "images/tabs.webp"
+            "cover": "public/images/tabs.webp"
         }
     },
     "attributes": {

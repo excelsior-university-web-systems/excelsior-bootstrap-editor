@@ -10,7 +10,7 @@
     },
     "example": {
         "attributes": {
-            "cover": "images/accordion.webp"
+            "cover": "public/images/accordion.webp"
         }
     },
     "attributes": {

@@ -10,7 +10,7 @@
     },
     "example": {
         "attributes": {
-            "cover": "images/tipbox.webp"
+            "cover": "public/images/tipbox.webp"
         }
     },
     "attributes": {

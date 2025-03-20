@@ -10,7 +10,7 @@
     },
     "example": {
         "attributes": {
-            "cover": "images/columns.webp"
+            "cover": "public/images/columns.webp"
         }
     },
     "attributes": {

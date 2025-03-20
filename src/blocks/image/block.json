@@ -11,7 +11,7 @@
     "usesContext": ["excelsior-bootstrap-editor/alignmentEnabled"],
     "example": {
         "attributes": {
-            "cover": "images/image.webp"
+            "cover": "public/images/image.webp"
         }
     },
     "attributes": {
