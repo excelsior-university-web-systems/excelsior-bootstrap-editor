@@ -5,7 +5,7 @@ Tags: bootstrap, css, js, editor, block, framework, getbootstrap
 Requires at least: 5.0
 Requires PHP: 8.0
 Tested up to: 6.7
-Stable tag: 1.0.10
+Stable tag: 1.0.11
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,12 @@ This section describes how to install the plugin and get it working.
 1. An example of Excelsior Bootstrap Editor blocks
 
 == Changelog ==
+
+= 1.0.11 (03/26/2025) =
+
+* Move images folders into the public folder.
+* Allow LMS Common Block to be inside the container.
+* Allow iFrame Embed block to be inside the callout and tipbox blocks.
 
 = 1.0.10 (03/12/2025) =
 
