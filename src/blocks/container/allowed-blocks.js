@@ -22,5 +22,6 @@ export const ALLOWED_BLOCKS = [
     "core/list",
     "core/table",
     "core/freeform",
-    "core/html"
+    "core/html",
+    "lms-common/lms-common-block-selector"
 ];
