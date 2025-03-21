@@ -45,6 +45,8 @@ This section describes how to install the plugin and get it working.
 * Allow iFrame Embed block to be inside the callout and tipbox blocks.
 * Update Instructor Notes pattern to include additional contents.
 * Update Discussion pattern to include a "Prompt Suggestions" callout for the reply tab.
+* Update language on the home page pattern.
+* Fix an editing issue with iFrame Embed text area.
 
 ### 1.0.10 (03/12/2025) ###
 
