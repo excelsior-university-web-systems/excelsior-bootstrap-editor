@@ -134,6 +134,11 @@ p.is-selected:focus code[data-rich-text-format-boundary] {
     margin-top: 0 !important;
 }
 
+.wp-block-excelsior-bootstrap-editor-columns .wp-block-excelsior-bootstrap-editor-iframe-embed {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
 /* EXCELSIOR BOOTSTRAP EDITOR
    START HERE BANNER */
 
