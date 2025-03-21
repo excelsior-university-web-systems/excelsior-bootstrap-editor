@@ -41,6 +41,8 @@ This section describes how to install the plugin and get it working.
 * Move images folders into the public folder.
 * Allow LMS Common Block to be inside the container.
 * Allow iFrame Embed block to be inside the callout and tipbox blocks.
+* Update Instructor Notes pattern to include additional contents.
+* Update Discussion pattern to include a "Prompt Suggestions" callout for the reply tab.
 
 = 1.0.10 (03/12/2025) =
 
