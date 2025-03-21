@@ -10,7 +10,7 @@
     },
     "example": {
         "attributes": {
-            "cover": "images/callout.webp"
+            "cover": "public/images/callout.webp"
         }
     },
     "attributes": {
