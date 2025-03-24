@@ -1,7 +1,7 @@
 # Excelsior Bootstrap Editor #
 
 **Contributors:** [eslin87](https://profiles.wordpress.org/eslin87/)  
-**Tags:** bootstrap, css, js, editor, block, framework, getbootstrap  
+**Tags:** bootstrap, css, js, editor, block  
 **Requires at least:** 5.0  
 **Requires PHP:** 8.0  
 **Tested up to:** 6.7  
@@ -26,7 +26,7 @@ This section describes how to install the plugin and get it working.
 
 ### Instructions ###
 
-1. Upload the alphalisting folder to the `/wp-content/plugins/` directory.
+1. Upload the `excelsior-bootstrap-editor` folder to the `/wp-content/plugins/` directory.
 1. Activate the plugin through the 'Plugins' menu in WordPress.
 1. Look for the Excelsior Bootstrap Editor menu item in the admin menu.
 
@@ -40,13 +40,14 @@ This section describes how to install the plugin and get it working.
 
 ### 1.0.11 (03/26/2025) ###
 
-* Move images folders into the public folder.
+* New: filter by course number and year.
+* Move the `images` folder into the `public` folder.
 * Allow LMS Common Block to be inside the container.
 * Allow iFrame Embed block to be inside the callout and tipbox blocks.
 * Update Instructor Notes pattern to include additional contents.
 * Update Discussion pattern to include a "Prompt Suggestions" callout for the reply tab.
 * Update language on the home page pattern.
-* Fix an editing issue with iFrame Embed text area.
+* Bugfix: fix an editing issue with iFrame Embed text area.
 
 ### 1.0.10 (03/12/2025) ###
 
