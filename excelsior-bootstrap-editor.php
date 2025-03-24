@@ -7,11 +7,8 @@
  * Author URI:  https://profiles.wordpress.org/eslin87/
  * Version:     1.0.11
  */
-namespace ExcelsiorBootstrapEditor;
 
-if ( ! defined( 'ABSPATH' ) ) {
-    exit; // Exit if accessed directly.
-}
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/post-type.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/blocks.php';

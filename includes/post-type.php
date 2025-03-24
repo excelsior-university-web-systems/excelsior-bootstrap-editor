@@ -1,5 +1,8 @@
 <?php
 namespace ExcelsiorBootstrapEditor;
+
+if ( ! defined( 'ABSPATH' ) ) { exit; }
+
 require_once plugin_dir_path( __FILE__ ) . 'constants.php';
 
 /*
@@ -84,7 +87,7 @@ add_action( 'init', function() {
         'type' => 'string',
         'show_in_rest' => true,
         'single' => true,
-        'default' => date("Y"),
+        'default' => '',
     ) );
 
     \ExcelsiorBootstrapEditor\add_excelsior_bootstrap_capabilities();

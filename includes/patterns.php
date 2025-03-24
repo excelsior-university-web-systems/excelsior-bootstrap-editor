@@ -1,5 +1,8 @@
 <?php
 namespace ExcelsiorBootstrapEditor;
+
+if ( ! defined( 'ABSPATH' ) ) { exit; }
+
 require_once plugin_dir_path( __FILE__ ) . 'constants.php';
 
 add_action( 'current_screen', function() {
