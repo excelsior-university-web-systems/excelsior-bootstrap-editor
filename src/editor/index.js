@@ -38,7 +38,7 @@ const CourseMetaFields = () => {
     const { editPost } = useDispatch('core/editor');
     const courseNumber = meta[XCLSR_BTSTRP_POST_TYPE+'_post_course_number'] || '';
     const pageTitle = meta[XCLSR_BTSTRP_POST_TYPE+'_post_page_title'] || '';
-    const year = meta[XCLSR_BTSTRP_POST_TYPE+'_post_year'] || '';
+    const year = meta[XCLSR_BTSTRP_POST_TYPE+'_post_year'] || new Date().getFullYear();
     const combinedTitle = `${courseNumber} - ${pageTitle} - ${year}`;
 
     // Removes spaces and makes uppercase
@@ -55,6 +55,7 @@ const CourseMetaFields = () => {
             }
         } );
     }
+
     // Otherwise, update the title if the fields are filled 
     else if ( courseNumber && pageTitle && year && combinedTitle !== currentTitle ) {
         editPost({ title: combinedTitle });
@@ -69,7 +70,7 @@ const CourseMetaFields = () => {
                     label="Course Number"
                     className='required'
                     help="Example: EGR290, NUR104, etc."
-                    value={meta[XCLSR_BTSTRP_POST_TYPE+'_post_course_number'] || ''}
+                    value={courseNumber}
                     onChange={(value) => editPost({ meta: { ...meta, excelsior_bootstrap_post_course_number: formatCourseNumber(value) } })}
                     __next40pxDefaultSize
                     __nextHasNoMarginBottom
@@ -79,7 +80,7 @@ const CourseMetaFields = () => {
                     label="Page Title"
                     className='required'
                     help="Example: M1.1 - Exploring Computer Science Career Paths"
-                    value={meta[XCLSR_BTSTRP_POST_TYPE+'_post_page_title'] || ''}
+                    value={pageTitle}
                     onChange={(value) => editPost({ meta: { ...meta, excelsior_bootstrap_post_page_title: value } })}
                     __next40pxDefaultSize
                     __nextHasNoMarginBottom
@@ -89,7 +90,7 @@ const CourseMetaFields = () => {
                     label="Year"
                     className='required'
                     type='number'
-                    value={meta[XCLSR_BTSTRP_POST_TYPE+'_post_year'] || ''}
+                    value={year}
                     onChange={(value) => editPost({ meta: { ...meta, excelsior_bootstrap_post_year: value } })}
                     __next40pxDefaultSize
                     __nextHasNoMarginBottom
