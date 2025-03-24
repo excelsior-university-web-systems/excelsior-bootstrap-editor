@@ -5,12 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 require_once plugin_dir_path( __FILE__ ) . 'constants.php';
 
-/*
- Register a custom post type with specific labels, capabilities, and
- block template tailored Excelsior Bootstrap Editor plugin.
-*/
-add_action( 'init', function() {
-
+function add_excelsior_bootstrap_post_type() {
     $args = array(
         'labels'                    => array(
             'name'                  => XCLSR_BTSTRP_POST_TYPE_NAME,
@@ -67,23 +62,23 @@ add_action( 'init', function() {
         'template_lock'       => 'insert',
     );
 
-    register_post_type( XCLSR_BTSTRP_POST_TYPE, $args );
+    \register_post_type( XCLSR_BTSTRP_POST_TYPE, $args );
 
-    register_post_meta( XCLSR_BTSTRP_POST_TYPE, XCLSR_BTSTRP_POST_TYPE.'_post_course_number', array(
+    \register_post_meta( XCLSR_BTSTRP_POST_TYPE, XCLSR_BTSTRP_POST_TYPE.'_post_course_number', array(
         'type' => 'string',
         'show_in_rest' => true,
         'single' => true,
         'default' => '',
     ) );
 
-    register_post_meta( XCLSR_BTSTRP_POST_TYPE, XCLSR_BTSTRP_POST_TYPE.'_post_page_title', array(
+    \register_post_meta( XCLSR_BTSTRP_POST_TYPE, XCLSR_BTSTRP_POST_TYPE.'_post_page_title', array(
         'type' => 'string',
         'show_in_rest' => true,
         'single' => true,
         'default' => '',
     ) );
 
-    register_post_meta( XCLSR_BTSTRP_POST_TYPE, XCLSR_BTSTRP_POST_TYPE.'_post_year', array(
+    \register_post_meta( XCLSR_BTSTRP_POST_TYPE, XCLSR_BTSTRP_POST_TYPE.'_post_year', array(
         'type' => 'string',
         'show_in_rest' => true,
         'single' => true,
@@ -91,8 +86,9 @@ add_action( 'init', function() {
     ) );
 
     \ExcelsiorBootstrapEditor\add_excelsior_bootstrap_capabilities();
+}
 
-} );
+add_action( 'init', __NAMESPACE__.'\\add_excelsior_bootstrap_post_type' );
 
 /*
   Assign custom capabilities (defined during post type registration)
@@ -103,7 +99,7 @@ function add_excelsior_bootstrap_capabilities() {
 
     foreach ( $roles as $role_name ) {
 
-        $role = get_role ($role_name );
+        $role = \get_role($role_name );
         
         if ( !$role ) continue;
 
@@ -122,8 +118,7 @@ function add_excelsior_bootstrap_capabilities() {
     }
 }
 
-add_filter( 'wp_insert_post_data', function( $data ) {
-
+function set_empty_title_post_to_draft( $data ) {
     if ( $data['post_type'] === XCLSR_BTSTRP_POST_TYPE && $data['post_status'] === 'publish' ) {
 
         if ( empty( $data['post_title'] ) ) {
@@ -132,7 +127,106 @@ add_filter( 'wp_insert_post_data', function( $data ) {
     }
 
     return $data;
+}
 
-}, 10, 2 );
+add_filter( 'wp_insert_post_data', __NAMESPACE__.'\\set_empty_title_post_to_draft', 10, 2 );
 
+function course_and_year_filtering_dropdown() {
+    global $typenow, $wpdb;
+
+    if ( $typenow !== XCLSR_BTSTRP_POST_TYPE ) {
+        return;
+    }
+
+    $course_number_meta_key = XCLSR_BTSTRP_POST_TYPE.'_post_course_number';
+    $year_meta_key = XCLSR_BTSTRP_POST_TYPE.'_post_year';
+
+    $course_numbers = $wpdb->get_col( $wpdb->prepare(
+        "SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE meta_key = %s AND meta_value != '' ORDER BY meta_value ASC",
+        $course_number_meta_key
+    ) );
+
+    $years = $wpdb->get_col( $wpdb->prepare(
+        "SELECT DISTINCT meta_value FROM $wpdb->postmeta WHERE meta_key = %s AND meta_value != '' ORDER BY meta_value DESC",
+        $year_meta_key
+    ) );
+
+    $selected_course = isset( $_GET['course_number'] ) ? sanitize_text_field( $_GET['course_number'] ) : '';
+    $selected_year = isset( $_GET['year'] ) ? sanitize_text_field( $_GET['year'] ) : '';
+
+    ?>
+    <select name="course_number">
+        <option value="">Filter by Course Number</option>
+        <?php foreach ( $course_numbers as $value ) : ?>
+            <option value="<?php echo esc_attr( $value ); ?>" <?php selected( $selected_course, $value ); ?>>
+                <?php echo esc_html( $value ); ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <?php
+
+    // Year Dropdown
+    ?>
+    <select name="year">
+        <option value="">Filter by Year</option>
+        <?php foreach ( $years as $value ) : ?>
+            <option value="<?php echo esc_attr( $value ); ?>" <?php selected( $selected_year, $value ); ?>>
+                <?php echo esc_html( $value ); ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <?php
+}
+
+add_action( 'restrict_manage_posts', __NAMESPACE__.'\\course_and_year_filtering_dropdown' );
+
+function filter_posts_by_course_number_and_year( $query ) {
+    global $pagenow;
+
+    if ( is_admin() && $pagenow == 'edit.php' && isset($_GET['post_type']) && $_GET['post_type'] === XCLSR_BTSTRP_POST_TYPE ) {
+        $meta_query = array();
+
+        // Filter by Course Number
+        if ( !empty( $_GET['course_number'] ) ) {
+            $meta_query[] = array(
+                'key'     => XCLSR_BTSTRP_POST_TYPE.'_post_course_number',
+                'value'   => sanitize_text_field( $_GET['course_number'] ),
+                'compare' => '='
+            );
+        }
+
+        // Filter by Year
+        if ( !empty( $_GET['year'] ) ) {
+            $meta_query[] = array(
+                'key'     => XCLSR_BTSTRP_POST_TYPE.'_post_year',
+                'value'   => sanitize_text_field( $_GET['year'] ),
+                'compare' => '='
+            );
+        }
+
+        if ( !empty( $meta_query ) ) {
+            $query->set( 'meta_query', $meta_query );
+        }
+    }
+}
+
+add_action( 'pre_get_posts', __NAMESPACE__.'\\filter_posts_by_course_number_and_year' );
+
+function add_course_number_and_year_query_var( $vars ) {
+    $vars[] = 'course_number';
+    $vars[] = 'year';
+    return $vars;
+}
+
+add_filter( 'query_vars', __NAMESPACE__.'\\add_course_number_and_year_query_var' );
+
+function hide_date_filter_dropdown() {
+    global $typenow;
+
+    if ( $typenow === XCLSR_BTSTRP_POST_TYPE ) {
+        echo '<style>#filter-by-date{ display: none !important; }</style>';
+    }
+}
+
+add_action('admin_head', __NAMESPACE__.'\\hide_date_filter_dropdown');
 ?>
