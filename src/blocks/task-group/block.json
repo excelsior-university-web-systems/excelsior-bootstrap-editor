@@ -10,7 +10,7 @@
     },
     "example": {
         "attributes": {
-            "cover": "public/images/task-group.webp"
+            "cover": "admin/images/task-group.webp"
         }
     },
     "attributes": {
