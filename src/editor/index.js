@@ -5,7 +5,7 @@ import { PluginPostStatusInfo } from '@wordpress/editor';
 import { InspectorControls } from '@wordpress/block-editor';
 import { Button, Modal, TextControl, Notice, __experimentalText as Text, PanelBody, SelectControl } from '@wordpress/components';
 import { createHigherOrderComponent } from '@wordpress/compose';
-import { select, useSelect, useDispatch, subscribe } from '@wordpress/data';
+import { select, dispatch, useSelect, useDispatch, subscribe } from '@wordpress/data';
 import { useState, useEffect, Fragment } from '@wordpress/element';
 import { observeElement } from '../commons';
 import beautify from 'js-beautify';
@@ -24,21 +24,26 @@ wp.domReady(() => {
     observeElement( '.editor-post-title', ( element ) => {
         element.setAttribute( 'contenteditable', false );
     } );
-    
+  
 });
 
 /* ADD COURSE META FIELDS FOR "TITLE" */
 
-let isLocked = false;
-
 const CourseMetaFields = () => {
 
+    const { unlockPostSaving, lockPostSaving } = dispatch('core/editor');
     const meta = useSelect( (select) => select('core/editor').getEditedPostAttribute('meta') );
     const currentTitle = useSelect((select) => select('core/editor').getEditedPostAttribute('title'));
     const { editPost } = useDispatch('core/editor');
     const courseNumber = meta[XCLSR_BTSTRP_POST_TYPE+'_post_course_number'] || '';
     const pageTitle = meta[XCLSR_BTSTRP_POST_TYPE+'_post_page_title'] || '';
-    const year = meta[XCLSR_BTSTRP_POST_TYPE+'_post_year'] || new Date().getFullYear();
+    let year = meta[XCLSR_BTSTRP_POST_TYPE+'_post_year'];
+
+    if ( year == '' ) {
+        year = new Date().getFullYear().toString();
+        editPost({ meta: { ...meta, excelsior_bootstrap_post_year: year } });
+    }
+
     const combinedTitle = `${courseNumber} - ${pageTitle} - ${year}`;
 
     // Removes spaces and makes uppercase
@@ -49,16 +54,13 @@ const CourseMetaFields = () => {
     // Clear the post title if all fields are empty
     if ( (!courseNumber || !pageTitle || !year) && currentTitle ) {
         editPost({ title: '' });
-        observeElement( '.editor-post-title span', ( element ) => {
-            if ( element ) {
-                element.setAttribute( 'data-rich-text-placeholder', postTitleMessage );
-            }
-        } );
+        lockPostSaving('required-fields');
     }
 
     // Otherwise, update the title if the fields are filled 
     else if ( courseNumber && pageTitle && year && combinedTitle !== currentTitle ) {
         editPost({ title: combinedTitle });
+        unlockPostSaving('required-fields');
     }
 
     return (
@@ -103,7 +105,7 @@ const CourseMetaFields = () => {
 
 const validateFields = () => {
 
-    const { getEditedPostAttribute } = wp.data.select('core/editor');
+    const { getEditedPostAttribute } = select('core/editor');
     const meta = getEditedPostAttribute('meta') || {};
     const courseNumber = meta[XCLSR_BTSTRP_POST_TYPE+'_post_course_number'] || '';
     const pageTitle = meta[XCLSR_BTSTRP_POST_TYPE+'_post_page_title'] || '';
@@ -113,28 +115,42 @@ const validateFields = () => {
 
 };
 
+let isSavingLocked = false;
+let isPostTypeAvailable = false;
+
 subscribe( () => {
-
-    const { isSavingPost } = wp.data.select('core/editor');
+    const { isSavingPost, hasChangedContent, getCurrentPostType, isPublishSidebarEnabled } = select('core/editor');
+    const { lockPostSaving, unlockPostSaving, lockPostAutosaving, unlockPostAutosaving, disablePublishSidebar } = dispatch('core/editor');
     const isSaving = isSavingPost();
+    const contentChanged = hasChangedContent();
     const isValid = validateFields();
+    const postType = getCurrentPostType();
 
-    // control the state of the save button
-    if ( isSaving && !isValid && !isLocked ) {
-
-        isLocked = true;
-        wp.data.dispatch('core/editor').lockPostSaving('required-fields');
-        wp.data.dispatch('core/notices').createNotice(
-            'error',
-            'Please fill in all required fields: Course Number, Page Title, and Year.',
-            { isDismissible: true }
-        );
-
-    } else if ( isValid && isLocked ) {
-        isLocked = false;
-        wp.data.dispatch('core/editor').unlockPostSaving('required-fields');
+    if ( !isPostTypeAvailable && postType ) {
+        const prePublishSidebarEnabled = isPublishSidebarEnabled();
+        if ( postType === XCLSR_BTSTRP_POST_TYPE && prePublishSidebarEnabled ) {
+            disablePublishSidebar();
+        }
+        isPostTypeAvailable = true;
     }
 
+    if ((isSaving && !isValid) || (contentChanged && !isValid)) {
+        if (!isSavingLocked) {
+            isSavingLocked = true;
+            lockPostSaving('required-fields');
+            lockPostAutosaving('required-fields');
+            dispatch('core/notices').createNotice(
+                'error',
+                'Please fill in all required fields: Course Number, Page Title, and Year.',
+                { id: 'required-fields', isDismissible: true }
+            );
+        }
+    } else if (isValid && isSavingLocked) {
+        isSavingLocked = false;
+        unlockPostSaving('required-fields');
+        unlockPostAutosaving('required-fields');
+        dispatch('core/notices').removeNotice('required-fields');
+    }
 } );
 
 registerPlugin( XCLSR_BTSTRP_EDITOR_PREFIX + '-course-meta-fields', {
@@ -150,15 +166,16 @@ const GetCodeButton = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [renderedHTML, setRenderedHTML] = useState('');
     const [copySuccess, setCopySuccess] = useState(false);
-    const { isSaving, hasUnsavedChanges, postStatus } = useSelect((select) => {
+    const { isSaving, hasUnsavedChanges, unsavedMeta, postStatus } = useSelect((select) => {
         const editorStore = select('core/editor');
         return {
             isSaving: editorStore.isSavingPost(),
+            unsavedMeta: editorStore.getPostEdits().meta !== undefined,
             hasUnsavedChanges: editorStore.hasChangedContent(),
             postStatus: editorStore.getEditedPostAttribute('status'),
         };
     });
-    const isDisabled = isSaving || hasUnsavedChanges || postStatus !== 'publish';
+    const isDisabled = isSaving || hasUnsavedChanges || unsavedMeta || postStatus !== 'publish';
 
     // Define the function that will execute when the button is clicked
     const getRenderedHTML = () => {
