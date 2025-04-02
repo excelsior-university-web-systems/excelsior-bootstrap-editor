@@ -5,7 +5,7 @@
 **Requires at least:** 5.0  
 **Requires PHP:** 8.0  
 **Tested up to:** 6.7  
-**Stable tag:** 1.0.11  
+**Stable tag:** 1.0.12  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -37,6 +37,10 @@ This section describes how to install the plugin and get it working.
 
 
 ## Changelog ##
+
+### 1.0.12 (04/02/2025) ###
+
+* Bugfix: fix an issue where required fields notice appeared even when required field are set after saving/publishing.
 
 ### 1.0.11 (03/26/2025) ###
 
