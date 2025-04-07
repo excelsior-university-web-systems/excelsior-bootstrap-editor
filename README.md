@@ -5,7 +5,7 @@
 **Requires at least:** 5.0  
 **Requires PHP:** 8.0  
 **Tested up to:** 6.7  
-**Stable tag:** 1.0.12  
+**Stable tag:** 1.0.13  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -38,9 +38,14 @@ This section describes how to install the plugin and get it working.
 
 ## Changelog ##
 
+### 1.0.13 (04/09/2025) ###
+
+* Remove LMS Common block from the approved block list.
+* Add ReBlock block to the approved block list.
+
 ### 1.0.12 (04/02/2025) ###
 
-* Bugfix: fix an issue where required fields notice appeared even when required field are set after saving/publishing.
+* Bugfix: fix an issue where required fields notice appeared even when they are set after saving/publishing.
 
 ### 1.0.11 (03/26/2025) ###
 
