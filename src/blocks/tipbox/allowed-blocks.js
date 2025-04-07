@@ -9,5 +9,6 @@ export const ALLOWED_BLOCKS = [
     XCLSR_BTSTRP_EDITOR_PREFIX + "/iframe-embed",
     "core/heading",
     "core/paragraph",
-    "core/list"
+    "core/list",
+    "reblock/reblock-block-selector"
 ];

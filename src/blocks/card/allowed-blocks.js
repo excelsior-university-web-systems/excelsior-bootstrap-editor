@@ -7,5 +7,6 @@ export const ALLOWED_BLOCKS = [
     XCLSR_BTSTRP_EDITOR_PREFIX + "/task-group",
     "core/heading",
     "core/paragraph",
-    "core/list"
+    "core/list",
+    "reblock/reblock-block-selector"
 ];
