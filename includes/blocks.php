@@ -27,7 +27,7 @@ add_filter( 'block_categories_all', function( $categories, $post ) {
 add_action( 'init', function() {
 
     wp_register_script(
-        XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-script',
+        XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend',
         plugin_dir_url(__FILE__) . '../public/js/excelsior-bootstrap.js',
         array(),
         '1.0.9',
@@ -38,7 +38,7 @@ add_action( 'init', function() {
     );
 
     wp_register_style(
-        XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-style',
+        XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend',
         plugin_dir_url(__FILE__) . '../public/css/excelsior-bootstrap.css',
         array(),
         '1.0.9'
@@ -75,7 +75,7 @@ add_action( 'enqueue_block_editor_assets', function() {
         foreach ( $blocks['blocks'] as $block ) {
             register_block_type( plugin_dir_path(__FILE__) . '../build/blocks/' . $block, array(
                 'editor_script_handles' => [XCLSR_BTSTRP_EDITOR_PREFIX.'-blocks-script'],
-                'editor_style_handles'  => [XCLSR_BTSTRP_EDITOR_PREFIX.'-style', XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-style']
+                'editor_style_handles'  => [XCLSR_BTSTRP_EDITOR_PREFIX.'-style', XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend']
             ) );
         }
     }
@@ -148,8 +148,8 @@ add_action( 'wp_enqueue_scripts', function() {
 
         if ( is_singular() ) {
 
-            wp_enqueue_script( XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-script' );
-            wp_enqueue_style( XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend-style' );
+            wp_enqueue_script( XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend' );
+            wp_enqueue_style( XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend' );
 
             // dequeue and deregister Learning Center Theme's Bootstrap script
             if ( wp_script_is( 'main-bootstrap' ) || wp_script_is( 'main-bootstrap', 'registered' ) || wp_script_is( 'main-bootstrap', 'done' ) ) {
