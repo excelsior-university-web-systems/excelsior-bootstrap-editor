@@ -5,7 +5,7 @@
 **Requires at least:** 5.0  
 **Requires PHP:** 8.0  
 **Tested up to:** 6.7  
-**Stable tag:** 1.0.13  
+**Stable tag:** 1.0.14  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -37,6 +37,10 @@ This section describes how to install the plugin and get it working.
 
 
 ## Changelog ##
+
+### 1.0.14 (04/15/2025) ###
+
+* Update Excelsior Bootstrap framework (CSS and JS)
 
 ### 1.0.13 (04/09/2025) ###
 

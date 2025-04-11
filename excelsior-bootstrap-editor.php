@@ -5,7 +5,8 @@
  * Description: Excelsior Bootstrap Editor enhances the editing experience by providing blocks specifically designed for Excelsior Bootstrap-based content.
  * Author:      Ethan Lin
  * Author URI:  https://profiles.wordpress.org/eslin87/
- * Version:     1.0.13
+ * Version:     1.0.14
+ * License:     GPLv2 or later
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
