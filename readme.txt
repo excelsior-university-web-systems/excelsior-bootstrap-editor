@@ -40,6 +40,7 @@ This section describes how to install the plugin and get it working.
 
 * Update Excelsior Bootstrap framework (CSS and JS).
 * Support Blockquote block for quotation.
+* Minor fixes and improvements.
 
 = 1.0.13 (04/09/2025) =
 

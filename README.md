@@ -38,9 +38,11 @@ This section describes how to install the plugin and get it working.
 
 ## Changelog ##
 
-### 1.0.14 (04/15/2025) ###
+### 1.0.14 (04/30/2025) ###
 
-* Update Excelsior Bootstrap framework (CSS and JS)
+* Update Excelsior Bootstrap framework (CSS and JS).
+* Support Blockquote block for quotation.
+* Minor fixes and improvements.
 
 ### 1.0.13 (04/09/2025) ###
 
