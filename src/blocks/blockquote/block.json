@@ -1,0 +1,35 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap-editor/blockquote",
+    "title": "Blockquote",
+    "description": "Create a blockquote to highlight a quotation.",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container"],
+    "supports": {
+        "html": false
+    },
+    "example": {
+        "attributes": {
+            "cover": "admin/images/blockquote.webp"
+        }
+    },
+    "attributes": {
+        "cover": {
+            "type": "string",
+            "default": ""
+        },
+        "narrowWidth": {
+            "type": "boolean",
+            "default": false
+        },
+        "hasSource": {
+            "type": "boolean",
+            "default": true
+        },
+        "source": {
+            "type": "string",
+            "default": ""
+        }
+        
+    }
+}

@@ -23,3 +23,4 @@ import './task';
 import './tabs';
 import './tab';
 import './page-navigation';
+import './blockquote';
