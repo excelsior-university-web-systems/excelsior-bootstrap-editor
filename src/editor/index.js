@@ -190,8 +190,7 @@ const GetCodeButton = () => {
         })
             .then((response) => response.json())
             .then((post) => {
-                const rawContent = post.content.raw.replace(/<!--\s*\/?wp:[^>]+-->/g, '');
-    
+                const rawContent = post.content.rendered.replace(/<!--\s*\/?wp:[^>]+-->/g, '');
                 const htmlCode = rawContent.replace(
                     /<i([^>]*)>(.*?)<\/i>/g,
                     (match, attrs, innerText) => {
