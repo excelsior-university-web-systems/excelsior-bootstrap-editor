@@ -42,6 +42,7 @@ This section describes how to install the plugin and get it working.
 
 * Update Excelsior Bootstrap framework (CSS and JS).
 * Support Blockquote block for quotation.
+* New accordion items are now closed by default on page loads. Added a new toggle control for the editor only to collapse and expand content for editing purposes.
 * Minor fixes and improvements.
 
 ### 1.0.13 (04/09/2025) ###

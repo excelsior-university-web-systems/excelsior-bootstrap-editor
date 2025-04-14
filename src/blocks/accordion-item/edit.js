@@ -8,7 +8,7 @@ import { useSelect } from '@wordpress/data';
 
 export default function Edit({ attributes, setAttributes, clientId, context }) {
 
-    const { title, uniqueId, open, HeadingLevel } = attributes;
+    const { title, uniqueId, open, openForEditing, HeadingLevel } = attributes;
     const accordionHeadingLevel = context?.[XCLSR_BTSTRP_EDITOR_PREFIX + '/accordionHeadingLevel'];
     const blockProps = useBlockProps({
         className: 'accordion-item',
@@ -43,13 +43,20 @@ export default function Edit({ attributes, setAttributes, clientId, context }) {
         <>
             <InspectorControls>
                 <PanelBody title="Accordion Item Settings">
-                    <ToggleControl
-                        label="Open when page loads"
-                        help="Content is displayed immediately upon page load."
+                <ToggleControl
+                        label="Open on page loads"
+                        help="Content is expanded immediately upon page load."
                         checked={open}
                         onChange={(value) => setAttributes({ open: value })}
                         __nextHasNoMarginBottom
-                    />
+                />
+                <ToggleControl
+                    label="Open for Editing"
+                    help="Editor only — content is expanded during editing."
+                    checked={openForEditing}
+                    onChange={(value) => setAttributes({ openForEditing: value })}
+                    __nextHasNoMarginBottom
+                />
                 </PanelBody>
             </InspectorControls>
             <div {...blockProps}>
@@ -58,17 +65,17 @@ export default function Edit({ attributes, setAttributes, clientId, context }) {
                         tagName="a"
                         placeholder="Accordion Item Title"
                         value={title}
-                        className={`accordion-button${open ? '' : ' collapsed'}`}
+                        className={`accordion-button${openForEditing ? '' : ' collapsed'}`}
                         role='button'
                         aria-controls={uniqueId}
-                        aria-expanded={open}
+                        aria-expanded={openForEditing}
                         data-bs-toggle="collapse"
                         data-bs-target={'#' + uniqueId}
                         onChange={(value) => setAttributes({ title: value })}
                         allowedFormats={['core/bold', 'core/italic', XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
                     />
                 </HeadingLevel>
-                <div id={uniqueId} class={`accordion-collapse collapse${open ? ' show' : ''}`}>
+                <div id={uniqueId} class={`accordion-collapse collapse${openForEditing ? ' show' : ''}`}>
                     <div class="accordion-body">
                         <InnerBlocks
                             allowedBlocks={ALLOWED_BLOCKS}

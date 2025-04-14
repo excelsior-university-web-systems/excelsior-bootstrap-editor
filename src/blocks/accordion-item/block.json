@@ -17,6 +17,10 @@
         },
         "open": {
             "type": "boolean",
+            "default": false
+        },
+        "openForEditing": {
+            "type": "boolean",
             "default": true
         },
         "HeadingLevel": {
