@@ -26,9 +26,14 @@
         "HeadingLevel": {
             "type": "string",
             "default": "h2"
+        },
+        "headingSize": {
+            "type": "string",
+            "default": "h4"
         }
     },
     "usesContext": [
-        "excelsior-bootstrap-editor/accordionHeadingLevel"
+        "excelsior-bootstrap-editor/accordionHeadingLevel",
+        "excelsior-bootstrap-editor/accordionHeadingSize"
     ]
 }

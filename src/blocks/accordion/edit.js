@@ -4,7 +4,7 @@ import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 
 export default function Edit( { attributes, setAttributes} ) {
     
-    const { accordionHeadingLevel, cover } = attributes;
+    const { accordionHeadingLevel, accordionHeadingSize, cover } = attributes;
     const blockProps = useBlockProps({
         className: 'accordion',
     });
@@ -33,6 +33,22 @@ export default function Edit( { attributes, setAttributes} ) {
                         { label: 'H6', value: 'h6' },
                     ]}
                     onChange={(value) => setAttributes({ accordionHeadingLevel: value })}
+                    __nextHasNoMarginBottom
+                    __next40pxDefaultSize
+                />
+                <SelectControl
+                    label="Heading Level Size"
+                    help="Set the font size of the heading to use the size of a different heading level."
+                    value={accordionHeadingSize}
+                    options={[
+                        { label: 'H1', value: 'h1' },
+                        { label: 'H2', value: 'h2' },
+                        { label: 'H3', value: 'h3' },
+                        { label: 'H4', value: 'h4' },
+                        { label: 'H5', value: 'h5' },
+                        { label: 'H6', value: 'h6' },
+                    ]}
+                    onChange={(value) => setAttributes({ accordionHeadingSize: value })}
                     __nextHasNoMarginBottom
                     __next40pxDefaultSize
                 />

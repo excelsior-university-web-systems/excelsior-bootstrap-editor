@@ -51,7 +51,7 @@ export default function Edit ({ attributes, setAttributes }) {
                     renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
                 />
             </blockquote>
-            { hasSource ? 
+            { hasSource && 
                 <RichText
                     tagName="figcaption"
                     className='excelsior-blockquote-footer'
@@ -59,7 +59,7 @@ export default function Edit ({ attributes, setAttributes }) {
                     placeholder='Enter Author / Source'
                     onChange={(value) => setAttributes({ source: value.trim() })}
                 />
-            : (<></>) }
+            }
         </figure>
         </>
         

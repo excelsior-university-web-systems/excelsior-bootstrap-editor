@@ -8,8 +8,9 @@ import { useSelect } from '@wordpress/data';
 
 export default function Edit({ attributes, setAttributes, clientId, context }) {
 
-    const { title, uniqueId, open, openForEditing, HeadingLevel } = attributes;
+    const { title, uniqueId, open, openForEditing, HeadingLevel, headingSize } = attributes;
     const accordionHeadingLevel = context?.[XCLSR_BTSTRP_EDITOR_PREFIX + '/accordionHeadingLevel'];
+    const accordionHeadingSize = context?.[XCLSR_BTSTRP_EDITOR_PREFIX + '/accordionHeadingSize'];
     const blockProps = useBlockProps({
         className: 'accordion-item',
     });
@@ -39,6 +40,14 @@ export default function Edit({ attributes, setAttributes, clientId, context }) {
 
     }, [accordionHeadingLevel]);
 
+    useEffect(() => {
+
+        if ( headingSize != accordionHeadingSize ) {
+            setAttributes( {headingSize: accordionHeadingSize} );
+        }
+
+    }, [accordionHeadingSize]);
+
     return (
         <>
             <InspectorControls>
@@ -51,7 +60,7 @@ export default function Edit({ attributes, setAttributes, clientId, context }) {
                         __nextHasNoMarginBottom
                 />
                 <ToggleControl
-                    label="Open for Editing"
+                    label="Open for editing"
                     help="Editor only — content is expanded during editing."
                     checked={openForEditing}
                     onChange={(value) => setAttributes({ openForEditing: value })}
@@ -60,12 +69,12 @@ export default function Edit({ attributes, setAttributes, clientId, context }) {
                 </PanelBody>
             </InspectorControls>
             <div {...blockProps}>
-                <HeadingLevel class="accordion-header">
+                <HeadingLevel className={`accordion-header ${accordionHeadingSize}`}>
                     <RichText
                         tagName="a"
                         placeholder="Accordion Item Title"
                         value={title}
-                        className={`accordion-button${openForEditing ? '' : ' collapsed'}`}
+                        className={openForEditing ? 'accordion-button' : 'accordion-button collapsed'}
                         role='button'
                         aria-controls={uniqueId}
                         aria-expanded={openForEditing}
@@ -75,7 +84,7 @@ export default function Edit({ attributes, setAttributes, clientId, context }) {
                         allowedFormats={['core/bold', 'core/italic', XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
                     />
                 </HeadingLevel>
-                <div id={uniqueId} class={`accordion-collapse collapse${openForEditing ? ' show' : ''}`}>
+                <div id={uniqueId} class={`accordion-collapse collapse ${openForEditing ? 'show' : ''}`}>
                     <div class="accordion-body">
                         <InnerBlocks
                             allowedBlocks={ALLOWED_BLOCKS}
