@@ -27,7 +27,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
     };
 
     if ( alignmentEnabled && alignment.length <= 0 ) {
-        setAttributes( {alignment: "float-start me-3 mb-1"} );
+        setAttributes( {alignment: "float-start me-3 mb-3"} );
     }
 
     if ( cover ) {
@@ -88,8 +88,8 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
                         >
-                        <ToggleGroupControlOption value="float-start me-3 mb-1" label="Left" />
-                        <ToggleGroupControlOption value="float-end ms-3 mb-1" label="Right" />
+                        <ToggleGroupControlOption value="float-start me-3 mb-3" label="Left" />
+                        <ToggleGroupControlOption value="float-end ms-3 mb-3" label="Right" />
                     </ToggleGroupControl>
 
                     <ToggleGroupControl
@@ -125,14 +125,14 @@ export default function Edit ( { attributes, setAttributes, context } ) {
         
             altText.length || caption.length ? (
 
-                <figure {...useBlockProps({className: `figure${ alignmentEnabled ? " " + alignment + " " + alignmentSize : ""}`})}>
-                    <img className={`figure-img${ mobileResponsive ? " img-fluid" : "" }`} src={url} alt={altText || ''} onError={handleImageError} />
+                <figure {...useBlockProps({className: `figure ${ alignmentEnabled ? alignment + ' ' + alignmentSize : ''}`})}>
+                    <img className={`figure-img ${ mobileResponsive ? 'img-fluid' : '' }`} src={url} alt={altText || ''} onError={handleImageError} />
                     { caption && <figcaption className='figure-caption'>{caption}</figcaption> }
                 </figure>
 
             ) : (
 
-                <img {...useBlockProps( {className: `${mobileResponsive ? "img-fluid" : ""}${ alignmentEnabled ? " " + alignment + " " + alignmentSize : ""}`} )} src={url} alt="" role="presentation" onError={handleImageError} />
+                <img {...useBlockProps( {className: `${mobileResponsive ? 'img-fluid' : ''} ${ alignmentEnabled ? alignment + ' ' + alignmentSize : ''}`} )} src={url} alt="" role="presentation" onError={handleImageError} />
 
             ) 
         
@@ -150,17 +150,17 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         <TextControl label="Image Alt Text" value={tempAltText} onChange={(newAltText) => setTempAltText(newAltText)} placeholder='Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration.' __next40pxDefaultSize __nextHasNoMarginBottom />
                         <Spacer />
                         <TextControl label="Image Caption" value={tempCaption} onChange={(newCaption) => setTempCaption(newCaption)} placeholder='Displays a caption or description for the entire image. Can be left blank if not needed.' __next40pxDefaultSize __nextHasNoMarginBottom />
-                        { !alignmentEnabled ? (
-                        <>
-                        <Spacer />
-                        <ToggleControl
-                            label="Mobile Responsive"
-                            checked={mobileResponsive}
-                            onChange={(value) => setAttributes({ mobileResponsive: value })}
-                            __nextHasNoMarginBottom
-                        />
-                        </>
-                        ) : '' }
+                        { !alignmentEnabled && (
+                            <>
+                            <Spacer />
+                            <ToggleControl
+                                label="Mobile Responsive"
+                                checked={mobileResponsive}
+                                onChange={(value) => setAttributes({ mobileResponsive: value })}
+                                __nextHasNoMarginBottom
+                            />
+                            </>
+                        ) }
                         <Spacer />
                         <Button onClick={onInsertUrl} variant="primary" __next40pxDefaultSize __nextHasNoMarginBottom>Insert</Button>
                     </div>
