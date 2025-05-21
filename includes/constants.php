@@ -3,7 +3,7 @@ namespace ExcelsiorBootstrapEditor;
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-const XCLSR_BTSTRP_EDITOR_VERSION = '1.0.14';
+const XCLSR_BTSTRP_EDITOR_VERSION = '1.0.15';
 const XCLSR_BTSTRP_EDITOR_PREFIX = 'excelsior-bootstrap-editor';
 const XCLSR_BTSTRP_POST_TYPE_NAME = 'Excelsior Bootstrap Editor';
 const XCLSR_BTSTRP_POST_TYPE = 'excelsior_bootstrap';

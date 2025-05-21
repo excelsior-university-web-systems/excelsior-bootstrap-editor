@@ -30,7 +30,7 @@ add_action( 'init', function() {
         XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend',
         plugin_dir_url(__FILE__) . '../public/js/excelsior-bootstrap.js',
         array(),
-        '1.0.9',
+        '1.0.10',
         array(
             'strategy' => 'defer',
             'in_footer' => true
@@ -41,7 +41,7 @@ add_action( 'init', function() {
         XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend',
         plugin_dir_url(__FILE__) . '../public/css/excelsior-bootstrap.css',
         array(),
-        '1.0.9'
+        '1.0.10'
     );
 
 } );
