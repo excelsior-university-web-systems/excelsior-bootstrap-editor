@@ -39,6 +39,7 @@ This section describes how to install the plugin and get it working.
 = 1.0.16 (06/25/2025) =
 
 * Disable back to top button/option when used in a ReBlock. When used in ReBlock, the back to top button will never be triggered and might cause confusion for screen reader users.
+* Update Excelsior Bootstrap framework.
 
 = 1.0.15 (05/21/2025) =
 
