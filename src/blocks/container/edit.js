@@ -1,15 +1,28 @@
 import { InnerBlocks, InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { PanelBody, ToggleControl } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
+import { useEffect } from '@wordpress/element';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 
 export default function Edit( { attributes, setAttributes } ) {
     
     const { backToTop, mainLandmarkRole } = attributes;
 
+    const isReBlockPostType = useSelect( ( select ) => {
+        const postType = select( 'core/editor' )?.getCurrentPostType?.();
+        return postType === 'reblock';
+    }, [] );
+
     const blockProps = useBlockProps( {
         className: `page-container${backToTop ? ' back-to-top' : ''}`.trim(),
         role: mainLandmarkRole ? 'main' : undefined,
     } );
+
+    useEffect( () => {
+        if ( isReBlockPostType && backToTop ) {
+            setAttributes( { backToTop: false } );
+        }
+    }, [ isReBlockPostType ] );
 
     return (
         <>
@@ -19,6 +32,7 @@ export default function Edit( { attributes, setAttributes } ) {
                         label="Back to top button"
                         help="Add a fixed-position button at the bottom right of the page to scroll long content back to the top."
                         checked={backToTop}
+                        disabled={isReBlockPostType}
                         onChange={(value) => setAttributes({ backToTop: value })}
                         __nextHasNoMarginBottom
                     />
