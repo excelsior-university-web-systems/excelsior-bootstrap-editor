@@ -2,6 +2,7 @@ export const ICONS = [
     { name: 'bi-book' },
     { name: 'bi-bookmark-check' },
     { name: 'bi-bookmark-check-fill' },
+    { name: 'bi-bookmark-star' },
     { name: 'bi-bookmark-star-fill' },
     { name: 'bi-box' },
     { name: 'bi-bullseye' },
