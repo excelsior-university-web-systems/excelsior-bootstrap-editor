@@ -9,7 +9,7 @@ import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 
 export default function Edit ( { attributes, setAttributes, context } ) {
 
-    const { url, alignment, alignmentSize, caption, altText, mobileResponsive, cover } = attributes;
+    const { url, alignment, alignmentSize, centerAlignment, caption, altText, mobileResponsive, cover } = attributes;
     const alignmentEnabled = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/alignmentEnabled'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/alignmentEnabled'] : false;
     const [tempUrl, setTempUrl] = useState('');
     const [tempAltText, setTempAltText] = useState('');
@@ -27,7 +27,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
     };
 
     if ( alignmentEnabled && alignment.length <= 0 ) {
-        setAttributes( {alignment: "float-start me-3 mb-3"} );
+        setAttributes( {alignment: "float-start me-3"} );
     }
 
     if ( cover ) {
@@ -88,8 +88,8 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
                         >
-                        <ToggleGroupControlOption value="float-start me-3 mb-3" label="Left" />
-                        <ToggleGroupControlOption value="float-end ms-3 mb-3" label="Right" />
+                        <ToggleGroupControlOption value="float-start me-3" label="Left" />
+                        <ToggleGroupControlOption value="float-end ms-3" label="Right" />
                     </ToggleGroupControl>
 
                     <ToggleGroupControl
@@ -108,6 +108,14 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                     </>
 
                 ) : (
+                    <>
+                    <ToggleControl
+                        label="Center Align"
+                        help="Horizontally center align the image."
+                        checked={centerAlignment}
+                        onChange={(value) => setAttributes({ centerAlignment: value })}
+                        __nextHasNoMarginBottom
+                    />
 
                     <ToggleControl
                         label="Mobile Responsive"
@@ -116,7 +124,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         onChange={(value) => setAttributes({ mobileResponsive: value })}
                         __nextHasNoMarginBottom
                     />
-
+                    </>
                 )}
                 
             </PanelBody>
@@ -125,14 +133,14 @@ export default function Edit ( { attributes, setAttributes, context } ) {
         
             altText.length || caption.length ? (
 
-                <figure {...useBlockProps({className: `figure ${ alignmentEnabled ? alignment + ' ' + alignmentSize : ''}`})}>
+                <figure {...useBlockProps({className: `figure mb-3 ${centerAlignment ? 'center-aligned' : ''} ${ alignmentEnabled ? alignment + ' ' + alignmentSize : ''}`})}>
                     <img className={`figure-img ${ mobileResponsive ? 'img-fluid' : '' }`} src={url} alt={altText || ''} onError={handleImageError} />
                     { caption && <figcaption className='figure-caption'>{caption}</figcaption> }
                 </figure>
 
             ) : (
 
-                <img {...useBlockProps( {className: `${mobileResponsive ? 'img-fluid' : ''} ${ alignmentEnabled ? alignment + ' ' + alignmentSize : ''}`} )} src={url} alt="" role="presentation" onError={handleImageError} />
+                <img {...useBlockProps( {className: `mb-3 ${mobileResponsive ? 'img-fluid' : ''} ${centerAlignment ? 'center-aligned' : ''} ${ alignmentEnabled ? alignment + ' ' + alignmentSize : ''}`} )} src={url} alt="" role="presentation" onError={handleImageError} />
 
             ) 
         
