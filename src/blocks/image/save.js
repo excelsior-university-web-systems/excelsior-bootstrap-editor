@@ -22,5 +22,5 @@ export default function Save({ attributes }) {
         );
     }
 
-    return <img {...useBlockProps.save({ className: baseClasses })} src={url} alt='' />;
+    return <img {...useBlockProps.save({ className: `${fluidClass} ${baseClasses}`.trim() })} src={url} alt='' />;
 }
