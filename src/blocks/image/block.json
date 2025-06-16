@@ -30,6 +30,10 @@
             "type": "string",
             "default": "w-25"
         },
+        "centerAlignment": {
+            "type": "boolean",
+            "default": false
+        },
         "mobileResponsive": {
             "type": "boolean",
             "default": false

@@ -36,11 +36,12 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
-= 1.0.16 (06/25/2025) =
+= 1.0.16 (06/18/2025) =
 
 * Disable back to top button/option when used in a ReBlock. When used in ReBlock, the back to top button will never be triggered and might cause confusion for screen reader users.
 * Add `bi-bookmark-star` icon.
 * Replace the "play" icon with "bookmark star" icon for the Introduction tab on the module overview pattern.
+* Add a new option to Image block to center-align the image.
 * Update Excelsior Bootstrap framework.
 
 = 1.0.15 (05/21/2025) =
