@@ -8,7 +8,7 @@
     "supports": {
         "html": false
     },
-    "usesContext": ["excelsior-bootstrap-editor/alignmentEnabled"],
+    "usesContext": ["excelsior-bootstrap-editor/alignmentEnabled", "excelsior-bootstrap-editor/inBlockqoute"],
     "example": {
         "attributes": {
             "cover": "admin/images/image.webp"
@@ -43,6 +43,10 @@
         },
         "altText": {
             "type": "string"
+        },
+        "useDiv": {
+            "type": "boolean",
+            "default": false
         }
     }
 }

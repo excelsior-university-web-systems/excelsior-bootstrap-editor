@@ -1,7 +1,7 @@
 import { useBlockProps } from "@wordpress/block-editor";
 
 export default function Save({ attributes }) {
-    const { url, alignment, alignmentSize, centerAlignment, caption, altText, mobileResponsive } = attributes;
+    const { url, alignment, alignmentSize, centerAlignment, caption, altText, mobileResponsive, useDiv } = attributes;
 
     if (!url) return null;
 
@@ -11,9 +11,17 @@ export default function Save({ attributes }) {
     const alignmentClass = alignment && alignmentSize ? `${alignment} ${alignmentSize}` : "";
     const centerClass = centerAlignment ? "center-aligned" : "";
     const fluidClass = mobileResponsive ? "img-fluid" : "";
-    const baseClasses = `mb-3 ${alignmentClass} ${centerClass}`.trim();
+    const marginBottomClass = !useDiv ? "mb-3" : "";
+    const baseClasses = `${marginBottomClass} ${alignmentClass} ${centerClass}`.trim();
 
     if (hasAltText || hasCaption) {
+        if (useDiv) {
+            return (
+                <div {...useBlockProps.save({ className: `figure ${baseClasses}`.trim() })}>
+                    <img className={`figure-img ${fluidClass}`.trim()} src={url} alt={altText || ""} />
+                </div>
+            );
+        }
         return (
             <figure {...useBlockProps.save({ className: `figure ${baseClasses}`.trim() })}>
                 <img className={`figure-img ${fluidClass}`.trim()} src={url} alt={altText || ""} />

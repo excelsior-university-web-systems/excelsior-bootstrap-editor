@@ -1,3 +1,4 @@
 export const ALLOWED_BLOCKS = [
-    "core/paragraph"
+    "core/paragraph",
+    "excelsior-bootstrap-editor/image-and-text"
 ];
