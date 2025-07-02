@@ -266,6 +266,11 @@ p.is-selected:focus code[data-rich-text-format-boundary] {
     background-color: #fff;
 }
 
+.wp-block-excelsior-bootstrap-editor-image-and-text {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
 /* BOOTSTRAP ICON ADJUSTMENTS */
 
 i.bi {
