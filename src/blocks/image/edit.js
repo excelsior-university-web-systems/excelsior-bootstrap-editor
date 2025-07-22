@@ -113,7 +113,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                             __nextHasNoMarginBottom
                             __next40pxDefaultSize
                             >
-                            <ToggleGroupControlOption value="" label="Actual" />
+                            <ToggleGroupControlOption value="img-fluid" label="Actual" />
                             <ToggleGroupControlOption value="w-25" label="25%" />
                             <ToggleGroupControlOption value="w-50" label="50%" />
                         </ToggleGroupControl>
@@ -169,7 +169,13 @@ export default function Edit ( { attributes, setAttributes, context } ) {
             <div {...useBlockProps({className: `${ alignmentEnabled ? alignment : ""}`})}>
                 { hasError ? (
                     <div className="excelsior-image-error">
-                        <div className="alert alert-warning my-0"><p className='my-0'><strong>Failed to load image.</strong> The image at <a href={url} target='_blank'>{url}</a> cannot be displayed. Please check the URL in Settings. If the image is from a website requiring authentication (like Canvas LMS), sign in first, then reload the editor.</p></div>
+                        <div className="alert alert-warning my-0">
+                            <p><strong>Failed to load image.</strong> The image at <a href={url} target='_blank'>{url}</a> cannot be displayed. If it's from Canvas, sign in to Canvas first and refresh the editor. If the image still doesn't load, try signing out and back in to refresh the Canvas session. Canvas image URL must follow one of these formats:</p>
+                            <ul className='my-0'>
+                                <li><code>https://excelsior.instructure.com/files/[<em>image_id</em>]/download</code> <strong>or</strong></li>
+                                <li><code>https://excelsior.instructure.com/courses/[<em>course_id</em>]/files/[<em>image_id</em>]/preview</code></li>
+                            </ul>
+                        </div>
                     </div>
                 ) : (
                     <div className="excelsior-image-url-insert mb-3">
