@@ -5,7 +5,7 @@ Tags: bootstrap, css, js, editor, block
 Requires at least: 5.0
 Requires PHP: 8.0
 Tested up to: 6.8
-Stable tag: 1.0.17
+Stable tag: 1.0.18
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,12 @@ This section describes how to install the plugin and get it working.
 1. An example of Excelsior Bootstrap Editor blocks
 
 == Changelog ==
+
+= 1.0.18 (07/22/2025) =
+
+* Fix Image and Text block alignment issue when image size is set to "Actual".
+* Update "Failed to load image" message to be clear and with additional information.
+* Update packages to the latest.
 
 = 1.0.17 (07/02/2025) =
 
