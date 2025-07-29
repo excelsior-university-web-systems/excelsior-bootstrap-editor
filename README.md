@@ -38,9 +38,12 @@ This section describes how to install the plugin and get it working.
 
 ## Changelog ##
 
-### 1.0.18 (07/30/2025) ###
+### 1.0.19 (07/30/2025) ###
 
 * Remove download link format in the "Failed to load image" message.
+* Add settings page to allowing configuration of post visibility, searchability, slug hashing, and styles and scripts management.
+* Updated post registration to use the new setting options.
+* Added a blank template for view Excelsior Bootstrap pages without additional WordPress overheads.
 
 ### 1.0.18 (07/22/2025) ###
 
