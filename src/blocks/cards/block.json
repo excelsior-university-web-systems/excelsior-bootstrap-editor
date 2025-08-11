@@ -13,6 +13,9 @@
             "cover": "admin/images/cards.webp"
         }
     },
+    "providesContext": {
+        "excelsior-bootstrap-editor/cardBgColor": "bgColor"
+    },
     "attributes": {
         "cover": {
             "type": "string",
@@ -21,6 +24,10 @@
         "colSize": {
             "type": "string",
             "default": "3"
+        },
+        "bgColor": {
+            "type": "string",
+            "default": ""
         }
     }
 }

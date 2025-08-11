@@ -1,5 +1,5 @@
 import { InnerBlocks, InspectorControls, useBlockProps } from '@wordpress/block-editor';
-import { PanelBody } from '@wordpress/components';
+import { PanelBody, SelectControl } from '@wordpress/components';
 import {
     __experimentalToggleGroupControl as ToggleGroupControl,
     __experimentalToggleGroupControlOption as ToggleGroupControlOption,
@@ -15,10 +15,10 @@ export default function Edit( {attributes, setAttributes} ) {
         [XCLSR_BTSTRP_EDITOR_PREFIX + '/card', {}, []]
     ];
 
-    const { colSize, cover } = attributes;
+    const { colSize, cover, bgColor } = attributes;
   
     const blockProps = useBlockProps( {
-        className: ''
+        className: '',
     } );
 
     useEffect(() => {
@@ -55,19 +55,33 @@ export default function Edit( {attributes, setAttributes} ) {
         <>
         <InspectorControls>
             <PanelBody title="Settings">
-            <ToggleGroupControl
-                label="Number of cards per row"
-                help="Select the maximum number of cards per row on a wide screen."
-                value={colSize}
-                onChange={(value) => setAttributes({ colSize: value })}
-                isBlock
-                __nextHasNoMarginBottom
-                __next40pxDefaultSize
-            >
-                <ToggleGroupControlOption value="2" label="2" />
-                <ToggleGroupControlOption value="3" label="3" />
-                <ToggleGroupControlOption value="4" label="4" />
-            </ToggleGroupControl>
+                <ToggleGroupControl
+                    label="Number of cards per row"
+                    help="Select the maximum number of cards per row on a wide screen."
+                    value={colSize}
+                    onChange={(value) => setAttributes({ colSize: value })}
+                    isBlock
+                    __nextHasNoMarginBottom
+                    __next40pxDefaultSize
+                >
+                    <ToggleGroupControlOption value="2" label="2" />
+                    <ToggleGroupControlOption value="3" label="3" />
+                    <ToggleGroupControlOption value="4" label="4" />
+                </ToggleGroupControl>
+                <SelectControl
+                    label="Background Color"
+                    value={bgColor}
+                    options={[
+                        { label: 'None', value: '' },
+                        { label: 'Light Subtle', value: 'bg-light-subtle' },
+                        { label: 'Light', value: 'bg-light' },
+                        { label: 'Secondary', value: 'bg-body-secondary' },
+                        { label: 'Dark Subtle', value: 'bg-dark-subtle' },
+                    ]}
+                    onChange={(value) => setAttributes({ bgColor: value })}
+                    __nextHasNoMarginBottom
+                    __next40pxDefaultSize
+                />
             </PanelBody>
         </InspectorControls>
         <div {...blockProps}>
