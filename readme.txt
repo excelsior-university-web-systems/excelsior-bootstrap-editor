@@ -5,7 +5,7 @@ Tags: bootstrap, css, js, editor, block
 Requires at least: 5.0
 Requires PHP: 8.0
 Tested up to: 6.8
-Stable tag: 1.0.19
+Stable tag: 1.0.20
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,10 @@ This section describes how to install the plugin and get it working.
 1. An example of Excelsior Bootstrap Editor blocks
 
 == Changelog ==
+
+= 1.0.20 (08/13/2025) =
+
+* Add background color support for cards block.
 
 = 1.0.19 (07/30/2025) =
 
