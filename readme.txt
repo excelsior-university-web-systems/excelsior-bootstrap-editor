@@ -5,7 +5,7 @@ Tags: bootstrap, css, js, editor, block
 Requires at least: 5.0
 Requires PHP: 8.0
 Tested up to: 6.8
-Stable tag: 1.0.18
+Stable tag: 1.0.20
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,17 @@ This section describes how to install the plugin and get it working.
 1. An example of Excelsior Bootstrap Editor blocks
 
 == Changelog ==
+
+= 1.0.20 (08/13/2025) =
+
+* Add background color support for cards block.
+
+= 1.0.19 (07/30/2025) =
+
+* Remove download link format in the "Failed to load image" message.
+* Add settings page to allowing configuration of post visibility, searchability, slug hashing, and styles and scripts management.
+* Updated post registration to use the new setting options.
+* Added a blank template for view Excelsior Bootstrap pages without additional WordPress overheads.
 
 = 1.0.18 (07/22/2025) =
 

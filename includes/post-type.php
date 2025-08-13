@@ -6,6 +6,13 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 require_once plugin_dir_path( __FILE__ ) . 'constants.php';
 
 function add_excelsior_bootstrap_post_type() {
+
+    $visibility     = get_option( 'boots_editor_is_public', false );
+    $is_public      = ( $visibility == '1' );
+
+    $searchability  = get_option( 'boots_editor_is_searchable', false );
+    $is_searchable  = ( $searchability == '1' );
+
     $args = array(
         'labels'                    => array(
             'name'                  => XCLSR_BTSTRP_POST_TYPE_NAME,
@@ -29,7 +36,7 @@ function add_excelsior_bootstrap_post_type() {
             'item_updated'          => 'Page updated',
             'item_trashed'          => 'Page trashed'
         ),
-        'public'              => false,
+        'public'              => $is_public,
         'show_ui'             => true,
         'show_in_menu'        => true,
         'map_meta_cap'        => true,
@@ -49,8 +56,8 @@ function add_excelsior_bootstrap_post_type() {
         ),
         'supports'            => array( 'title', 'editor', 'author', 'revisions', 'custom-fields' ),
         'has_archive'         => false,
-        'exclude_from_search' => true,
-        'publicly_queryable'  => false,
+        'exclude_from_search' => ! $is_searchable,
+        'publicly_queryable'  => $is_public,
         'show_in_nav_menus'   => false,
         'show_in_admin_bar'   => false,
         'show_in_rest'        => true,
@@ -130,6 +137,43 @@ function set_empty_title_post_to_draft( $data ) {
 }
 
 add_filter( 'wp_insert_post_data', __NAMESPACE__.'\\set_empty_title_post_to_draft', 10, 2 );
+
+/**
+ * Generates a hashed slug for new Excelsior Bootstrap page if slug hashing is enabled.
+ *
+ * - Applies only to posts of the excelsior_bootstrap post type.
+ * - Checks the plugin option `editor_hash_slug_option` before applying.
+ * - For new posts, generates a unique slug using microtime and a random password.
+ * - Hashes the base string using MD5 to ensure a unique, fixed-length slug.
+ *
+ * @param array $data    Sanitized post data.
+ * @param array $postarr Raw post data.
+ * @return array Modified post data with hashed slug if applicable.
+ */
+function editor_hash_slug( $data, $postarr ) {
+    if ( $data['post_type'] !== XCLSR_BTSTRP_POST_TYPE ) {
+        return $data;
+    }
+
+    if ( ! get_option( 'boots_editor_hash_slug_option', false ) ) {
+        return $data;
+    }
+
+    // Only generate slug if it's a new post
+    $is_new_post = empty( $postarr['ID'] ) || get_post_status( $postarr['ID'] ) === false;
+
+    if ( $is_new_post ) {
+        $time = microtime( true );
+        $rand = wp_generate_password( 6, false );
+        $base = 'boots-editor-' . $time . '-' . $rand;
+
+        $data['post_name'] = md5( $base );
+    }
+
+    return $data;
+}
+
+add_filter( 'wp_insert_post_data', __NAMESPACE__ . '\\editor_hash_slug', 10, 2 );
 
 function course_and_year_filtering_dropdown() {
     global $typenow, $wpdb;
@@ -229,4 +273,98 @@ function hide_date_filter_dropdown() {
 }
 
 add_action('admin_head', __NAMESPACE__.'\\hide_date_filter_dropdown');
+
+/**
+ * Removes all styles and scripts on Excelsior Bootstrap single pages except allowed ones and enqueues the ReBlock frontend script.
+ *
+ * - Registers and enqueues the `reblock-single` script from the build directory.
+ * - Passes the current post ID to JavaScript via `wp_localize_script`.
+ * - Retains required assets such as global styles, Excelsior Bootstrap, and allowed user-defined handles.
+ * - Optionally disables the WordPress admin bar and its associated styles.
+ * - Dequeues all non-allowed styles and scripts for a clean front-end rendering.
+ *
+ * @return void
+ */
+function boots_remove_all_styles_and_scripts() {
+    if ( !is_singular( XCLSR_BTSTRP_POST_TYPE ) ) {
+        return;
+    }
+
+    global $wp_styles, $wp_scripts;
+    $required[] = 'excelsior-bootstrap-editor-frontend';
+
+    if ( !in_array('excelsior-bootstrap-editor-frontend', $wp_styles->queue, true ) ) {
+        wp_enqueue_style( 'excelsior-bootstrap-editor-frontend' );
+        wp_enqueue_script( 'excelsior-bootstrap-editor-frontend' );
+    }
+
+    // Disable admin bar if option is false
+    if ( !get_option( 'boots_editor_show_wp_admin_bar', false ) ) {
+        add_filter( 'show_admin_bar', '__return_false' );
+        wp_dequeue_style( 'admin-bar' );
+        wp_deregister_style( 'admin-bar' );
+    }
+
+    // Retain 'global-styles' if global styles are allowed
+    if ( get_option( 'boots_editor_allow_global_styles', false ) ) {
+        $required[] = 'global-styles';
+    }
+
+    $allowed_option = get_option( 'boots_editor_allowed_styles_scripts', '' );
+
+    if ( $allowed_option === '*' ) {
+        return;
+    }
+
+    $allowed = array_map( 'trim', explode( ',', $allowed_option ) );
+    $combined = array_unique( array_merge( $required, $allowed ) );
+
+    // Ensure admin-bar is preserved if admin bar is enabled
+    if ( get_option( 'boots_editor_show_wp_admin_bar', false ) && !in_array( 'admin-bar', $combined, true ) ) {
+        $combined[] = 'admin-bar';
+    }
+
+    // Ensure global-styles is removed if global styles are disabled
+    if ( !get_option( 'boots_editor_allow_global_styles', true ) && in_array( 'global-styles', $combined, true ) ) {
+        $global_styles_key = array_search( 'global-styles', $combined );
+        unset( $combined[$global_styles_key] );
+    }
+
+    foreach ( $wp_styles->queue as $style ) {
+        if ( !in_array( $style, $combined, true ) ) {
+            wp_dequeue_style( $style );
+            wp_deregister_style( $style );
+        }
+    }
+
+    foreach ( $wp_scripts->queue as $script ) {
+        if ( !in_array( $script, $combined, true ) ) {
+            wp_dequeue_script( $script );
+            wp_deregister_script( $script );
+        }
+    }
+}
+
+add_action( 'wp_enqueue_scripts', __NAMESPACE__.'\\boots_remove_all_styles_and_scripts', 999 );
+
+/**
+ * Loads a custom blank template for single posts.
+ * - Returns the plugin-provided blank template if it exists.
+ * - Falls back to the default template otherwise.
+ *
+ * @param string $template The default single post template path.
+ * @return string The modified or original template path.
+ */
+function blank_single_template( $template ) {
+    if ( is_singular( XCLSR_BTSTRP_POST_TYPE ) ) {
+        $plugin_template = plugin_dir_path( __FILE__ ) . 'templates/blank.php';
+        if ( file_exists( $plugin_template ) ) {
+            return $plugin_template;
+        }
+    }
+    
+    return $template;
+}
+
+add_filter( 'single_template', __NAMESPACE__.'\\blank_single_template', 11 );
 ?>

@@ -4,6 +4,7 @@ import { ALLOWED_BLOCKS } from './allowed-blocks';
 import { addFilter } from '@wordpress/hooks';
 import { useState } from '@wordpress/element';
 import { createHigherOrderComponent } from '@wordpress/compose';
+import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 
 const withCustomClasses = createHigherOrderComponent((BlockEdit) => {
     return (props) => {
@@ -14,7 +15,7 @@ const withCustomClasses = createHigherOrderComponent((BlockEdit) => {
         if (name !== 'core/paragraph') {
             return <BlockEdit {...props} />;
         }
-
+        
         const parentBlockId = wp.data.select('core/block-editor').getBlockParents(clientId).slice(-1)[0];
         const parentBlockName = parentBlockId ? wp.data.select('core/block-editor').getBlockName(parentBlockId) : null;
 
@@ -34,19 +35,28 @@ addFilter(
     withCustomClasses
 );
 
-export default function Edit( {attributes, setAttributes} ) {
+export default function Edit( {attributes, setAttributes, context} ) {
    
     const TEMPLATE = [
         ['core/heading', { placeholder: "Card Title", level: 4, headingSizeClass: "h5", className: "card-title" }],
         ['core/paragraph', { placeholder: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." }]
     ];
-    const { imgUrl, imgAltText, useImg } = attributes;
+    const { imgUrl, imgAltText, useImg, bgColor } = attributes;
     const [tempUrl, setTempUrl] = useState('');
     const [tempAltTxt, setTempAltTxt] = useState('');
     const [hasError, setHasError] = useState(false);
+
+    const cardBgColor = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/cardBgColor'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/cardBgColor'] : '';
+
     const blockProps = useBlockProps( {
         className: 'col'
     } );
+
+    if ( cardBgColor && cardBgColor.length > 0 ) {
+        setAttributes( {bgColor: cardBgColor} );
+    } else {
+        setAttributes( {bgColor: ''} );
+    }
 
     const onInsertUrl = () => {
         if ( tempUrl ) {
@@ -103,7 +113,7 @@ export default function Edit( {attributes, setAttributes} ) {
             </PanelBody>
         </InspectorControls>
         <div {...blockProps}>
-            <div class="card h-100">
+            <div class={`card h-100 ${bgColor ? bgColor : ''}`}>
                 { useImg ? (
                     imgUrl && !hasError ? (
 
@@ -114,7 +124,7 @@ export default function Edit( {attributes, setAttributes} ) {
                         <div>
                             { hasError ? (
                                 <div className="excelsior-image-error">
-                                    <div className="alert alert-warning my-0"><p className='my-0'><strong>Failed to load image.</strong> The image at <a href={imgUrl} target='_blank'>{imgUrl}</a> cannot be displayed. Please check the URL in Settings. If the image is from a website requiring authentication (like Canvas LMS), sign in first, then reload the editor.</p></div>
+                                    <div className="alert alert-warning my-0"><p className='my-0'><strong>Failed to load image.</strong> The image at <a href={imgUrl} target='_blank'>{imgUrl}</a> cannot be displayed. If it's from Canvas, sign in to Canvas first and refresh the editor. If the image still doesn't load, try signing out and back in to refresh the Canvas session. Canvas image URL should follow this format: <code>https://excelsior.instructure.com/courses/[<em>course_id</em>]/files/[<em>image_id</em>]/preview</code>.</p></div>
                                 </div>
                             ) : (
                                 <div className="excelsior-image-url-insert">

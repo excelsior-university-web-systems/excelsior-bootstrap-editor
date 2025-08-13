@@ -170,11 +170,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                 { hasError ? (
                     <div className="excelsior-image-error">
                         <div className="alert alert-warning my-0">
-                            <p><strong>Failed to load image.</strong> The image at <a href={url} target='_blank'>{url}</a> cannot be displayed. If it's from Canvas, sign in to Canvas first and refresh the editor. If the image still doesn't load, try signing out and back in to refresh the Canvas session. Canvas image URL must follow one of these formats:</p>
-                            <ul className='my-0'>
-                                <li><code>https://excelsior.instructure.com/files/[<em>image_id</em>]/download</code> <strong>or</strong></li>
-                                <li><code>https://excelsior.instructure.com/courses/[<em>course_id</em>]/files/[<em>image_id</em>]/preview</code></li>
-                            </ul>
+                            <p className='my-0'><strong>Failed to load image.</strong> The image at <a href={url} target='_blank'>{url}</a> cannot be displayed. If it's from Canvas, sign in to Canvas first and refresh the editor. If the image still doesn't load, try signing out and back in to refresh the Canvas session. Canvas image URL should follow this format: <code>https://excelsior.instructure.com/courses/[<em>course_id</em>]/files/[<em>image_id</em>]/preview</code>.</p>
                         </div>
                     </div>
                 ) : (
