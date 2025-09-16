@@ -47,6 +47,10 @@
         "useDiv": {
             "type": "boolean",
             "default": false
+        },
+        "enlargeable": {
+            "type": "boolean",
+            "default": false
         }
     }
 }
