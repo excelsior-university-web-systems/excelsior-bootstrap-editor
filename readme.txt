@@ -37,6 +37,7 @@ This section describes how to install and activate the plugin.
 
 = 1.0.21 (2025-10-01) =
 * Added a new “Enlargeable” setting to the Image block, allowing images to expand to the full browser width.
+* Fixed an issue where floated image retained it floating classes when moved to its own block.
 * Updated Excelsior Bootstrap framework to version 1.0.12.
 
 = 1.0.20 (2025-08-13) =
