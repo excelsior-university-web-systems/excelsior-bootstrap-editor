@@ -22,9 +22,13 @@
         "url": {
             "type": "string"
         },
+        "alignmentEnabled": {
+            "type": "boolean",
+            "default": false
+        },
         "alignment": {
             "type": "string",
-            "default": ""
+            "default": "float-start me-3"
         },
         "alignmentSize": {
             "type": "string",
