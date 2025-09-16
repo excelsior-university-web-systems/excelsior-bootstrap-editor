@@ -5,7 +5,7 @@ Tags: bootstrap, css, js, editor, block
 Requires at least: 5.0
 Requires PHP: 8.0
 Tested up to: 6.8
-Stable tag: 1.0.20
+Stable tag: 1.0.21
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,11 @@ This section describes how to install the plugin and get it working.
 1. An example of Excelsior Bootstrap Editor blocks
 
 == Changelog ==
+
+= 1.0.21 (10/01/2025) =
+
+* Added a new "Enlargeable" settings to image block for adding an enlarge button that will enlarge the image to the full width of the browser's viewport.
+* Updated Excelsior Bootstrap framework to version 1.0.12.
 
 = 1.0.20 (08/13/2025) =
 
