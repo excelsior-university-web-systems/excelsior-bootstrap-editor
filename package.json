@@ -1,6 +1,6 @@
 {
   "name": "excelsior-bootstrap-editor",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "A WordPress plugin that helps with creating Excelsior Bootstrap pages.",
   "main": "build/index.js",
   "scripts": {
@@ -23,16 +23,16 @@
   "author": "",
   "license": "GPLv3",
   "devDependencies": {
-    "@wordpress/scripts": "^30.19.0",
+    "@wordpress/scripts": "^30.23.0",
     "babel-plugin-prismjs": "^2.1.0",
     "grunt": "^1.6.1",
     "grunt-wp-readme-to-markdown": "^2.1.0",
     "webpack-shell-plugin-next": "^2.3.2"
   },
   "dependencies": {
-    "@mantine/core": "^7.12.2",
-    "@mantine/dates": "^7.12.2",
-    "@wordpress/icons": "^10.26.0",
+    "@mantine/core": "^8.3.1",
+    "@mantine/dates": "^8.3.1",
+    "@wordpress/icons": "^10.30.0",
     "js-beautify": "^1.15.1",
     "prismjs": "^1.29.0"
   }

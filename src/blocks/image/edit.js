@@ -9,8 +9,8 @@ import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 
 export default function Edit ( { attributes, setAttributes, context } ) {
 
-    const { url, alignment, alignmentSize, centerAlignment, caption, altText, mobileResponsive, cover, useDiv } = attributes;
-    const alignmentEnabled = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/alignmentEnabled'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/alignmentEnabled'] : false;
+    const { url, alignmentEnabled, alignment, alignmentSize, centerAlignment, caption, altText, mobileResponsive, cover, useDiv, enlargeable } = attributes;
+    const inAlignmentEnabledEl = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/alignmentEnabled'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/alignmentEnabled'] : false;
     const inBlockqoute = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/inBlockqoute'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/inBlockqoute'] : false;
     const [tempUrl, setTempUrl] = useState('');
     const [tempAltText, setTempAltText] = useState('');
@@ -27,8 +27,10 @@ export default function Edit ( { attributes, setAttributes, context } ) {
         setHasError(true); 
     };
 
-    if ( alignmentEnabled && alignment.length <= 0 ) {
-        setAttributes( {alignment: "float-start me-3"} );
+    if ( inAlignmentEnabledEl ) {
+        setAttributes( {alignmentEnabled: true} );
+    } else {
+        setAttributes( {alignmentEnabled: false} );
     }
 
     if ( inBlockqoute ) {
@@ -88,7 +90,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
 
                 </BaseControl>
 
-                { alignmentEnabled ? (
+                { inAlignmentEnabledEl ? (
                     <>
                     <ToggleGroupControl
                         label="Align"
@@ -130,7 +132,6 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         onChange={(value) => setAttributes({ centerAlignment: value })}
                         __nextHasNoMarginBottom
                     />
-
                     <ToggleControl
                         label="Mobile Responsive"
                         help="Scale image to size of the container width. Responsive image will never scale bigger than its actual size."
@@ -140,19 +141,26 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                     />
                     </>
                 )}
+                <ToggleControl
+                    label="Enlargeable"
+                    help="Enable to add a button that enlarges the image to the full browser width."
+                    checked={enlargeable}
+                    onChange={(value) => setAttributes({ enlargeable: value })}
+                    __nextHasNoMarginBottom
+                />
                 
             </PanelBody>
         </InspectorControls>
         { url && !hasError ? 
         
-            altText.length || caption.length ? (
+            altText.length || caption.length || enlargeable ? (
 
                  useDiv ? (
-                    <div {...useBlockProps({className: `figure ${!useDiv ? 'mb-3' : ''} ${centerAlignment ? 'center-aligned' : ''} ${ alignmentEnabled ? alignment + ' ' + alignmentSize : ''}`})}>
+                    <div {...useBlockProps({className: `figure ${!useDiv ? 'mb-3' : ''} ${centerAlignment ? 'center-aligned' : ''} ${ alignmentEnabled ? alignment + ' ' + alignmentSize : ''} ${ enlargeable ? 'enlargeable' : '' }`})}>
                         <img className={`figure-img ${ mobileResponsive ? 'img-fluid' : '' }`} src={url} alt={altText || ''} onError={handleImageError} />
                     </div>
                 ) : (
-                    <figure {...useBlockProps({className: `figure ${!useDiv ? 'mb-3' : ''} ${centerAlignment ? 'center-aligned' : ''} ${ alignmentEnabled ? alignment + ' ' + alignmentSize : ''}`})}>
+                    <figure {...useBlockProps({className: `figure ${!useDiv ? 'mb-3' : ''} ${centerAlignment ? 'center-aligned' : ''} ${ alignmentEnabled ? alignment + ' ' + alignmentSize : ''} ${enlargeable ? 'enlargeable' : ''}`})}>
                         <img className={`figure-img ${ mobileResponsive ? 'img-fluid' : '' }`} src={url} alt={altText || ''} onError={handleImageError} />
                         { caption && <figcaption className='figure-caption'>{caption}</figcaption> }
                     </figure>
@@ -184,7 +192,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                             <TextControl label="Image Caption" value={tempCaption} onChange={(newCaption) => setTempCaption(newCaption)} placeholder='Displays a caption or description for the entire image. Can be left blank if not needed.' __next40pxDefaultSize __nextHasNoMarginBottom />
                             </>
                         )}
-                        { !alignmentEnabled && (
+                        { !inAlignmentEnabledEl && (
                             <>
                             <Spacer />
                             <ToggleControl
@@ -195,6 +203,13 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                             />
                             </>
                         ) }
+                        <Spacer />
+                        <ToggleControl
+                            label="Enlargeable"
+                            checked={enlargeable}
+                            onChange={(value) => setAttributes({ enlargeable: value })}
+                            __nextHasNoMarginBottom
+                        />
                         <Spacer />
                         <Button onClick={onInsertUrl} variant="primary" __next40pxDefaultSize __nextHasNoMarginBottom>Insert</Button>
                     </div>
