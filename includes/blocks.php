@@ -116,7 +116,7 @@ add_action( 'enqueue_block_editor_assets', function() {
         wp_enqueue_script(
             XCLSR_BTSTRP_EDITOR_PREFIX.'-modification',
             plugins_url( '/build/editor/index.js', dirname(__FILE__) ),
-            array( 'wp-blocks', 'wp-dom-ready', 'wp-edit-post' ),
+            array( 'wp-blocks', 'wp-dom-ready', 'wp-rich-text', 'wp-format-library', 'wp-edit-post' ),
             XCLSR_BTSTRP_EDITOR_VERSION
         );
 
