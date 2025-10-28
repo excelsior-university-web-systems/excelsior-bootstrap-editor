@@ -110,6 +110,7 @@ add_action( 'enqueue_block_editor_assets', function() {
     );
 
     global $post_type;
+    
     if ( $post_type === XCLSR_BTSTRP_POST_TYPE ) {
 
         // editor modification script/style

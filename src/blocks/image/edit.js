@@ -143,7 +143,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                 )}
                 <ToggleControl
                     label="Enlargeable"
-                    help="Enable to add a button that enlarges the image to the full browser width."
+                    help="Enable a button to expand the image to its actual width, scaling down if it exceeds the browser width."
                     checked={enlargeable}
                     onChange={(value) => setAttributes({ enlargeable: value })}
                     __nextHasNoMarginBottom
