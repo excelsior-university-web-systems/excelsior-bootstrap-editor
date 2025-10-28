@@ -37,7 +37,8 @@ This section describes how to install and activate the plugin.
 
 = 1.0.22 (2025-11-05) =
 * Inline code format default to none when on language is selected so that it will have Bootstrap's default inline code typography style. Note: the gray background is not part of Bootstrap but rather Canvas LMS's.
-* Unregister "Footnote" format form the rich text toolbar.
+* Added 'enlargeable' option to card block images.
+* Unregistered "Footnote" format form the rich text toolbar.
 * Updated Excelsior Bootstrap framework to version 1.0.13.
 
 = 1.0.21 (2025-10-01) =
