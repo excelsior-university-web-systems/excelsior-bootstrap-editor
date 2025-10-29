@@ -13,6 +13,7 @@ export const ALLOWED_BLOCKS = [
     XCLSR_BTSTRP_EDITOR_PREFIX + "/task-group",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/tabs",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/blockquote",
+    XCLSR_BTSTRP_EDITOR_PREFIX + "/carousel",
     "core/paragraph",
     "core/heading",
     "core/list",
