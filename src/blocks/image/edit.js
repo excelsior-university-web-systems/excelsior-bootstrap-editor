@@ -12,6 +12,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
     const { url, alignmentEnabled, alignment, alignmentSize, centerAlignment, caption, altText, mobileResponsive, cover, useDiv, enlargeable } = attributes;
     const inAlignmentEnabledEl = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/alignmentEnabled'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/alignmentEnabled'] : false;
     const inBlockqoute = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/inBlockqoute'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/inBlockqoute'] : false;
+    const inCarousel = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/inCarousel'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/inCarousel'] : false;
     const [tempUrl, setTempUrl] = useState('');
     const [tempAltText, setTempAltText] = useState('');
     const [tempCaption, setTempCaption] = useState('');
@@ -60,7 +61,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                     __nextHasNoMarginBottom
                     __next40pxDefaultSize
                 />
-                <BaseControl help={ !inBlockqoute ? "Alt text describes the image for those who cannot see it, while the caption adds context. Together, they enhance accessibility and provide complete information about the image." : ""}
+                <BaseControl help={ ( !inBlockqoute && !inCarousel ) ? "Alt text describes the image for those who cannot see it, while the caption adds context. Together, they enhance accessibility and provide complete information about the image." : ""}
                  __nextHasNoMarginBottom>
                     <TextControl
                         label="Image Alt Text"
@@ -73,7 +74,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
                     />
-                    { !inBlockqoute && (
+                    { (!inBlockqoute && !inCarousel) && (
                         <>
                         <TextControl
                             label="Image Caption"
@@ -90,7 +91,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
 
                 </BaseControl>
 
-                { inAlignmentEnabledEl ? (
+                { inAlignmentEnabledEl && (
                     <>
                     <ToggleGroupControl
                         label="Align"
@@ -119,14 +120,15 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                     </ToggleGroupControl>
                     </>
 
-                ) : (
+                )}
+                { (!inBlockqoute && !inCarousel && !inAlignmentEnabledEl) && (
                     <>
                     <ToggleControl
-                        label="Center Align"
-                        help="Horizontally center align the image."
-                        checked={centerAlignment}
-                        onChange={(value) => setAttributes({ centerAlignment: value })}
-                        __nextHasNoMarginBottom
+                    label="Center Align"
+                    help="Horizontally center align the image."
+                    checked={centerAlignment}
+                    onChange={(value) => setAttributes({ centerAlignment: value })}
+                    __nextHasNoMarginBottom
                     />
                     <ToggleControl
                         label="Mobile Responsive"
@@ -136,6 +138,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         __nextHasNoMarginBottom
                     />
                     </>
+
                 )}
                 <ToggleControl
                     label="Enlargeable"
@@ -183,12 +186,12 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         <Spacer />
                         <TextControl label="Image Alt Text" value={tempAltText} onChange={(newAltText) => setTempAltText(newAltText)} placeholder='Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration.' __next40pxDefaultSize __nextHasNoMarginBottom />
                         <Spacer />
-                        { !inBlockqoute && (
+                        { (!inBlockqoute && !inCarousel) && (
                             <>
                             <TextControl label="Image Caption" value={tempCaption} onChange={(newCaption) => setTempCaption(newCaption)} placeholder='Displays a caption or description for the entire image. Can be left blank if not needed.' __next40pxDefaultSize __nextHasNoMarginBottom />
                             </>
                         )}
-                        { !inAlignmentEnabledEl && (
+                        { (!inAlignmentEnabledEl && !inBlockqoute && !inCarousel) && (
                             <>
                             <Spacer />
                             <ToggleControl

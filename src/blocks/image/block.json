@@ -8,7 +8,7 @@
     "supports": {
         "html": false
     },
-    "usesContext": ["excelsior-bootstrap-editor/alignmentEnabled", "excelsior-bootstrap-editor/inBlockqoute"],
+    "usesContext": ["excelsior-bootstrap-editor/alignmentEnabled", "excelsior-bootstrap-editor/inBlockqoute", "excelsior-bootstrap-editor/inCarousel"],
     "example": {
         "attributes": {
             "cover": "admin/images/image.webp"
