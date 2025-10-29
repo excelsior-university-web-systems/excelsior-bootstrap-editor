@@ -1,0 +1,14 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap-editor/carousel-slide",
+    "title": "Carousel Slide",
+    "description": "Create a carousel slide.",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/carousel"],
+    "attributes": {
+        
+    },
+    "supports": {
+        "html": false
+    }
+}
