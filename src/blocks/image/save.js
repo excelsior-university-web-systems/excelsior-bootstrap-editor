@@ -18,8 +18,8 @@ export default function Save({ attributes }) {
     if (hasAltText || hasCaption || enlargeable) {
         if (useDiv) {
             return (
-                <div {...useBlockProps.save({ className: `figure ${baseClasses}`.trim() })}>
-                    <img className={`figure-img ${fluidClass}`.trim()} src={url} alt={altText || ""} />
+                <div {...useBlockProps.save({ className: `figure ${baseClasses} ${enlargeableClass}`.trim() })}>
+                    <img className={`figure-img w-100 ${fluidClass}`.trim()} src={url} alt={altText || ""} />
                 </div>
             );
         }

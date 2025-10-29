@@ -104,23 +104,19 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         <ToggleGroupControlOption value="float-start me-3" label="Left" />
                         <ToggleGroupControlOption value="float-end ms-3" label="Right" />
                     </ToggleGroupControl>
-                    { !inBlockqoute && (
-                        <>
-                        <ToggleGroupControl
-                            label="Image Size"
-                            help="An image won't scale beyond its original size. For instance, a 200-pixel-wide image won't exceed 200 pixels, even at 50% scale."
-                            value={alignmentSize}
-                            onChange={(value) => setAttributes({ alignmentSize: value })}
-                            isBlock
-                            __nextHasNoMarginBottom
-                            __next40pxDefaultSize
-                            >
-                            <ToggleGroupControlOption value="img-fluid" label="Actual" />
-                            <ToggleGroupControlOption value="w-25" label="25%" />
-                            <ToggleGroupControlOption value="w-50" label="50%" />
-                        </ToggleGroupControl>
-                        </>
-                    ) }
+                    <ToggleGroupControl
+                        label="Image Size"
+                        help="An image won't scale beyond its original size. For instance, a 200-pixel-wide image won't exceed 200 pixels, even at 50% scale."
+                        value={alignmentSize}
+                        onChange={(value) => setAttributes({ alignmentSize: value })}
+                        isBlock
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
+                        >
+                        <ToggleGroupControlOption value="img-fluid" label="Actual" />
+                        <ToggleGroupControlOption value="w-25" label="25%" />
+                        <ToggleGroupControlOption value="w-50" label="50%" />
+                    </ToggleGroupControl>
                     </>
 
                 ) : (
