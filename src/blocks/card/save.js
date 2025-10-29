@@ -13,9 +13,9 @@ export default function Save( { attributes } ) {
                 { useImg ? (
                     <>
                     { enlargeable ? (
-                        <figure class="figure w-full enlargeable mb-0">
+                        <div class="figure w-full enlargeable mb-0">
                             <img class="card-img-top" src={imgUrl} alt={imgAltText} />
-                        </figure>
+                        </div>
                     ) : (
                         <img class="card-img-top" src={imgUrl} alt={imgAltText} />
                     )}

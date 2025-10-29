@@ -131,9 +131,9 @@ export default function Edit( {attributes, setAttributes, context} ) {
 
                         <>
                         { enlargeable ? (
-                            <figure class="figure w-full enlargeable mb-0">
+                            <div class="figure w-full enlargeable mb-0">
                                 <img class="card-img-top" src={imgUrl} alt={imgAltText} onError={handleImageError} />
-                            </figure>
+                            </div>
                         ) : (
                             <img class="card-img-top" src={imgUrl} alt={imgAltText} onError={handleImageError} />
                         )}
