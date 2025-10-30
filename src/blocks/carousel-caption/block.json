@@ -1,0 +1,12 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap-editor/carousel-caption",
+    "title": "Carousel Caption",
+    "description": "Create a carousel slide caption.",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/carousel-slide"],
+    "attributes": {},
+    "supports": {
+        "html": false
+    }
+}

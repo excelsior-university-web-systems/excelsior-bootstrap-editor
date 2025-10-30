@@ -5,8 +5,16 @@
     "description": "Create a carousel slide.",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/carousel"],
+    "usesContext": ["excelsior-bootstrap-editor/activeSlide"],
     "attributes": {
-        
+        "uniqueId": {
+            "type": "string",
+            "default": ""
+        },
+        "isActive": {
+            "type": "boolean",
+            "default": false
+        }
     },
     "supports": {
         "html": false

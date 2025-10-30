@@ -34,7 +34,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
         setAttributes( {alignmentEnabled: false} );
     }
 
-    if ( inBlockqoute ) {
+    if ( inBlockqoute || inCarousel ) {
         setAttributes( {useDiv: true} );
     }
 

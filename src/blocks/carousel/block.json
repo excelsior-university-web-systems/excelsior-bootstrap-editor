@@ -11,7 +11,8 @@
         }
     },
     "providesContext": {
-        "excelsior-bootstrap-editor/inCarousel": "inCarousel"
+        "excelsior-bootstrap-editor/inCarousel": "inCarousel",
+        "excelsior-bootstrap-editor/activeSlide": "activeSlide"
     },
     "attributes": {
         "cover": {
@@ -29,6 +30,10 @@
         "slides": {
             "type": "array",
             "default": []
+        },
+        "activeSlide": {
+            "type": "string",
+            "default": ""
         },
         "inCarousel": {
             "type": "boolean",

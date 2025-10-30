@@ -6,10 +6,13 @@ import { generateHtmlId, getBlocksOfType } from '../../commons';
 
 export default function Edit({ attributes, setAttributes, clientId }) {
 
-    const { cover, uniqueId, animation } = attributes;
+    const { cover, uniqueId, animation, slides, activeSlide } = attributes;
 
     const blockProps = useBlockProps({
-        className: '',
+        className: 'carousel',
+        id: uniqueId,
+        role: "region",
+        "aria-roledescription": "carousel"
     });
 
     // Fetch all blocks of the specific type
@@ -18,20 +21,37 @@ export default function Edit({ attributes, setAttributes, clientId }) {
         return getBlocksOfType(allBlocks, 'excelsior-bootstrap-editor/carousel');
     }, []);
 
+    // carousel/edit.js
     const childSlides = useSelect(
-        (select) => {
-            const { getBlocks } = select('core/block-editor');
-            return getBlocks(clientId) || [];
+        ( select ) => {
+            const { getBlockOrder, getBlockAttributes } = select( 'core/block-editor' );
+            const innerBlockIds = getBlockOrder( clientId ) || []; // guard
+            return innerBlockIds.map( ( id ) => getBlockAttributes( id ) || { uniqueId: '' } );
         },
         [ clientId ]
     );
 
+
     // Initialize slides if not present
-    useEffect(() => {
-        if (!attributes.slides) {
-            setAttributes({ slides: [] });
+   useEffect( () => {
+        if ( ! Array.isArray( slides ) ) {
+            setAttributes( { slides: [] } );
         }
-    }, []);
+    }, [] );
+
+    useEffect(() => {
+        
+        // Compare current childSlides with attributes.slides
+        if ( JSON.stringify( childSlides ) !== JSON.stringify( slides ) ) {
+            setAttributes({ slides: childSlides });
+        }
+
+        // The first tab is always active
+        if ( childSlides.length > 0 && ( !activeSlide || activeSlide !== childSlides[0].uniqueId ) ) {
+            setAttributes({ activeSlide: childSlides[0].uniqueId });
+        }
+
+    }, [childSlides] );
 
     useEffect( () => {
         // Check if uniqueId already exists in other blocks of the same type
@@ -70,38 +90,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                 />
             </PanelBody>
         </InspectorControls>
-        <div {...blockProps} id={uniqueId} role="region" aria-roledescription="carousel">
-            {/* <div className="carousel-indicators">
-                {childSlides.map((_slide, index) => (
-                    <a 
-                        href={`#${uniqueId}`}
-                        role="button"
-                        data-bs-target={`#${uniqueId || ''}`}
-                        data-bs-slide-to={index}
-                        className={`${index === 0 ? 'active' : ''}`}
-                        aria-current={`${index === 0 ? 'true' : ''}`}>
-                        <span className="visually-hidden">Slide {index + 1}</span>
-                    </a>
-                ))}
-            </div> */}
-
-            <div>
+        <div {...blockProps} >
+            <div className="carousel-inner" aria-live="polite">
                 <InnerBlocks
                     allowedBlocks={['excelsior-bootstrap-editor/carousel-slide']}
                     template={[['excelsior-bootstrap-editor/carousel-slide']]}
                     templateLock={false}
                 />
             </div>
-            {/* <a href={`#${uniqueId}`} className="carousel-control-prev" role="button" data-bs-target={`#${uniqueId}`}
-                data-bs-slide="prev" aria-label="Previous slide">
-                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span className="visually-hidden">Previous Slide</span>
-            </a>
-            <a href={`#${uniqueId}`} className="carousel-control-next" role="button" data-bs-target={`#${uniqueId}`}
-                data-bs-slide="next" aria-label="Next slide">
-                <span className="carousel-control-next-icon" aria-hidden="true">&nbsp;</span>
-                <span className="visually-hidden">Next Slide</span>
-            </a> */}
         </div>
         </>
     );

@@ -19,7 +19,7 @@ export default function Save({ attributes }) {
         if (useDiv) {
             return (
                 <div {...useBlockProps.save({ className: `figure ${baseClasses} ${enlargeableClass}`.trim() })}>
-                    <img className={`figure-img w-100 ${fluidClass}`.trim()} src={url} alt={altText || ""} />
+                    <img className={`figure-img ${fluidClass}`.trim()} src={url} alt={altText || ""} />
                 </div>
             );
         }

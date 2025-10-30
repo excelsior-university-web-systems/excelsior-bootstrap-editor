@@ -8,6 +8,7 @@ import './cards';
 import './card';
 import './carousel';
 import './carousel-slide';
+import './carousel-caption';
 import './code-block';
 import './columns';
 import './column';

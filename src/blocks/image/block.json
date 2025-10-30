@@ -6,7 +6,8 @@
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/container"],
     "supports": {
-        "html": false
+        "html": false,
+        "lock": true
     },
     "usesContext": ["excelsior-bootstrap-editor/alignmentEnabled", "excelsior-bootstrap-editor/inBlockqoute", "excelsior-bootstrap-editor/inCarousel"],
     "example": {

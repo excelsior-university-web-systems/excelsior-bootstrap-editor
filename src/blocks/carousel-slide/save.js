@@ -1,9 +1,10 @@
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 
-export default function Save() {
+export default function Save({attributes}) {
     
+    const {isActive} = attributes;
     const blockProps = useBlockProps.save({
-        className: 'carousel-item'
+        className: `carousel-item ${isActive ? 'active' : ''}`.trim()
     });
 
     return (
