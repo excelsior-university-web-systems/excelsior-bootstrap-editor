@@ -32,7 +32,7 @@ export default function Save({ attributes }) {
             </div>
             <a href={`#${uniqueId}`} className="carousel-control-prev" role="button" data-bs-target={`#${uniqueId}`}
                 data-bs-slide="prev" aria-label="Previous slide">
-                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span className="carousel-control-prev-icon" aria-hidden="true">&nbsp;</span>
                 <span className="visually-hidden">Previous Slide</span>
             </a>
             <a href={`#${uniqueId}`} className="carousel-control-next" role="button" data-bs-target={`#${uniqueId}`}
