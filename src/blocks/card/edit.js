@@ -2,7 +2,7 @@ import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-
 import { PanelBody, Button, TextControl, ToggleControl, __experimentalSpacer as Spacer } from '@wordpress/components';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 import { addFilter } from '@wordpress/hooks';
-import { useState } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 
@@ -41,7 +41,7 @@ export default function Edit( {attributes, setAttributes, context} ) {
         ['core/heading', { placeholder: "Card Title", level: 4, headingSizeClass: "h5", className: "card-title" }],
         ['core/paragraph', { placeholder: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." }]
     ];
-    const { imgUrl, imgAltText, useImg, bgColor } = attributes;
+    const { imgUrl, imgAltText, useImg, enlargeable, bgColor } = attributes;
     const [tempUrl, setTempUrl] = useState('');
     const [tempAltTxt, setTempAltTxt] = useState('');
     const [hasError, setHasError] = useState(false);
@@ -52,11 +52,15 @@ export default function Edit( {attributes, setAttributes, context} ) {
         className: 'col'
     } );
 
-    if ( cardBgColor && cardBgColor.length > 0 ) {
-        setAttributes( {bgColor: cardBgColor} );
-    } else {
-        setAttributes( {bgColor: ''} );
-    }
+    useEffect(() => {
+        if (cardBgColor && cardBgColor.length > 0) {
+            if (bgColor !== cardBgColor) {
+                setAttributes({ bgColor: cardBgColor });
+            }
+        } else if (bgColor !== '') {
+            setAttributes({ bgColor: '' });
+        }
+    }, [cardBgColor, bgColor, setAttributes]);
 
     const onInsertUrl = () => {
         if ( tempUrl ) {
@@ -107,6 +111,14 @@ export default function Edit( {attributes, setAttributes, context} ) {
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
                     />
+                    <ToggleControl
+                        label="Enlargeable"
+                        help="Enable a button to expand the image to its actual width, scaling down if it exceeds the browser width."
+                        checked={enlargeable}
+                        disabled={!imgUrl}
+                        onChange={(value) => setAttributes({ enlargeable: value })}
+                        __nextHasNoMarginBottom
+                    />
                     </>
                 ) : '' }
                 
@@ -117,8 +129,16 @@ export default function Edit( {attributes, setAttributes, context} ) {
                 { useImg ? (
                     imgUrl && !hasError ? (
 
-                        <img class="card-img-top" src={imgUrl} alt={imgAltText} onError={handleImageError} />
-        
+                        <>
+                        { enlargeable ? (
+                            <div class="figure w-full enlargeable mb-0">
+                                <img class="card-img-top" src={imgUrl} alt={imgAltText} onError={handleImageError} />
+                            </div>
+                        ) : (
+                            <img class="card-img-top" src={imgUrl} alt={imgAltText} onError={handleImageError} />
+                        )}
+                        </>
+                        
                         ) : (
         
                         <div>
@@ -131,6 +151,14 @@ export default function Edit( {attributes, setAttributes, context} ) {
                                     <TextControl label="Image URL" value={tempUrl} onChange={(newUrl) => setTempUrl(newUrl)} __next40pxDefaultSize __nextHasNoMarginBottom />
                                     <Spacer />
                                     <TextControl label="Image Alt Text" value={tempAltTxt} onChange={(newAlt) => setTempAltTxt(newAlt)} __next40pxDefaultSize __nextHasNoMarginBottom />
+                                    <Spacer />
+                                    <ToggleControl
+                                        label="Enlargeable"
+                                        checked={enlargeable}
+                                        disabled={(tempUrl || '').trim().length === 0}
+                                        onChange={(value) => setAttributes({ enlargeable: value })}
+                                        __nextHasNoMarginBottom
+                                    />
                                     <Spacer />
                                     <Button onClick={onInsertUrl} variant="primary" __next40pxDefaultSize>Insert</Button>
                                     <Button onClick={onNoImg} className="ms-1" variant="secondary" __next40pxDefaultSize>Omit Image</Button>

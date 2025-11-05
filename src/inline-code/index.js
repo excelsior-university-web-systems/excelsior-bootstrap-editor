@@ -81,7 +81,18 @@ wp.domReady(() => {
                             if (isActive) {
                                 onChange(removeFormat(value, INLINE_CODE_FORMAT_NAME));
                             } else {
-                                setIsVisible(!isVisible);
+                                // If there's no initial language set and has text selection,
+                                // immediately wrap the selection in <code> (no language class)
+                                // and open the popover for further changes.
+                                const hasSelection = ( typeof value?.start === 'number' && typeof value?.end === 'number' && value.start !== value.end );
+
+                                if ( !initialLanguage && hasSelection ) {
+                                    setLanguage( '' );
+                                    applyLanguageClass('');
+                                    setIsVisible( true );
+                                } else {
+                                    setIsVisible( !isVisible );
+                                }
                             }
                         }}
                         isActive={isActive}

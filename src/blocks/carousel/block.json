@@ -1,0 +1,46 @@
+{
+    "apiVersion": 2,
+    "name": "excelsior-bootstrap-editor/carousel",
+    "title": "Carousel",
+    "description": "Create Carousel for cycling through images—like a slideshow.",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container"],
+    "example": {
+        "attributes": {
+            "cover": "admin/images/carousel.webp"
+        }
+    },
+    "providesContext": {
+        "excelsior-bootstrap-editor/inCarousel": "inCarousel",
+        "excelsior-bootstrap-editor/activeSlide": "activeSlide"
+    },
+    "attributes": {
+        "cover": {
+            "type": "string",
+            "default": ""
+        },
+        "uniqueId": {
+            "type": "string",
+            "default": ""
+        },
+        "animation": {
+            "type": "string",
+            "default": "slide"
+        },
+        "slides": {
+            "type": "array",
+            "default": []
+        },
+        "activeSlide": {
+            "type": "string",
+            "default": ""
+        },
+        "inCarousel": {
+            "type": "boolean",
+            "default": true
+        }
+    },
+    "supports": {
+        "html": false
+    }
+}

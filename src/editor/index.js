@@ -17,8 +17,9 @@ wp.domReady(() => {
 
     wp.richText.unregisterFormatType('core/image');        // Remove inline image
     wp.richText.unregisterFormatType('core/text-color');   // Remove text color/highlight
-    wp.richText.unregisterFormatType('core/language');     // Example for language button
-    wp.richText.unregisterFormatType('core/keyboard');     // Example for keyboard input button
+    wp.richText.unregisterFormatType('core/language');     // Remove language button
+    wp.richText.unregisterFormatType('core/keyboard');     // Remove keyboard input button
+    wp.richText.unregisterFormatType('core/footnote');   // Remove footnote button
 
     // Make the post title not editable and change the placeholder to an instruction
     observeElement( '.editor-post-title', ( element ) => {

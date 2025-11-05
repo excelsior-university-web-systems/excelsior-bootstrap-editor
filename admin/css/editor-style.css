@@ -271,6 +271,52 @@ p.is-selected:focus code[data-rich-text-format-boundary] {
     margin-bottom: 0 !important;
 }
 
+/* EXCELSIOR BOOTSTRAP EDITOR
+   CAROUSEL */
+.wp-block-excelsior-bootstrap-editor-carousel {
+    border: 1px dashed #ccc;
+}
+
+.wp-block-excelsior-bootstrap-editor-carousel .carousel-inner .block-editor-inner-blocks .block-editor-block-list__layout {
+    padding: 0.5rem;
+}
+
+.wp-block-excelsior-bootstrap-editor-carousel .carousel-item .block-editor-inner-blocks .block-editor-block-list__layout {
+    padding: 0;
+}
+
+.wp-block-excelsior-bootstrap-editor-carousel-slide {
+    display: block !important;
+    float: none !important;
+    margin: 0 0 1rem !important;
+    border: 1px dashed #ccc;
+}
+
+.wp-block-excelsior-bootstrap-editor-carousel-slide .block-list-appender {
+    z-index: 10 !important;
+}
+
+.wp-block-excelsior-bootstrap-editor-carousel-slide img {
+    /* margin-bottom: 1rem !important; */
+    margin: 0 0.5rem !important;
+    padding: 0.5rem 0 !important;
+    width: calc(100% - 1rem) !important;
+    height: calc-size(auto, size - 1rem) !important;
+    object-fit: cover;
+    object-position: center;
+}
+
+.wp-block-excelsior-bootstrap-editor-carousel-slide .carousel-caption {
+    position: relative !important;
+    background-color: transparent !important;
+    background: none !important;
+    box-shadow: none !important;
+    color: inherit !important;
+    text-align: left !important;
+    padding: 0 1rem !important;
+    margin: 0 0 1rem !important;
+}
+
 /* BOOTSTRAP ICON ADJUSTMENTS */
 
 i.bi {

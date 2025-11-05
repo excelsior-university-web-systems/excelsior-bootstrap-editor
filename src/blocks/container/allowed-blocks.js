@@ -18,6 +18,7 @@ export const ALLOWED_BLOCKS = [
     XCLSR_BTSTRP_EDITOR_PREFIX + "/task-group",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/tipbox",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/page-navigation",
+    XCLSR_BTSTRP_EDITOR_PREFIX + "/carousel",
     "core/freeform",
     "core/heading",
     "core/html",

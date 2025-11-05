@@ -15,6 +15,11 @@ if ( !defined( 'ABSPATH' ) ) { exit; }
 			margin: 0;
 			padding: 0;
 		}
+		main {
+			max-width: 940px;
+			margin: 0 auto;
+			padding: 0 1rem;
+		}
 	</style>
 </head>
 <body <?php body_class(); ?>>

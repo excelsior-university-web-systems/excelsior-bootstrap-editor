@@ -21,6 +21,10 @@
             "type": "string",
             "default": ""
         },
+        "enlargeable": {
+            "type": "boolean",
+            "default": false
+        },
         "bgColor": {
             "type": "string",
             "default": ""
