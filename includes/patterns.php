@@ -33,8 +33,6 @@ add_action( 'current_screen', function() {
             array( 'slug' => 'homepage', 'title' => 'Homepage', 'file' => 'online-home.html' ),
             array( 'slug' => 'overview', 'title' => 'Overview', 'file' => 'online-overview.html' ),
             array( 'slug' => 'lesson', 'title' => 'Lesson', 'file' => 'online-lesson.html' ),
-            array( 'slug' => 'lessonwithcards', 'title' => 'Lesson with Cards', 'file' => 'online-lesson-with-cards.html' ),
-            array( 'slug' => 'lessonwithmedia', 'title' => 'Lesson with Media', 'file' => 'online-lesson-with-media.html' ),
             array( 'slug' => 'discussion', 'title' => 'Discussion', 'file' => 'online-discussion.html' ),
             array( 'slug' => 'assignment', 'title' => 'Assignment', 'file' => 'online-assignment.html' ),
             array( 'slug' => 'livesession', 'title' => 'Live Session', 'file' => 'online-live-session.html' ),
@@ -75,21 +73,6 @@ add_action( 'current_screen', function() {
             );
 
         }
-
-        // foreach ( $excelsiorEditorHybridPatterns as $pattern ) {
-
-        //     register_block_pattern(
-        //         XCLSR_BTSTRP_EDITOR_PREFIX.'/'.$pattern['slug'],
-        //         array(
-        //             'title'      => __( $pattern['title'], XCLSR_BTSTRP_POST_TYPE ),
-        //             'categories' => array( XCLSR_BTSTRP_EDITOR_PREFIX.'-hybrid-patterns' ),
-        //             'postTypes'  => array( XCLSR_BTSTRP_POST_TYPE ),
-        //             'blockTypes' => array( XCLSR_BTSTRP_EDITOR_PREFIX.'/container' ),
-        //             'filePath'   => $patternDirectory.$pattern['file'],
-        //         )
-        //     );
-
-        // }
 
     }
 
