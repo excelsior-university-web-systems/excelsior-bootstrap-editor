@@ -4,7 +4,7 @@
 **Requires at least:** 5.0  
 **Requires PHP:** 8.0  
 **Tested up to:** 6.8  
-**Stable tag:** 1.0.22  
+**Stable tag:** 1.0.23  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -36,6 +36,14 @@ This section describes how to install and activate the plugin.
 
 
 ## Changelog ##
+
+### 1.0.23 (2025-12-03) ###
+* Updated discussion template/pattern.
+* Updated assignment template/pattern.
+* Updated overview template/pattern.
+* Added new 5-tab discussion template/pattern.
+* Added new 5-tab assignment template/pattern.
+* Added a new style dropdown menu for header.
 
 ### 1.0.22 (2025-11-05) ###
 * Inline code format default to none when on language is selected so that it will have Bootstrap's default inline code typography style. Note: the gray background is not part of Bootstrap but rather Canvas LMS's.
