@@ -358,7 +358,7 @@ const addHeadingSizeControl = createHigherOrderComponent((BlockEdit) => {
 
         const headingStyleOptions = [
             { label: 'Default', value: '' },
-            { label: 'Underline', value: 'fw-semibold pb-1 mb-3 border-bottom border-2 border-dark' }
+            { label: 'Underline', value: 'fw-semibold pb-1 mb-3 border-bottom border-2 border-secondary-subtle' }
         ];
 
         const { attributes, setAttributes } = props;
