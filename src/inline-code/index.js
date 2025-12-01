@@ -20,7 +20,12 @@ wp.domReady(() => {
 
         edit({ isActive, value, onChange, contentRef }) {
             const activeFormat = getActiveFormat(value, INLINE_CODE_FORMAT_NAME);
-            const initialLang = activeFormat?.attributes?.class?.match(/language-(\w+)/)?.[1] || '';
+
+            if (activeFormat && activeFormat.type !== INLINE_CODE_FORMAT_NAME) {
+                return null;
+            }
+
+            const initialLang = activeFormat?.unregisteredAttributes?.class?.match(/language-(\w+)/)?.[1] || activeFormat?.attributes?.class?.match(/language-(\w+)/)?.[1] || '';
 
             const [language, setLanguage] = useState(initialLang);
             const [isPopoverVisible, setPopoverVisible] = useState(false);
@@ -31,7 +36,9 @@ wp.domReady(() => {
                 const newClass = lang ? `language-${lang}` : '';
                 const newValue = applyFormat(value, {
                     type: INLINE_CODE_FORMAT_NAME,
-                    attributes: { class: newClass },
+                    attributes: {
+                        class: newClass,
+                    },
                 });
                 onChange(newValue);
             };
@@ -99,19 +106,26 @@ wp.domReady(() => {
                 }
             }, []);
 
+            useEffect(() => {
+                setLanguage(initialLang);
+            }, [initialLang]);
+
             // If popover is open — attach scroll/resize to reposition anchor
             useEffect(() => {
                 if (!isPopoverVisible) {
                     return;
                 }
+
                 const update = () => {
                     const anchor = computeAnchorFromSelection() || popoverAnchor;
                     if (anchor) {
                         setPopoverAnchor(anchor);
                     }
                 };
+
                 window.addEventListener('scroll', update, true);
                 window.addEventListener('resize', update);
+                
                 return () => {
                     window.removeEventListener('scroll', update, true);
                     window.removeEventListener('resize', update);
