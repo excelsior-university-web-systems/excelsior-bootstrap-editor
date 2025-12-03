@@ -16,7 +16,7 @@ if ( !defined( 'ABSPATH' ) ) { exit; }
 			padding: 0;
 		}
 		main {
-			max-width: 940px;
+			max-width: 1080px;
 			margin: 0 auto;
 			padding: 0 1rem;
 		}

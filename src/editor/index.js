@@ -280,7 +280,7 @@ registerPlugin (XCLSR_BTSTRP_EDITOR_PREFIX + '-get-code-button', {
     icon: 'smiley',
 });
 
-/* ADD SIZE SETTINGS TO CORE/HEADING BLOCK */
+/* ADD SIZE AND STYLE SETTINGS TO CORE/HEADING BLOCK */
 
 addFilter( 'blocks.registerBlockType', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-settings', (settings, name) => {
     if (name === 'core/heading') {
@@ -288,8 +288,12 @@ addFilter( 'blocks.registerBlockType', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-bl
             ...settings.attributes,
             headingSizeClass: {
                 type: 'string',
-                default: '',
+                default: ''
             },
+            headingStyleClasses: {
+                type: 'string',
+                default: ''
+            }
         };
     }
     return settings;
@@ -298,17 +302,38 @@ addFilter( 'blocks.registerBlockType', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-bl
 // Ensure the class is reflected in the editor preview
 addFilter('editor.BlockListBlock', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-preview-class', (BlockListBlock) => {
     return (props) => {
-        if (props.name === 'core/heading' && props.attributes.headingSizeClass) {
-            return <BlockListBlock {...props} className={`${props.className} ${props.attributes.headingSizeClass}`} />;
+        if (props.name === 'core/heading') {
+            let additionalClasses = [];
+
+            if (props.attributes.headingSizeClass && props.attributes.headingSizeClass.trim().length) {
+                additionalClasses.push(props.attributes.headingSizeClass);
+            }
+
+            if (props.attributes.headingStyleClasses && props.attributes.headingStyleClasses.trim().length) {
+                additionalClasses.push(props.attributes.headingStyleClasses);
+            }
+
+            return <BlockListBlock {...props} className={`${props.className} ${additionalClasses.join(' ')}`} />;
         }
+
         return <BlockListBlock {...props} />;
     };
 });
 
 // Inject the size class into the block's save props to apply on the front-end
 addFilter('blocks.getSaveContent.extraProps', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-class', (extraProps, blockType, attributes) => {
-    if (blockType.name === 'core/heading' && attributes.headingSizeClass) {
-        extraProps.className = `${extraProps.className || ''} ${attributes.headingSizeClass}`.trim();
+    if (blockType.name === 'core/heading') {
+        let additionalClasses = [];
+
+        if (attributes.headingSizeClass && attributes.headingSizeClass.trim().length) {
+            additionalClasses.push(attributes.headingSizeClass);
+        }
+
+        if (attributes.headingStyleClasses && attributes.headingStyleClasses.trim().length) {
+            additionalClasses.push(attributes.headingStyleClasses);
+        }
+
+        extraProps.className = `${extraProps.className || ''} ${additionalClasses.join(' ')}`.trim();
     }
     return extraProps;
 });
@@ -331,8 +356,13 @@ const addHeadingSizeControl = createHigherOrderComponent((BlockEdit) => {
             { label: 'H6', value: 'h6' }
         ];
 
+        const headingStyleOptions = [
+            { label: 'Default', value: '' },
+            { label: 'Underline', value: 'fw-semibold pb-1 mb-3 border-bottom border-2 border-secondary-subtle' }
+        ];
+
         const { attributes, setAttributes } = props;
-        const { headingSizeClass } = attributes;
+        const { headingSizeClass, headingStyleClasses } = attributes;
         
         return (
             <Fragment>
@@ -345,6 +375,14 @@ const addHeadingSizeControl = createHigherOrderComponent((BlockEdit) => {
                             value={headingSizeClass}
                             options={headingLevelSizeOptions}
                             onChange={(value) => setAttributes({ headingSizeClass: value })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        />
+                        <SelectControl
+                            label="Heading Style"
+                            value={headingStyleClasses}
+                            options={headingStyleOptions}
+                            onChange={(value) => setAttributes({ headingStyleClasses: value })}
                             __next40pxDefaultSize
                             __nextHasNoMarginBottom
                         />

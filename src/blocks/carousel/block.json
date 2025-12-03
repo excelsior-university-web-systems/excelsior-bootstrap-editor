@@ -17,7 +17,7 @@
     "attributes": {
         "cover": {
             "type": "string",
-            "default": ""
+            "default": "admin/images/carousel.webp"
         },
         "uniqueId": {
             "type": "string",
