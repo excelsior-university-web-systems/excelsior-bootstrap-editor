@@ -5,7 +5,7 @@ export default function Save( {attributes} ) {
     const { colSize } = attributes;
 
     const blockProps = useBlockProps.save( {
-        className: `row row-cols-1 row-cols-sm-2 row-cols-md-${colSize} g-3`
+        className: `row row-cols-1 row-cols-sm-2 row-cols-md-${colSize} g-3 mb-3`
     } );
 
     return (

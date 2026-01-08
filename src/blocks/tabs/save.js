@@ -4,7 +4,7 @@ export default function Save({ attributes }) {
 
     const { tabStyle } = attributes;
     const blockProps = useBlockProps.save({
-        className: tabStyle,
+        className: `${tabStyle} mb-3`,
     });
 
     return (
