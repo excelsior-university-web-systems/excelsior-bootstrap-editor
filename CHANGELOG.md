@@ -108,6 +108,8 @@
 * Fixed issue with duplicate IDs in tabs and accordions causing incorrect content display.
 * Minor fixes and improvements.
 
+## 2024 ##
+
 ### 1.0.6 (2024-12-18) ###
 
 * Added Instructor Notes patterns.
