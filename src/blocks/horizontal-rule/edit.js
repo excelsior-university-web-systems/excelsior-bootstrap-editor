@@ -7,21 +7,24 @@ import {
 import { createElement } from '@wordpress/element';
 
 const ICONS = [
-    { name: 'bi-house-door-fill', label: 'Homepage' },
-    { name: 'bi-bookmark-star-fill', label: 'Getting Started Page' },
+    { name: 'bi-box', label: 'Immersives Page'},
     { name: 'bi-bookmark-check-fill', label: 'Module Reflection Page' },
+    { name: 'bi-bookmark-star-fill', label: 'Getting Started Page' },
+    { name: 'bi-building-fill', label: 'Insight Industry' },
+    { name: 'bi-clipboard-check-fill', label: 'Quiz or Knowledge Check Page' },
     { name: 'bi-chat-square-dots-fill', label: 'Discussion Page' },
+    { name: 'bi-compass', label: 'Orientation Page' },
+    { name: 'bi-easel', label: 'Verbal Competency Session Page' },
+    { name: 'bi-house-door-fill', label: 'Homepage' },
+    { name: 'bi-globe', label: 'Real-World Examples'},
     { name: 'bi-journal-text', label: 'Instructor Notes Page' },
-    { name: 'bi-x-diamond-fill', label: 'Module Overview Page' },
-    { name: 'bi-search', label: 'Lesson or Module Page' },
+    { name: 'bi-lightbulb', label: 'Reflect' },
+    { name: 'bi-list-check', label: 'Session Sign Up Page' },
     { name: 'bi-pencil-fill', label: 'Assignment Page' },
     { name: 'bi-people-fill', label: 'Live Session Page' },
-    { name: 'bi-clipboard-check-fill', label: 'Quiz or Knowledge Check Page' },
-    { name: 'bi-list-check', label: 'Session Sign Up Page' },
-    { name: 'bi-easel', label: 'Verbal Competency Session Page' },
-    { name: 'bi-compass', label: 'Orientation Page' },
     { name: 'bi-puzzle-fill', label: 'SkillSource Page'},
-    { name: 'bi-box', label: 'Immersives Page'},
+    { name: 'bi-search', label: 'Lesson or Module Page' },
+    { name: 'bi-x-diamond-fill', label: 'Module Overview Page' },
 ];
 
 export default function Edit ({ attributes, setAttributes }) {
