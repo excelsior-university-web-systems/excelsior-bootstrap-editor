@@ -37,9 +37,10 @@ This section describes how to install and activate the plugin.
 
 ## Changelog ##
 
-### 1.0.24 (2026-01-15) ###
-* Add new icons (`bi-lightbulb`, `bi-building-fill`, and `bi-globe`)
-* Add margin bottom spacing to cards, tabs, and accordions.
+### 1.0.24 (2026-01-14) ###
+* Added new icons (`bi-lightbulb`, `bi-building-fill`, and `bi-globe`)
+* Added margin bottom spacing to cards, tabs, and accordions.
+* Updated instructor notes template.
 * Updated Excelsior Bootstrap framework to version 1.0.14.
 
 Previous release changelog can be viewed at https://github.com/excelsior-university-web-systems/excelsior-bootstrap-editor/blob/main/CHANGELOG.md.
