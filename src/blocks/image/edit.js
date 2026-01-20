@@ -30,6 +30,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
 
     if ( inAlignmentEnabledEl ) {
         setAttributes( {alignmentEnabled: true} );
+        setAttributes( {mobileResponsive: false} );
     } else {
         setAttributes( {alignmentEnabled: false} );
     }
