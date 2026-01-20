@@ -14,5 +14,6 @@ export const ALLOWED_BLOCKS = [
     "core/heading",
     "core/list",
     "core/html",
+    "core/math",
     "reblock/reblock-block-selector"
 ];
