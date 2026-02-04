@@ -4,7 +4,7 @@ Tags: bootstrap, css, js, editor, block
 Requires at least: 5.0
 Requires PHP: 8.0
 Tested up to: 6.9
-Stable tag: 1.0.25
+Stable tag: 1.0.26
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,9 @@ This section describes how to install and activate the plugin.
 1. Example Excelsior Bootstrap Editor blocks in use.
 
 == Changelog ==
+
+= 1.0.26 (2026-02-11) =
+* Disabled WordPress's stretchy text blocks within Excelsior Bootstrap blocks.
 
 = 1.0.25 (2026-02-04) =
 * Mobile responsive is toggled on by default for image block.
