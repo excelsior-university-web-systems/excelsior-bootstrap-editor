@@ -4,7 +4,7 @@
 **Requires at least:** 5.0  
 **Requires PHP:** 8.0  
 **Tested up to:** 6.9  
-**Stable tag:** 1.0.24  
+**Stable tag:** 1.0.25  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -36,6 +36,11 @@ This section describes how to install and activate the plugin.
 
 
 ## Changelog ##
+
+### 1.0.25 (2026-02-04) ###
+* Mobile responsive is toggled on by default for image block.
+* Added `core/math` block support.
+* Updated discussion pattern/template.
 
 ### 1.0.24 (2026-01-14) ###
 * Added new icons (`bi-lightbulb`, `bi-building-fill`, and `bi-globe`)

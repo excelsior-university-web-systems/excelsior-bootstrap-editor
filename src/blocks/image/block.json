@@ -41,7 +41,7 @@
         },
         "mobileResponsive": {
             "type": "boolean",
-            "default": false
+            "default": true
         },
         "caption": {
             "type": "string"
