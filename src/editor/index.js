@@ -21,6 +21,9 @@ wp.domReady(() => {
     wp.richText.unregisterFormatType('core/keyboard');     // Remove keyboard input button
     wp.richText.unregisterFormatType('core/footnote');   // Remove footnote button
 
+    wp.blocks.unregisterBlockVariation( 'core/paragraph', 'stretchy-paragraph' ); // Remove stretchy paragraph
+    wp.blocks.unregisterBlockVariation( 'core/heading', 'stretchy-heading' ); // Remove stretchy heading
+
     // Make the post title not editable and change the placeholder to an instruction
     observeElement( '.editor-post-title', ( element ) => {
         element.setAttribute( 'contenteditable', false );
