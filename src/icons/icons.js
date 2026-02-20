@@ -12,6 +12,7 @@ export const ICONS = [
     { name: 'bi-chat-square-dots' },
     { name: 'bi-chat-square-dots-fill' },
     { name: 'bi-check-circle' },
+    { name: 'bi-check-square' },
     { name: 'bi-clipboard-check' },
     { name: 'bi-clipboard-check-fill' },
     { name: 'bi-compass' },
