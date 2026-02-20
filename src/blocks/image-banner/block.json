@@ -1,5 +1,5 @@
 {
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "excelsior-bootstrap-editor/image-banner",
     "title": "Image Banner",
     "description": "Insert a visually prominent graphic to capture attention, often displayed at the top of a page.",

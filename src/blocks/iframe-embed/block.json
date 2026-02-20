@@ -1,5 +1,5 @@
 {
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "excelsior-bootstrap-editor/iframe-embed",
     "title": "iFrame Embed",
     "description": "Insert an iFrame embed code to display external content, such as videos.",

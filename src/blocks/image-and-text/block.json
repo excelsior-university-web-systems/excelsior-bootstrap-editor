@@ -1,5 +1,5 @@
 {
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "excelsior-bootstrap-editor/image-and-text",
     "title": "Image and Text",
     "description": "Create an image with text wrap, which allows text to flow around it.",

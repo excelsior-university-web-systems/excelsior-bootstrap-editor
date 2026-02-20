@@ -1,5 +1,5 @@
 {
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "excelsior-bootstrap-editor/image",
     "title": "Image",
     "description": "Insert an image to display visuals.",

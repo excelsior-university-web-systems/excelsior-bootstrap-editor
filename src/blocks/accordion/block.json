@@ -1,5 +1,5 @@
 {
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "excelsior-bootstrap-editor/accordion",
     "title": "Accordion",
     "description": "Create a collapsible component used to organize content into expandable sections.",
