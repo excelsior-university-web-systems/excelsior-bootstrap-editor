@@ -10,6 +10,7 @@ export const ALLOWED_BLOCKS = [
     XCLSR_BTSTRP_EDITOR_PREFIX + "/code-block",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/task-group",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/blockquote",
+    XCLSR_BTSTRP_EDITOR_PREFIX + "/collapsible",
     "core/paragraph",
     "core/heading",
     "core/list",
