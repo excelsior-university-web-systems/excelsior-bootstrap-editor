@@ -38,7 +38,7 @@ This section describes how to install and activate the plugin.
 = 1.0.27 (2026-03-11) =
 * Updated templates to add underlined header style to H2 headers.
 * Updated homepage template to remove the "Your Instructor and Peers" button.
-* Added a new `check-square` icon.
+* Added a new icons: `check-square` and `bi-gear-fill`.
 * Added the `bi-gear` (technical guide) icon to the horizontal rule block icon options.
 
 = 1.0.26 (2026-02-11) =

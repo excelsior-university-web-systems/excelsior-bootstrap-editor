@@ -20,6 +20,7 @@ export const ICONS = [
     { name: 'bi-easel' },
     { name: 'bi-exclamation-triangle' },
     { name: 'bi-gear' },
+    { name: 'bi-gear-fill' },
     { name: 'bi-globe' },
     { name: 'bi-file-earmark-arrow-up' },
     { name: 'bi-house-door-fill' },

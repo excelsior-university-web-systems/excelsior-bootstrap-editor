@@ -16,7 +16,7 @@ const ICONS = [
     { name: 'bi-compass', label: 'Orientation Page' },
     { name: 'bi-easel', label: 'Verbal Competency Session Page' },
     { name: 'bi-house-door-fill', label: 'Homepage' },
-    { name: 'bi-gear', label: 'Technical Guide' },
+    { name: 'bi-gear-fill', label: 'Technical Guide' },
     { name: 'bi-globe', label: 'Real-World Examples'},
     { name: 'bi-journal-text', label: 'Instructor Notes Page' },
     { name: 'bi-lightbulb', label: 'Reflect' },
