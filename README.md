@@ -1,7 +1,7 @@
 # Excelsior Bootstrap Editor #
 **Contributors:** [eslin87](https://profiles.wordpress.org/eslin87/)  
 **Tags:** bootstrap, css, js, editor, block  
-**Requires at least:** 5.0  
+**Requires at least:** 5.3  
 **Requires PHP:** 8.0  
 **Tested up to:** 6.9  
 **Stable tag:** 1.0.27  
@@ -36,6 +36,9 @@ This section describes how to install and activate the plugin.
 
 
 ## Changelog ##
+
+### 1.1.0 (2026-04-08) ###
+* New block for the Collapsible (Show/Hide) component
 
 ### 1.0.27 (2026-03-11) ###
 * Updated templates to add underlined header style to H2 headers.
