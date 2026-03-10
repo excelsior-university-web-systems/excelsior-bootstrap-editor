@@ -39,6 +39,7 @@ This section describes how to install and activate the plugin.
 * Updated templates to add underlined header style to H2 headers.
 * Updated homepage template to remove the "Your Instructor and Peers" button.
 * Added a new `check-square` icon.
+* Added the `bi-gear` (technical guide) icon to the horizontal rule block icon options.
 
 = 1.0.26 (2026-02-11) =
 * Disabled WordPress's stretchy text blocks within Excelsior Bootstrap blocks.

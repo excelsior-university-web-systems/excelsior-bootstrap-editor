@@ -7,7 +7,7 @@ import {
 import { createElement } from '@wordpress/element';
 
 const ICONS = [
-    { name: 'bi-box', label: 'Immersives Page'},
+    { name: 'bi-box', label: 'Immersive Page'},
     { name: 'bi-bookmark-check-fill', label: 'Module Reflection Page' },
     { name: 'bi-bookmark-star-fill', label: 'Getting Started Page' },
     { name: 'bi-building-fill', label: 'Insight Industry' },
@@ -16,6 +16,7 @@ const ICONS = [
     { name: 'bi-compass', label: 'Orientation Page' },
     { name: 'bi-easel', label: 'Verbal Competency Session Page' },
     { name: 'bi-house-door-fill', label: 'Homepage' },
+    { name: 'bi-gear', label: 'Technical Guide' },
     { name: 'bi-globe', label: 'Real-World Examples'},
     { name: 'bi-journal-text', label: 'Instructor Notes Page' },
     { name: 'bi-lightbulb', label: 'Reflect' },
