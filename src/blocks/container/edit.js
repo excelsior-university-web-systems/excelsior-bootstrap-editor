@@ -1,17 +1,60 @@
 import { InnerBlocks, InspectorControls, useBlockProps } from '@wordpress/block-editor';
-import { PanelBody, ToggleControl } from '@wordpress/components';
-import { useSelect } from '@wordpress/data';
+import { PanelBody, ToggleControl, Tooltip } from '@wordpress/components';
+import { createBlock } from '@wordpress/blocks';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 
-export default function Edit( { attributes, setAttributes } ) {
+function isEmptyParagraphBlock( block ) {
+    if ( !block || block.name !== 'core/paragraph' ) {
+        return false;
+    }
+
+    const content = block.attributes?.content || '';
+    const textOnlyContent = content
+        .replace( /<br\s*\/?>/gi, '' )
+        .replace( /&nbsp;/gi, ' ' )
+        .replace( /<[^>]+>/g, '' )
+        .trim();
+
+    return textOnlyContent.length === 0;
+}
+
+function ParagraphAppender( { rootClientId } ) {
+    const { insertBlock, selectBlock } = useDispatch( 'core/block-editor' );
+
+    const appendParagraph = () => {
+        const block = createBlock( 'core/paragraph' );
+        insertBlock( block, undefined, rootClientId );
+        selectBlock( block.clientId );
+    };
+
+    return (
+        <div className='empty-block-appender'>
+            <Tooltip text='Add an empty block at the end of the container'>
+                <button
+                    type="button"
+                    onClick={appendParagraph}
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="M11 12.5V17.5H12.5V12.5H17.5V11H12.5V6H11V11H6V12.5H11Z"></path></svg>
+                </button>
+            </Tooltip>
+        </div>
+    );
+}
+
+export default function Edit( { attributes, setAttributes, clientId } ) {
     
     const { backToTop, mainLandmarkRole } = attributes;
-
-    const isReBlockPostType = useSelect( ( select ) => {
+    const { isReBlockPostType, lastInnerBlock } = useSelect( ( select ) => {
         const postType = select( 'core/editor' )?.getCurrentPostType?.();
-        return postType === 'reblock';
-    }, [] );
+        const innerBlocks = select( 'core/block-editor' ).getBlocks( clientId );
+
+        return {
+            isReBlockPostType: postType === 'reblock',
+            lastInnerBlock: innerBlocks[ innerBlocks.length - 1 ] || null,
+        };
+    }, [ clientId ] );
 
     const blockProps = useBlockProps( {
         className: `page-container${backToTop ? ' back-to-top' : ''}`.trim(),
@@ -22,7 +65,7 @@ export default function Edit( { attributes, setAttributes } ) {
         if ( isReBlockPostType && backToTop ) {
             setAttributes( { backToTop: false } );
         }
-    }, [ isReBlockPostType ] );
+    }, [ isReBlockPostType, backToTop, setAttributes ] );
 
     return (
         <>
@@ -48,10 +91,13 @@ export default function Edit( { attributes, setAttributes } ) {
             <div {...blockProps}>
                 <InnerBlocks
                     allowedBlocks={ALLOWED_BLOCKS}
-                    template={[['core/paragraph']]}
+                    template={[ [ 'core/paragraph' ] ]}
                     templateLock={false}
-                    renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
+                    renderAppender={false}
                 />
+                { !isEmptyParagraphBlock( lastInnerBlock ) && (
+                    <ParagraphAppender rootClientId={clientId} />
+                ) }
             </div>
         </>
     );

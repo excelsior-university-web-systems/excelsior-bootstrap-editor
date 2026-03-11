@@ -324,6 +324,29 @@ p.is-selected:focus code[data-rich-text-format-boundary] {
     padding: 0.5rem 1rem 0;
 }
 
+.empty-block-appender button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 28px;
+    border: none;
+    border-radius: 5px !important;
+    background: #1e1e1e;
+    color: #fff;
+    opacity: 0.75;
+    transition: all 0.25s ease-in-out;
+}
+
+.empty-block-appender button svg {
+    fill: #fff;
+}
+
+.empty-block-appender button:hover{
+    opacity: 1;
+    background-color: #007cba;
+}
+
 /* BOOTSTRAP ICON ADJUSTMENTS */
 
 i.bi {
