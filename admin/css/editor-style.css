@@ -317,6 +317,13 @@ p.is-selected:focus code[data-rich-text-format-boundary] {
     margin: 0 0 1rem !important;
 }
 
+/* EXCELSIOR BOOTSTRAP EDITOR
+   COLLAPSIBLE */
+.wp-block-excelsior-bootstrap-editor-collapsible-content {
+    border: 1px dashed #ccc;
+    padding: 0.5rem 1rem 0;
+}
+
 /* BOOTSTRAP ICON ADJUSTMENTS */
 
 i.bi {
