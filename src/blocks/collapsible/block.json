@@ -31,13 +31,6 @@
         "styleType": {
             "type": "string",
             "default": ""
-        },
-        "_collapsibleContentId": {
-            "type": "string"
-        },
-        "_collapsibleContentInnerBlocks": {
-            "type": "array",
-            "default": []
         }
     }
 }

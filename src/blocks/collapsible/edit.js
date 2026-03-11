@@ -1,6 +1,6 @@
 import { InnerBlocks, useBlockProps, InspectorControls, RichText } from '@wordpress/block-editor';
 import { PanelBody, SelectControl } from '@wordpress/components';
-import { useEffect } from '@wordpress/element';
+import { useEffect, useRef } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 import { generateHtmlId, getBlocksOfType } from '../../commons';
@@ -10,7 +10,7 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
     const TEMPLATE = [
         ['core/heading', {headingSizeClass: 'h5', level: 3, placeholder: 'Heading'}],
         ['core/paragraph', {placeholder: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.'}],
-        ['excelsior-bootstrap-editor/collapsible-content']
+        ['excelsior-bootstrap-editor/collapsible-content', { lock: { remove: true, move: false } }]
     ];
     
     const { buttonText, uniqueId, styleType, cover } = attributes;
@@ -31,8 +31,32 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
         };
     }, [clientId]);
 
-    const { insertBlocks } = useDispatch('core/block-editor');
+    const { insertBlocks, updateBlockAttributes, replaceInnerBlocks } = useDispatch('core/block-editor');
     const { createNotice } = useDispatch('core/notices');
+    const collapsibleContentBlocks = innerBlocks.filter(
+        ( block ) => block.name === 'excelsior-bootstrap-editor/collapsible-content'
+    );
+    const firstCollapsibleContentId = collapsibleContentBlocks?.[0]?.clientId || null;
+    const firstCollapsibleContentLock = useSelect(
+        ( select ) => {
+            if ( ! firstCollapsibleContentId ) {
+                return null;
+            }
+
+            const blockAttributes = select( 'core/block-editor' ).getBlockAttributes( firstCollapsibleContentId ) || {};
+            return blockAttributes.lock || null;
+        },
+        [ firstCollapsibleContentId ]
+    );
+    const hasCollapsibleContentBlock = collapsibleContentBlocks.length > 0;
+    const allowedBlocks = hasCollapsibleContentBlock
+        ? ALLOWED_BLOCKS.filter(
+            ( blockName ) => blockName !== 'excelsior-bootstrap-editor/collapsible-content'
+        )
+        : ALLOWED_BLOCKS;
+    const enforcingContentRef = useRef( false );
+    const primaryContentIdRef = useRef( null );
+    const knownContentIdsRef = useRef( [] );
 
     // Ensure an unique ID is assigned
     useEffect(() => {
@@ -47,28 +71,13 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
 
     }, []);
 
-    // Track and save collapsible-content's inner blocks
-    useEffect(() => {
-        const collapsibleContentBlocks = innerBlocks.filter(
-            block => block.name === 'excelsior-bootstrap-editor/collapsible-content'
-        );
-        
-        if (collapsibleContentBlocks.length === 1) {
-            const contentBlock = collapsibleContentBlocks[0];
-            // Save the inner blocks of collapsible-content to parent attributes
-            if (contentBlock.innerBlocks.length > 0) {
-                setAttributes({ 
-                    _collapsibleContentInnerBlocks: contentBlock.innerBlocks 
-                });
-            }
-        }
-    }, [innerBlocks]);
-
     // Ensure collapsible-content block always exists
     useEffect(() => {
-        const collapsibleContentBlocks = innerBlocks.filter(
-            block => block.name === 'excelsior-bootstrap-editor/collapsible-content'
-        );
+        if ( enforcingContentRef.current ) {
+            return;
+        }
+
+        enforcingContentRef.current = true;
 
         // If no collapsible-content block, add one with saved content
         if (collapsibleContentBlocks.length === 0) {
@@ -83,15 +92,27 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
             const wp = window.wp;
             const block = wp.blocks.createBlock(
                 'excelsior-bootstrap-editor/collapsible-content',
-                {},
-                attributes._collapsibleContentInnerBlocks || []
+                { lock: { remove: true, move: false } }
             );
+            primaryContentIdRef.current = block.clientId;
+            knownContentIdsRef.current = [ block.clientId ];
             insertBlocks(block, innerBlocks.length, clientId);
-            // Store this block's ID
-            setAttributes({ _collapsibleContentId: block.clientId });
+            enforcingContentRef.current = false;
+            return;
+        }
+
+        if (
+            ! primaryContentIdRef.current ||
+            ! collapsibleContentBlocks.some( ( block ) => block.clientId === primaryContentIdRef.current )
+        ) {
+            primaryContentIdRef.current = collapsibleContentBlocks[0].clientId;
+        }
+
+        if ( collapsibleContentBlocks.length === 1 ) {
+            knownContentIdsRef.current = [ collapsibleContentBlocks[0].clientId ];
         }
         
-        // If more than one collapsible-content block, remove the duplicates but keep the original
+        // If more than one collapsible-content block, remove the extras immediately.
         if (collapsibleContentBlocks.length > 1) {
             createNotice(
                 'warning',
@@ -101,16 +122,55 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
                     type: 'snackbar'
                 }
             );
-            const { removeBlock } = window.wp.data.dispatch('core/block-editor');
-            const keepBlockId = attributes._collapsibleContentId || collapsibleContentBlocks[0].clientId;
-            
-            collapsibleContentBlocks.forEach(block => {
-                if (block.clientId !== keepBlockId) {
-                    removeBlock(block.clientId);
-                }
-            });
+            const knownIds = knownContentIdsRef.current;
+            let duplicateBlocks = collapsibleContentBlocks.filter(
+                ( block ) =>
+                    block.clientId !== primaryContentIdRef.current &&
+                    ! knownIds.includes( block.clientId )
+            );
+
+            if ( duplicateBlocks.length === 0 ) {
+                duplicateBlocks = collapsibleContentBlocks.filter(
+                    ( block ) => block.clientId !== primaryContentIdRef.current
+                );
+            }
+
+            const duplicateIds = duplicateBlocks.map( ( block ) => block.clientId );
+            const nextInnerBlocks = innerBlocks.filter(
+                ( block ) =>
+                    block.name !== 'excelsior-bootstrap-editor/collapsible-content' ||
+                    ! duplicateIds.includes( block.clientId )
+            );
+
+            replaceInnerBlocks( clientId, nextInnerBlocks, false );
+
+            knownContentIdsRef.current = [ primaryContentIdRef.current ];
+            enforcingContentRef.current = false;
+            return;
         }
-    }, [innerBlocks, clientId, insertBlocks, createNotice, attributes]);
+
+        enforcingContentRef.current = false;
+    }, [ collapsibleContentBlocks.length, clientId, createNotice, innerBlocks, insertBlocks, replaceInnerBlocks ]);
+
+    // Prevent removing or moving the required collapsible-content wrapper.
+    useEffect(() => {
+        if ( ! firstCollapsibleContentId || collapsibleContentBlocks.length !== 1 ) {
+            return;
+        }
+
+        const isLocked =
+            !!firstCollapsibleContentLock &&
+            firstCollapsibleContentLock.remove === true &&
+            firstCollapsibleContentLock.move === false;
+
+        if ( isLocked ) {
+            return;
+        }
+
+        updateBlockAttributes( firstCollapsibleContentId, {
+            lock: { remove: true, move: false }
+        } );
+    }, [ firstCollapsibleContentId, firstCollapsibleContentLock, collapsibleContentBlocks.length, updateBlockAttributes ]);
 
     if ( cover ) {
         return(
@@ -145,7 +205,7 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
         <div {...blockProps}>
             <div className='content'>
                 <InnerBlocks
-                    allowedBlocks={ALLOWED_BLOCKS}
+                    allowedBlocks={allowedBlocks}
                     template={TEMPLATE}
                     templateLock={false}
                     renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
