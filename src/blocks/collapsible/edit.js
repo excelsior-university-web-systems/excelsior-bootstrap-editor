@@ -14,6 +14,7 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
     ];
     
     const { buttonText, uniqueId, styleType, cover } = attributes;
+    const isPreview = !!cover;
 
     const blockProps = useBlockProps( {
         className: `excelsior-collapsible mb-3 ${styleType}`,
@@ -60,6 +61,9 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
 
     // Ensure an unique ID is assigned
     useEffect(() => {
+        if ( isPreview ) {
+            return;
+        }
     
         const isDuplicate = sameTypeBlocks.some(
             ( block ) => block.clientId !== clientId && block.attributes.uniqueId === uniqueId
@@ -69,10 +73,14 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
             setAttributes( { uniqueId: generateHtmlId() } );
         }
 
-    }, []);
+    }, [ isPreview ]);
 
     // Ensure collapsible-content block always exists
     useEffect(() => {
+        if ( isPreview ) {
+            return;
+        }
+
         if ( enforcingContentRef.current ) {
             return;
         }
@@ -81,14 +89,16 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
 
         // If no collapsible-content block, add one with saved content
         if (collapsibleContentBlocks.length === 0) {
-            createNotice(
-                'warning',
-                'A Collapsible block must contains one Collapsible Content block.',
-                {
-                    isDismissible: true,
-                    type: 'snackbar'
-                }
-            );
+            if ( innerBlocks.length > 0 ) {
+                createNotice(
+                    'warning',
+                    'A Collapsible block must contains one Collapsible Content block.',
+                    {
+                        isDismissible: true,
+                        type: 'snackbar'
+                    }
+                );
+            }
             const wp = window.wp;
             const block = wp.blocks.createBlock(
                 'excelsior-bootstrap-editor/collapsible-content',
@@ -150,10 +160,14 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
         }
 
         enforcingContentRef.current = false;
-    }, [ collapsibleContentBlocks.length, clientId, createNotice, innerBlocks, insertBlocks, replaceInnerBlocks ]);
+    }, [ collapsibleContentBlocks.length, clientId, createNotice, innerBlocks, insertBlocks, isPreview, replaceInnerBlocks ]);
 
     // Prevent removing or moving the required collapsible-content wrapper.
     useEffect(() => {
+        if ( isPreview ) {
+            return;
+        }
+
         if ( ! firstCollapsibleContentId || collapsibleContentBlocks.length !== 1 ) {
             return;
         }
@@ -170,9 +184,9 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
         updateBlockAttributes( firstCollapsibleContentId, {
             lock: { remove: true, move: false }
         } );
-    }, [ firstCollapsibleContentId, firstCollapsibleContentLock, collapsibleContentBlocks.length, updateBlockAttributes ]);
+    }, [ firstCollapsibleContentId, firstCollapsibleContentLock, collapsibleContentBlocks.length, isPreview, updateBlockAttributes ]);
 
-    if ( cover ) {
+    if ( isPreview ) {
         return(
             <>
             <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
