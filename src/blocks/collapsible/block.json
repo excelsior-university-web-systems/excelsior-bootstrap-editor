@@ -24,10 +24,6 @@
         "uniqueId": {
             "type": "string"
         },
-        "buttonText": {
-            "type": "string",
-            "default": "Show"
-        },
         "styleType": {
             "type": "string",
             "default": ""

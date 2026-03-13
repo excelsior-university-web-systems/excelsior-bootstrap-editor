@@ -1,4 +1,4 @@
-import { InnerBlocks, useBlockProps, InspectorControls, RichText } from '@wordpress/block-editor';
+import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, SelectControl } from '@wordpress/components';
 import { useEffect, useRef } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
@@ -13,7 +13,7 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
         ['excelsior-bootstrap-editor/collapsible-content', { lock: { remove: true, move: false } }]
     ];
     
-    const { buttonText, uniqueId, styleType, cover } = attributes;
+    const { uniqueId, styleType, cover } = attributes;
     const isPreview = !!cover;
 
     const blockProps = useBlockProps( {
@@ -225,14 +225,7 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
                     renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
                 />
             </div>
-            <RichText
-                className="btn"
-                tagName="a"
-                href={'#'+uniqueId}
-                value={buttonText}
-                role="button"
-                onChange={(value) => setAttributes({ buttonText: value })}
-            />
+            
         </div>
         </>
     );

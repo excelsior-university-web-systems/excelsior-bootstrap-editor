@@ -12,6 +12,10 @@
     "attributes": {
         "uniqueId": {
             "type": "string"
+        },
+        "buttonText": {
+            "type": "string",
+            "default": ""
         }
     }
 }

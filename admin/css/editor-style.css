@@ -322,6 +322,7 @@ p.is-selected:focus code[data-rich-text-format-boundary] {
 .wp-block-excelsior-bootstrap-editor-collapsible-content {
     border: 1px dashed #ccc;
     padding: 0.5rem 1rem 0;
+    margin-bottom: 0;
 }
 
 .empty-block-appender button {
