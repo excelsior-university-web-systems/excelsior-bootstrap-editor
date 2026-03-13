@@ -1,11 +1,10 @@
-import { InnerBlocks, InspectorControls, useBlockProps } from '@wordpress/block-editor';
+import { InnerBlocks, InspectorControls, useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { PanelBody, SelectControl } from '@wordpress/components';
 import {
     __experimentalToggleGroupControl as ToggleGroupControl,
     __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
-import { useEffect } from '@wordpress/element';
 
 export default function Edit( {attributes, setAttributes} ) {
 
@@ -21,27 +20,18 @@ export default function Edit( {attributes, setAttributes} ) {
         className: '',
     } );
 
-    useEffect(() => {
-        // Select the wrapper that Gutenberg uses to wrap InnerBlocks
-        const editorInnerBlocks = document.querySelector(
-            `.block-editor-block-list__block[data-block="${blockProps['data-block']}"] .block-editor-block-list__layout`
-        );
-
-        // Apply the Bootstrap classes to this wrapper
-        if (editorInnerBlocks) {
-            // Remove previous column classes to avoid conflicts
-            editorInnerBlocks.classList.remove('row-cols-1', 'row-cols-sm-2', 'row-cols-md-2', 'row-cols-md-3');
-            // Apply the new column classes based on colSize
-            editorInnerBlocks.classList.add('row', 'row-cols-1', 'row-cols-sm-2', 'row-cols-md-' + colSize, 'g-3');
+    const innerBlocksProps = useInnerBlocksProps(
+        {
+            className: `row row-cols-1 row-cols-sm-2 row-cols-md-${colSize} g-3`,
+        },
+        {
+            allowedBlocks: [XCLSR_BTSTRP_EDITOR_PREFIX + '/card'],
+            template: TEMPLATE,
+            templateLock: false,
+            orientation: 'horizontal',
+            renderAppender: InnerBlocks.DefaultBlockAppender,
         }
-
-        // Clean up the classes if the component unmounts or re-renders
-        return () => {
-            if (editorInnerBlocks) {
-                editorInnerBlocks.classList.remove('row', 'row-cols-1', 'row-cols-sm-2', 'row-cols-md-'+colSize, 'g-3');
-            }
-        };
-    }, [blockProps['data-block'], colSize]);
+    );
 
     if ( cover ) {
         return(
@@ -85,13 +75,7 @@ export default function Edit( {attributes, setAttributes} ) {
             </PanelBody>
         </InspectorControls>
         <div {...blockProps}>
-            <InnerBlocks
-                allowedBlocks={[XCLSR_BTSTRP_EDITOR_PREFIX + '/card']}
-                template={TEMPLATE}
-                templateLock={false}
-                orientation='horizontal'
-                renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
-            />
+            <div {...innerBlocksProps} />
         </div>
         </>
     );
