@@ -36,7 +36,7 @@ This section describes how to install and activate the plugin.
 == Changelog ==
 
 = 1.1.0 (2026-04-08) =
-* New block for the Collapsible (Show/Hide) component
+* New block for the Collapsible (Show/Hide) component.
 
 = 1.0.27 (2026-03-11) =
 * Updated templates to add underlined header style to H2 headers.
@@ -58,4 +58,4 @@ This section describes how to install and activate the plugin.
 * Updated instructor notes template.
 * Updated Excelsior Bootstrap framework to version 1.0.14.
 
-Previous release changelog can be viewed at https://github.com/excelsior-university-web-systems/excelsior-bootstrap-editor/blob/main/CHANGELOG.md.
+Previous release notes can be viewed in [CHANGELOG](CHANGELOG).

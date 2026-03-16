@@ -13,7 +13,72 @@ import beautify from 'js-beautify';
 window.Prism = window.Prism || {};
 Prism.manual = true;
 
-wp.domReady(() => {
+const NAMESPACE_BLOCK = `${XCLSR_BTSTRP_EDITOR_PREFIX}/namespace`;
+
+const blockTreeHasExcelsiorBootstrapNamespace = ( blocks = [] ) => {
+    return blocks.some( ( block ) => {
+        if ( block.name === NAMESPACE_BLOCK ) {
+            return true;
+        }
+
+        return blockTreeHasExcelsiorBootstrapNamespace( block.innerBlocks || [] );
+    } );
+};
+
+const hasExcelsiorBootstrapNamespaceBlockInEditor = () => {
+    const blockEditorStore = select( 'core/block-editor' );
+
+    if ( ! blockEditorStore || ! blockEditorStore.getBlocks ) {
+        return false;
+    }
+
+    return blockTreeHasExcelsiorBootstrapNamespace( blockEditorStore.getBlocks() );
+};
+
+const isExcelsiorBootstrapPostType = () => {
+    const editorStore = select( 'core/editor' );
+
+    if ( ! editorStore || ! editorStore.getCurrentPostType ) {
+        return false;
+    }
+
+    return editorStore.getCurrentPostType() === XCLSR_BTSTRP_POST_TYPE;
+};
+
+const isBootstrapEditorActive = () => {
+    return isExcelsiorBootstrapPostType() || hasExcelsiorBootstrapNamespaceBlockInEditor();
+};
+
+const useIsBootstrapEditorActive = () => useSelect( () => isBootstrapEditorActive(), [] );
+const useIsExcelsiorBootstrapPostType = () => useSelect( () => isExcelsiorBootstrapPostType(), [] );
+
+const isBlockInsideNamespace = ( clientId ) => {
+    if ( ! clientId ) {
+        return false;
+    }
+
+    const blockEditorStore = select( 'core/block-editor' );
+
+    if ( ! blockEditorStore || ! blockEditorStore.getBlockParents || ! blockEditorStore.getBlockName ) {
+        return false;
+    }
+
+    const parentClientIds = blockEditorStore.getBlockParents( clientId );
+
+    return parentClientIds.some( ( parentClientId ) => {
+        return blockEditorStore.getBlockName( parentClientId ) === NAMESPACE_BLOCK;
+    } );
+};
+
+let hasActivatedNamespaceEnhancements = false;
+let hasActivatedPostTypeEnhancements = false;
+
+const activateNamespaceEnhancements = () => {
+    if ( hasActivatedNamespaceEnhancements ) {
+        return;
+    }
+
+    hasActivatedNamespaceEnhancements = true;
 
     wp.richText.unregisterFormatType('core/image');        // Remove inline image
     wp.richText.unregisterFormatType('core/text-color');   // Remove text color/highlight
@@ -23,17 +88,44 @@ wp.domReady(() => {
 
     wp.blocks.unregisterBlockVariation( 'core/paragraph', 'stretchy-paragraph' ); // Remove stretchy paragraph
     wp.blocks.unregisterBlockVariation( 'core/heading', 'stretchy-heading' ); // Remove stretchy heading
+};
+
+const activatePostTypeEnhancements = () => {
+    if ( hasActivatedPostTypeEnhancements ) {
+        return;
+    }
+
+    hasActivatedPostTypeEnhancements = true;
 
     // Make the post title not editable and change the placeholder to an instruction
     observeElement( '.editor-post-title', ( element ) => {
         element.setAttribute( 'contenteditable', false );
     } );
-  
+};
+
+wp.domReady(() => {
+    const maybeActivateEditorEnhancements = () => {
+        if ( isBootstrapEditorActive() ) {
+            activateNamespaceEnhancements();
+        }
+
+        if ( isExcelsiorBootstrapPostType() ) {
+            activatePostTypeEnhancements();
+        }
+    };
+
+    maybeActivateEditorEnhancements();
+    subscribe( maybeActivateEditorEnhancements );
 });
 
 /* ADD COURSE META FIELDS FOR "TITLE" */
 
 const CourseMetaFields = () => {
+    const isExcelsiorBootstrap = useIsExcelsiorBootstrapPostType();
+
+    if ( ! isExcelsiorBootstrap ) {
+        return null;
+    }
 
     const { unlockPostSaving, lockPostSaving } = dispatch('core/editor');
     const meta = useSelect( (select) => select('core/editor').getEditedPostAttribute('meta') );
@@ -108,6 +200,9 @@ const CourseMetaFields = () => {
 };
 
 const validateFields = () => {
+    if ( ! isExcelsiorBootstrapPostType() ) {
+        return true;
+    }
 
     const { getEditedPostAttribute } = select('core/editor');
     const meta = getEditedPostAttribute('meta') || {};
@@ -120,22 +215,29 @@ const validateFields = () => {
 };
 
 let isSavingLocked = false;
-let isPostTypeAvailable = false;
 
 subscribe( () => {
     const { isSavingPost, hasChangedContent, getCurrentPostType, isPublishSidebarEnabled } = select('core/editor');
     const { lockPostSaving, unlockPostSaving, lockPostAutosaving, unlockPostAutosaving, disablePublishSidebar } = dispatch('core/editor');
     const isSaving = isSavingPost();
     const contentChanged = hasChangedContent();
-    const isValid = validateFields();
     const postType = getCurrentPostType();
+    const isExcelsiorBootstrap = postType === XCLSR_BTSTRP_POST_TYPE;
+    const isValid = validateFields();
 
-    if ( !isPostTypeAvailable && postType ) {
-        const prePublishSidebarEnabled = isPublishSidebarEnabled();
-        if ( postType === XCLSR_BTSTRP_POST_TYPE && prePublishSidebarEnabled ) {
-            disablePublishSidebar();
+    if ( ! isExcelsiorBootstrap ) {
+        if ( isSavingLocked ) {
+            isSavingLocked = false;
+            unlockPostSaving('required-fields');
+            unlockPostAutosaving('required-fields');
+            dispatch('core/notices').removeNotice('required-fields');
         }
-        isPostTypeAvailable = true;
+
+        return;
+    }
+
+    if ( isPublishSidebarEnabled() ) {
+        disablePublishSidebar();
     }
 
     if ((isSaving && !isValid) || (contentChanged && !isValid)) {
@@ -166,6 +268,11 @@ registerPlugin( XCLSR_BTSTRP_EDITOR_PREFIX + '-course-meta-fields', {
 
 // Define the button component
 const GetCodeButton = () => {
+    const isExcelsiorBootstrap = useIsExcelsiorBootstrapPostType();
+
+    if ( ! isExcelsiorBootstrap ) {
+        return null;
+    }
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [renderedHTML, setRenderedHTML] = useState('');
@@ -277,15 +384,13 @@ const GetCodeButton = () => {
     );
 };
 
-// Register the plugin to display the button in the editor's sidebar
 registerPlugin (XCLSR_BTSTRP_EDITOR_PREFIX + '-get-code-button', {
     render: GetCodeButton,
-    icon: 'smiley',
+    icon: null,
 });
 
 /* ADD SIZE AND STYLE SETTINGS TO CORE/HEADING BLOCK */
-
-addFilter( 'blocks.registerBlockType', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-settings', (settings, name) => {
+const addingBlockSizeAndStyle = (settings, name) => {
     if (name === 'core/heading') {
         settings.attributes = {
             ...settings.attributes,
@@ -296,16 +401,41 @@ addFilter( 'blocks.registerBlockType', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-bl
             headingStyleClasses: {
                 type: 'string',
                 default: ''
+            },
+            isInExcelsiorNamespace: {
+                type: 'boolean',
+                default: false
             }
         };
     }
+
     return settings;
-});
+};
+
+addFilter( 'blocks.registerBlockType', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-settings', addingBlockSizeAndStyle);
 
 // Ensure the class is reflected in the editor preview
-addFilter('editor.BlockListBlock', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-preview-class', (BlockListBlock) => {
+const addBlockSizePreviewClass = (BlockListBlock) => {
     return (props) => {
-        if (props.name === 'core/heading') {
+        const isInsideNamespace = useSelect( (select) => {
+            if ( props.name !== 'core/heading' ) {
+                return false;
+            }
+
+            const blockEditorStore = select( 'core/block-editor' );
+
+            if ( ! blockEditorStore || ! blockEditorStore.getBlockParents || ! blockEditorStore.getBlockName ) {
+                return false;
+            }
+
+            const parentClientIds = blockEditorStore.getBlockParents( props.clientId );
+
+            return parentClientIds.some( ( parentClientId ) => {
+                return blockEditorStore.getBlockName( parentClientId ) === NAMESPACE_BLOCK;
+            } );
+        }, [ props.clientId, props.name ] );
+
+        if (isInsideNamespace && props.name === 'core/heading') {
             let additionalClasses = [];
 
             if (props.attributes.headingSizeClass && props.attributes.headingSizeClass.trim().length) {
@@ -321,11 +451,13 @@ addFilter('editor.BlockListBlock', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-
 
         return <BlockListBlock {...props} />;
     };
-});
+};
+
+addFilter('editor.BlockListBlock', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-preview-class', addBlockSizePreviewClass);
 
 // Inject the size class into the block's save props to apply on the front-end
-addFilter('blocks.getSaveContent.extraProps', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-class', (extraProps, blockType, attributes) => {
-    if (blockType.name === 'core/heading') {
+const saveBlockSizeAndStyle = (extraProps, blockType, attributes) => {
+    if (attributes.isInExcelsiorNamespace && blockType.name === 'core/heading') {
         let additionalClasses = [];
 
         if (attributes.headingSizeClass && attributes.headingSizeClass.trim().length) {
@@ -338,14 +470,34 @@ addFilter('blocks.getSaveContent.extraProps', XCLSR_BTSTRP_EDITOR_PREFIX + '/hea
 
         extraProps.className = `${extraProps.className || ''} ${additionalClasses.join(' ')}`.trim();
     }
+
     return extraProps;
-});
+};
+
+addFilter('blocks.getSaveContent.extraProps', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-class', saveBlockSizeAndStyle);
 
 // Add the custom control to the block's inspector
 const addHeadingSizeControl = createHigherOrderComponent((BlockEdit) => {
     return (props) => {
+        const isInsideNamespace = useSelect( () => {
+            if ( props.name !== 'core/heading' ) {
+                return false;
+            }
 
-        if (props.name !== 'core/heading') {
+            return isBlockInsideNamespace( props.clientId );
+        }, [ props.clientId, props.name ] );
+
+        useEffect( () => {
+            if ( props.name !== 'core/heading' ) {
+                return;
+            }
+
+            if ( props.attributes.isInExcelsiorNamespace !== isInsideNamespace ) {
+                props.setAttributes( { isInExcelsiorNamespace: isInsideNamespace } );
+            }
+        }, [ isInsideNamespace, props ] );
+
+        if (props.name !== 'core/heading' || ! isInsideNamespace) {
             return <BlockEdit {...props} />;
         }
 
