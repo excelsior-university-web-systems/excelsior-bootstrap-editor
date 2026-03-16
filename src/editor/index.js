@@ -70,7 +70,6 @@ const isBootstrapEditorActive = () => {
     return isExcelsiorBootstrapPostType() || hasExcelsiorBootstrapNamespaceBlockInEditor();
 };
 
-const useIsBootstrapEditorActive = () => useSelect( () => isBootstrapEditorActive(), [] );
 const useIsExcelsiorBootstrapPostType = () => useSelect( () => isExcelsiorBootstrapPostType(), [] );
 
 /**
