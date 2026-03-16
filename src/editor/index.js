@@ -15,6 +15,12 @@ Prism.manual = true;
 
 const NAMESPACE_BLOCK = `${XCLSR_BTSTRP_EDITOR_PREFIX}/namespace`;
 
+/**
+ * Recursively checks whether a block tree contains the Excelsior namespace block.
+ *
+ * @param {Array<Object>} [blocks=[]] Registered editor blocks to scan.
+ * @returns {boolean} True when the namespace block exists anywhere in the tree.
+ */
 const blockTreeHasExcelsiorBootstrapNamespace = ( blocks = [] ) => {
     return blocks.some( ( block ) => {
         if ( block.name === NAMESPACE_BLOCK ) {
@@ -25,6 +31,11 @@ const blockTreeHasExcelsiorBootstrapNamespace = ( blocks = [] ) => {
     } );
 };
 
+/**
+ * Determines whether the current editor session contains the namespace block.
+ *
+ * @returns {boolean} True when the block editor currently contains the namespace block.
+ */
 const hasExcelsiorBootstrapNamespaceBlockInEditor = () => {
     const blockEditorStore = select( 'core/block-editor' );
 
@@ -35,6 +46,11 @@ const hasExcelsiorBootstrapNamespaceBlockInEditor = () => {
     return blockTreeHasExcelsiorBootstrapNamespace( blockEditorStore.getBlocks() );
 };
 
+/**
+ * Checks whether the current editor is loading the Excelsior custom post type.
+ *
+ * @returns {boolean} True when the current post type matches `excelsior_bootstrap`.
+ */
 const isExcelsiorBootstrapPostType = () => {
     const editorStore = select( 'core/editor' );
 
@@ -45,6 +61,11 @@ const isExcelsiorBootstrapPostType = () => {
     return editorStore.getCurrentPostType() === XCLSR_BTSTRP_POST_TYPE;
 };
 
+/**
+ * Determines whether Excelsior editor enhancements should be active at all.
+ *
+ * @returns {boolean} True for the Excelsior post type or when the namespace block exists in the editor.
+ */
 const isBootstrapEditorActive = () => {
     return isExcelsiorBootstrapPostType() || hasExcelsiorBootstrapNamespaceBlockInEditor();
 };
@@ -52,6 +73,12 @@ const isBootstrapEditorActive = () => {
 const useIsBootstrapEditorActive = () => useSelect( () => isBootstrapEditorActive(), [] );
 const useIsExcelsiorBootstrapPostType = () => useSelect( () => isExcelsiorBootstrapPostType(), [] );
 
+/**
+ * Checks whether a block is nested anywhere inside the namespace block.
+ *
+ * @param {string} clientId Gutenberg client ID for the block being inspected.
+ * @returns {boolean} True when one of the block's parents is the namespace block.
+ */
 const isBlockInsideNamespace = ( clientId ) => {
     if ( ! clientId ) {
         return false;
@@ -73,6 +100,14 @@ const isBlockInsideNamespace = ( clientId ) => {
 let hasActivatedNamespaceEnhancements = false;
 let hasActivatedPostTypeEnhancements = false;
 
+/**
+ * Applies editor-wide namespace enhancements once per editor session.
+ *
+ * These APIs unregister editor features globally, so they cannot be scoped to an
+ * individual block instance after they run.
+ *
+ * @returns {void}
+ */
 const activateNamespaceEnhancements = () => {
     if ( hasActivatedNamespaceEnhancements ) {
         return;
@@ -90,6 +125,11 @@ const activateNamespaceEnhancements = () => {
     wp.blocks.unregisterBlockVariation( 'core/heading', 'stretchy-heading' ); // Remove stretchy heading
 };
 
+/**
+ * Applies Excelsior post-type-only editor changes once per editor session.
+ *
+ * @returns {void}
+ */
 const activatePostTypeEnhancements = () => {
     if ( hasActivatedPostTypeEnhancements ) {
         return;
@@ -118,8 +158,11 @@ wp.domReady(() => {
     subscribe( maybeActivateEditorEnhancements );
 });
 
-/* ADD COURSE META FIELDS FOR "TITLE" */
-
+/**
+ * Renders the Excelsior course metadata sidebar panel.
+ *
+ * @returns {JSX.Element|null} The sidebar panel for the Excelsior post type only.
+ */
 const CourseMetaFields = () => {
     const isExcelsiorBootstrap = useIsExcelsiorBootstrapPostType();
 
@@ -199,6 +242,11 @@ const CourseMetaFields = () => {
     );
 };
 
+/**
+ * Validates the required Excelsior metadata fields used to construct the title.
+ *
+ * @returns {boolean} True when the required fields are complete or the post type does not apply.
+ */
 const validateFields = () => {
     if ( ! isExcelsiorBootstrapPostType() ) {
         return true;
@@ -236,6 +284,7 @@ subscribe( () => {
         return;
     }
 
+    // The custom publish flow replaces the default pre-publish sidebar for this post type.
     if ( isPublishSidebarEnabled() ) {
         disablePublishSidebar();
     }
@@ -264,9 +313,11 @@ registerPlugin( XCLSR_BTSTRP_EDITOR_PREFIX + '-course-meta-fields', {
     icon: null,
 } );
 
-/* GET CODE BUTTON */
-
-// Define the button component
+/**
+ * Renders the "Get Code" sidebar action for published Excelsior posts.
+ *
+ * @returns {JSX.Element|null} Sidebar UI for published Excelsior posts only.
+ */
 const GetCodeButton = () => {
     const isExcelsiorBootstrap = useIsExcelsiorBootstrapPostType();
 
@@ -305,6 +356,7 @@ const GetCodeButton = () => {
                 const htmlCode = rawContent.replace(
                     /<i([^>]*)>(.*?)<\/i>/g,
                     (match, attrs, innerText) => {
+                        // Preserve icon spacing when rendered HTML is copied out of the editor.
                         const nonBreakingText = innerText.replace(/ /g, '&nbsp;');
                         return `<i${attrs}>${nonBreakingText}</i>`;
                     }
@@ -389,7 +441,17 @@ registerPlugin (XCLSR_BTSTRP_EDITOR_PREFIX + '-get-code-button', {
     icon: null,
 });
 
-/* ADD SIZE AND STYLE SETTINGS TO CORE/HEADING BLOCK */
+/**
+ * Extends `core/heading` with Excelsior-only styling attributes.
+ *
+ * The attributes are registered globally so first-time insertion inside the
+ * namespace works immediately, but the UI and saved classes are still gated
+ * to headings nested under the namespace block.
+ *
+ * @param {Object} settings Block settings being registered.
+ * @param {string} name Block name being registered.
+ * @returns {Object} Updated block settings.
+ */
 const addingBlockSizeAndStyle = (settings, name) => {
     if (name === 'core/heading') {
         settings.attributes = {
@@ -414,7 +476,12 @@ const addingBlockSizeAndStyle = (settings, name) => {
 
 addFilter( 'blocks.registerBlockType', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-settings', addingBlockSizeAndStyle);
 
-// Ensure the class is reflected in the editor preview
+/**
+ * Mirrors heading style classes in the editor preview only for namespace headings.
+ *
+ * @param {Function} BlockListBlock Original editor block list component.
+ * @returns {Function} Wrapped component with conditional preview classes.
+ */
 const addBlockSizePreviewClass = (BlockListBlock) => {
     return (props) => {
         const isInsideNamespace = useSelect( (select) => {
@@ -430,6 +497,7 @@ const addBlockSizePreviewClass = (BlockListBlock) => {
 
             const parentClientIds = blockEditorStore.getBlockParents( props.clientId );
 
+            // A heading is eligible only when one of its ancestors is the namespace block.
             return parentClientIds.some( ( parentClientId ) => {
                 return blockEditorStore.getBlockName( parentClientId ) === NAMESPACE_BLOCK;
             } );
@@ -455,7 +523,14 @@ const addBlockSizePreviewClass = (BlockListBlock) => {
 
 addFilter('editor.BlockListBlock', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-preview-class', addBlockSizePreviewClass);
 
-// Inject the size class into the block's save props to apply on the front-end
+/**
+ * Applies saved heading classes only when the heading was nested in the namespace.
+ *
+ * @param {Object} extraProps Save props generated for the block.
+ * @param {Object} blockType Registered block type object.
+ * @param {Object} attributes Block attributes being saved.
+ * @returns {Object} Updated save props.
+ */
 const saveBlockSizeAndStyle = (extraProps, blockType, attributes) => {
     if (attributes.isInExcelsiorNamespace && blockType.name === 'core/heading') {
         let additionalClasses = [];
@@ -476,7 +551,12 @@ const saveBlockSizeAndStyle = (extraProps, blockType, attributes) => {
 
 addFilter('blocks.getSaveContent.extraProps', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-class', saveBlockSizeAndStyle);
 
-// Add the custom control to the block's inspector
+/**
+ * Adds the heading inspector controls only when the heading lives inside the namespace.
+ *
+ * @param {Function} BlockEdit Original block edit component.
+ * @returns {Function} Wrapped block edit component.
+ */
 const addHeadingSizeControl = createHigherOrderComponent((BlockEdit) => {
     return (props) => {
         const isInsideNamespace = useSelect( () => {
@@ -492,6 +572,7 @@ const addHeadingSizeControl = createHigherOrderComponent((BlockEdit) => {
                 return;
             }
 
+            // Persist namespace ancestry so save-time filters can stay context-aware.
             if ( props.attributes.isInExcelsiorNamespace !== isInsideNamespace ) {
                 props.setAttributes( { isInExcelsiorNamespace: isInsideNamespace } );
             }
