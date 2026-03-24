@@ -10,6 +10,8 @@ import './carousel';
 import './carousel-slide';
 import './carousel-caption';
 import './code-block';
+import './collapsible';
+import './collapsible-content';
 import './columns';
 import './column';
 import './container';

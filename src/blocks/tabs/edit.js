@@ -2,10 +2,16 @@ import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-
 import { PanelBody, SelectControl } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
+import metadata from './block.json';
 
 export default function Edit({ attributes, setAttributes, clientId }) {
 
-    const { tabStyle, cover } = attributes;
+    const { tabStyle } = attributes;
+    const previewImage = metadata?.example?.attributes?.cover || '';
+    const isPreview = useSelect(
+        ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
+        []
+    );
 
     const blockProps = useBlockProps({
         className: tabStyle,
@@ -13,10 +19,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
     // Initialize tabs if not present
     useEffect(() => {
+        if ( isPreview ) {
+            return;
+        }
+
         if (!attributes.tabs) {
             setAttributes({ tabs: [] });
         }
-    }, []);
+    }, [ attributes.tabs, isPreview ] );
 
     const childTabs = useSelect(
         (select) => {
@@ -33,6 +43,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
     // Update the parent block's "tabs" attribute when child tabs change
     useEffect(() => {
+        if ( isPreview ) {
+            return;
+        }
         
         // Compare current childTabs with attributes.tabs
         if ( JSON.stringify( childTabs ) !== JSON.stringify( attributes.tabs ) ) {
@@ -44,14 +57,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
             setAttributes({ activeTab: childTabs[0].uniqueId });
         }
 
-    }, [childTabs] );
+    }, [ attributes.activeTab, attributes.tabs, childTabs, isPreview, setAttributes ] );
 
-    if ( cover ) {
-        return(
-            <>
-            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
-            </>
-        );
+    if ( isPreview && previewImage ) {
+        return <img src={xclsr_btstrp_block_preview.pluginUrl + previewImage} width='100%' height='auto' />;
     }
     
     return (

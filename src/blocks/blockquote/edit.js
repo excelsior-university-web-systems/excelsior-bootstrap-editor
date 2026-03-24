@@ -1,6 +1,8 @@
-import { InnerBlocks, useBlockProps, RichText, InspectorControls } from '@wordpress/block-editor';
+import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, ToggleControl } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
+import metadata from './block.json';
 
 export default function Edit ({ attributes, setAttributes }) {
 
@@ -8,17 +10,18 @@ export default function Edit ({ attributes, setAttributes }) {
         ['core/paragraph', {placeholder: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.'}]
     ];
 
-    const { narrowWidth, cover } = attributes;
+    const { narrowWidth } = attributes;
+    const previewImage = metadata?.example?.attributes?.cover || '';
+    const isPreview = useSelect(
+        ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
+        []
+    );
     const blockProps = useBlockProps( {
         className: `excelsior-blockquote ${narrowWidth ? 'w-75 mx-auto' : ''}`,
     } );
 
-    if ( cover ) {
-        return(
-            <>
-            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
-            </>
-        );
+    if ( isPreview && previewImage ) {
+        return <img src={xclsr_btstrp_block_preview.pluginUrl + previewImage} width='100%' height='auto' />;
     }
 
     return (

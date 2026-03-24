@@ -1,5 +1,5 @@
 {
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "excelsior-bootstrap-editor/carousel",
     "title": "Carousel",
     "description": "Create Carousel for cycling through images—like a slideshow.",
@@ -15,10 +15,6 @@
         "excelsior-bootstrap-editor/activeSlide": "activeSlide"
     },
     "attributes": {
-        "cover": {
-            "type": "string",
-            "default": "admin/images/carousel.webp"
-        },
         "uniqueId": {
             "type": "string",
             "default": ""

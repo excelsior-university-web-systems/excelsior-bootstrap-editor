@@ -1,5 +1,5 @@
 {
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "excelsior-bootstrap-editor/task",
     "title": "Task",
     "description": "Create a task item.",

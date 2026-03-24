@@ -1,5 +1,5 @@
 {
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "excelsior-bootstrap-editor/tabs",
     "title": "Tabs",
     "description": "Create tabs to organize information into separate sections.",
@@ -11,10 +11,6 @@
         }
     },
     "attributes": {
-        "cover": {
-            "type": "string",
-            "default": ""
-        },
         "tabs": {
             "type": "array",
             "default": []

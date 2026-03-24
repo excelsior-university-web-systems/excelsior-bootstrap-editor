@@ -1,20 +1,23 @@
 import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, SelectControl } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
+import metadata from './block.json';
 
 export default function Edit( { attributes, setAttributes} ) {
     
-    const { accordionHeadingLevel, accordionHeadingSize, cover } = attributes;
+    const { accordionHeadingLevel, accordionHeadingSize } = attributes;
+    const previewImage = metadata?.example?.attributes?.cover || '';
+    const isPreview = useSelect(
+        ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
+        []
+    );
     const blockProps = useBlockProps({
         className: 'accordion',
     });
 
-    if ( cover ) {
-        return(
-            <>
-            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
-            </>
-        );
+    if ( isPreview && previewImage ) {
+        return <img src={xclsr_btstrp_block_preview.pluginUrl + previewImage} width='100%' height='auto' />;
     }
 
     return (

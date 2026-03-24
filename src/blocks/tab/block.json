@@ -1,5 +1,5 @@
 {
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "excelsior-bootstrap-editor/tab",
     "title": "Tab",
     "description": "Create a tab item.",

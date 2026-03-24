@@ -1,5 +1,5 @@
 {
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "excelsior-bootstrap-editor/code-block",
     "title": "Code Block",
     "description": "Create code snippet with syntax highlighting.",
@@ -14,10 +14,6 @@
         }
     },
     "attributes": {
-        "cover": {
-            "type": "string",
-            "default": ""
-        },
         "content": {
 			"type": "string"
 		},

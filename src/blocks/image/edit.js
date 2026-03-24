@@ -5,14 +5,21 @@ import {
     __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
 import { useState } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
+import metadata from './block.json';
 
 export default function Edit ( { attributes, setAttributes, context } ) {
 
-    const { url, alignmentEnabled, alignment, alignmentSize, centerAlignment, caption, altText, mobileResponsive, cover, useDiv, enlargeable } = attributes;
+    const { url, alignmentEnabled, alignment, alignmentSize, centerAlignment, caption, altText, mobileResponsive, useDiv, enlargeable } = attributes;
     const inAlignmentEnabledEl = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/alignmentEnabled'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/alignmentEnabled'] : false;
     const inBlockqoute = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/inBlockqoute'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/inBlockqoute'] : false;
     const inCarousel = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/inCarousel'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/inCarousel'] : false;
+    const previewImage = metadata?.example?.attributes?.cover || '';
+    const isPreview = useSelect(
+        ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
+        []
+    );
     const [tempUrl, setTempUrl] = useState('');
     const [tempAltText, setTempAltText] = useState('');
     const [tempCaption, setTempCaption] = useState('');
@@ -28,6 +35,10 @@ export default function Edit ( { attributes, setAttributes, context } ) {
         setHasError(true); 
     };
 
+    if ( isPreview && previewImage ) {
+        return <img src={xclsr_btstrp_block_preview.pluginUrl + previewImage} width='100%' height='auto' />;
+    }
+
     if ( inAlignmentEnabledEl ) {
         setAttributes( {alignmentEnabled: true} );
         setAttributes( {mobileResponsive: false} );
@@ -37,14 +48,6 @@ export default function Edit ( { attributes, setAttributes, context } ) {
 
     if ( inBlockqoute || inCarousel ) {
         setAttributes( {useDiv: true} );
-    }
-
-    if ( cover ) {
-        return(
-            <>
-            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
-            </>
-        );
     }
 
     return (

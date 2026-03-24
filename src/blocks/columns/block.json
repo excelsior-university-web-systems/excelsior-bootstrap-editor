@@ -1,5 +1,5 @@
 {
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "excelsior-bootstrap-editor/columns",
     "title": "Columns",
     "description": "Create columns to organize content into a multi-column layout.",
@@ -14,10 +14,6 @@
         }
     },
     "attributes": {
-        "cover": {
-            "type": "string",
-            "default": ""
-        },
         "colSize": {
             "type": "string",
             "default": "3"

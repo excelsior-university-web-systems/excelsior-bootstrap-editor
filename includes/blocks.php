@@ -101,7 +101,7 @@ add_action( 'enqueue_block_editor_assets', function() {
         XCLSR_BTSTRP_EDITOR_VERSION
     );
 
-    //insert inline code script
+    // insert inline code script
     wp_enqueue_script(
         XCLSR_BTSTRP_EDITOR_PREFIX.'-inline-code',
         plugins_url( '/build/inline-code/index.js', dirname(__FILE__) ),
@@ -109,19 +109,13 @@ add_action( 'enqueue_block_editor_assets', function() {
         XCLSR_BTSTRP_EDITOR_VERSION
     );
 
-    global $post_type;
-    
-    if ( $post_type === XCLSR_BTSTRP_POST_TYPE ) {
-
-        // editor modification script/style
-        wp_enqueue_script(
-            XCLSR_BTSTRP_EDITOR_PREFIX.'-modification',
-            plugins_url( '/build/editor/index.js', dirname(__FILE__) ),
-            array( 'wp-blocks', 'wp-dom-ready', 'wp-rich-text', 'wp-format-library', 'wp-edit-post' ),
-            XCLSR_BTSTRP_EDITOR_VERSION
-        );
-
-    }
+    // insert script to enhance the block editor with additional editor and global block settings
+    wp_enqueue_script(
+        XCLSR_BTSTRP_EDITOR_PREFIX.'-modification',
+        plugins_url( '/build/editor/index.js', dirname(__FILE__) ),
+        array( 'wp-blocks', 'wp-dom-ready', 'wp-rich-text', 'wp-format-library', 'wp-edit-post' ),
+        XCLSR_BTSTRP_EDITOR_VERSION
+    );
 
 } );
 

@@ -1,5 +1,5 @@
 {
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "excelsior-bootstrap-editor/blockquote",
     "title": "Blockquote",
     "description": "Create a blockquote to highlight a quotation.",
@@ -17,10 +17,6 @@
         "excelsior-bootstrap-editor/inBlockqoute": "inBlockqoute"
     },
     "attributes": {
-        "cover": {
-            "type": "string",
-            "default": ""
-        },
         "narrowWidth": {
             "type": "boolean",
             "default": false

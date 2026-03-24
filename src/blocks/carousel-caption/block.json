@@ -1,5 +1,5 @@
 {
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "excelsior-bootstrap-editor/carousel-caption",
     "title": "Carousel Caption",
     "description": "Create a carousel slide caption.",

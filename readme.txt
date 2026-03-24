@@ -1,10 +1,10 @@
 === Excelsior Bootstrap Editor ===
 Contributors: eslin87
 Tags: bootstrap, css, js, editor, block
-Requires at least: 5.0
+Requires at least: 5.3
 Requires PHP: 8.0
 Tested up to: 6.9
-Stable tag: 1.0.26
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,19 @@ This section describes how to install and activate the plugin.
 
 == Changelog ==
 
+= 1.1.0 (2026-03-25) =
+* New block for the Collapsible (Show/Hide) component (implemented but not available for use yet).
+* Added new "Add an empty block" button at the end of the Content Canvas area.
+* Heading size and style settings are now available outside of the Excelsior Bootstrap post type restriction.
+* Unify Block Inserter Preview Handling.
+* Table caption is now unhidden.
+
+= 1.0.27 (2026-03-11) =
+* Updated templates to add underlined header style to H2 headers.
+* Updated homepage template to remove the "Your Instructor and Peers" button.
+* Added a new icons: `check-square` and `bi-gear-fill`.
+* Added the `bi-gear` (technical guide) icon to the horizontal rule block icon options.
+
 = 1.0.26 (2026-02-11) =
 * Disabled WordPress's stretchy text blocks within Excelsior Bootstrap blocks.
 
@@ -49,4 +62,4 @@ This section describes how to install and activate the plugin.
 * Updated instructor notes template.
 * Updated Excelsior Bootstrap framework to version 1.0.14.
 
-Previous release changelog can be viewed at https://github.com/excelsior-university-web-systems/excelsior-bootstrap-editor/blob/main/CHANGELOG.md.
+Previous release notes can be viewed in [CHANGELOG](CHANGELOG).

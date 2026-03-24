@@ -1,6 +1,8 @@
 import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
+import metadata from './block.json';
 
 export default function Edit ({ attributes, setAttributes }) {
 
@@ -8,19 +10,20 @@ export default function Edit ({ attributes, setAttributes }) {
         ['core/paragraph', {placeholder: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.'}]
     ];
 
-    const { styleType, narrowWidth, cover } = attributes;
+    const { styleType, narrowWidth } = attributes;
+    const previewImage = metadata?.example?.attributes?.cover || '';
+    const isPreview = useSelect(
+        ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
+        []
+    );
 
     const blockProps = useBlockProps( {
         className: `tip${styleType.length ? ' ' + styleType : ''}${narrowWidth ? ' w-75 mx-auto' : ''}`,
         role: 'alert'
     } );
 
-    if ( cover ) {
-        return(
-            <>
-            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
-            </>
-        );
+    if ( isPreview && previewImage ) {
+        return <img src={xclsr_btstrp_block_preview.pluginUrl + previewImage} width='100%' height='auto' />;
     }
 
     return (

@@ -1,5 +1,5 @@
 {
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "excelsior-bootstrap-editor/buttons",
     "title": "Buttons",
     "description": "Create button to navigate between pages or websites.",
@@ -13,10 +13,5 @@
             "cover": "admin/images/buttons.webp"
         }
     },
-    "attributes": {
-        "cover": {
-            "type": "string",
-            "default": ""
-        }
-    }
+    "attributes": {}
 }

@@ -1,0 +1,29 @@
+{
+    "apiVersion": 3,
+    "name": "excelsior-bootstrap-editor/collapsible",
+    "title": "Collapsible",
+    "description": "Create a collapsible component that allows authors to show or hide additional content.",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container"],
+    "supports": {
+        "html": false,
+        "inserter": false
+    },
+    "example": {
+        "attributes": {
+            "cover": "admin/images/collapsible.webp"
+        }
+    },
+    "providesContext": {
+        "excelsior-bootstrap-editor/collapsibleContentId": "uniqueId"
+    },
+    "attributes": {
+        "uniqueId": {
+            "type": "string"
+        },
+        "styleType": {
+            "type": "string",
+            "default": ""
+        }
+    }
+}
