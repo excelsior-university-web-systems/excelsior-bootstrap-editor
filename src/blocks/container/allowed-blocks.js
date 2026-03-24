@@ -19,7 +19,6 @@ export const ALLOWED_BLOCKS = [
     XCLSR_BTSTRP_EDITOR_PREFIX + "/tipbox",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/page-navigation",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/carousel",
-    // XCLSR_BTSTRP_EDITOR_PREFIX + "/collapsible",
     "core/freeform",
     "core/heading",
     "core/html",
