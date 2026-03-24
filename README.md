@@ -4,7 +4,7 @@
 **Requires at least:** 5.3  
 **Requires PHP:** 8.0  
 **Tested up to:** 6.9  
-**Stable tag:** 1.0.27  
+**Stable tag:** 1.1.0  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -37,10 +37,12 @@ This section describes how to install and activate the plugin.
 
 ## Changelog ##
 
-### 1.1.0 (2026-04-08) ###
-* New block for the Collapsible (Show/Hide) component.
+### 1.1.0 (2026-03-25) ###
+* New block for the Collapsible (Show/Hide) component (implemented but not available for use yet).
 * Added new "Add an empty block" button at the end of the Content Canvas area.
 * Heading size and style settings are now available outside of the Excelsior Bootstrap post type restriction.
+* Unify Block Inserter Preview Handling.
+* Table caption is now unhidden.
 
 ### 1.0.27 (2026-03-11) ###
 * Updated templates to add underlined header style to H2 headers.
