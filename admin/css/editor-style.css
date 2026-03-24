@@ -227,13 +227,6 @@ p.is-selected:focus code[data-rich-text-format-boundary] {
 }
 
 /* EXCELSIOR BOOTSTRAP EDITOR
-   TABLE */
-
-.wp-block-excelsior-bootstrap-editor-container figure.wp-block-table figcaption {
-    display: none;
-}
-
-/* EXCELSIOR BOOTSTRAP EDITOR
    TABS */
 
 .wp-block-excelsior-bootstrap-editor-tabs .tab-content .block-editor-inner-blocks .block-editor-block-list__layout .wp-block-excelsior-bootstrap-editor-tab {
