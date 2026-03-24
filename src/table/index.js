@@ -51,6 +51,7 @@ registerBlockVariation('core/table', {
     name: BOOTSTRAP_TABLE_VARIATION_NAME,
     title: 'Bootstrap Table',
     description: 'A table with bordered, striped, and compact options.',
+    isDefault: true,
     attributes: {
         isBootstrapTableVariant: true,
         isCompact: false,

@@ -14,6 +14,13 @@ window.Prism = window.Prism || {};
 Prism.manual = true;
 
 const NAMESPACE_BLOCK = `${XCLSR_BTSTRP_EDITOR_PREFIX}/namespace`;
+const CORE_TABLE_BLOCK = 'core/table';
+const BOOTSTRAP_TABLE_VARIATION_ATTRIBUTES = {
+    isBootstrapTableVariant: true,
+    isCompact: false,
+    isStriped: false,
+    border: 'table-bordered',
+};
 
 /**
  * Recursively checks whether a block tree contains the Excelsior namespace block.
@@ -96,6 +103,58 @@ const isBlockInsideNamespace = ( clientId ) => {
     } );
 };
 
+/**
+ * Recursively collects core table blocks nested within the Excelsior namespace block.
+ *
+ * @param {Array<Object>} [blocks=[]] Block tree to scan.
+ * @param {boolean} [isInsideNamespace=false] Whether the current recursion branch is inside the namespace.
+ * @returns {Array<Object>} Matching table blocks that should use the Bootstrap variation.
+ */
+const getNamespaceTableBlocks = ( blocks = [], isInsideNamespace = false ) => {
+    return blocks.flatMap( ( block ) => {
+        const nextIsInsideNamespace =
+            isInsideNamespace || block.name === NAMESPACE_BLOCK;
+        const matchingBlocks =
+            nextIsInsideNamespace && block.name === CORE_TABLE_BLOCK ? [ block ] : [];
+
+        return [
+            ...matchingBlocks,
+            ...getNamespaceTableBlocks( block.innerBlocks || [], nextIsInsideNamespace ),
+        ];
+    } );
+};
+
+/**
+ * Converts namespace-scoped core table blocks to the Bootstrap table variation once.
+ *
+ * @returns {void}
+ */
+const convertNamespaceTablesToBootstrapVariation = () => {
+    if ( ! isExcelsiorBootstrapPostType() ) {
+        return;
+    }
+
+    const blockEditorStore = select( 'core/block-editor' );
+
+    if ( ! blockEditorStore?.getBlocks ) {
+        return;
+    }
+
+    const namespaceTableBlocks = getNamespaceTableBlocks( blockEditorStore.getBlocks() );
+    const blocksNeedingConversion = namespaceTableBlocks.filter( ( block ) => {
+        return block.attributes?.isBootstrapTableVariant !== true;
+    } );
+
+    if ( ! blocksNeedingConversion.length ) {
+        return;
+    }
+
+    dispatch( 'core/block-editor' ).updateBlockAttributes(
+        blocksNeedingConversion.map( ( block ) => block.clientId ),
+        BOOTSTRAP_TABLE_VARIATION_ATTRIBUTES
+    );
+};
+
 let hasActivatedNamespaceEnhancements = false;
 let hasActivatedPostTypeEnhancements = false;
 
@@ -150,6 +209,7 @@ wp.domReady(() => {
 
         if ( isExcelsiorBootstrapPostType() ) {
             activatePostTypeEnhancements();
+            convertNamespaceTablesToBootstrapVariation();
         }
     };
 
