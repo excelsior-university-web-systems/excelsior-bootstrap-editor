@@ -3,10 +3,12 @@ import { PanelBody, SelectControl } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { generateHtmlId, getBlocksOfType } from '../../commons';
+import metadata from './block.json';
 
 export default function Edit({ attributes, setAttributes, clientId }) {
 
-    const { cover, uniqueId, animation, slides, activeSlide } = attributes;
+    const { uniqueId, animation, slides, activeSlide } = attributes;
+    const previewImage = metadata?.example?.attributes?.cover || '';
 
     const blockProps = useBlockProps({
         className: 'carousel',
@@ -20,13 +22,19 @@ export default function Edit({ attributes, setAttributes, clientId }) {
         const allBlocks = select('core/block-editor').getBlocks();
         return getBlocksOfType(allBlocks, 'excelsior-bootstrap-editor/carousel');
     }, []);
+    const isPreview = useSelect(
+        ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
+        []
+    );
 
     // carousel/edit.js
-    const childSlides = useSelect(
+    const childSlideIds = useSelect(
         ( select ) => {
             const { getBlockOrder, getBlockAttributes } = select( 'core/block-editor' );
             const innerBlockIds = getBlockOrder( clientId ) || []; // guard
-            return innerBlockIds.map( ( id ) => getBlockAttributes( id ) || { uniqueId: '' } );
+            return innerBlockIds.map(
+                ( id ) => getBlockAttributes( id )?.uniqueId || ''
+            );
         },
         [ clientId ]
     );
@@ -34,26 +42,39 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
     // Initialize slides if not present
    useEffect( () => {
+        if ( isPreview ) {
+            return;
+        }
+
         if ( ! Array.isArray( slides ) ) {
             setAttributes( { slides: [] } );
         }
-    }, [] );
-
-    useEffect(() => {
-        
-        // Compare current childSlides with attributes.slides
-        if ( JSON.stringify( childSlides ) !== JSON.stringify( slides ) ) {
-            setAttributes({ slides: childSlides });
-        }
-
-        // The first tab is always active
-        if ( childSlides.length > 0 && ( !activeSlide || activeSlide !== childSlides[0].uniqueId ) ) {
-            setAttributes({ activeSlide: childSlides[0].uniqueId });
-        }
-
-    }, [childSlides] );
+    }, [ isPreview, slides ] );
 
     useEffect( () => {
+        if ( isPreview ) {
+            return;
+        }
+
+        const nextSlides = childSlideIds.map( ( id ) => ( { uniqueId: id } ) );
+        const nextActiveSlide = childSlideIds[0] || '';
+
+        if (
+            JSON.stringify( slides ) !== JSON.stringify( nextSlides ) ||
+            activeSlide !== nextActiveSlide
+        ) {
+            setAttributes( {
+                slides: nextSlides,
+                activeSlide: nextActiveSlide
+            } );
+        }
+    }, [ isPreview, childSlideIds, slides, activeSlide ] );
+
+    useEffect( () => {
+        if ( isPreview ) {
+            return;
+        }
+
         // Check if uniqueId already exists in other blocks of the same type
         const isDuplicate = sameTypeBlocks.some(
             ( block ) => block.clientId !== clientId && block.attributes.uniqueId === uniqueId
@@ -63,16 +84,12 @@ export default function Edit({ attributes, setAttributes, clientId }) {
         if ( !uniqueId || isDuplicate ) {
             setAttributes( { uniqueId: generateHtmlId() } );
         }
-    }, [] );
+    }, [ isPreview, sameTypeBlocks, clientId, uniqueId ] );
 
-    if ( cover ) {
-        return(
-            <>
-            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
-            </>
-        );
+    if ( isPreview && previewImage ) {
+        return <img src={xclsr_btstrp_block_preview.pluginUrl + previewImage} width='100%' height='auto' />;
     }
-    
+
     return (
         <>
         <InspectorControls>
