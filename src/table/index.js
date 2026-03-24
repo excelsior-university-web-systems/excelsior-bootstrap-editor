@@ -1,47 +1,96 @@
+import { registerBlockVariation } from '@wordpress/blocks';
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
-import { Fragment, useEffect } from '@wordpress/element';
-import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
-import { PanelBody, ToggleControl, BaseControl } from '@wordpress/components';
-import {
-    __experimentalToggleGroupControl as ToggleGroupControl,
-    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
-} from '@wordpress/components';
+import { Children, Fragment, cloneElement, isValidElement, useEffect } from '@wordpress/element';
+import { InspectorControls } from '@wordpress/block-editor';
+import { PanelBody, ToggleControl } from '@wordpress/components';
+import { __experimentalToggleGroupControl as ToggleGroupControl, __experimentalToggleGroupControlOption as ToggleGroupControlOption } from '@wordpress/components';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../constants';
 
-// Function to modify the core/table block
-function modifyTableBlock(settings, name) {
+const BOOTSTRAP_TABLE_VARIATION_NAME = `${XCLSR_BTSTRP_EDITOR_PREFIX}/bootstrap-table`;
+const TABLE_BORDERED = 'table-bordered';
+const TABLE_BORDERLESS = 'table-borderless';
+const MANAGED_TABLE_CLASSES = ['table', 'table-sm', 'table-striped', TABLE_BORDERED, TABLE_BORDERLESS];
 
+const getBootstrapTableClasses = (attributes = {}) => {
+    const { border = TABLE_BORDERED, isStriped = false, isCompact = false } = attributes;
+
+    return ['table', border === TABLE_BORDERLESS ? TABLE_BORDERLESS : TABLE_BORDERED, isStriped ? 'table-striped' : '', isCompact ? 'table-sm' : ''].filter(Boolean);
+};
+
+const syncTableClasses = (tableElement, attributes) => {
+    if (!tableElement) {
+        return;
+    }
+
+    tableElement.classList.remove(...MANAGED_TABLE_CLASSES);
+    tableElement.classList.add(...getBootstrapTableClasses(attributes));
+};
+
+const getEditorDocuments = () => {
+    const iframeDocuments = Array.from(document.querySelectorAll('iframe'))
+        .map((iframe) => iframe.contentDocument)
+        .filter(Boolean);
+
+    return [document, ...iframeDocuments];
+};
+
+const findBlockElement = (clientId) => {
+    for (const editorDocument of getEditorDocuments()) {
+        const blockElement = editorDocument.querySelector(`[data-block="${clientId}"]`);
+
+        if (blockElement) {
+            return blockElement;
+        }
+    }
+
+    return null;
+};
+
+registerBlockVariation('core/table', {
+    name: BOOTSTRAP_TABLE_VARIATION_NAME,
+    title: 'Bootstrap Table',
+    description: 'A table with bordered, striped, and compact options.',
+    attributes: {
+        isBootstrapTableVariant: true,
+        isCompact: false,
+        isStriped: false,
+        border: TABLE_BORDERED,
+        fixedLayout: false,
+        hasFixedLayout: false,
+    },
+    isActive: (blockAttributes) => blockAttributes.isBootstrapTableVariant === true,
+    scope: ['inserter', 'block'],
+});
+
+function modifyTableBlock(settings, name) {
     if (name !== 'core/table') {
         return settings;
     }
 
-    // Remove caption attribute
-    if (settings.attributes && settings.attributes.caption) {
-        delete settings.attributes.caption;
-    }
-
-    // Add custom attributes
     settings.attributes = {
         ...settings.attributes,
+        hasFixedLayout: {
+            ...settings.attributes?.hasFixedLayout,
+            type: 'boolean',
+            default: false,
+        },
+        isBootstrapTableVariant: {
+            type: 'boolean',
+            default: false,
+        },
         isCompact: {
-            type: "boolean",
-            default: false
+            type: 'boolean',
+            default: false,
         },
         border: {
-            type: "string",
-            default: "table-bordered"
+            type: 'string',
+            default: TABLE_BORDERED,
         },
         isStriped: {
-            type: "boolean",
-            default: false
-        }
-    };
-
-    // Modify supports
-    settings.supports = {
-        ...settings.supports,
-        align: false
+            type: 'boolean',
+            default: false,
+        },
     };
 
     settings.styles = [];
@@ -49,94 +98,111 @@ function modifyTableBlock(settings, name) {
     return settings;
 }
 
-// Hook into the blocks.registerBlockType filter
-addFilter(
-    'blocks.registerBlockType',
-    XCLSR_BTSTRP_EDITOR_PREFIX + '/customize-core-table',
-    modifyTableBlock
-);
+addFilter('blocks.registerBlockType', `${XCLSR_BTSTRP_EDITOR_PREFIX}/customize-core-table`, modifyTableBlock);
 
-// Create a Higher-Order Component (HOC) to add a custom class in the editor
 const modifyTableEditor = createHigherOrderComponent((BlockEdit) => {
     return (props) => {
         if (props.name !== 'core/table') {
             return <BlockEdit {...props} />;
         }
 
-        const { border, isStriped, isCompact } = props.attributes;
-
-        const applyClasses = (tableElement) => {
-
-            if (tableElement) {
-                const classArray = ['table', border, isStriped ? 'table-striped' : '', isCompact ? 'table-sm' : ''].filter(Boolean);
-                tableElement.classList.add(...classArray);
-            }
-
-        };
+        const { isBootstrapTableVariant, border, isStriped, isCompact } = props.attributes;
 
         useEffect(() => {
+            if (!isBootstrapTableVariant) {
+                return undefined;
+            }
 
-            const blockElement = document.querySelector(`[data-block="${props.clientId}"]`);
+            let observedBlockElement = null;
+            let blockObserver = null;
+            const rootObservers = [];
 
-            if (!blockElement) return;
+            const applyManagedClasses = () => {
+                const blockElement = findBlockElement(props.clientId);
 
-            // Create a MutationObserver to watch for changes in the block element
-            const observer = new MutationObserver(() => {
+                if (!blockElement) {
+                    return;
+                }
+
+                if (observedBlockElement !== blockElement) {
+                    blockObserver?.disconnect();
+                    observedBlockElement = blockElement;
+
+                    const MutationObserverClass =
+                        blockElement.ownerDocument.defaultView?.MutationObserver ||
+                        MutationObserver;
+
+                    blockObserver = new MutationObserverClass(() => {
+                        const nextTableElement = blockElement.querySelector('table');
+                        syncTableClasses(nextTableElement, props.attributes);
+                    });
+
+                    blockObserver.observe(blockElement, {
+                        childList: true,
+                        subtree: true,
+                    });
+                }
+
                 const tableElement = blockElement.querySelector('table');
-                applyClasses(tableElement);
+                syncTableClasses(tableElement, props.attributes);
+            };
+
+            getEditorDocuments().forEach((editorDocument) => {
+                if (!editorDocument.body) {
+                    return;
+                }
+
+                const MutationObserverClass =
+                    editorDocument.defaultView?.MutationObserver || MutationObserver;
+                const rootObserver = new MutationObserverClass(applyManagedClasses);
+
+                rootObserver.observe(editorDocument.body, {
+                    childList: true,
+                    subtree: true,
+                });
+
+                rootObservers.push(rootObserver);
             });
 
-            // Start observing the block element for childList changes
-            observer.observe(blockElement, {
-                childList: true,
-                subtree: true,
-            });
+            applyManagedClasses();
 
-            // Initial application of classes
-            const initialTableElement = blockElement.querySelector('table');
-            applyClasses(initialTableElement);
-
-            // Cleanup observer on unmount
             return () => {
-                observer.disconnect();
-                if (initialTableElement) {
-                    const classArray = ['table', border, isStriped ? 'table-striped' : '', isCompact ? 'table-sm' : ''].filter(Boolean);
-                    initialTableElement.classList.remove(...classArray);
+                blockObserver?.disconnect();
+                rootObservers.forEach((observer) => observer.disconnect());
+
+                const tableElement = observedBlockElement?.querySelector('table');
+
+                if (tableElement) {
+                    tableElement.classList.remove(...MANAGED_TABLE_CLASSES);
                 }
             };
-        }, [props.clientId, border, isStriped, isCompact]);
+        }, [props.attributes, props.clientId, isBootstrapTableVariant, border, isStriped, isCompact]);
+
+        if (!isBootstrapTableVariant) {
+            return <BlockEdit {...props} />;
+        }
 
         return (
             <Fragment>
-                <BlockEdit {...props} {...useBlockProps()} />
+                <BlockEdit {...props} />
                 <InspectorControls>
                     {props.isSelected && (
-                        <PanelBody>
-                            <BaseControl label="Styles" __nextHasNoMarginBottom>
-                                <ToggleControl
-                                    label="Striped"
-                                    checked={isStriped}
-                                    onChange={(value) => props.setAttributes({ isStriped: value })}
-                                    __nextHasNoMarginBottom
-                                />
-                                <ToggleControl
-                                    label="Compact"
-                                    checked={isCompact}
-                                    onChange={(value) => props.setAttributes({ isCompact: value })}
-                                    __nextHasNoMarginBottom
-                                />
-                            </BaseControl>
+                        <PanelBody title='Bootstrap Table'>
+                            <ToggleControl label='Striped' checked={isStriped} onChange={(value) => props.setAttributes({ isStriped: value })} __nextHasNoMarginBottom />
+                            <ToggleControl label='Compact' checked={isCompact} onChange={(value) => props.setAttributes({ isCompact: value })} __nextHasNoMarginBottom />
                             <ToggleGroupControl
-                                label="Border"
+                                label='Border'
                                 value={border}
-                                onChange={(value) => props.setAttributes({ border: value })}
+                                onChange={(value) =>
+                                    props.setAttributes({
+                                        border: value || TABLE_BORDERED,
+                                    })
+                                }
                                 isBlock
                                 __next40pxDefaultSize
-                                __nextHasNoMarginBottom
-                            >
-                                <ToggleGroupControlOption value="" label="Simple" />
-                                <ToggleGroupControlOption value="table-bordered" label="Bordered" />
-                                <ToggleGroupControlOption value="table-borderless" label="Borderless" />
+                                __nextHasNoMarginBottom>
+                                <ToggleGroupControlOption value={TABLE_BORDERED} label='Bordered' />
+                                <ToggleGroupControlOption value={TABLE_BORDERLESS} label='Borderless' />
                             </ToggleGroupControl>
                         </PanelBody>
                     )}
@@ -146,39 +212,28 @@ const modifyTableEditor = createHigherOrderComponent((BlockEdit) => {
     };
 }, 'modifyTableEditor');
 
-// Hook into the editor.BlockEdit filter
-addFilter(
-    'editor.BlockEdit',
-    XCLSR_BTSTRP_EDITOR_PREFIX + '/modify-table-editor',
-    modifyTableEditor
-);
+addFilter('editor.BlockEdit', `${XCLSR_BTSTRP_EDITOR_PREFIX}/modify-table-editor`, modifyTableEditor);
 
-// Function to filter the save element
 function filterTableSave(element, blockType, attributes) {
-    if (blockType.name !== 'core/table') {
+    if (blockType.name !== 'core/table' || !attributes.isBootstrapTableVariant || !isValidElement(element) || element.type !== 'figure') {
         return element;
     }
 
-    // Ensure the element is valid and is a figure
-    if (element && element.type === 'figure') {
+    const children = Children.map(element.props.children, (child) => {
+        if (!isValidElement(child) || child.type !== 'table') {
+            return child;
+        }
 
-        // Extract the children of the figure element (usually the table and optionally the caption)
-        const tableElement = element.props.children.find((child) => child.type === 'table');
-        
-        const {border, isStriped, isCompact} = attributes;
-        const classes = `table${border.length ? ' ' + border : ''}${isStriped ? ' table-striped' : ''}${isCompact ? ' table-sm' : ''}`;
+        const existingClasses = (child.props.className || '')
+            .split(/\s+/)
+            .filter(Boolean)
+            .filter((className) => !MANAGED_TABLE_CLASSES.includes(className));
+        const className = [...existingClasses, ...getBootstrapTableClasses(attributes)].join(' ').trim();
 
-        tableElement.props.className = `${tableElement.props.className || ''} ${classes}`.trim();
+        return cloneElement(child, { className });
+    });
 
-        return tableElement; // Return only the table element
-    }
-
-    return element;
+    return cloneElement(element, undefined, children || element.props.children);
 }
 
-// Hook into the blocks.getSaveElement filter
-addFilter(
-    'blocks.getSaveElement',
-    XCLSR_BTSTRP_EDITOR_PREFIX + '/filter-table-save',
-    filterTableSave
-);
+addFilter('blocks.getSaveElement', `${XCLSR_BTSTRP_EDITOR_PREFIX}/filter-table-save`, filterTableSave);
