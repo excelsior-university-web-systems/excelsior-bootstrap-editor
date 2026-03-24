@@ -13,10 +13,5 @@
             "cover": "admin/images/task-group.webp"
         }
     },
-    "attributes": {
-        "cover": {
-            "type": "string",
-            "default": ""
-        }
-    }
+    "attributes": {}
 }

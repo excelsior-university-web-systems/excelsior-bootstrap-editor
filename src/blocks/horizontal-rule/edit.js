@@ -5,6 +5,8 @@ import {
     __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
 import { createElement } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
+import metadata from './block.json';
 
 const ICONS = [
     { name: 'bi-box', label: 'Immersive Page'},
@@ -30,7 +32,12 @@ const ICONS = [
 
 export default function Edit ({ attributes, setAttributes }) {
     
-    const { selectedIcon, size, decorative, noIcon, cover, styleType } = attributes;
+    const { selectedIcon, size, decorative, noIcon, styleType } = attributes;
+    const previewImage = metadata?.example?.attributes?.cover || '';
+    const isPreview = useSelect(
+        ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
+        []
+    );
 
     const handleIconSelect = (iconName) => {
         setAttributes({ selectedIcon: iconName });
@@ -48,12 +55,8 @@ export default function Edit ({ attributes, setAttributes }) {
         role: decorative ? 'presentation' : undefined
     } );
 
-    if ( cover ) {
-        return(
-            <>
-            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
-            </>
-        );
+    if ( isPreview && previewImage ) {
+        return <img src={xclsr_btstrp_block_preview.pluginUrl + previewImage} width='100%' height='auto' />;
     }
 
     return (

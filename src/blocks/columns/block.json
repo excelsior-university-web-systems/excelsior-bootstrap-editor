@@ -14,10 +14,6 @@
         }
     },
     "attributes": {
-        "cover": {
-            "type": "string",
-            "default": ""
-        },
         "colSize": {
             "type": "string",
             "default": "3"

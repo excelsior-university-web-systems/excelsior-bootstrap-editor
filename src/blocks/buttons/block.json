@@ -13,10 +13,5 @@
             "cover": "admin/images/buttons.webp"
         }
     },
-    "attributes": {
-        "cover": {
-            "type": "string",
-            "default": ""
-        }
-    }
+    "attributes": {}
 }

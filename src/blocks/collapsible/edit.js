@@ -4,6 +4,7 @@ import { useEffect, useRef } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 import { generateHtmlId, getBlocksOfType } from '../../commons';
+import metadata from './block.json';
 
 export default function Edit ({ attributes, setAttributes, clientId }) {
 
@@ -13,8 +14,12 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
         ['excelsior-bootstrap-editor/collapsible-content', { lock: { remove: true, move: false } }]
     ];
     
-    const { uniqueId, styleType, cover } = attributes;
-    const isPreview = !!cover;
+    const { uniqueId, styleType } = attributes;
+    const previewImage = metadata?.example?.attributes?.cover || '';
+    const isPreview = useSelect(
+        ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
+        []
+    );
 
     const blockProps = useBlockProps( {
         className: `excelsior-collapsible mb-3 ${styleType}`,
@@ -186,12 +191,8 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
         } );
     }, [ firstCollapsibleContentId, firstCollapsibleContentLock, collapsibleContentBlocks.length, isPreview, updateBlockAttributes ]);
 
-    if ( isPreview ) {
-        return(
-            <>
-            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
-            </>
-        );
+    if ( isPreview && previewImage ) {
+        return <img src={xclsr_btstrp_block_preview.pluginUrl + previewImage} width='100%' height='auto' />;
     }
 
     return (

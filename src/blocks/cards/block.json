@@ -17,10 +17,6 @@
         "excelsior-bootstrap-editor/cardBgColor": "bgColor"
     },
     "attributes": {
-        "cover": {
-            "type": "string",
-            "default": ""
-        },
         "colSize": {
             "type": "string",
             "default": "3"

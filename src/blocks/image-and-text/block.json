@@ -17,10 +17,6 @@
         }
     },
     "attributes": {
-        "cover": {
-            "type": "string",
-            "default": ""
-        },
         "alignmentEnabled": {
             "type": "boolean",
             "default": true

@@ -17,10 +17,6 @@
         "excelsior-bootstrap-editor/collapsibleContentId": "uniqueId"
     },
     "attributes": {
-        "cover": {
-            "type": "string",
-            "default": ""
-        },
         "uniqueId": {
             "type": "string"
         },

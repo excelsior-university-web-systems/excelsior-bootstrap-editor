@@ -14,10 +14,6 @@
         }
     },
     "attributes": {
-        "cover": {
-            "type": "string",
-            "default": ""
-        },
         "content": {
 			"type": "string"
 		},

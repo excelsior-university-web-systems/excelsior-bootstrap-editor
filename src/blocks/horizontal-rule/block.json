@@ -14,10 +14,6 @@
         }
     },
     "attributes": {
-        "cover": {
-            "type": "string",
-            "default": ""
-        },
         "selectedIcon": {
             "type": "string",
             "default": "bi-house-door-fill"

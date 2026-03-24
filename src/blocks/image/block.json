@@ -16,10 +16,6 @@
         }
     },
     "attributes": {
-        "cover": {
-            "type": "string",
-            "default": ""
-        },
         "url": {
             "type": "string"
         },

@@ -14,10 +14,6 @@
         }
     },
     "attributes": {
-        "cover": {
-            "type": "string",
-            "default": ""
-        },
         "accordionHeadingLevel": {
             "type": "string",
             "default": "h2"

@@ -1,10 +1,12 @@
 import { InnerBlocks, InspectorControls, useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { PanelBody, SelectControl } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
 import {
     __experimentalToggleGroupControl as ToggleGroupControl,
     __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
+import metadata from './block.json';
 
 export default function Edit( {attributes, setAttributes} ) {
 
@@ -14,7 +16,12 @@ export default function Edit( {attributes, setAttributes} ) {
         [XCLSR_BTSTRP_EDITOR_PREFIX + '/card', {}, []]
     ];
 
-    const { colSize, cover, bgColor } = attributes;
+    const { colSize, bgColor } = attributes;
+    const previewImage = metadata?.example?.attributes?.cover || '';
+    const isPreview = useSelect(
+        ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
+        []
+    );
   
     const blockProps = useBlockProps( {
         className: '',
@@ -33,12 +40,8 @@ export default function Edit( {attributes, setAttributes} ) {
         }
     );
 
-    if ( cover ) {
-        return(
-            <>
-            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
-            </>
-        );
+    if ( isPreview && previewImage ) {
+        return <img src={xclsr_btstrp_block_preview.pluginUrl + previewImage} width='100%' height='auto' />;
     }
     
     return (

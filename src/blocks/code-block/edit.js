@@ -1,13 +1,20 @@
 import { InspectorControls, useBlockProps, BlockControls } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, Modal, TextareaControl, Button, ToolbarGroup, ToolbarButton, ToggleControl, __experimentalSpacer as Spacer } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 import Prism from 'prismjs';
+import metadata from './block.json';
 
 Prism.manual = true;
 
 export default function Edit({ attributes, setAttributes, isSelected }) {
 
-    const { content, language, showLineNumbers, cover } = attributes;
+    const { content, language, showLineNumbers } = attributes;
+    const previewImage = metadata?.example?.attributes?.cover || '';
+    const isPreview = useSelect(
+        ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
+        []
+    );
     const [tempCode, setTempCode] = useState(content || '');
     const [isEditing, setEditing] = useState(false);
     const blockProps = useBlockProps();
@@ -24,6 +31,9 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
     };
 
     useEffect(() => {
+        if ( isPreview ) {
+            return;
+        }
 
         const codeElement = document.querySelector(`[data-block="${blockProps['data-block']}"] code`);
         const preElement = codeElement?.closest('pre');
@@ -40,14 +50,10 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 
         }
 
-    }, [content, language, showLineNumbers]);
+    }, [ isPreview, content, language, showLineNumbers ]);
 
-    if ( cover ) {
-        return(
-            <>
-            <img src={xclsr_btstrp_block_preview.pluginUrl + cover} width='100%' height='auto' />
-            </>
-        );
+    if ( isPreview && previewImage ) {
+        return <img src={xclsr_btstrp_block_preview.pluginUrl + previewImage} width='100%' height='auto' />;
     }
     
     return (

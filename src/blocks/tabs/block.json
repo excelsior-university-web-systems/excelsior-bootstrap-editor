@@ -11,10 +11,6 @@
         }
     },
     "attributes": {
-        "cover": {
-            "type": "string",
-            "default": ""
-        },
         "tabs": {
             "type": "array",
             "default": []
