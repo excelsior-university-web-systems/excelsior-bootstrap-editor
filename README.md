@@ -40,6 +40,13 @@ This section describes how to install and activate the plugin.
 ### 1.1.1 (2026-04-08) ###
 * Enabled Collapsible (Show/Hide) block support.
 
+### 1.1.0 (2026-03-25) ###
+* New block for the Collapsible (Show/Hide) component (implemented but not available for use yet).
+* Added new "Add an empty block" button at the end of the Content Canvas area.
+* Heading size and style settings are now available outside of the Excelsior Bootstrap post type restriction.
+* Unify Block Inserter Preview Handling.
+* Table caption is now unhidden.
+
 ### 1.0.27 (2026-03-11) ###
 * Updated templates to add underlined header style to H2 headers.
 * Updated homepage template to remove the "Your Instructor and Peers" button.
