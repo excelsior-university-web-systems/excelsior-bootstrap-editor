@@ -10,7 +10,7 @@ export default function Save( {attributes} ) {
     return (
         <>
         <a id={`btn-${uniqueId}`}
-            className="btn collapsed"
+            className="btn btn-sm collapsed"
             href={'#' + uniqueId}
             role="button"
             data-bs-toggle="collapse"
