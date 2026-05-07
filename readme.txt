@@ -3,8 +3,8 @@ Contributors: eslin87
 Tags: bootstrap, css, js, editor, block
 Requires at least: 5.3
 Requires PHP: 8.0
-Tested up to: 6.9
-Stable tag: 1.1.1
+Tested up to: 7.0
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,9 @@ This section describes how to install and activate the plugin.
 1. Example Excelsior Bootstrap Editor blocks in use.
 
 == Changelog ==
+
+= 1.1.2 (2026-05-13) =
+* Allow core/group and core/spacer block.
 
 = 1.1.1 (2026-04-08) =
 * Enabled Collapsible (Show/Hide) block support.
