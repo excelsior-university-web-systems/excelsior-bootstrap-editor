@@ -27,5 +27,7 @@ export const ALLOWED_BLOCKS = [
     "core/table",
     "core/paragraph",
     "core/math",
+    "core/group",
+    "core/spacer",
     "reblock/reblock-block-selector"
 ];
