@@ -37,6 +37,7 @@ This section describes how to install and activate the plugin.
 
 = 1.1.2 (2026-05-13) =
 * Allow core/group and core/spacer block.
+* Conditionally register Bootstrap table variation so that regular table is still available for non-Excelsior Bootstrap context.
 
 = 1.1.1 (2026-04-08) =
 * Enabled Collapsible (Show/Hide) block support.
