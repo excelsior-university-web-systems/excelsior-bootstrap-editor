@@ -1,3 +1,4 @@
+import domReady from '@wordpress/dom-ready';
 import { registerBlockVariation } from '@wordpress/blocks';
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
@@ -5,12 +6,35 @@ import { Children, Fragment, cloneElement, isValidElement, useEffect } from '@wo
 import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, ToggleControl } from '@wordpress/components';
 import { __experimentalToggleGroupControl as ToggleGroupControl, __experimentalToggleGroupControlOption as ToggleGroupControlOption } from '@wordpress/components';
-import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../constants';
+import { dispatch, select, subscribe, useSelect } from '@wordpress/data';
+import { XCLSR_BTSTRP_EDITOR_PREFIX, XCLSR_BTSTRP_POST_TYPE } from '../constants';
 
+const CORE_TABLE_BLOCK = 'core/table';
+const CONTAINER_BLOCK = `${XCLSR_BTSTRP_EDITOR_PREFIX}/container`;
 const BOOTSTRAP_TABLE_VARIATION_NAME = `${XCLSR_BTSTRP_EDITOR_PREFIX}/bootstrap-table`;
 const TABLE_BORDERED = 'table-bordered';
 const TABLE_BORDERLESS = 'table-borderless';
 const MANAGED_TABLE_CLASSES = ['table', 'table-sm', 'table-striped', TABLE_BORDERED, TABLE_BORDERLESS];
+const BOOTSTRAP_TABLE_VARIATION_ATTRIBUTES = {
+    isBootstrapTableVariant: true,
+    isCompact: false,
+    isStriped: false,
+    border: TABLE_BORDERED,
+    fixedLayout: false,
+    hasFixedLayout: false,
+};
+const BOOTSTRAP_TABLE_VARIATION = {
+    name: BOOTSTRAP_TABLE_VARIATION_NAME,
+    title: 'Bootstrap Table',
+    description: 'A table with bordered, striped, and compact options.',
+    isDefault: true,
+    attributes: BOOTSTRAP_TABLE_VARIATION_ATTRIBUTES,
+    isActive: (blockAttributes) => blockAttributes.isBootstrapTableVariant === true,
+    scope: ['inserter', 'block'],
+};
+
+let isBootstrapTableVariationRegistered = false;
+let isConvertingContainerTables = false;
 
 const getBootstrapTableClasses = (attributes = {}) => {
     const { border = TABLE_BORDERED, isStriped = false, isCompact = false } = attributes;
@@ -47,25 +71,117 @@ const findBlockElement = (clientId) => {
     return null;
 };
 
-registerBlockVariation('core/table', {
-    name: BOOTSTRAP_TABLE_VARIATION_NAME,
-    title: 'Bootstrap Table',
-    description: 'A table with bordered, striped, and compact options.',
-    isDefault: true,
-    attributes: {
-        isBootstrapTableVariant: true,
-        isCompact: false,
-        isStriped: false,
-        border: TABLE_BORDERED,
-        fixedLayout: false,
-        hasFixedLayout: false,
-    },
-    isActive: (blockAttributes) => blockAttributes.isBootstrapTableVariant === true,
-    scope: ['inserter', 'block'],
+const isExcelsiorBootstrapPostType = () => {
+    const editorStore = select('core/editor');
+
+    if (!editorStore || !editorStore.getCurrentPostType) {
+        return false;
+    }
+
+    return editorStore.getCurrentPostType() === XCLSR_BTSTRP_POST_TYPE;
+};
+
+const isBlockInsideContainer = (clientId) => {
+    if (!clientId) {
+        return false;
+    }
+
+    const blockEditorStore = select('core/block-editor');
+
+    if (!blockEditorStore || !blockEditorStore.getBlockParents || !blockEditorStore.getBlockName) {
+        return false;
+    }
+
+    const parentClientIds = blockEditorStore.getBlockParents(clientId);
+
+    return parentClientIds.some((parentClientId) => {
+        return blockEditorStore.getBlockName(parentClientId) === CONTAINER_BLOCK;
+    });
+};
+
+const isBootstrapTableEligible = (clientId) => {
+    return isExcelsiorBootstrapPostType() || isBlockInsideContainer(clientId);
+};
+
+const getContainerTableBlocks = (blocks = [], isInsideContainer = false) => {
+    return blocks.flatMap((block) => {
+        const nextIsInsideContainer = isInsideContainer || block.name === CONTAINER_BLOCK;
+        const matchingBlocks = nextIsInsideContainer && block.name === CORE_TABLE_BLOCK ? [block] : [];
+
+        return [
+            ...matchingBlocks,
+            ...getContainerTableBlocks(block.innerBlocks || [], nextIsInsideContainer),
+        ];
+    });
+};
+
+const convertContainerTablesToBootstrapVariation = () => {
+    if (isConvertingContainerTables || isExcelsiorBootstrapPostType()) {
+        return;
+    }
+
+    const blockEditorStore = select('core/block-editor');
+
+    if (!blockEditorStore || !blockEditorStore.getBlocks) {
+        return;
+    }
+
+    const blocksNeedingConversion = getContainerTableBlocks(blockEditorStore.getBlocks()).filter((block) => {
+        return block.attributes?.isBootstrapTableVariant !== true;
+    });
+
+    if (!blocksNeedingConversion.length) {
+        return;
+    }
+
+    isConvertingContainerTables = true;
+
+    try {
+        dispatch('core/block-editor').updateBlockAttributes(
+            blocksNeedingConversion.map((block) => block.clientId),
+            BOOTSTRAP_TABLE_VARIATION_ATTRIBUTES
+        );
+    } finally {
+        isConvertingContainerTables = false;
+    }
+};
+
+const registerBootstrapTableVariation = () => {
+    if (isBootstrapTableVariationRegistered) {
+        return;
+    }
+
+    isBootstrapTableVariationRegistered = true;
+
+    try {
+        registerBlockVariation(CORE_TABLE_BLOCK, BOOTSTRAP_TABLE_VARIATION);
+    } catch (error) {
+        isBootstrapTableVariationRegistered = false;
+        throw error;
+    }
+};
+
+const syncBootstrapTableVariationRegistration = () => {
+    if (isExcelsiorBootstrapPostType()) {
+        registerBootstrapTableVariation();
+    }
+};
+
+domReady(() => {
+    const syncBootstrapTableState = () => {
+        if (!isBootstrapTableVariationRegistered) {
+            syncBootstrapTableVariationRegistration();
+        }
+
+        convertContainerTablesToBootstrapVariation();
+    };
+
+    syncBootstrapTableState();
+    subscribe(syncBootstrapTableState);
 });
 
 function modifyTableBlock(settings, name) {
-    if (name !== 'core/table') {
+    if (name !== CORE_TABLE_BLOCK) {
         return settings;
     }
 
@@ -103,14 +219,15 @@ addFilter('blocks.registerBlockType', `${XCLSR_BTSTRP_EDITOR_PREFIX}/customize-c
 
 const modifyTableEditor = createHigherOrderComponent((BlockEdit) => {
     return (props) => {
-        if (props.name !== 'core/table') {
+        if (props.name !== CORE_TABLE_BLOCK) {
             return <BlockEdit {...props} />;
         }
 
+        const isEligible = useSelect(() => isBootstrapTableEligible(props.clientId), [props.clientId]);
         const { isBootstrapTableVariant, border, isStriped, isCompact } = props.attributes;
 
         useEffect(() => {
-            if (!isBootstrapTableVariant) {
+            if (!isEligible || !isBootstrapTableVariant) {
                 return undefined;
             }
 
@@ -177,9 +294,9 @@ const modifyTableEditor = createHigherOrderComponent((BlockEdit) => {
                     tableElement.classList.remove(...MANAGED_TABLE_CLASSES);
                 }
             };
-        }, [props.attributes, props.clientId, isBootstrapTableVariant, border, isStriped, isCompact]);
+        }, [props.attributes, props.clientId, isEligible, isBootstrapTableVariant, border, isStriped, isCompact]);
 
-        if (!isBootstrapTableVariant) {
+        if (!isEligible || !isBootstrapTableVariant) {
             return <BlockEdit {...props} />;
         }
 
@@ -216,7 +333,7 @@ const modifyTableEditor = createHigherOrderComponent((BlockEdit) => {
 addFilter('editor.BlockEdit', `${XCLSR_BTSTRP_EDITOR_PREFIX}/modify-table-editor`, modifyTableEditor);
 
 function filterTableSave(element, blockType, attributes) {
-    if (blockType.name !== 'core/table' || !attributes.isBootstrapTableVariant || !isValidElement(element) || element.type !== 'figure') {
+    if (blockType.name !== CORE_TABLE_BLOCK || !attributes.isBootstrapTableVariant || !isValidElement(element) || element.type !== 'figure') {
         return element;
     }
 
