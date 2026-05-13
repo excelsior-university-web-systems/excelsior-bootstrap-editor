@@ -4,7 +4,7 @@
 **Requires at least:** 5.3  
 **Requires PHP:** 8.0  
 **Tested up to:** 7.0  
-**Stable tag:** 1.1.2  
+**Stable tag:** 1.1.3  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -36,6 +36,10 @@ This section describes how to install and activate the plugin.
 
 
 ## Changelog ##
+
+### 1.1.3 (2026-05-13) ###
+* Add core/group as allowed parent
+* Remove hardcoded 'Show' text from Collapsible button
 
 ### 1.1.2 (2026-05-13) ###
 * Allow core/group and core/spacer block.
