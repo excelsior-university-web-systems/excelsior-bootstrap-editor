@@ -4,7 +4,7 @@
     "title": "Tabs",
     "description": "Create tabs to organize information into separate sections.",
     "category": "excelsior-bootstrap-editor-blocks",
-    "parent": ["excelsior-bootstrap-editor/container"],
+    "parent": ["excelsior-bootstrap-editor/container", "core/group"],
     "example": {
         "attributes": {
             "cover": "admin/images/tabs.webp"

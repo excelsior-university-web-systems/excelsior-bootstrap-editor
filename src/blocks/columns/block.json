@@ -4,7 +4,7 @@
     "title": "Columns",
     "description": "Create columns to organize content into a multi-column layout.",
     "category": "excelsior-bootstrap-editor-blocks",
-    "parent": ["excelsior-bootstrap-editor/container"],
+    "parent": ["excelsior-bootstrap-editor/container", "core/group"],
     "supports": {
         "html": false
     },

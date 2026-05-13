@@ -4,7 +4,7 @@
     "title": "Image",
     "description": "Insert an image to display visuals.",
     "category": "excelsior-bootstrap-editor-blocks",
-    "parent": ["excelsior-bootstrap-editor/container"],
+    "parent": ["excelsior-bootstrap-editor/container", "core/group"],
     "supports": {
         "html": false,
         "lock": true

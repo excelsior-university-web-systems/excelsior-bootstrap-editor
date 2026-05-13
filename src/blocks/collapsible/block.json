@@ -4,7 +4,7 @@
     "title": "Collapsible",
     "description": "Create a collapsible component that allows authors to show or hide additional content.",
     "category": "excelsior-bootstrap-editor-blocks",
-    "parent": ["excelsior-bootstrap-editor/container"],
+    "parent": ["excelsior-bootstrap-editor/container", "core/group"],
     "supports": {
         "html": false
     },

@@ -4,7 +4,7 @@
     "title": "Carousel",
     "description": "Create Carousel for cycling through images—like a slideshow.",
     "category": "excelsior-bootstrap-editor-blocks",
-    "parent": ["excelsior-bootstrap-editor/container"],
+    "parent": ["excelsior-bootstrap-editor/container", "core/group"],
     "example": {
         "attributes": {
             "cover": "admin/images/carousel.webp"

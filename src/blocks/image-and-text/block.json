@@ -4,7 +4,7 @@
     "title": "Image and Text",
     "description": "Create an image with text wrap, which allows text to flow around it.",
     "category": "excelsior-bootstrap-editor-blocks",
-    "parent": ["excelsior-bootstrap-editor/container"],
+    "parent": ["excelsior-bootstrap-editor/container", "core/group"],
     "supports": {
         "html": false
     },

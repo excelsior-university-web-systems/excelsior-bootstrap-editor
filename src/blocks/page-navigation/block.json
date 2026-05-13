@@ -3,7 +3,7 @@
     "name": "excelsior-bootstrap-editor/page-navigation",
     "title": "Page Navigation",
     "category": "excelsior-bootstrap-editor-blocks",
-    "parent": ["excelsior-bootstrap-editor/container"],
+    "parent": ["excelsior-bootstrap-editor/container", "core/group"],
     "supports": {
         "html": false,
         "multiple": false,

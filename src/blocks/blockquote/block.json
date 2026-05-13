@@ -4,7 +4,7 @@
     "title": "Blockquote",
     "description": "Create a blockquote to highlight a quotation.",
     "category": "excelsior-bootstrap-editor-blocks",
-    "parent": ["excelsior-bootstrap-editor/container"],
+    "parent": ["excelsior-bootstrap-editor/container", "core/group"],
     "supports": {
         "html": false
     },

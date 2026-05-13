@@ -4,7 +4,7 @@
     "title": "Image Banner",
     "description": "Insert a visually prominent graphic to capture attention, often displayed at the top of a page.",
     "category": "excelsior-bootstrap-editor-blocks",
-    "parent": ["excelsior-bootstrap-editor/container"],
+    "parent": ["excelsior-bootstrap-editor/container", "core/group"],
     "supports": {
         "html": false,
         "multiple": false
