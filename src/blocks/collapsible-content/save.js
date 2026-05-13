@@ -17,7 +17,7 @@ export default function Save( {attributes} ) {
             aria-expanded="false"
             aria-controls={uniqueId}
         >
-            Show <span className='btn-label'>{buttonText}</span>
+            <span className='btn-label'>{buttonText}</span>
             <i class="bi bi-chevron-down" aria-hidden="true"></i>
         </a>
         <div {...blockProps} id={uniqueId} role="region" aria-labelledby={`btn-${uniqueId}`}>

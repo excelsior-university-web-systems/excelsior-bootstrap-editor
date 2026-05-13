@@ -22,7 +22,6 @@ export default function Edit( {attributes, setAttributes, context} ) {
         
         <div {...blockProps}>
             <div id={`btn-${uniqueId}`} className="btn btn-sm mb-3" href={'#'+uniqueId}>
-            Show &nbsp;
             <RichText
                 className="btn-label"
                 tagName="span"
