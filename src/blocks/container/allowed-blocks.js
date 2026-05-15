@@ -19,6 +19,7 @@ export const ALLOWED_BLOCKS = [
     XCLSR_BTSTRP_EDITOR_PREFIX + "/tipbox",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/page-navigation",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/carousel",
+    XCLSR_BTSTRP_EDITOR_PREFIX + "/collapsible",
     "core/freeform",
     "core/heading",
     "core/html",
@@ -26,5 +27,7 @@ export const ALLOWED_BLOCKS = [
     "core/table",
     "core/paragraph",
     "core/math",
+    "core/group",
+    "core/spacer",
     "reblock/reblock-block-selector"
 ];

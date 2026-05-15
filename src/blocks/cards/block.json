@@ -4,7 +4,7 @@
     "title": "Cards",
     "description": "Create cards to display content in a compact, organized format, often used for showcasing.",
     "category": "excelsior-bootstrap-editor-blocks",
-    "parent": ["excelsior-bootstrap-editor/container"],
+    "parent": ["excelsior-bootstrap-editor/container", "core/group"],
     "supports": {
         "html": false
     },

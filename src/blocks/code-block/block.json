@@ -4,7 +4,7 @@
     "title": "Code Block",
     "description": "Create code snippet with syntax highlighting.",
     "category": "excelsior-bootstrap-editor-blocks",
-    "parent": ["excelsior-bootstrap-editor/container"],
+    "parent": ["excelsior-bootstrap-editor/container", "core/group"],
     "supports": {
         "html": false
     },

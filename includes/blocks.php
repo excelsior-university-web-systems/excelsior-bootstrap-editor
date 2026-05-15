@@ -89,7 +89,7 @@ add_action( 'enqueue_block_editor_assets', function() {
     wp_enqueue_script(
         XCLSR_BTSTRP_EDITOR_PREFIX.'-core-table-modification',
         plugins_url( '/build/table/index.js', dirname(__FILE__) ),
-        array( 'wp-blocks', 'wp-dom-ready', 'wp-edit-post' ),
+        array( 'wp-blocks', 'wp-dom-ready', 'wp-edit-post', 'wp-data' ),
         XCLSR_BTSTRP_EDITOR_VERSION
     );
 

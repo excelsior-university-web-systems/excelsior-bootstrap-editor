@@ -34,3 +34,7 @@
 .block-editor-bindings__panel {
     display: none !important;
 }
+
+.dimensions-block-support-panel {
+    display: none !important;
+}

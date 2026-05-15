@@ -4,7 +4,7 @@
     "title": "Horizontal Rule",
     "description": "Create a thematic break or divider between content sections.",
     "category": "excelsior-bootstrap-editor-blocks",
-    "parent": ["excelsior-bootstrap-editor/container"],
+    "parent": ["excelsior-bootstrap-editor/container", "core/group"],
     "supports": {
         "html": false
     },
