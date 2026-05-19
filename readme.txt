@@ -1,10 +1,10 @@
 === Excelsior Bootstrap Editor ===
 Contributors: eslin87
 Tags: bootstrap, css, js, editor, block
-Requires at least: 5.3
+Requires at least: 6.0
 Requires PHP: 8.0
 Tested up to: 7.0
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,9 @@ This section describes how to install and activate the plugin.
 1. Example Excelsior Bootstrap Editor blocks in use.
 
 == Changelog ==
+
+= 1.1.4 (2026-xx-xx) =
+* Update Excelsior Bootstrap framework to version 1.1.15
 
 = 1.1.3 (2026-05-13) =
 * Add core/group as allowed parent
