@@ -37,8 +37,9 @@ This section describes how to install and activate the plugin.
 
 ## Changelog ##
 
-### 1.1.4 (2026-xx-xx) ###
+### 1.1.4 (2027-05-27) ###
 * Update Excelsior Bootstrap framework to version 1.1.15
+* Allow the insert WordPress patterns
 
 ### 1.1.3 (2026-05-13) ###
 * Add core/group as allowed parent
