@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: Excelsior Bootstrap Editor
+ * Plugin Name: Excelsior Bootstrap
  * Plugin URI:  https://github.com/excelsior-university-web-systems/excelsior-bootstrap-editor
- * Description: Excelsior Bootstrap Editor enhances the editing experience by providing blocks specifically designed for Excelsior Bootstrap-based content.
+ * Description: Excelsior Bootstrap enhances the editing experience by providing blocks specifically designed for Excelsior Bootstrap-based content.
  * Author:      Ethan Lin
  * Author URI:  https://profiles.wordpress.org/eslin87/
- * Version:     1.1.4
+ * Version:     1.1.5
  * License:     GPLv2 or later
  */
 

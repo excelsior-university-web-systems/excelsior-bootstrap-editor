@@ -1,10 +1,10 @@
-=== Excelsior Bootstrap Editor ===
+=== Excelsior Bootstrap ===
 Contributors: eslin87
 Tags: bootstrap, css, js, editor, block
 Requires at least: 6.0
 Requires PHP: 8.0
 Tested up to: 7.0
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ A WordPress plugin that provides custom blocks for creating Excelsior Bootstrap 
 
 == Description ==
 
-Excelsior Bootstrap Editor enhances the block editor by providing custom blocks and patterns specifically designed for creating Excelsior Bootstrap–based content.
+Excelsior Bootstrap enhances the block editor by providing custom blocks and patterns specifically designed for creating Excelsior Bootstrap–based content.
 
 == Installation ==
 
@@ -34,6 +34,9 @@ This section describes how to install and activate the plugin.
 1. Example Excelsior Bootstrap Editor blocks in use.
 
 == Changelog ==
+
+= 1.1.5 (2027-xx-xx) =
+* Rename plugin to Excelsior Bootstrap (removing the "Editor" from title)
 
 = 1.1.4 (2027-05-27) =
 * Update Excelsior Bootstrap framework to version 1.1.15
