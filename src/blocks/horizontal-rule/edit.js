@@ -9,7 +9,23 @@ import { useSelect } from '@wordpress/data';
 import metadata from './block.json';
 
 const ICONS = [
-    { name: 'bi-box', label: 'Immersive Page'},
+    { name: 'bi-signpost-split', label: 'Orientation' },
+    { name: 'bi-house', label: 'Homepage' },
+    { name: 'bi-x-diamond', label: 'Module Overview' },
+    { name: 'bi-journal-text', label: 'Lesson' },
+    { name: 'bi-bookmark-star', label: 'Key Takeaways' },
+    { name: 'bi-chat-square-text', label: 'Discussion' },
+    { name: 'bi-pencil', label: 'Assignment' },
+    { name: 'bi-patch-question', label: 'Quiz' },
+    { name: 'bi-clipboard-check', label: 'Exam' },
+    { name: 'bi-broadcast', label: 'Live Session' },
+    { name: 'bi-boxes', label: 'SkillSource/Immersive' },
+    { name: 'bi-gear', label: 'Technical Guide' },
+    { name: 'bi-person-exclamation', label: 'Instructor Notes' },
+];
+
+const DEPRECATED_ICONS = [
+    { name: 'bi-box', label: 'Immersive Page' },
     { name: 'bi-bookmark-check-fill', label: 'Module Reflection Page' },
     { name: 'bi-bookmark-star-fill', label: 'Getting Started Page' },
     { name: 'bi-building-fill', label: 'Insight Industry' },
@@ -19,7 +35,7 @@ const ICONS = [
     { name: 'bi-easel', label: 'Verbal Competency Session Page' },
     { name: 'bi-house-door-fill', label: 'Homepage' },
     { name: 'bi-gear-fill', label: 'Technical Guide' },
-    { name: 'bi-globe', label: 'Real-World Examples'},
+    { name: 'bi-globe', label: 'Real-World Examples' },
     { name: 'bi-journal-text', label: 'Instructor Notes Page' },
     { name: 'bi-lightbulb', label: 'Reflect' },
     { name: 'bi-list-check', label: 'Session Sign Up Page' },
@@ -43,9 +59,14 @@ export default function Edit ({ attributes, setAttributes }) {
         setAttributes({ selectedIcon: iconName });
     };
 
+    const handleStyleChange = (style) => {
+        setAttributes({styleType: style.value})
+        blockProps.className = determineClassNames();
+    };
+
     const determineClassNames = () => {
         if ( styleType !== 'basic' ) {
-            return `decorative ${styleType !== 'red' ? styleType : '' } ${ noIcon ? '' : `bi ${selectedIcon}${size !== 'regular' ? ' ' + size : '' }`}`
+            return `decorative red ${ noIcon ? '' : `bi ${selectedIcon}${size !== 'regular' ? ' ' + size : '' }`}`
         }
         return '';
     };
@@ -70,17 +91,15 @@ export default function Edit ({ attributes, setAttributes }) {
                     options={[
                         { label: 'Basic', value: 'basic' },
                         { label: 'Red (Default)', value: 'red' },
-                        { label: 'Blue', value: 'blue' },
-                        { label: 'Purple', value: 'purple' },
                     ]}
-                    onChange={(value) => setAttributes({ styleType: value })}
+                    onChange={(value) => handleStyleChange({ value })}
                     __nextHasNoMarginBottom
                     __next40pxDefaultSize
                 />
 
                 { noIcon == false && styleType !== 'basic' && (
-
-                    <BaseControl label="Icons" __nextHasNoMarginBottom>
+                    <>
+                    <BaseControl label="Page Type Icons" __nextHasNoMarginBottom>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
                         {ICONS.map((icon) => (
                             <Tooltip text={icon.label} delay={500} placement='top'>
@@ -104,12 +123,38 @@ export default function Edit ({ attributes, setAttributes }) {
                         ))}
                     </div>
                     </BaseControl>
+                    <BaseControl label="Deprecated Icons" className="deprecated-icons" __nextHasNoMarginBottom>
+                    <p className='do-not-use-msg'><strong>DO NOT USE; WILL BE REMOVED IN THE NEAR FUTURE</strong></p>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+                        {DEPRECATED_ICONS.map((icon) => (
+                            <Tooltip text={icon.label} delay={500} placement='top'>
+                                <Button
+                                    key={icon.name}
+                                    isPressed={selectedIcon === icon.name}
+                                    onClick={() => handleIconSelect(icon.name)}
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        padding: '20px',
+                                        fontSize: '1.25rem',
+                                    }}
+                                    __nextHasNoMarginBottom
+                                    __next40pxDefaultSize
+                                >
+                                    {createElement('i', { className: `bi ${icon.name}` })}
+                                </Button>
+                            </Tooltip>
+                        ))}
+                    </div>
+                    </BaseControl>
+                    </>
 
                 ) }
 
                 <ToggleControl
                     label="No Icon"
-                    help="Toggle on to remove icon."
+                    help="Toggle on to remove page type icon."
                     checked={noIcon}
                     disabled={styleType === 'basic'}
                     onChange={(value) => setAttributes({ noIcon: value })}
