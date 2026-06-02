@@ -8,7 +8,7 @@ require_once plugin_dir_path( __FILE__ ) . 'constants.php';
 function register_boots_editor_settings_page() {
     add_submenu_page(
         'edit.php?post_type='.XCLSR_BTSTRP_POST_TYPE,
-        'Excelsior Bootstrap Editor Settings',
+        'Excelsior Bootstrap Settings',
         'Settings',
         'manage_options',
         XCLSR_BTSTRP_EDITOR_PREFIX.'-settings',

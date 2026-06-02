@@ -38,7 +38,7 @@ This section describes how to install and activate the plugin.
 ## Changelog ##
 
 ### 1.1.5 (2027-xx-xx) ###
-* 
+* Rename plugin to Excelsior Bootstrap (removing the "Editor" from title)
 
 ### 1.1.4 (2027-05-27) ###
 * Update Excelsior Bootstrap framework to version 1.1.15
