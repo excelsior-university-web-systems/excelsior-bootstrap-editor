@@ -29,7 +29,7 @@ export default function Edit( {attributes, setAttributes} ) {
 
     const innerBlocksProps = useInnerBlocksProps(
         {
-            className: `row row-cols-1 row-cols-sm-2 row-cols-md-${colSize} g-3`,
+            className: `row row-cols-1 row-cols-sm-2 row-cols-md-${colSize} g-3 mb-3`,
         },
         {
             allowedBlocks: [XCLSR_BTSTRP_EDITOR_PREFIX + '/card'],
