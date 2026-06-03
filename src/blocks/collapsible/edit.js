@@ -14,7 +14,7 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
         ['excelsior-bootstrap-editor/collapsible-content', { lock: { remove: true, move: false } }]
     ];
     
-    const { uniqueId, styleType } = attributes;
+    const { uniqueId } = attributes;
     const previewImage = metadata?.example?.attributes?.cover || '';
     const isPreview = useSelect(
         ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
@@ -22,7 +22,7 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
     );
 
     const blockProps = useBlockProps( {
-        className: `excelsior-collapsible mb-3 ${styleType}`,
+        className: `excelsior-collapsible mb-3`,
     } );
 
     const sameTypeBlocks = useSelect((select) => {
@@ -197,26 +197,6 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
 
     return (
         <>
-        <InspectorControls>
-            <PanelBody title="Settings">
-            <SelectControl
-                label="Styles"
-                help="Please refer to the style guide for each style's use case."
-                value={styleType}
-                options={[
-                    { label: 'Default', value: '' },
-                    { label: 'Purple', value: 'purple' },
-                    { label: 'Blue', value: 'blue' },
-                    { label: 'Green', value: 'green' },
-                    { label: 'Red', value: 'red' },
-                ]}
-                onChange={(value) => setAttributes({ styleType: value })}
-                __nextHasNoMarginBottom
-                __next40pxDefaultSize
-            />
-            </PanelBody>
-        </InspectorControls>
-
         <div {...blockProps}>
             <div className='content'>
                 <InnerBlocks
