@@ -1,5 +1,5 @@
 import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl } from '@wordpress/components';
+import { PanelBody, SelectControl, Notice } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 import metadata from './block.json';
@@ -30,15 +30,16 @@ export default function Edit ({ attributes, setAttributes }) {
     return (
         <>
         <InspectorControls>
-            <PanelBody title="Settings">
+            <PanelBody title="Settings" className="deprecated">
+            <Notice status="warning" isDismissible={false}>Quote style is deprecated. Do not use. It will be removed in the near future. Supplement style is not fully supported yet.</Notice>
             <SelectControl
                 label="Styles"
-                help="Guide is purple. Quote is blue. Skills are green. Please refer to the style guide for each style's use case."
                 value={styleType}
                 options={[
-                    { label: 'Guide', value: 'guide' },
-                    { label: 'Quote', value: 'quote' },
-                    { label: 'Skills', value: 'skills' },
+                    { label: 'Supplemental', value: 'supplement' },
+                    { label: 'Spotlight (formerly, Guide)', value: 'guide' },
+                    { label: 'Quote (DEPRECATED)', value: 'quote' },
+                    { label: 'Reflection (formerly, Skills)', value: 'skills' },
                 ]}
                 onChange={(value) => setAttributes({ styleType: value })}
                 __nextHasNoMarginBottom
