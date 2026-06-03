@@ -18,6 +18,10 @@
             "type": "string",
             "default": "tip"
         },
+        "content": {
+            "type": "string",
+            "default": ""
+        },
         "narrowWidth": {
             "type": "boolean",
             "default": false

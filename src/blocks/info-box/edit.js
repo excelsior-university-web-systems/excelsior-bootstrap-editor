@@ -1,16 +1,27 @@
-import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-editor';
+import { RichText, useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
-import { ALLOWED_BLOCKS } from './allowed-blocks';
 import metadata from './block.json';
+
+const STYLE_LABELS = {
+    tip: {
+        icon: 'bi-lightbulb-fill',
+        text: 'Tip: '
+    },
+    note: {
+        icon: 'bi-stickies-fill',
+        text: 'Note: '
+    },
+    reminder: {
+        icon: 'bi-bell-fill',
+        text: 'Reminder: '
+    }
+};
 
 export default function Edit ({ attributes, setAttributes }) {
 
-    const TEMPLATE = [
-        ['core/paragraph', {placeholder: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.'}]
-    ];
-
-    const { styleType, narrowWidth } = attributes;
+    const { styleType, content, narrowWidth } = attributes;
+    const label = STYLE_LABELS[ styleType ] || STYLE_LABELS.tip;
     const previewImage = metadata?.example?.attributes?.cover || '';
     const isPreview = useSelect(
         ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
@@ -52,12 +63,18 @@ export default function Edit ({ attributes, setAttributes }) {
             </PanelBody>
         </InspectorControls>
         <div {...blockProps}>
-            <InnerBlocks
-                allowedBlocks={ALLOWED_BLOCKS}
-                template={TEMPLATE}
-                templateLock={false}
-                renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
-            />
+            <p>
+                <strong>
+                    <i className={`bi ${label.icon}`} aria-hidden="true"></i>&nbsp;
+                    {label.text}
+                </strong>
+                <RichText
+                    tagName="span"
+                    value={content}
+                    placeholder="Lorem ipsum dolor, sit amet consectetur adipisicing elit."
+                    onChange={(value) => setAttributes({ content: value })}
+                />
+            </p>
         </div>
         </>
         
