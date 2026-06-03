@@ -362,7 +362,7 @@ i.bi::before {
     text-align: center;
 }
 
-.deprecated-icons {
+.deprecated {
     background-color: #ffee006e;
     padding: 10px;
 }

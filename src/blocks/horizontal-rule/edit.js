@@ -123,7 +123,7 @@ export default function Edit ({ attributes, setAttributes }) {
                         ))}
                     </div>
                     </BaseControl>
-                    <BaseControl label="Deprecated Icons" className="deprecated-icons" __nextHasNoMarginBottom>
+                    <BaseControl label="Deprecated Icons" className="deprecated" __nextHasNoMarginBottom>
                     <p className='do-not-use-msg'><strong>DO NOT USE; WILL BE REMOVED IN THE NEAR FUTURE</strong></p>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
                         {DEPRECATED_ICONS.map((icon) => (
