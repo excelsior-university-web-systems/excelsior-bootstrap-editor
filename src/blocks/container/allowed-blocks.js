@@ -12,6 +12,7 @@ export const ALLOWED_BLOCKS = [
     XCLSR_BTSTRP_EDITOR_PREFIX + "/image",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/image-banner",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/image-and-text",
+    XCLSR_BTSTRP_EDITOR_PREFIX + "/info-box",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/iframe-embed",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/start-here-banner",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/tabs",

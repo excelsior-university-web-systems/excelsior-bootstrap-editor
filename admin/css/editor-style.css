@@ -162,6 +162,13 @@ p.is-selected:focus code[data-rich-text-format-boundary] {
 }
 
 /* EXCELSIOR BOOTSTRAP EDITOR
+   INFO BOX */
+
+.wp-block-excelsior-bootstrap-editor-info-box > .block-editor-inner-blocks > .block-editor-block-list__layout > *:nth-last-child(2) {
+    margin-bottom: 0 !important;
+}
+
+/* EXCELSIOR BOOTSTRAP EDITOR
    BLOCKQUOTE */
 .wp-block-excelsior-bootstrap-editor-blockquote .block-editor-inner-blocks > .block-editor-block-list__layout > p:last-of-type {
     margin-bottom: 0 !important;

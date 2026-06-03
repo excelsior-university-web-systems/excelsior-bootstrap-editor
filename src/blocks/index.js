@@ -21,6 +21,7 @@ import './iframe-embed';
 import './image-banner';
 import './image';
 import './image-and-text';
+import './info-box';
 import './namespace';
 import './page-navigation';
 import './start-here-banner';
