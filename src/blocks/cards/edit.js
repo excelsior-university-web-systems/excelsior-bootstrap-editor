@@ -1,5 +1,5 @@
 import { InnerBlocks, InspectorControls, useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
-import { PanelBody, SelectControl } from '@wordpress/components';
+import { PanelBody, SelectControl, Notice } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import {
     __experimentalToggleGroupControl as ToggleGroupControl,
@@ -66,15 +66,16 @@ export default function Edit( {attributes, setAttributes} ) {
                     value={bgColor}
                     options={[
                         { label: 'None', value: '' },
-                        { label: 'Light Subtle', value: 'bg-light-subtle' },
+                        { label: 'Light Subtle (DEPRECATED)', value: 'bg-light-subtle' },
                         { label: 'Light', value: 'bg-light' },
-                        { label: 'Secondary', value: 'bg-body-secondary' },
-                        { label: 'Dark Subtle', value: 'bg-dark-subtle' },
+                        { label: 'Secondary (DEPRECATED)', value: 'bg-body-secondary' },
+                        { label: 'Dark Subtle (DEPRECATED)', value: 'bg-dark-subtle' },
                     ]}
                     onChange={(value) => setAttributes({ bgColor: value })}
                     __nextHasNoMarginBottom
                     __next40pxDefaultSize
                 />
+                <Notice status="warning" isDismissible={false}>All color choices, except Light, are deprecated. Do not use. They will be removed in the near future.</Notice>
             </PanelBody>
         </InspectorControls>
         <div {...blockProps}>
