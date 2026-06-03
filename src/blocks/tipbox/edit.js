@@ -1,5 +1,5 @@
 import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
+import { PanelBody, SelectControl, ToggleControl, Notice } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 import metadata from './block.json';
@@ -29,7 +29,8 @@ export default function Edit ({ attributes, setAttributes }) {
     return (
         <>
         <InspectorControls>
-            <PanelBody title="Settings">
+            <PanelBody title="Settings" className="deprecated">
+                <Notice status="warning" isDismissible={false}>Tip Box is deprecated. Do not use. It will be removed in the near future. Use INFO BOX instead.</Notice>
                 <SelectControl
                     label="Styles"
                     help="Tip is purple. Reminder is red. Note is blue. Please refer to the style guide for each style's use case."

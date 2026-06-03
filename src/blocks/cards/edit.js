@@ -118,6 +118,7 @@ export default function Edit( {attributes, setAttributes, clientId} ) {
                     <ToggleGroupControlOption value="4" label="4" />
                 </ToggleGroupControl>
                 <SelectControl
+                className="deprecated"
                     label="Background Color"
                     value={bgColor}
                     options={[
