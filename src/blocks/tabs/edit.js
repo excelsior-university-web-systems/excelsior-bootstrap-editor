@@ -22,7 +22,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
     );
 
     const blockProps = useBlockProps({
-        className: tabStyle,
+        className: 'mb-3 ' + tabStyle,
     });
     const childBlocks = useSelect(
         ( select ) => select( 'core/block-editor' ).getBlocks( clientId ) || [],
