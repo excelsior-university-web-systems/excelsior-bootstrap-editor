@@ -26,8 +26,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
     }
 
     const blockProps = useBlockProps( {
-        className: `btn ${styleType}${subsequent ? ' ms-2' : ''}`,
-        rel: styleType === 'btn-resource' ? 'noopener' : undefined
+        className: `btn ${styleType}${subsequent ? ' ms-2' : ''}`
     } );
 
     return (
@@ -39,18 +38,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                         help="Enter the button's URL."
                         value={href}
                         onChange={(value) => setAttributes({ href: value.trim() })}
-                        __next40pxDefaultSize
-                        __nextHasNoMarginBottom
-                    />
-                    <SelectControl
-                        label="Styles"
-                        help="Internal (red) is for links within the site. Resource (blue) is for external links and will open a new tab/window."
-                        value={styleType}
-                        options={[
-                            { label: 'Internal', value: 'btn-internal' },
-                            { label: 'Resource', value: 'btn-resource' },
-                        ]}
-                        onChange={(value) => setAttributes({ styleType: value })}
                         __next40pxDefaultSize
                         __nextHasNoMarginBottom
                     />

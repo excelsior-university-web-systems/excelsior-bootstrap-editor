@@ -23,7 +23,7 @@
         },
         "styleType": {
             "type": "string",
-            "default": "btn-internal"
+            "default": "btn-resource"
         },
         "subsequent": {
             "type": "boolean",
