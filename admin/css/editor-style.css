@@ -367,8 +367,9 @@ i.bi::before {
     padding: 10px;
 }
 
-.do-not-use-msg {
-    font-size: 0.8rem;
+.deprecated .components-input-control__label,
+.do-not-use-msg,
+.do-not-use-msg .components-base-control__help {
     color: #fa0f0f;
 }
 
