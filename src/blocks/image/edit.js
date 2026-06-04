@@ -1,34 +1,13 @@
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { BaseControl, PanelBody, Button, TextControl, TextareaControl, ToggleControl, __experimentalSpacer as Spacer } from '@wordpress/components';
-import {
-    Notice,
+import { BaseControl, PanelBody, Button, TextControl, TextareaControl, ToggleControl, 
+    __experimentalSpacer as Spacer,
     __experimentalToggleGroupControl as ToggleGroupControl,
-    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
-} from '@wordpress/components';
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption, } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 import metadata from './block.json';
-
-const ALT_TEXT_LIMIT = 150;
-const CAPTION_LIMIT = 250;
-
-const CharacterLimitFeedback = ( { label, value, limit } ) => {
-    const characterCount = ( value || '' ).length;
-
-    return (
-        <>
-        <div className="components-base-control__help">
-            { characterCount }/{ limit }
-        </div>
-        { characterCount > limit && (
-            <Notice status="warning" isDismissible={false} className="character-limit-notice">
-                { label } is { characterCount } characters. Recommended limit is { limit } characters.
-            </Notice>
-        )}
-        </>
-    );
-};
+import { ALT_TEXT_LIMIT, CAPTION_LIMIT, getCharacterCount, getCharacterLimitLabel, CharacterLimitFeedback } from '../../commons';
 
 export default function Edit ( { attributes, setAttributes, context } ) {
 
@@ -86,11 +65,11 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                     __nextHasNoMarginBottom
                     __next40pxDefaultSize
                 />
-                <BaseControl help={ ( !inBlockqoute && !inCarousel ) ? "Alt text describes the image for those who cannot see it, while the caption adds context. Together, they enhance accessibility and provide complete information about the image." : ""}
-                 __nextHasNoMarginBottom>
+                <BaseControl __nextHasNoMarginBottom>
                     <TextareaControl
-                        label="Image Alt Text"
-                        help="Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration."
+                        label='Image Alt Text'
+                        help={getCharacterLimitLabel( altText, ALT_TEXT_LIMIT )}
+                        placeholder="Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration."
                         value={altText}
                         onChange={(value) => {
                             setAttributes( { altText: value } );
@@ -99,12 +78,14 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
                     />
-                    <CharacterLimitFeedback label="Image alt text" value={altText} limit={ALT_TEXT_LIMIT} />
+                    <CharacterLimitFeedback value={altText} limit={ALT_TEXT_LIMIT} message="Keep it under 150 characters so screen reader users get a concise description without unnecessary detail." showCount={false} />
+                    
                     { (!inBlockqoute && !inCarousel) && (
                         <>
                         <TextareaControl
-                            label="Image Caption"
-                            help="Displays a caption or description for the entire image. Can be left blank if not needed."
+                            label='Image Caption'
+                            help={getCharacterLimitLabel( caption, CAPTION_LIMIT )}
+                            placeholder="Displays a caption or description for the entire image. Can be left blank if not needed."
                             value={caption}
                             onChange={(value) => {
                                 setAttributes( { caption: value } );
@@ -112,7 +93,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                             __nextHasNoMarginBottom
                             __next40pxDefaultSize
                         />
-                        <CharacterLimitFeedback label="Image caption" value={caption} limit={CAPTION_LIMIT} />
+                        <CharacterLimitFeedback value={caption} limit={CAPTION_LIMIT} message="Keep it under 250 characters so the caption stays easy to scan and does not overwhelm the image." showCount={false} />
                         </>
                     )}
 
@@ -212,12 +193,12 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         <TextControl label="Image URL" value={tempUrl} onChange={(newUrl) => setTempUrl(newUrl)} __next40pxDefaultSize __nextHasNoMarginBottom />
                         <Spacer />
                         <TextareaControl label="Image Alt Text" value={tempAltText} onChange={(newAltText) => setTempAltText(newAltText)} placeholder='Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration.' __next40pxDefaultSize __nextHasNoMarginBottom />
-                        <CharacterLimitFeedback label="Image alt text" value={tempAltText} limit={ALT_TEXT_LIMIT} />
+                        <CharacterLimitFeedback value={tempAltText} limit={ALT_TEXT_LIMIT} message="Keep it under 150 characters so screen reader users get a concise description without unnecessary detail." />
                         <Spacer />
                         { (!inBlockqoute && !inCarousel) && (
                             <>
                             <TextareaControl label="Image Caption" value={tempCaption} onChange={(newCaption) => setTempCaption(newCaption)} placeholder='Displays a caption or description for the entire image. Can be left blank if not needed.' __next40pxDefaultSize __nextHasNoMarginBottom />
-                            <CharacterLimitFeedback label="Image caption" value={tempCaption} limit={CAPTION_LIMIT} />
+                            <CharacterLimitFeedback value={tempCaption} limit={CAPTION_LIMIT} message="Keep it under 250 characters so the caption stays easy to scan and does not overwhelm the image." />
                             </>
                         )}
                         { (!inAlignmentEnabledEl && !inBlockqoute && !inCarousel) && (
