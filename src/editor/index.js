@@ -69,6 +69,34 @@ const isExcelsiorBootstrapPostType = () => {
 };
 
 /**
+ * Checks for the Excelsior post type while blocks are being registered.
+ *
+ * Block registration can run before the editor store has the current post type,
+ * so this falls back to the admin body class and post type query parameter.
+ *
+ * @returns {boolean} True when the current editor screen is for the Excelsior post type.
+ */
+const isExcelsiorBootstrapPostTypeDuringBlockRegistration = () => {
+    if ( isExcelsiorBootstrapPostType() ) {
+        return true;
+    }
+
+    if ( typeof document !== 'undefined' && document.body ) {
+        if ( document.body.classList.contains( `post-type-${ XCLSR_BTSTRP_POST_TYPE }` ) ) {
+            return true;
+        }
+    }
+
+    if ( typeof window !== 'undefined' && window.location?.search ) {
+        const searchParams = new URLSearchParams( window.location.search );
+
+        return searchParams.get( 'post_type' ) === XCLSR_BTSTRP_POST_TYPE;
+    }
+
+    return false;
+};
+
+/**
  * Determines whether Excelsior editor enhancements should be active at all.
  *
  * @returns {boolean} True for the Excelsior post type or when the namespace block exists in the editor.
@@ -513,21 +541,38 @@ registerPlugin (XCLSR_BTSTRP_EDITOR_PREFIX + '-get-code-button', {
  */
 const addingBlockSizeAndStyle = (settings, name) => {
     if (name === 'core/heading') {
-        settings.attributes = {
-            ...settings.attributes,
-            headingSizeClass: {
-                type: 'string',
-                default: ''
-            },
-            headingStyleClasses: {
-                type: 'string',
-                default: ''
-            },
-            isInExcelsiorNamespace: {
-                type: 'boolean',
-                default: false
+        const updatedSettings = {
+            ...settings,
+            attributes: {
+                ...settings.attributes,
+                headingSizeClass: {
+                    type: 'string',
+                    default: ''
+                },
+                headingStyleClasses: {
+                    type: 'string',
+                    default: ''
+                },
+                isInExcelsiorNamespace: {
+                    type: 'boolean',
+                    default: false
+                }
             }
         };
+
+        if ( isExcelsiorBootstrapPostTypeDuringBlockRegistration() ) {
+            const existingColorSupport = settings.supports?.color;
+
+            updatedSettings.supports = {
+                ...settings.supports,
+                color: {
+                    ...( existingColorSupport && typeof existingColorSupport === 'object' ? existingColorSupport : {} ),
+                    text: false
+                }
+            };
+        }
+
+        return updatedSettings;
     }
 
     return settings;
