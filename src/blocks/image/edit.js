@@ -13,17 +13,20 @@ import metadata from './block.json';
 const ALT_TEXT_LIMIT = 150;
 const CAPTION_LIMIT = 250;
 
-const CharacterLimitNotice = ( { label, value, limit } ) => {
+const CharacterLimitFeedback = ( { label, value, limit } ) => {
     const characterCount = ( value || '' ).length;
 
-    if ( characterCount <= limit ) {
-        return null;
-    }
-
     return (
-        <Notice status="warning" isDismissible={false}>
-            { label } is { characterCount } characters. Recommended limit is { limit } characters.
-        </Notice>
+        <>
+        <div className="components-base-control__help">
+            { characterCount }/{ limit }
+        </div>
+        { characterCount > limit && (
+            <Notice status="warning" isDismissible={false} className="character-limit-notice">
+                { label } is { characterCount } characters. Recommended limit is { limit } characters.
+            </Notice>
+        )}
+        </>
     );
 };
 
@@ -96,7 +99,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
                     />
-                    <CharacterLimitNotice label="Image alt text" value={altText} limit={ALT_TEXT_LIMIT} />
+                    <CharacterLimitFeedback label="Image alt text" value={altText} limit={ALT_TEXT_LIMIT} />
                     { (!inBlockqoute && !inCarousel) && (
                         <>
                         <TextareaControl
@@ -109,7 +112,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                             __nextHasNoMarginBottom
                             __next40pxDefaultSize
                         />
-                        <CharacterLimitNotice label="Image caption" value={caption} limit={CAPTION_LIMIT} />
+                        <CharacterLimitFeedback label="Image caption" value={caption} limit={CAPTION_LIMIT} />
                         </>
                     )}
 
@@ -208,13 +211,13 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                     <div className="excelsior-image-url-insert mb-3">
                         <TextControl label="Image URL" value={tempUrl} onChange={(newUrl) => setTempUrl(newUrl)} __next40pxDefaultSize __nextHasNoMarginBottom />
                         <Spacer />
-                        <TextControl label="Image Alt Text" value={tempAltText} onChange={(newAltText) => setTempAltText(newAltText)} placeholder='Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration.' __next40pxDefaultSize __nextHasNoMarginBottom />
-                        <CharacterLimitNotice label="Image alt text" value={tempAltText} limit={ALT_TEXT_LIMIT} />
+                        <TextareaControl label="Image Alt Text" value={tempAltText} onChange={(newAltText) => setTempAltText(newAltText)} placeholder='Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration.' __next40pxDefaultSize __nextHasNoMarginBottom />
+                        <CharacterLimitFeedback label="Image alt text" value={tempAltText} limit={ALT_TEXT_LIMIT} />
                         <Spacer />
                         { (!inBlockqoute && !inCarousel) && (
                             <>
-                            <TextControl label="Image Caption" value={tempCaption} onChange={(newCaption) => setTempCaption(newCaption)} placeholder='Displays a caption or description for the entire image. Can be left blank if not needed.' __next40pxDefaultSize __nextHasNoMarginBottom />
-                            <CharacterLimitNotice label="Image caption" value={tempCaption} limit={CAPTION_LIMIT} />
+                            <TextareaControl label="Image Caption" value={tempCaption} onChange={(newCaption) => setTempCaption(newCaption)} placeholder='Displays a caption or description for the entire image. Can be left blank if not needed.' __next40pxDefaultSize __nextHasNoMarginBottom />
+                            <CharacterLimitFeedback label="Image caption" value={tempCaption} limit={CAPTION_LIMIT} />
                             </>
                         )}
                         { (!inAlignmentEnabledEl && !inBlockqoute && !inCarousel) && (

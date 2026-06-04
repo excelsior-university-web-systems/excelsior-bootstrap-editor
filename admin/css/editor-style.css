@@ -369,6 +369,10 @@ i.bi::before {
     text-align: center;
 }
 
+.character-limit-notice {
+    margin: 8px 0px 16px;
+}
+
 .deprecated {
     background-color: #ffee006e;
     padding: 10px;
