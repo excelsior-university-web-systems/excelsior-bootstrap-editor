@@ -1,6 +1,7 @@
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { BaseControl, PanelBody, Button, TextControl, ToggleControl, __experimentalSpacer as Spacer } from '@wordpress/components';
+import { BaseControl, PanelBody, Button, TextControl, TextareaControl, ToggleControl, __experimentalSpacer as Spacer } from '@wordpress/components';
 import {
+    Notice,
     __experimentalToggleGroupControl as ToggleGroupControl,
     __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
@@ -8,6 +9,23 @@ import { useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 import metadata from './block.json';
+
+const ALT_TEXT_LIMIT = 150;
+const CAPTION_LIMIT = 250;
+
+const CharacterLimitNotice = ( { label, value, limit } ) => {
+    const characterCount = ( value || '' ).length;
+
+    if ( characterCount <= limit ) {
+        return null;
+    }
+
+    return (
+        <Notice status="warning" isDismissible={false}>
+            { label } is { characterCount } characters. Recommended limit is { limit } characters.
+        </Notice>
+    );
+};
 
 export default function Edit ( { attributes, setAttributes, context } ) {
 
@@ -67,7 +85,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                 />
                 <BaseControl help={ ( !inBlockqoute && !inCarousel ) ? "Alt text describes the image for those who cannot see it, while the caption adds context. Together, they enhance accessibility and provide complete information about the image." : ""}
                  __nextHasNoMarginBottom>
-                    <TextControl
+                    <TextareaControl
                         label="Image Alt Text"
                         help="Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration."
                         value={altText}
@@ -78,9 +96,10 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
                     />
+                    <CharacterLimitNotice label="Image alt text" value={altText} limit={ALT_TEXT_LIMIT} />
                     { (!inBlockqoute && !inCarousel) && (
                         <>
-                        <TextControl
+                        <TextareaControl
                             label="Image Caption"
                             help="Displays a caption or description for the entire image. Can be left blank if not needed."
                             value={caption}
@@ -90,6 +109,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                             __nextHasNoMarginBottom
                             __next40pxDefaultSize
                         />
+                        <CharacterLimitNotice label="Image caption" value={caption} limit={CAPTION_LIMIT} />
                         </>
                     )}
 
@@ -189,10 +209,12 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                         <TextControl label="Image URL" value={tempUrl} onChange={(newUrl) => setTempUrl(newUrl)} __next40pxDefaultSize __nextHasNoMarginBottom />
                         <Spacer />
                         <TextControl label="Image Alt Text" value={tempAltText} onChange={(newAltText) => setTempAltText(newAltText)} placeholder='Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration.' __next40pxDefaultSize __nextHasNoMarginBottom />
+                        <CharacterLimitNotice label="Image alt text" value={tempAltText} limit={ALT_TEXT_LIMIT} />
                         <Spacer />
                         { (!inBlockqoute && !inCarousel) && (
                             <>
                             <TextControl label="Image Caption" value={tempCaption} onChange={(newCaption) => setTempCaption(newCaption)} placeholder='Displays a caption or description for the entire image. Can be left blank if not needed.' __next40pxDefaultSize __nextHasNoMarginBottom />
+                            <CharacterLimitNotice label="Image caption" value={tempCaption} limit={CAPTION_LIMIT} />
                             </>
                         )}
                         { (!inAlignmentEnabledEl && !inBlockqoute && !inCarousel) && (
