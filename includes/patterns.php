@@ -38,7 +38,8 @@ add_action( 'current_screen', function() {
             array( 'slug' => 'assignment', 'title' => 'Assignment', 'file' => 'assignment.html' ),
             array( 'slug' => 'fivetabassignment', 'title' => '5-Tab Assignment', 'file' => '5-tab-assignment.html' ),
             array( 'slug' => 'livesession', 'title' => 'Live Session', 'file' => 'live-session.html' ),
-            array( 'slug' => 'quizknowledgecheck', 'title' => 'Quiz / Knowledge Check', 'file' => 'quiz-knowledge-check.html' ),
+            array( 'slug' => 'knowledgecheck', 'title' => 'Knowledge Check', 'file' => 'knowledge-check.html' ),
+            array( 'slug' => 'quiztestexam', 'title' => 'Quiz / Test / Exam', 'file' => 'quiz-test-exam.html' ),
             array( 'slug' => 'modulereflection', 'title' => 'Module Reflection', 'file' => 'module-reflection.html' ),
             array( 'slug' => 'instructornotes', 'title' => 'Instructor Notes', 'file' => 'instructor-notes.html' )
         );
@@ -69,8 +70,9 @@ add_action( 'current_screen', function() {
             array( 'slug' => 'new-assignment', 'title' => 'Assignment', 'file' => 'assignment.html' ),
             array( 'slug' => 'new-fivetabassignment', 'title' => '5-Tab Assignment', 'file' => '5-tab-assignment.html' ),
             array( 'slug' => 'new-livesession', 'title' => 'Live Session', 'file' => 'live-session.html' ),
-            array( 'slug' => 'new-quizknowledgecheck', 'title' => 'Quiz / Knowledge Check', 'file' => 'quiz-knowledge-check.html' ),
-            array( 'slug' => 'new-modulereflection', 'title' => 'Module Reflection', 'file' => 'module-reflection.html' ),
+            array( 'slug' => 'new-knowledgecheck', 'title' => 'Knowledge Check', 'file' => 'knowledge-check.html' ),
+            array( 'slug' => 'new-quiztestexam', 'title' => 'Quiz / Test / Exam', 'file' => 'quiz-test-exam.html' ),
+            array( 'slug' => 'new-keytakeaways', 'title' => 'Key Takeaways', 'file' => 'key-takeaways.html' ),
             array( 'slug' => 'new-instructornotes', 'title' => 'Instructor Notes', 'file' => 'instructor-notes.html' )
         );
 
