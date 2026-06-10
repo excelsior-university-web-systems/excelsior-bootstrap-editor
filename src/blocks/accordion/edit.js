@@ -1,10 +1,19 @@
 import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, SelectControl } from '@wordpress/components';
-import { useSelect } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
+import { useEffect } from '@wordpress/element';
+import { createBlock } from '@wordpress/blocks';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 import metadata from './block.json';
 
-export default function Edit( { attributes, setAttributes} ) {
+const ACCORDION_ITEM_BLOCK = XCLSR_BTSTRP_EDITOR_PREFIX + '/accordion-item';
+const MIN_ACCORDION_ITEMS = 2;
+const TEMPLATE = [
+    [ACCORDION_ITEM_BLOCK],
+    [ACCORDION_ITEM_BLOCK],
+];
+
+export default function Edit( { attributes, setAttributes, clientId } ) {
     
     const { accordionHeadingLevel, accordionHeadingSize } = attributes;
     const previewImage = metadata?.example?.attributes?.cover || '';
@@ -15,6 +24,58 @@ export default function Edit( { attributes, setAttributes} ) {
     const blockProps = useBlockProps({
         className: 'accordion',
     });
+    const childBlocks = useSelect(
+        ( select ) => select( 'core/block-editor' ).getBlocks( clientId ) || [],
+        [ clientId ]
+    );
+    const { insertBlocks, updateBlockAttributes } = useDispatch( 'core/block-editor' );
+    const accordionItemBlocks = childBlocks.filter(
+        ( block ) => block.name === ACCORDION_ITEM_BLOCK
+    );
+
+    useEffect( () => {
+        if ( isPreview ) {
+            return;
+        }
+
+        const missingItemCount = MIN_ACCORDION_ITEMS - accordionItemBlocks.length;
+
+        if ( missingItemCount > 0 ) {
+            insertBlocks(
+                Array.from(
+                    { length: missingItemCount },
+                    () => createBlock( ACCORDION_ITEM_BLOCK )
+                ),
+                childBlocks.length,
+                clientId
+            );
+            return;
+        }
+
+        const lockRemove = accordionItemBlocks.length <= MIN_ACCORDION_ITEMS;
+
+        accordionItemBlocks.forEach( ( block ) => {
+            const currentLock = block.attributes?.lock || {};
+
+            if ( currentLock.remove === lockRemove ) {
+                return;
+            }
+
+            updateBlockAttributes( block.clientId, {
+                lock: {
+                    ...currentLock,
+                    remove: lockRemove,
+                },
+            } );
+        } );
+    }, [
+        accordionItemBlocks,
+        childBlocks.length,
+        clientId,
+        insertBlocks,
+        isPreview,
+        updateBlockAttributes,
+    ] );
 
     if ( isPreview && previewImage ) {
         return <img src={xclsr_btstrp_block_preview.pluginUrl + previewImage} width='100%' height='auto' />;
@@ -59,8 +120,8 @@ export default function Edit( { attributes, setAttributes} ) {
         </InspectorControls>
         <div {...blockProps}>
             <InnerBlocks
-                allowedBlocks={[XCLSR_BTSTRP_EDITOR_PREFIX + '/accordion-item']}
-                template={[[XCLSR_BTSTRP_EDITOR_PREFIX + '/accordion-item']]}
+                allowedBlocks={[ACCORDION_ITEM_BLOCK]}
+                template={TEMPLATE}
                 templateLock={false}
                 renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
             />

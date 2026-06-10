@@ -16,7 +16,7 @@
     "attributes": {
         "selectedIcon": {
             "type": "string",
-            "default": "bi-house-door-fill"
+            "default": "bi-house"
         },
         "size": {
             "type": "string",

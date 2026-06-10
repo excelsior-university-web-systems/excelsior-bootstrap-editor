@@ -14,6 +14,7 @@ window.Prism = window.Prism || {};
 Prism.manual = true;
 
 const NAMESPACE_BLOCK = `${XCLSR_BTSTRP_EDITOR_PREFIX}/namespace`;
+const CORE_HEADING_BLOCK = 'core/heading';
 const CORE_TABLE_BLOCK = 'core/table';
 const BOOTSTRAP_TABLE_VARIATION_ATTRIBUTES = {
     isBootstrapTableVariant: true,
@@ -66,6 +67,38 @@ const isExcelsiorBootstrapPostType = () => {
     }
 
     return editorStore.getCurrentPostType() === XCLSR_BTSTRP_POST_TYPE;
+};
+
+/**
+ * Checks for the Excelsior post type while blocks are being registered.
+ *
+ * Block registration can run before the editor store has the current post type,
+ * so this falls back to the admin body class and post type query parameter.
+ *
+ * @returns {boolean} True when the current editor screen is for the Excelsior post type.
+ */
+const isExcelsiorBootstrapPostTypeDuringBlockRegistration = () => {
+    if ( isExcelsiorBootstrapPostType() ) {
+        return true;
+    }
+
+    if ( typeof document !== 'undefined' && document.body ) {
+        if ( document.body.classList.contains( `post-type-${ XCLSR_BTSTRP_POST_TYPE }` ) ) {
+            return true;
+        }
+    }
+
+    if ( typeof window !== 'undefined' && window.typenow === XCLSR_BTSTRP_POST_TYPE ) {
+        return true;
+    }
+
+    if ( typeof window !== 'undefined' && window.location?.search ) {
+        const searchParams = new URLSearchParams( window.location.search );
+
+        return searchParams.get( 'post_type' ) === XCLSR_BTSTRP_POST_TYPE;
+    }
+
+    return false;
 };
 
 /**
@@ -513,27 +546,79 @@ registerPlugin (XCLSR_BTSTRP_EDITOR_PREFIX + '-get-code-button', {
  */
 const addingBlockSizeAndStyle = (settings, name) => {
     if (name === 'core/heading') {
-        settings.attributes = {
-            ...settings.attributes,
-            headingSizeClass: {
-                type: 'string',
-                default: ''
-            },
-            headingStyleClasses: {
-                type: 'string',
-                default: ''
-            },
-            isInExcelsiorNamespace: {
-                type: 'boolean',
-                default: false
+        const updatedSettings = {
+            ...settings,
+            attributes: {
+                ...settings.attributes,
+                headingSizeClass: {
+                    type: 'string',
+                    default: ''
+                },
+                headingStyleClasses: {
+                    type: 'string',
+                    default: ''
+                },
+                isInExcelsiorNamespace: {
+                    type: 'boolean',
+                    default: false
+                }
             }
         };
+
+        if ( isExcelsiorBootstrapPostTypeDuringBlockRegistration() ) {
+            const existingColorSupport = settings.supports?.color;
+
+            updatedSettings.supports = {
+                ...settings.supports,
+                color: {
+                    ...( existingColorSupport && typeof existingColorSupport === 'object' ? existingColorSupport : {} ),
+                    text: false,
+                    __experimentalDefaultControls: {
+                        ...( existingColorSupport?.__experimentalDefaultControls || {} ),
+                        text: false
+                    }
+                }
+            };
+        }
+
+        return updatedSettings;
     }
 
     return settings;
 };
 
 addFilter( 'blocks.registerBlockType', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-settings', addingBlockSizeAndStyle);
+
+/**
+ * Adds an explanatory notice to the heading Styles tab for Excelsior posts.
+ *
+ * @param {Function} BlockEdit Original block edit component.
+ * @returns {Function} Wrapped block edit component.
+ */
+const addHeadingStylesNotice = createHigherOrderComponent((BlockEdit) => {
+    return (props) => {
+        const isExcelsiorBootstrap = useIsExcelsiorBootstrapPostType();
+
+        if ( props.name !== CORE_HEADING_BLOCK || ! isExcelsiorBootstrap ) {
+            return <BlockEdit {...props} />;
+        }
+
+        return (
+            <Fragment>
+                <BlockEdit {...props} />
+                <InspectorControls group="styles">
+                    <PanelBody>
+                        <Notice status="info" isDismissible={false}>
+                            Additional style options have been disabled.
+                        </Notice>
+                    </PanelBody>
+                </InspectorControls>
+            </Fragment>
+        );
+    };
+}, 'addHeadingStylesNotice');
+
+addFilter('editor.BlockEdit', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-styles-notice', addHeadingStylesNotice);
 
 /**
  * Mirrors heading style classes in the editor preview only for namespace headings.

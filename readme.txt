@@ -1,10 +1,10 @@
-=== Excelsior Bootstrap Editor ===
+=== Excelsior Bootstrap ===
 Contributors: eslin87
 Tags: bootstrap, css, js, editor, block
-Requires at least: 5.3
+Requires at least: 6.0
 Requires PHP: 8.0
 Tested up to: 7.0
-Stable tag: 1.1.3
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ A WordPress plugin that provides custom blocks for creating Excelsior Bootstrap 
 
 == Description ==
 
-Excelsior Bootstrap Editor enhances the block editor by providing custom blocks and patterns specifically designed for creating Excelsior Bootstrap–based content.
+Excelsior Bootstrap enhances the block editor by providing custom blocks and patterns specifically designed for creating Excelsior Bootstrap–based content.
 
 == Installation ==
 
@@ -35,8 +35,35 @@ This section describes how to install and activate the plugin.
 
 == Changelog ==
 
+= 1.1.5 (2027-06-10) =
+* Renamed plugin to Excelsior Bootstrap (removing the "Editor" from title).
+* Updated horizontal rule block with new page type icons and remove other styles; deprecated existing icons.
+* Made the button block to add blue buttons only.
+* Deprecated all color options except Light for the Cards block.
+* Cards block now enforces minimum of two cards.
+* Cards block now disallow nesting of callout, tip box, code block, task group, and blockquote blocks.
+* Tabs block now enforces minimum of two tabs.
+* Tabs block now disallow nesting of horizontal rule and accordion blocks.
+* Accordion block is now open by default and enforces minimal of 2 accordion items.
+* Accordion block now disallow nesting of horizontal rule and tabs blocks.
+* Callout block now disallow nesting of buttons, code block, task group, and iframe embed.
+* Callout block now pre-fills the heading based on the selected style.
+* Mark columns and tip box blocks as deprecated.
+* Mark collapsible block's style as deprecated.
+* Mark Quote style as deprecated for Callout block.
+* Added Supplemental style placeholder in Callout block.
+* Added the new Info Box block (tip box block replacement).
+* Added new icons and deprecated many icons.
+* Heading block no longer has options to change the text color.
+* Added soft character limit and warning to image block alt and caption.
+* Fixed an issue with code block not preview the syntax highlighting preview in the block editor.
+
+= 1.1.4 (2027-05-27) =
+* Updated Excelsior Bootstrap framework to version 1.1.15
+* Allow the insert WordPress patterns
+
 = 1.1.3 (2026-05-13) =
-* Add core/group as allowed parent
+* Added core/group as allowed parent
 * Remove hardcoded 'Show' text from Collapsible button
 
 = 1.1.2 (2026-05-13) =

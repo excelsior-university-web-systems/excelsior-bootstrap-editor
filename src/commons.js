@@ -1,3 +1,8 @@
+import { Notice } from '@wordpress/components';
+
+export const ALT_TEXT_LIMIT = 150;
+export const CAPTION_LIMIT = 250;
+
 export const convertTo12HourFormat = ( time ) => {
 
     const [hours24, minutes] = time.split(':');
@@ -88,4 +93,29 @@ export const getBlocksOfType = (blocks, blockType) => {
         }
         return acc;
     }, []);
+};
+
+export const getCharacterCount = ( value ) => ( value || '' ).length;
+
+export const getCharacterLimitLabel = ( value, limit ) => {
+    return `${ getCharacterCount( value ) }/${ limit }`;
+};
+
+export const CharacterLimitFeedback = ( { value, limit, message, showCount = true } ) => {
+    const characterCount = getCharacterCount( value );
+
+    return (
+        <>
+        { showCount && (
+            <div className="components-base-control__help">
+                { characterCount }/{ limit }
+            </div>
+        )}
+        { characterCount > limit && (
+            <Notice status="warning" isDismissible={false} className="character-limit-notice">
+                { message }
+            </Notice>
+        )}
+        </>
+    );
 };

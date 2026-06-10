@@ -198,18 +198,19 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
     return (
         <>
         <InspectorControls>
-            <PanelBody title="Settings">
+            <PanelBody title="Settings" className="deprecated">
             <SelectControl
-                label="Styles"
-                help="Please refer to the style guide for each style's use case."
+                label="Styles (DEPRECATED)"
+                help="DO NOT USE. WILL BE REMOVED IN THE NEAR FUTURE."
                 value={styleType}
                 options={[
                     { label: 'Default', value: '' },
-                    { label: 'Purple', value: 'purple' },
-                    { label: 'Blue', value: 'blue' },
-                    { label: 'Green', value: 'green' },
-                    { label: 'Red', value: 'red' },
+                    { label: 'Purple (DEPRECATED)', value: 'purple' },
+                    { label: 'Blue (DEPRECATED)', value: 'blue' },
+                    { label: 'Green (DEPRECATED)', value: 'green' },
+                    { label: 'Red (DEPRECATED)', value: 'red' },
                 ]}
+                className="do-not-use-msg"
                 onChange={(value) => setAttributes({ styleType: value })}
                 __nextHasNoMarginBottom
                 __next40pxDefaultSize

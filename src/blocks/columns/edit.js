@@ -1,5 +1,5 @@
 import { InnerBlocks, InspectorControls, useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
-import { PanelBody } from '@wordpress/components';
+import { PanelBody, Notice } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import {
     __experimentalToggleGroupControl as ToggleGroupControl,
@@ -35,7 +35,7 @@ export default function Edit( {attributes, setAttributes} ) {
 
     const innerBlocksProps = useInnerBlocksProps(
         {
-            className: `row row-cols-1 row-cols-sm-2 row-cols-md-${colSize} g-3`,
+            className: `row row-cols-1 row-cols-sm-2 row-cols-md-${colSize} g-3 mb-3`,
         },
         {
             allowedBlocks: [XCLSR_BTSTRP_EDITOR_PREFIX + '/column'],
@@ -53,7 +53,8 @@ export default function Edit( {attributes, setAttributes} ) {
     return (
         <>
         <InspectorControls>
-            <PanelBody title="Settings">
+            <PanelBody title="Settings" className="deprecated">
+                <Notice status="warning" isDismissible={false}>Columns are deprecated. Do not use. It will be removed in the near future.</Notice>
             <ToggleGroupControl
                 label="Number of Columns"
                 help="Select the maximum number of columns per row on full width."

@@ -3,7 +3,7 @@ import { Fragment, useState, createElement } from '@wordpress/element';
 import { Modal, Button, __experimentalGrid as Grid } from '@wordpress/components';
 import { BlockControls } from '@wordpress/block-editor';
 import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
-import { ICONS } from './icons';
+import { ICONS, DEPRECATED_ICONS } from './icons';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../constants';
 import { useSelect } from '@wordpress/data';
 
@@ -141,6 +141,33 @@ wp.domReady( () => {
                                     __nextHasNoMarginBottom
                                 >
                                     {createElement('i', { className: `bi ${icon.name}`, style: { fontSize: '3rem' } })}
+                                </Button>
+                            ))}
+                        </Grid>
+                        <p className='do-not-use-msg'><i class="bi bi-arrow-down"></i> <strong>DEPRECATED ICON - DO NOT USE - WILL BE REMOVED IN THE NEAR FUTURE</strong> <i class="bi bi-arrow-down"></i></p>
+                        <Grid columns={10} gap={3} className="deprecated">
+                            {DEPRECATED_ICONS.map((icon) => (
+                                <Button
+                                    key={icon.name}
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        height: '40px',
+                                        border: '1px solid #f2f2f2'
+                                    }}
+                                    isPressed={ 
+                                        value.activeFormats &&
+                                        value.activeFormats[0] && 
+                                        value.activeFormats[0].unregisteredAttributes &&
+                                        value.activeFormats[0].unregisteredAttributes.class &&
+                                        value.activeFormats[0].unregisteredAttributes.class === "bi " + icon.name
+                                    }
+                                    onClick={() => handleIconSelect(icon.name)}
+                                    __next40pxDefaultSize
+                                    __nextHasNoMarginBottom
+                                >
+                                    {createElement('i', { className: `bi ${icon.name}`, style: { fontSize: '1.5rem' } })}
                                 </Button>
                             ))}
                         </Grid>

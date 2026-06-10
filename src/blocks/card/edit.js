@@ -1,10 +1,11 @@
 import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, Button, TextControl, ToggleControl, __experimentalSpacer as Spacer } from '@wordpress/components';
+import { PanelBody, Button, TextControl, TextareaControl, ToggleControl, __experimentalSpacer as Spacer } from '@wordpress/components';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 import { addFilter } from '@wordpress/hooks';
 import { useState, useEffect } from '@wordpress/element';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
+import { ALT_TEXT_LIMIT, CAPTION_LIMIT, getCharacterCount, getCharacterLimitLabel, CharacterLimitFeedback } from '../../commons';
 
 const withCustomClasses = createHigherOrderComponent((BlockEdit) => {
     return (props) => {
@@ -100,9 +101,10 @@ export default function Edit( {attributes, setAttributes, context} ) {
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
                     />
-                    <TextControl
+                    <TextareaControl
                         label="Image Alt Text"
-                        help="Replace the alt text for the image. Leave it blank if image is for decoration."
+                        help={getCharacterLimitLabel( imgAltText, ALT_TEXT_LIMIT )}
+                        placeholder="Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration."
                         value={imgAltText}
                         onChange={(value) => {
                             setAttributes( { imgAltText: value } );
@@ -111,6 +113,7 @@ export default function Edit( {attributes, setAttributes, context} ) {
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
                     />
+                    <CharacterLimitFeedback value={imgAltText} limit={ALT_TEXT_LIMIT} message="Keep it under 150 characters so screen reader users get a concise description without unnecessary detail." showCount={false} />
                     <ToggleControl
                         label="Enlargeable"
                         help="Enable a button to expand the image to its actual width, scaling down if it exceeds the browser width."
@@ -150,7 +153,8 @@ export default function Edit( {attributes, setAttributes, context} ) {
                                 <div className="excelsior-image-url-insert">
                                     <TextControl label="Image URL" value={tempUrl} onChange={(newUrl) => setTempUrl(newUrl)} __next40pxDefaultSize __nextHasNoMarginBottom />
                                     <Spacer />
-                                    <TextControl label="Image Alt Text" value={tempAltTxt} onChange={(newAlt) => setTempAltTxt(newAlt)} __next40pxDefaultSize __nextHasNoMarginBottom />
+                                    <TextareaControl label="Image Alt Text" placeholder="Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration." value={tempAltTxt} onChange={(newAlt) => setTempAltTxt(newAlt)} __next40pxDefaultSize __nextHasNoMarginBottom />
+                                    <CharacterLimitFeedback value={tempAltTxt} limit={ALT_TEXT_LIMIT} message="Keep it under 150 characters so screen reader users get a concise description without unnecessary detail." />
                                     <Spacer />
                                     <ToggleControl
                                         label="Enlargeable"

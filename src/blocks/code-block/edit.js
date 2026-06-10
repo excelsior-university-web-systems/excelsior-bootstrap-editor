@@ -1,6 +1,6 @@
 import { InspectorControls, useBlockProps, BlockControls } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, Modal, TextareaControl, Button, ToolbarGroup, ToolbarButton, ToggleControl, __experimentalSpacer as Spacer } from '@wordpress/components';
-import { useState, useEffect } from '@wordpress/element';
+import { useState, useEffect, useRef } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import Prism from 'prismjs';
 import metadata from './block.json';
@@ -17,6 +17,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
     );
     const [tempCode, setTempCode] = useState(content || '');
     const [isEditing, setEditing] = useState(false);
+    const codeRef = useRef(null);
     const blockProps = useBlockProps();
     const openEditingModal = () => setEditing(true);
     const closeEditingModal = () => setEditing(false);
@@ -31,23 +32,14 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
     };
 
     useEffect(() => {
-        if ( isPreview ) {
+        if ( isPreview || ! content ) {
             return;
         }
 
-        const codeElement = document.querySelector(`[data-block="${blockProps['data-block']}"] code`);
-        const preElement = codeElement?.closest('pre');
+        const codeElement = codeRef.current;
 
-        if ( preElement ) {
-
-            if ( showLineNumbers ) {
-                preElement.classList.add('line-numbers');
-            } else {
-                preElement.classList.remove('line-numbers');
-            }
-
+        if ( codeElement ) {
             Prism.highlightElement( codeElement );
-
         }
 
     }, [ isPreview, content, language, showLineNumbers ]);
@@ -132,8 +124,8 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 
             <div {...blockProps}>
                 {content ? (
-                    <pre>
-                        <code className={`language-${language}`}>
+                    <pre className={showLineNumbers ? 'line-numbers' : undefined}>
+                        <code ref={codeRef} className={`language-${language}`}>
                             {content}
                         </code>
                     </pre>

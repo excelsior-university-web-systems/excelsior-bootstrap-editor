@@ -1,8 +1,8 @@
 {
     "apiVersion": 3,
     "name": "excelsior-bootstrap-editor/tipbox",
-    "title": "Tip Box",
-    "description": "Create a tip box to highlight important information.",
+    "title": "Tip Box (DEPRECATED)",
+    "description": "DO NOT USE. WILL BE REMOVED IN THE NEAR FUTURE. Create a tip box to highlight important information.",
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/container", "core/group"],
     "supports": {
