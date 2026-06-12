@@ -37,7 +37,7 @@ This section describes how to install and activate the plugin.
 
 ## Changelog ##
 
-### 1.1.5 (2027-06-10) ###
+### 1.2.0 (2027-06-10) ###
 * Renamed plugin to Excelsior Bootstrap (removing the "Editor" from title).
 * Updated horizontal rule block with new page type icons and remove other styles; deprecated existing icons.
 * Made the button block to add blue buttons only.
