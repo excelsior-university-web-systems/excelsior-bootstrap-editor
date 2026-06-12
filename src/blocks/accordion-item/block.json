@@ -17,7 +17,7 @@
         },
         "open": {
             "type": "boolean",
-            "default": true
+            "default": false
         },
         "openForEditing": {
             "type": "boolean",
