@@ -39,7 +39,10 @@ This section describes how to install and activate the plugin.
 
 ### 1.2.1 (2027-06-17) ###
 * Revert restrictions placed on the accordions block.
-* Add source URL setting option to the image block.
+* Added source URL setting option to the image block.
+* Updated new Excelsior Bootstrap templates.
+* Updated icons for the horizontal rule block and icon library.
+* Added "Required Resources" callout; replacing the quote style.
 
 ### 1.2.0 (2027-06-10) ###
 * Renamed plugin to Excelsior Bootstrap (removing the "Editor" from title).
