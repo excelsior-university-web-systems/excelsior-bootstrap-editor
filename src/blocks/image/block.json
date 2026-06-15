@@ -45,6 +45,9 @@
         "altText": {
             "type": "string"
         },
+        "sourceUrl": {
+            "type": "string"
+        },
         "useDiv": {
             "type": "boolean",
             "default": false

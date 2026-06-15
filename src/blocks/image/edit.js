@@ -1,5 +1,5 @@
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { BaseControl, PanelBody, Button, TextControl, TextareaControl, ToggleControl, 
+import { BaseControl, PanelBody, Button, TextControl, TextareaControl, ToggleControl, Notice, 
     __experimentalSpacer as Spacer,
     __experimentalToggleGroupControl as ToggleGroupControl,
     __experimentalToggleGroupControlOption as ToggleGroupControlOption, } from '@wordpress/components';
@@ -7,11 +7,11 @@ import { useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 import metadata from './block.json';
-import { ALT_TEXT_LIMIT, CAPTION_LIMIT, getCharacterCount, getCharacterLimitLabel, CharacterLimitFeedback } from '../../commons';
+import { ALT_TEXT_LIMIT, CAPTION_LIMIT, getCharacterCount, getCharacterLimitLabel, CharacterLimitFeedback, isValidUrl } from '../../commons';
 
 export default function Edit ( { attributes, setAttributes, context } ) {
 
-    const { url, alignmentEnabled, alignment, alignmentSize, centerAlignment, caption, altText, mobileResponsive, useDiv, enlargeable } = attributes;
+    const { url, alignmentEnabled, alignment, alignmentSize, centerAlignment, caption, altText, sourceUrl, mobileResponsive, useDiv, enlargeable } = attributes;
     const inAlignmentEnabledEl = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/alignmentEnabled'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/alignmentEnabled'] : false;
     const inBlockqoute = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/inBlockqoute'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/inBlockqoute'] : false;
     const inCarousel = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/inCarousel'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/inCarousel'] : false;
@@ -23,11 +23,12 @@ export default function Edit ( { attributes, setAttributes, context } ) {
     const [tempUrl, setTempUrl] = useState('');
     const [tempAltText, setTempAltText] = useState('');
     const [tempCaption, setTempCaption] = useState('');
+    const [tempSourceUrl, setTempSourceUrl] = useState('');
     const [hasError, setHasError] = useState(false);
 
     const onInsertUrl = () => {
         if ( tempUrl ) {
-            setAttributes({ url: tempUrl.trim(), altText: tempAltText.trim(), caption: tempCaption.trim() });
+            setAttributes({ url: tempUrl.trim(), altText: tempAltText.trim(), caption: tempCaption.trim(), sourceUrl: tempSourceUrl.trim() });
         }
     };
 
@@ -94,6 +95,21 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                             __next40pxDefaultSize
                         />
                         <CharacterLimitFeedback value={caption} limit={CAPTION_LIMIT} message="Keep it under 250 characters so the caption stays easy to scan and does not overwhelm the image." showCount={false} />
+                        <TextControl
+                            label = 'Source URL'
+                            help = 'Enter the URL where the image was originally published or sourced. Include http:// or https://.'
+                            value={sourceUrl}
+                            onChange={(value) => {
+                                setAttributes( { sourceUrl: value } );
+                            }}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
+                        />
+                        { !!sourceUrl && !isValidUrl(sourceUrl) && 
+                            <Notice status="error" isDismissible={false}>
+                                The source URL does not appear to be a valid URL.
+                            </Notice>
+                        }
                         </>
                     )}
 
@@ -160,7 +176,7 @@ export default function Edit ( { attributes, setAttributes, context } ) {
         </InspectorControls>
         { url && !hasError ? 
         
-            altText.length || caption.length || enlargeable ? (
+            altText.length || caption.length || sourceUrl.length || enlargeable ? (
 
                  useDiv ? (
                     <div {...useBlockProps({className: `figure ${!useDiv ? 'mb-3' : ''} ${centerAlignment ? 'center-aligned' : ''} ${ alignmentEnabled ? alignment + ' ' + alignmentSize : ''} ${ enlargeable ? 'enlargeable' : '' }`})}>
@@ -169,7 +185,18 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                 ) : (
                     <figure {...useBlockProps({className: `figure ${!useDiv ? 'mb-3' : ''} ${centerAlignment ? 'center-aligned' : ''} ${ alignmentEnabled ? alignment + ' ' + alignmentSize : ''} ${enlargeable ? 'enlargeable' : ''}`})}>
                         <img className={`figure-img ${ mobileResponsive ? 'img-fluid' : '' }`} src={url} alt={altText || ''} onError={handleImageError} />
-                        { caption && <figcaption className='figure-caption'>{caption}</figcaption> }
+                        { ( caption || sourceUrl ) && <figcaption className='figure-caption'>
+                            {caption && <p>{caption}</p>}
+                            {sourceUrl && <p>Source: <cite>
+                                 {isValidUrl(sourceUrl) ? (
+                                    <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
+                                    {sourceUrl}
+                                    </a>
+                                ) : (
+                                    sourceUrl
+                                )}    
+                            </cite></p>}
+                        </figcaption> }
                     </figure>
                 )
 
@@ -199,6 +226,14 @@ export default function Edit ( { attributes, setAttributes, context } ) {
                             <>
                             <TextareaControl label="Image Caption" value={tempCaption} onChange={(newCaption) => setTempCaption(newCaption)} placeholder='Displays a caption or description for the entire image. Can be left blank if not needed.' __next40pxDefaultSize __nextHasNoMarginBottom />
                             <CharacterLimitFeedback value={tempCaption} limit={CAPTION_LIMIT} message="Keep it under 250 characters so the caption stays easy to scan and does not overwhelm the image." />
+                            <TextControl
+                                label = 'Source URL'
+                                help = 'Enter the URL where the image was originally published or sourced. Include http:// or https://.'
+                                value={tempSourceUrl}
+                                onChange={(newSourceUrl) => setTempSourceUrl(newSourceUrl)}
+                                __nextHasNoMarginBottom
+                                __next40pxDefaultSize
+                            />
                             </>
                         )}
                         { (!inAlignmentEnabledEl && !inBlockqoute && !inCarousel) && (
