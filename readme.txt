@@ -4,7 +4,7 @@ Tags: bootstrap, css, js, editor, block
 Requires at least: 6.0
 Requires PHP: 8.0
 Tested up to: 7.0
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,7 +35,14 @@ This section describes how to install and activate the plugin.
 
 == Changelog ==
 
-= 1.1.5 (2027-06-10) =
+= 1.2.1 (2027-06-17) =
+* Revert restrictions placed on the accordions block.
+* Added source URL setting option to the image block.
+* Updated new Excelsior Bootstrap templates.
+* Updated icons for the horizontal rule block and icon library.
+* Removed "Supplemental" style for callout block.
+
+= 1.2.0 (2027-06-10) =
 * Renamed plugin to Excelsior Bootstrap (removing the "Editor" from title).
 * Updated horizontal rule block with new page type icons and remove other styles; deprecated existing icons.
 * Made the button block to add blue buttons only.

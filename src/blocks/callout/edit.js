@@ -1,13 +1,14 @@
 import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, Notice } from '@wordpress/components';
+import { PanelBody, SelectControl } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 import metadata from './block.json';
 
 const CALLOUT_HEADING_PREFIX = {
-    supplemental: '<i class="bi bi-paperclip" role="presentation" aria-hidden="true">&nbsp;</i> Supplemental:',
+    // supplemental: '<i class="bi bi-paperclip" role="presentation" aria-hidden="true">&nbsp;</i> Supplemental:',
     guide: '<i class="bi bi-lamp-fill" role="presentation" aria-hidden="true">&nbsp;</i> Spotlight:',
-    skills: '<i class="bi bi-symmetry-vertical" role="presentation" aria-hidden="true">&nbsp;</i> Reflection:'
+    skills: '<i class="bi bi-symmetry-vertical" role="presentation" aria-hidden="true">&nbsp;</i> Reflection:',
+    // quote: '<i class="bi bi-star-fill" role="presentation" aria-hidden="true">&nbsp;</i> Required Resources:'
 };
 
 const getCalloutHeadingContent = ( styleType, currentContent = '' ) => {
@@ -80,12 +81,11 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
         <>
         <InspectorControls>
             <PanelBody title="Settings" className="deprecated">
-            <Notice status="warning" isDismissible={false}>Quote style is deprecated. Do not use. It will be removed in the near future. Supplement style is not fully supported yet.</Notice>
             <SelectControl
                 label="Styles"
                 value={styleType}
                 options={[
-                    { label: 'Supplemental', value: 'supplemental' },
+                    // { label: 'Supplemental', value: 'supplemental' },
                     { label: 'Spotlight (formerly, Guide)', value: 'guide' },
                     { label: 'Quote (DEPRECATED)', value: 'quote' },
                     { label: 'Reflection (formerly, Skills)', value: 'skills' },
