@@ -35,14 +35,14 @@ This section describes how to install and activate the plugin.
 
 == Changelog ==
 
-= 1.2.1 (2027-06-17) =
+= 1.2.1 (2026-06-17) =
 * Revert restrictions placed on the accordions block.
 * Added source URL setting option to the image block.
 * Updated new Excelsior Bootstrap templates.
 * Updated icons for the horizontal rule block and icon library.
 * Removed "Supplemental" style for callout block.
 
-= 1.2.0 (2027-06-10) =
+= 1.2.0 (2026-06-10) =
 * Renamed plugin to Excelsior Bootstrap (removing the "Editor" from title).
 * Updated horizontal rule block with new page type icons and remove other styles; deprecated existing icons.
 * Made the button block to add blue buttons only.
@@ -65,7 +65,7 @@ This section describes how to install and activate the plugin.
 * Added soft character limit and warning to image block alt and caption.
 * Fixed an issue with code block not preview the syntax highlighting preview in the block editor.
 
-= 1.1.4 (2027-05-27) =
+= 1.1.4 (2026-05-27) =
 * Updated Excelsior Bootstrap framework to version 1.1.15
 * Allow the insert WordPress patterns
 
