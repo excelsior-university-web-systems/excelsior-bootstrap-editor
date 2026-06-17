@@ -5,10 +5,10 @@ import { ALLOWED_BLOCKS } from './allowed-blocks';
 import metadata from './block.json';
 
 const CALLOUT_HEADING_PREFIX = {
-    supplemental: '<i class="bi bi-paperclip" role="presentation" aria-hidden="true">&nbsp;</i> Supplemental:',
+    // supplemental: '<i class="bi bi-paperclip" role="presentation" aria-hidden="true">&nbsp;</i> Supplemental:',
     guide: '<i class="bi bi-lamp-fill" role="presentation" aria-hidden="true">&nbsp;</i> Spotlight:',
     skills: '<i class="bi bi-symmetry-vertical" role="presentation" aria-hidden="true">&nbsp;</i> Reflection:',
-    quote: '<i class="bi bi-star-fill" role="presentation" aria-hidden="true">&nbsp;</i> Required Resources:'
+    // quote: '<i class="bi bi-star-fill" role="presentation" aria-hidden="true">&nbsp;</i> Required Resources:'
 };
 
 const getCalloutHeadingContent = ( styleType, currentContent = '' ) => {
@@ -85,9 +85,9 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
                 label="Styles"
                 value={styleType}
                 options={[
-                    { label: 'Supplemental', value: 'supplemental' },
+                    // { label: 'Supplemental', value: 'supplemental' },
                     { label: 'Spotlight (formerly, Guide)', value: 'guide' },
-                    { label: 'Required Resources (formerly, Quote)', value: 'quote' },
+                    { label: 'Quote (DEPRECATED)', value: 'quote' },
                     { label: 'Reflection (formerly, Skills)', value: 'skills' },
                 ]}
                 onChange={updateStyleType}
