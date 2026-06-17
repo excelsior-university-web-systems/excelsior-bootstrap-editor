@@ -40,7 +40,7 @@ This section describes how to install and activate the plugin.
 * Added source URL setting option to the image block.
 * Updated new Excelsior Bootstrap templates.
 * Updated icons for the horizontal rule block and icon library.
-* Added "Required Resources" callout; replacing the quote style.
+* Removed "Supplemental" style for callout block.
 
 = 1.2.0 (2027-06-10) =
 * Renamed plugin to Excelsior Bootstrap (removing the "Editor" from title).
