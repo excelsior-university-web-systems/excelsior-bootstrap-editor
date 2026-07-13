@@ -6,5 +6,6 @@ export const ALLOWED_BLOCKS = [
     "core/paragraph",
     "core/heading",
     "core/list",
-    "core/math"
+    "core/math",
+    "equation-editor/equation"
 ];

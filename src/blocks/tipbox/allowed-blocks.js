@@ -11,5 +11,6 @@ export const ALLOWED_BLOCKS = [
     "core/paragraph",
     "core/list",
     "core/math",
-    "reblock/reblock-block-selector"
+    "reblock/reblock-block-selector",
+    "equation-editor/equation"
 ];

@@ -9,5 +9,6 @@ export const ALLOWED_BLOCKS = [
     "core/list",
     "core/html",
     "core/math",
-    "reblock/reblock-block-selector"
+    "reblock/reblock-block-selector",
+    "equation-editor/equation"
 ];

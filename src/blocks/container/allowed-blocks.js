@@ -30,6 +30,7 @@ export const ALLOWED_BLOCKS = [
     "core/math",
     "core/group",
     "core/spacer",
+    "core/block",
     "reblock/reblock-block-selector",
-    "core/block"
+    "equation-editor/equation"
 ];
