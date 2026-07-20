@@ -12,5 +12,5 @@ export const ALLOWED_BLOCKS = [
     "core/list",
     "core/math",
     "reblock/reblock-block-selector",
-    "equation-editor/equation"
+    "glyphwell/equation"
 ];

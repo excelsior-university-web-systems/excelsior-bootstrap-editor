@@ -7,5 +7,5 @@ export const ALLOWED_BLOCKS = [
     "core/heading",
     "core/list",
     "core/math",
-    "equation-editor/equation"
+    "glyphwell/equation"
 ];

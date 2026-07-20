@@ -32,5 +32,5 @@ export const ALLOWED_BLOCKS = [
     "core/spacer",
     "core/block",
     "reblock/reblock-block-selector",
-    "equation-editor/equation"
+    "glyphwell/equation"
 ];

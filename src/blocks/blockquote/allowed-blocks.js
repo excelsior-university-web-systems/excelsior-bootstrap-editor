@@ -1,6 +1,6 @@
 export const ALLOWED_BLOCKS = [
     "core/paragraph",
     "core/math",
-    "equation-editor/equation",
+    "glyphwell/equation",
     "excelsior-bootstrap-editor/image-and-text"
 ];

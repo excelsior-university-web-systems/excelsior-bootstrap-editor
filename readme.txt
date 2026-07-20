@@ -4,7 +4,7 @@ Tags: bootstrap, css, js, editor, block
 Requires at least: 6.0
 Requires PHP: 8.0
 Tested up to: 7.0
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,9 @@ This section describes how to install and activate the plugin.
 1. Example Excelsior Bootstrap Editor blocks in use.
 
 == Changelog ==
+
+= 1.2.3 (2026-07-22) =
+* Allow the equation block from Glyphwell - Visual Equation Editor plugin.
 
 = 1.2.2 (2026-07-15) =
 * Allow equation block from Equation Editor plugin.

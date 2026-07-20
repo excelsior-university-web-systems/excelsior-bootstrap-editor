@@ -5,5 +5,5 @@ export const ALLOWED_BLOCKS = [
     "core/paragraph",
     "core/list",
     "core/math",
-    "equation-editor/equation"
+    "glyphwell/equation"
 ];
