@@ -1,0 +1,17 @@
+{
+    "apiVersion": 3,
+    "name": "excelsior-bootstrap-editor/definitions",
+    "title": "Definitions",
+    "description": "Create a collection of terms and their corresponding definitions.",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container", "core/group"],
+    "supports": {
+        "html": false
+    },
+    "example": {
+        "attributes": {
+            "cover": "admin/images/definitions.webp"
+        }
+    },
+    "attributes": {}
+}

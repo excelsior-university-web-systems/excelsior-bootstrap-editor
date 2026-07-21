@@ -1,0 +1,17 @@
+{
+    "apiVersion": 3,
+    "name": "excelsior-bootstrap-editor/definition-term",
+    "title": "Term",
+    "description": "Create a term of a definition collection.",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/definitions"],
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "termName": {
+            "type": "string",
+            "default": ""
+        }
+    }
+}

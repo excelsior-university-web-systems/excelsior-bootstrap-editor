@@ -15,6 +15,8 @@ import './collapsible-content';
 import './columns';
 import './column';
 import './container';
+import './definitions';
+import './definition-term';
 import './homepage-content';
 import './horizontal-rule';
 import './iframe-embed';
