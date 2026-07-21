@@ -464,6 +464,7 @@ const GetCodeButton = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [renderedHTML, setRenderedHTML] = useState('');
     const [copySuccess, setCopySuccess] = useState(false);
+    const [isRetrievingHTML, setIsRetrievingHTML] = useState(false);
     const { isSaving, hasUnsavedChanges, unsavedMeta, postStatus } = useSelect((select) => {
         const editorStore = select('core/editor');
         return {
@@ -479,6 +480,7 @@ const GetCodeButton = () => {
     const getRenderedHTML = () => {
         const postId = select('core/editor').getCurrentPostId();
         const restUrl = `${wpApiSettings.root}wp/v2/excelsior_bootstrap/${postId}?context=edit&t=${new Date().getTime()}`;
+        setIsRetrievingHTML(true);
     
         // Fetch the raw content via REST API
         fetch(restUrl, {
@@ -504,8 +506,14 @@ const GetCodeButton = () => {
             })
             .catch((error) => {
                 console.error('Error fetching the post content:', error);
+                setIsRetrievingHTML(false);
             });
     };    
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setIsRetrievingHTML(false);
+    };
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(renderedHTML)
@@ -531,8 +539,8 @@ const GetCodeButton = () => {
         <>
         <PluginPostStatusInfo>
             <PanelBody className='get-code-btn-panel'>
-            <Button className='get-code-btn' onClick={getRenderedHTML} disabled={isDisabled} __next40pxDefaultSize>
-                Get Code
+            <Button className='get-code-btn' onClick={getRenderedHTML} disabled={isDisabled || isRetrievingHTML} __next40pxDefaultSize>
+                {isRetrievingHTML ? 'Retrieving HTML...' : 'Get HTML Code'}
             </Button>
             {isDisabled && (
                 <Text as='p' variant='muted' isBlock style={{marginTop: '8px'}}>
@@ -545,7 +553,7 @@ const GetCodeButton = () => {
             <Modal
                 title="HTML Code"
                 className='get-code-modal'
-                onRequestClose={() => setIsModalOpen(false)}
+                onRequestClose={closeModal}
                 shouldCloseOnClickOutside={false}
                 size='fill'
             >
