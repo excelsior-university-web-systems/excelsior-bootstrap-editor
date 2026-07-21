@@ -12,6 +12,10 @@
         "termName": {
             "type": "string",
             "default": ""
+        },
+        "termDefinition": {
+            "type": "string",
+            "default": ""
         }
     }
 }

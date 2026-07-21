@@ -1,11 +1,11 @@
-import { useBlockProps, InnerBlocks, RichText } from '@wordpress/block-editor';
+import { useBlockProps, RichText } from '@wordpress/block-editor';
 import { PanelBody, ToggleControl } from '@wordpress/components';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 
 export default function Edit( { attributes, setAttributes } ) {
 
-    const { termName } = attributes;
+    const { termName, termDefinition } = attributes;
 
     const blockProps = useBlockProps({
         className: 'excelsior-definition-term',
@@ -22,14 +22,13 @@ export default function Edit( { attributes, setAttributes } ) {
                 onChange={(value) => setAttributes({ termName: value })}
                 allowedFormats={['core/bold', 'core/italic']}
             />
-            <dd className='description'>
-                <InnerBlocks
-                    allowedBlocks={ALLOWED_BLOCKS}
-                    template={[['core/paragraph']]}
-                    templateLock={false}
-                    renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
-                />
-            </dd>
+            <RichText
+                className='definition mb-3'
+                placeholder='Definition'
+                value={termDefinition}
+                onChange={(value) => setAttributes({ termDefinition: value })}
+                allowedFormats={['core/bold', 'core/italic', 'core/math', 'glyphwell/inline-equation']}
+            />
         </div>
         </>
     );

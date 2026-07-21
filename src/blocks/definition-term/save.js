@@ -1,23 +1,21 @@
-import { useBlockProps, InnerBlocks, RichText } from '@wordpress/block-editor';
+import { RichText } from '@wordpress/block-editor';
 
 export default function Save( { attributes } ) {
 
-    const { termName } = attributes;
-    
-    const blockProps = useBlockProps.save( {
-        className: 'definition-term'
-    });
+    const { termName, termDefinition } = attributes;
 
     return (
-        <div {...blockProps}>
-            <RichText.Content
-                tagName="dt"
-                className='term'
-                value={termName}
-            />
-            <dd className='description'>
-                <InnerBlocks.Content />
-            </dd>
-        </div>
+        <>
+        <RichText.Content
+            tagName="dt"
+            className='term'
+            value={termName}
+        />
+        <RichText.Content
+            tagName="dd"
+            className='definition mb-3'
+            value={termDefinition}
+        />
+        </>
     );
 }
