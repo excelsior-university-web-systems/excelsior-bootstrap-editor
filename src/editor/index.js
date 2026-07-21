@@ -234,6 +234,19 @@ const activatePostTypeEnhancements = () => {
     } );
 };
 
+const unregisterBlockStyleVariations = () => {
+    const blockStyles = {
+        'core/heading': ['text-shadow-sm', 'text-shadow', 'text-shadow-lg'],
+        'core/paragraph': ['text-shadow-sm', 'text-shadow', 'text-shadow-lg'],
+    };
+
+    Object.entries( blockStyles ).forEach( ([blockName, styleNames] ) => {
+        styleNames.forEach( ( styleName ) => {
+            wp.blocks.unregisterBlockStyle( blockName, styleName );
+        } );
+    } );
+};
+
 wp.domReady(() => {
     const maybeActivateEditorEnhancements = () => {
         if ( isBootstrapEditorActive() ) {
@@ -248,6 +261,11 @@ wp.domReady(() => {
 
     maybeActivateEditorEnhancements();
     subscribe( maybeActivateEditorEnhancements );
+
+    if ( isExcelsiorBootstrapPostTypeDuringBlockRegistration() ) {
+        unregisterBlockStyleVariations();
+    }
+    
 });
 
 /**
