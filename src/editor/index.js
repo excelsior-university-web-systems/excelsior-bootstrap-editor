@@ -424,6 +424,32 @@ registerPlugin( XCLSR_BTSTRP_EDITOR_PREFIX + '-course-meta-fields', {
 } );
 
 /**
+ * Removes WordPress-generated classes from rendered HTML output.
+ *
+ * @param {string} html Rendered HTML to clean.
+ * @returns {string} Rendered HTML without class tokens beginning with `wp-`.
+ */
+const removeWordPressClasses = ( html ) => {
+    const template = document.createElement( 'template' );
+    template.innerHTML = html;
+
+    template.content.querySelectorAll( '[class]' ).forEach( ( element ) => {
+        const classes = Array.from( element.classList ).filter( ( className ) => {
+            return ! className.startsWith( 'wp-' );
+        } );
+
+        if ( classes.length ) {
+            element.setAttribute( 'class', classes.join( ' ' ) );
+            return;
+        }
+
+        element.removeAttribute( 'class' );
+    } );
+
+    return template.innerHTML;
+};
+
+/**
  * Renders the "Get Code" sidebar action for published Excelsior posts.
  *
  * @returns {JSX.Element|null} Sidebar UI for published Excelsior posts only.
@@ -463,7 +489,8 @@ const GetCodeButton = () => {
             .then((response) => response.json())
             .then((post) => {
                 const rawContent = post.content.rendered.replace(/<!--\s*\/?wp:[^>]+-->/g, '');
-                const htmlCode = rawContent.replace(
+                const filteredContent = removeWordPressClasses( rawContent );
+                const htmlCode = filteredContent.replace(
                     /<i([^>]*)>(.*?)<\/i>/g,
                     (match, attrs, innerText) => {
                         // Preserve icon spacing when rendered HTML is copied out of the editor.
