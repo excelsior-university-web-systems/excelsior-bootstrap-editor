@@ -65,6 +65,7 @@ add_action( 'current_screen', function() {
             array( 'slug' => 'new-homepage', 'title' => 'Homepage', 'file' => 'home.html' ),
             array( 'slug' => 'new-overview', 'title' => 'Overview', 'file' => 'overview.html' ),
             array( 'slug' => 'new-lesson', 'title' => 'Lesson', 'file' => 'lesson.html' ),
+            array( 'slug' => 'key-terms-definitions', 'title' => 'Key Terms and Definitions', 'file' => 'key-terms-definitions.html' ),
             array( 'slug' => 'new-discussion', 'title' => 'Discussion', 'file' => 'discussion.html' ),
             array( 'slug' => 'new-fivetabdiscussion', 'title' => '5-Tab Discussion', 'file' => '5-tab-discussion.html' ),
             array( 'slug' => 'new-assignment', 'title' => 'Assignment', 'file' => 'assignment.html' ),
