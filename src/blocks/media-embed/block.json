@@ -1,0 +1,25 @@
+{
+    "apiVersion": 3,
+    "name": "excelsior-bootstrap-editor/media-embed",
+    "title": "Media Embed",
+    "description": "Embed media such as Storybook+, video player, and YouTube video.",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container", "core/group"],
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "mediaTitle": {
+            "type": "string",
+            "default": ""
+        },
+        "mediaType": {
+            "type": "string",
+            "default": "gvp"
+        },
+        "mediaSource": {
+            "type": "string",
+            "default": ""
+        }
+    }
+}

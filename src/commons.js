@@ -1,4 +1,4 @@
-import { Notice } from '@wordpress/components';
+import { Notice, SandBox } from '@wordpress/components';
 
 export const ALT_TEXT_LIMIT = 150;
 export const CAPTION_LIMIT = 250;
@@ -196,4 +196,146 @@ export const isValidUrl = ( value ) => {
     } catch {
         return false;
     }
+};
+
+/**
+ * Extracts an 11-character YouTube video ID from a raw ID or any common
+ * YouTube URL form (watch, youtu.be, embed, shorts).
+ *
+ * @param {string} source - Raw video ID or YouTube URL.
+ * @returns {string} The extracted video ID, or the trimmed input if none matched.
+ */
+const extractYouTubeId = ( source ) => {
+    const value = ( source || '' ).trim();
+
+    // Already a bare 11-char ID.
+    if ( /^[a-zA-Z0-9_-]{11}$/.test( value ) ) {
+        return value;
+    }
+
+    const match = value.match(
+        /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+    );
+
+    return match ? match[ 1 ] : value;
+};
+
+/**
+ * Per-type configuration for the media embed block.
+ * `buildSrc` maps the stored media source to the iframe URL.
+ */
+const MEDIA_CONFIG = {
+    gvp: {
+        buildSrc: ( source ) => source,
+        paddingTop: '56.25%',
+        allow: 'fullscreen; autoplay; clipboard-write; encrypted-media; picture-in-picture',
+    },
+    yt: {
+        buildSrc: ( source ) => `https://www.youtube.com/embed/${ extractYouTubeId( source ) }`,
+        paddingTop: '56.25%',
+        allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
+    },
+    sbplus: {
+        buildSrc: ( source ) => source,
+        paddingTop: '65.11111111111111%',
+        minHeight: 586,
+        allow: 'fullscreen; autoplay; accelerometer; gyroscope; clipboard-write; encrypted-media',
+    },
+};
+
+/**
+ * Escapes a value for safe interpolation into a double-quoted HTML attribute.
+ *
+ * @param {string} value - Raw attribute value.
+ * @returns {string} Escaped value.
+ */
+const escapeAttr = ( value ) =>
+    String( value || '' )
+        .replace( /&/g, '&amp;' )
+        .replace( /"/g, '&quot;' )
+        .replace( /</g, '&lt;' )
+        .replace( />/g, '&gt;' );
+
+/**
+ * Renders a responsive, aspect-ratio-locked media embed iframe.
+ *
+ * On the front-end the iframe is rendered directly. In `preview` mode (the
+ * block editor) it is rendered through WordPress's SandBox component instead.
+ * The editor canvas is an `about:srcdoc` iframe, and embedding YouTube directly
+ * inside it fails referrer validation ("Error 153"); SandBox gives the embed a
+ * proper browsing context, the same way the core embed blocks do.
+ *
+ * @param {Object} props - Component props.
+ * @param {string} props.mediaType - Media type key (see MEDIA_CONFIG).
+ * @param {string} props.mediaSource - Media source URL or ID.
+ * @param {string} [props.mediaTitle] - Accessible iframe title.
+ * @param {boolean} [props.preview=false] - Render through SandBox for the editor.
+ * @returns {JSX.Element|null} The embed markup, or null when not configured.
+ */
+export const MediaEmbed = ( { mediaType, mediaSource, mediaTitle, preview = false } ) => {
+    const config = MEDIA_CONFIG[ mediaType ];
+
+    if ( ! config || ! mediaSource ) {
+        return null;
+    }
+
+    const src = config.buildSrc( mediaSource );
+
+    const wrapperStyle = {
+        position: 'relative',
+        display: 'block',
+        maxWidth: 900,
+        margin: '0 auto 1rem',
+        ...( config.minHeight && { minHeight: config.minHeight } ),
+    };
+
+    const fillStyle = {
+        position: 'absolute',
+        inset: 0,
+        width: '100%',
+        height: '100%',
+        border: 'none',
+    };
+
+    // Editor preview: render the same markup through SandBox so third-party
+    // embeds get a valid browsing context instead of the editor's srcdoc canvas.
+    if ( preview ) {
+        const minHeight = config.minHeight ? `min-height:${ config.minHeight }px;` : '';
+        const html = `
+            <div style="position:relative;display:block;max-width:900px;margin:0 auto;${ minHeight }">
+                <div style="padding-top:${ config.paddingTop };">
+                    <iframe
+                        src="${ escapeAttr( src ) }"
+                        title="${ escapeAttr( mediaTitle ) }"
+                        scrolling="no"
+                        frameborder="0"
+                        allow="${ escapeAttr( config.allow ) }"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        style="position:absolute;inset:0;width:100%;height:100%;border:none;"
+                        loading="lazy"
+                        allowfullscreen
+                    ></iframe>
+                </div>
+            </div>`;
+
+        return <SandBox html={ html } title={ mediaTitle } type={ `media-embed-${ mediaType }` } />;
+    }
+
+    return (
+        <div style={ wrapperStyle }>
+            <div style={ { paddingTop: config.paddingTop } }>
+                <iframe
+                    src={ src }
+                    title={ mediaTitle }
+                    scrolling="no"
+                    frameBorder="0"
+                    allow={ config.allow }
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    style={ fillStyle }
+                    loading="lazy"
+                    allowFullScreen
+                ></iframe>
+            </div>
+        </div>
+    );
 };

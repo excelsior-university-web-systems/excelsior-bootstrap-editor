@@ -124,10 +124,11 @@ p.is-selected:focus code[data-rich-text-format-boundary] {
 /* EXCELSIOR BOOTSTRAP EDITOR
    IFRAME EMBED */
 
-.excelsior-iframe-embed-insert {
+.excelsior-iframe-embed-insert,
+.excelsior-media-embed-insert {
     border: 1px dashed #ccc;
-    padding: 10px;
-    margin-bottom: 1rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .homepage-content .wp-block-excelsior-bootstrap-editor-iframe-embed {

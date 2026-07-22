@@ -24,6 +24,7 @@ import './image-banner';
 import './image';
 import './image-and-text';
 import './info-box';
+import './media-embed';
 import './namespace';
 import './page-navigation';
 import './start-here-banner';
