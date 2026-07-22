@@ -430,12 +430,17 @@ registerPlugin( XCLSR_BTSTRP_EDITOR_PREFIX + '-course-meta-fields', {
  * @returns {string} Rendered HTML without class tokens beginning with `wp-`.
  */
 const removeWordPressClasses = ( html ) => {
+
+    const PRESERVED_WORDPRESS_CLASSES = new Set( [
+        'wp-block-group',
+    ] );
+
     const template = document.createElement( 'template' );
     template.innerHTML = html;
 
     template.content.querySelectorAll( '[class]' ).forEach( ( element ) => {
         const classes = Array.from( element.classList ).filter( ( className ) => {
-            return ! className.startsWith( 'wp-' );
+            return ! className.startsWith( 'wp-' ) || PRESERVED_WORDPRESS_CLASSES.has( className );
         } );
 
         if ( classes.length ) {
