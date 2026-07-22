@@ -4,7 +4,7 @@ Tags: bootstrap, css, js, editor, block
 Requires at least: 6.0
 Requires PHP: 8.0
 Tested up to: 7.0
-Stable tag: 1.2.3
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,17 @@ This section describes how to install and activate the plugin.
 1. Example Excelsior Bootstrap Editor blocks in use.
 
 == Changelog ==
+
+= 1.3.0 (2026-08-12) =
+* NEW - Definitions block. Create a collection of key terms and their corresponding definitions.
+* NEW - Key Terms and Definition template
+* NEW - `alphabet-uppercase` icon is now available and is used as the page type icon for the Key Terms and Definitions page.
+* Update block icons for accordion, accordion item, tabs, and tab. Block editor only. No effects on Excelsior Bootstrap framework.
+* Remove most of WordPress classes when get the HTML code.
+* Rename "Get Code" button texts to "Get HTML Code"
+* Add a loading state to "Get HTML Code" button. When user click the button, the button texts will be changed to "Retrieving code..." and be disabled. Button texts will revert back to "Get HTML Code" after the HTML code modal is closed.
+* 
+
 
 = 1.2.3 (2026-07-22) =
 * Allow the equation block from Glyphwell - Visual Equation Editor plugin.
