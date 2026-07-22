@@ -1,11 +1,21 @@
 import { useBlockProps, RichText } from '@wordpress/block-editor';
 import { PanelBody, ToggleControl } from '@wordpress/components';
+import { useEffect } from '@wordpress/element';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 
-export default function Edit( { attributes, setAttributes } ) {
+export default function Edit( { attributes, setAttributes, context } ) {
 
-    const { termName, termDefinition } = attributes;
+    const { termName, termDefinition, hasIndentation } = attributes;
+    const useIndentation = context?.[XCLSR_BTSTRP_EDITOR_PREFIX + '/useIndentationForDefinitions'];
+
+    useEffect(() => {
+    
+        if ( hasIndentation != useIndentation ) {
+            setAttributes( {hasIndentation: useIndentation} );
+        }
+
+    }, [useIndentation]);
 
     const blockProps = useBlockProps({
         className: 'excelsior-definition-term',
@@ -23,7 +33,7 @@ export default function Edit( { attributes, setAttributes } ) {
                 allowedFormats={['core/bold', 'core/italic']}
             />
             <RichText
-                className='definition mb-3'
+                className={`definition mb-3 ${hasIndentation ? 'ms-3' : ''}`}
                 placeholder='Definition'
                 value={termDefinition}
                 onChange={(value) => setAttributes({ termDefinition: value })}

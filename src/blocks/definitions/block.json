@@ -13,5 +13,13 @@
             "cover": "admin/images/definitions.webp"
         }
     },
-    "attributes": {}
+    "attributes": {
+        "useIndentation": {
+            "type": "boolean",
+            "default": false
+        }
+    },
+    "providesContext": {
+        "excelsior-bootstrap-editor/useIndentationForDefinitions": "useIndentation"
+    }
 }

@@ -2,7 +2,7 @@ import { RichText } from '@wordpress/block-editor';
 
 export default function Save( { attributes } ) {
 
-    const { termName, termDefinition } = attributes;
+    const { termName, termDefinition, hasIndentation } = attributes;
 
     return (
         <>
@@ -13,7 +13,7 @@ export default function Save( { attributes } ) {
         />
         <RichText.Content
             tagName="dd"
-            className='definition mb-3'
+            className={`definition mb-3 ${hasIndentation ? 'ms-3' : ''}`}
             value={termDefinition}
         />
         </>

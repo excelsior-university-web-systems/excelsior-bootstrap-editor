@@ -16,6 +16,13 @@
         "termDefinition": {
             "type": "string",
             "default": ""
+        },
+        "hasIndentation": {
+            "type": "boolean",
+            "default": false
         }
-    }
+    },
+    "usesContext": [
+        "excelsior-bootstrap-editor/useIndentationForDefinitions"
+    ]
 }
