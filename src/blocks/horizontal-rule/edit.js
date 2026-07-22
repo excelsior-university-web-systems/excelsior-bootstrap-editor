@@ -12,6 +12,7 @@ const ICONS = [
     { name: 'bi-signpost-split', label: 'Orientation' },
     { name: 'bi-house', label: 'Homepage' },
     { name: 'bi-x-diamond', label: 'Module Overview' },
+    { name: 'bi-alphabet-uppercase', label: 'Key Terms' },
     { name: 'bi-easel', label: 'Lesson' },
     { name: 'bi-bookmark-star', label: 'Key Takeaways' },
     { name: 'bi-chat-square-text', label: 'Discussion' },

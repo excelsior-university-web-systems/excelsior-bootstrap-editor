@@ -1,4 +1,5 @@
 export const ICONS = [
+    { name: 'bi-alphabet-uppercase' },
     { name: 'bi-bell-fill' },
     { name: 'bi-bookmark-star' },
     { name: 'bi-bookmark-star-fill' },
