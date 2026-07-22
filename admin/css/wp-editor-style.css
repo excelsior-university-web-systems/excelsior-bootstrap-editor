@@ -30,6 +30,7 @@
 .typography-block-support-panel,
 .block-editor-bindings__panel,
 .dimensions-block-support-panel,
-.border-block-support-panel {
+.border-block-support-panel,
+.background-block-support-panel {
     display: none !important;
 }
