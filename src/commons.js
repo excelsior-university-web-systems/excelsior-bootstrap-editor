@@ -223,21 +223,26 @@ const extractYouTubeId = ( source ) => {
 /**
  * Per-type configuration for the media embed block.
  * `buildSrc` maps the stored media source to the iframe URL.
+ *
+ * `sameOrigin` renders the editor preview through a same-origin SandBox. The
+ * default (isolated) SandBox gives its document — and every iframe nested inside
+ * it — an opaque `null` origin, which breaks embedded players: YouTube refuses
+ * playback ("Error 153") because there is no valid Referer, and the GVP/Storybook+
+ * players fail their own same-origin fetches (e.g. manifest.json) from a null
+ * origin. A same-origin SandBox lets the nested iframe keep its real origin.
+ * Mirrors how core's embed block renders its previews.
  */
 const MEDIA_CONFIG = {
     gvp: {
         buildSrc: ( source ) => source,
         paddingTop: '56.25%',
         allow: 'fullscreen; autoplay; clipboard-write; encrypted-media; picture-in-picture',
+        sameOrigin: true,
     },
     yt: {
         buildSrc: ( source ) => `https://www.youtube.com/embed/${ extractYouTubeId( source ) }`,
         paddingTop: '56.25%',
         allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
-        // Render the editor preview through a same-origin SandBox so the nested
-        // YouTube iframe inherits the page URL and forwards a valid Referer.
-        // Without it the default isolated SandBox has an opaque origin and YouTube
-        // refuses playback ("Error 153"). Mirrors core's embed block.
         sameOrigin: true,
     },
     sbplus: {
@@ -245,6 +250,7 @@ const MEDIA_CONFIG = {
         paddingTop: '65.11111111111111%',
         minHeight: 586,
         allow: 'fullscreen; autoplay; accelerometer; gyroscope; clipboard-write; encrypted-media',
+        sameOrigin: true,
     },
 };
 
