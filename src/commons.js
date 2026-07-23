@@ -234,6 +234,11 @@ const MEDIA_CONFIG = {
         buildSrc: ( source ) => `https://www.youtube.com/embed/${ extractYouTubeId( source ) }`,
         paddingTop: '56.25%',
         allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
+        // Render the editor preview through a same-origin SandBox so the nested
+        // YouTube iframe inherits the page URL and forwards a valid Referer.
+        // Without it the default isolated SandBox has an opaque origin and YouTube
+        // refuses playback ("Error 153"). Mirrors core's embed block.
+        sameOrigin: true,
     },
     sbplus: {
         buildSrc: ( source ) => source,
@@ -261,9 +266,6 @@ const escapeAttr = ( value ) =>
  *
  * On the front-end the iframe is rendered directly. In `preview` mode (the
  * block editor) it is rendered through WordPress's SandBox component instead.
- * The editor canvas is an `about:srcdoc` iframe, and embedding YouTube directly
- * inside it fails referrer validation ("Error 153"); SandBox gives the embed a
- * proper browsing context, the same way the core embed blocks do.
  *
  * @param {Object} props - Component props.
  * @param {string} props.mediaType - Media type key (see MEDIA_CONFIG).
@@ -285,7 +287,7 @@ export const MediaEmbed = ( { mediaType, mediaSource, mediaTitle, preview = fals
         position: 'relative',
         display: 'block',
         maxWidth: 900,
-        margin: '0 auto 1rem',
+        margin: '0 auto',
         ...( config.minHeight && { minHeight: config.minHeight } ),
     };
 
@@ -318,7 +320,7 @@ export const MediaEmbed = ( { mediaType, mediaSource, mediaTitle, preview = fals
                 </div>
             </div>`;
 
-        return <SandBox html={ html } title={ mediaTitle } type={ `media-embed-${ mediaType }` } />;
+        return <SandBox allowSameOrigin={ Boolean( config.sameOrigin ) } html={ html } title={ mediaTitle } type={ `media-embed-${ mediaType }` } />;
     }
 
     return (

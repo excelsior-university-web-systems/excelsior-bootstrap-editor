@@ -41,7 +41,7 @@ export default function Edit( { attributes, setAttributes } ) {
                 />
             </PanelBody> 
         </InspectorControls>
-        <div {...useBlockProps()}>
+        <div {...useBlockProps({className:'mb-3'})}>
             { mediaType && mediaSource ? (
 
                 <MediaEmbed mediaType={ mediaType } mediaSource={ mediaSource } mediaTitle={ mediaTitle } preview />
