@@ -3,9 +3,9 @@ import { MediaEmbed } from '../../commons';
 
 export default function Save( { attributes } ) {
 
-    const { mediaTitle, mediaType, mediaSource } = attributes;
+    const { mediaTitle, mediaType, mediaSource, floatingClasses } = attributes;
     const blockProps = useBlockProps.save( {
-        className:'mb-3'
+        className: `${ floatingClasses.length ? floatingClasses : 'mb-3'}`
     } );
 
     return (

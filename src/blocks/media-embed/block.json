@@ -20,6 +20,10 @@
         "mediaSource": {
             "type": "string",
             "default": ""
+        },
+        "floatingClasses": {
+            "type": "string",
+            "default": ""
         }
     }
 }

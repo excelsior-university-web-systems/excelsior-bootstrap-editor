@@ -5,7 +5,7 @@ import { MediaEmbed } from '../../commons';
 
 export default function Edit( { attributes, setAttributes } ) {
 
-    const { mediaTitle, mediaType, mediaSource } = attributes;
+    const { mediaTitle, mediaType, mediaSource, floatingClasses } = attributes;
 
     const updateMediaType = ( value ) => {
         setAttributes( { mediaType: value } );
@@ -41,14 +41,15 @@ export default function Edit( { attributes, setAttributes } ) {
                 />
             </PanelBody> 
         </InspectorControls>
-        <div {...useBlockProps({className:'mb-3'})}>
+        <div {...useBlockProps()}>
             { mediaType && mediaSource ? (
-
-                <MediaEmbed mediaType={ mediaType } mediaSource={ mediaSource } mediaTitle={ mediaTitle } preview />
+                <div className={`${ floatingClasses.length ? floatingClasses : 'mb-3'}`}>
+                    <MediaEmbed mediaType={ mediaType } mediaSource={ mediaSource } mediaTitle={ mediaTitle } preview />
+                </div>
 
             ) : (
 
-                <div className='excelsior-media-embed-insert'>
+                <div className={`excelsior-media-embed-insert`}>
                     <TextControl
                         label="Media Title"
                         value={ mediaTitle }
