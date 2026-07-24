@@ -16,7 +16,7 @@ const TYPE_LABELS = {
 
 const SOURCE_HELP = 'Paste a YouTube link, an Excelsior player/.xml URL, or a network/SMB file path.';
 
-export default function Edit( { attributes, setAttributes } ) {
+export default function Edit( { attributes, setAttributes, isSelected } ) {
 
     const { mediaTitle, mediaSource, responsive, verticalScroll, width, height, minWidth, minHeight, maxWidth, maxHeight, floatingClasses } = attributes;
 
@@ -177,18 +177,28 @@ export default function Edit( { attributes, setAttributes } ) {
             { mediaSource && detectedType ? (
                 <div className={ `${ floatingClasses.length ? floatingClasses + " ratio ratio-16x9 ratio-md-0" : 'mb-3' }` }>
                     { /* mediaTitle is intentionally omitted: it only sets the front-end iframe title (see save.js). Passing it here would rebuild the SandBox markup and reload the embed on every keystroke. */ }
-                    <MediaEmbed
-                        mediaSource={ mediaSource }
-                        responsive={ responsive }
-                        verticalScroll={ verticalScroll }
-                        width={ width }
-                        height={ height }
-                        minWidth={ minWidth }
-                        minHeight={ minHeight }
-                        maxWidth={ maxWidth }
-                        maxHeight={ maxHeight }
-                        preview
-                    />
+                    <div className="excelsior-media-embed-preview" style={ { position: 'relative' } }>
+                        <MediaEmbed
+                            mediaSource={ mediaSource }
+                            responsive={ responsive }
+                            verticalScroll={ verticalScroll }
+                            width={ width }
+                            height={ height }
+                            minWidth={ minWidth }
+                            minHeight={ minHeight }
+                            maxWidth={ maxWidth }
+                            maxHeight={ maxHeight }
+                            preview
+                        />
+                        { /* Click shield: while the block is not selected, this transparent overlay intercepts clicks so the first click selects the block instead of interacting with the iframe (playing the video). It is removed once selected so the embed becomes interactive. */ }
+                        { ! isSelected && (
+                            <div
+                                className="excelsior-media-embed-overlay"
+                                style={ { position: 'absolute', inset: 0, zIndex: 1 } }
+                                aria-hidden="true"
+                            />
+                        ) }
+                    </div>
                 </div>
             ) : (
                 <div className="excelsior-media-embed-insert">
