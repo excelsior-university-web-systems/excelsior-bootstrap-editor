@@ -39,11 +39,12 @@ This section describes how to install and activate the plugin.
 * NEW - Definitions block. Create a collection of key terms and their corresponding definitions.
 * NEW - Key Terms and Definition template
 * NEW - `alphabet-uppercase` icon is now available and is used as the page type icon for the Key Terms and Definitions page.
+* NEW - Media Embed block. Instead of using the iFrame Embed block to enter a raw HTML embed code, the Media Embed block makes it easier to insert media just by pasting a source: a YouTube link, an Excelsior player (Storybook+, generic video player, or audio player) or .xml URL, or a network/SMB file path. The media type is detected automatically and the correct embed code is applied. Embeds are responsive by default, with optional fixed width/height and min/max size controls.
 * Update block icons for accordion, accordion item, tabs, and tab. Block editor only. No effects on Excelsior Bootstrap framework.
 * Remove most of WordPress classes when get the HTML code.
 * Rename "Get Code" button texts to "Get HTML Code"
 * Add a loading state to "Get HTML Code" button. When user click the button, the button texts will be changed to "Retrieving code..." and be disabled. Button texts will revert back to "Get HTML Code" after the HTML code modal is closed.
-* 
+* Update the Homepage template to use the new Media Embed block instead of iFrame Embed block. 
 
 
 = 1.2.3 (2026-07-22) =

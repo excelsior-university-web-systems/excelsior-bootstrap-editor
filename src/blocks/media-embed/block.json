@@ -13,11 +13,35 @@
             "type": "string",
             "default": ""
         },
-        "mediaType": {
-            "type": "string",
-            "default": "gvp"
-        },
         "mediaSource": {
+            "type": "string",
+            "default": ""
+        },
+        "responsive": {
+            "type": "boolean",
+            "default": true
+        },
+        "width": {
+            "type": "string",
+            "default": ""
+        },
+        "height": {
+            "type": "string",
+            "default": ""
+        },
+        "minWidth": {
+            "type": "string",
+            "default": ""
+        },
+        "minHeight": {
+            "type": "string",
+            "default": ""
+        },
+        "maxWidth": {
+            "type": "string",
+            "default": ""
+        },
+        "maxHeight": {
             "type": "string",
             "default": ""
         },
