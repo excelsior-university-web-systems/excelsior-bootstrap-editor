@@ -162,10 +162,10 @@ export default function Edit( { attributes, setAttributes } ) {
         </InspectorControls>
         <div { ...useBlockProps() }>
             { mediaSource && detectedType ? (
-                <div className={ `${ floatingClasses.length ? floatingClasses : 'mb-3' }` }>
+                <div className={ `${ floatingClasses.length ? floatingClasses + " ratio ratio-16x9 ratio-md-0" : 'mb-3' }` }>
+                    { /* mediaTitle is intentionally omitted: it only sets the front-end iframe title (see save.js). Passing it here would rebuild the SandBox markup and reload the embed on every keystroke. */ }
                     <MediaEmbed
                         mediaSource={ mediaSource }
-                        mediaTitle={ mediaTitle }
                         responsive={ responsive }
                         width={ width }
                         height={ height }
