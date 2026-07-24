@@ -526,6 +526,7 @@ const MEDIA_CONFIG = {
         layout: 'flow',
         width: 900,
         height: 600,
+        scroll: true,
         allow: 'fullscreen; encrypted-media; picture-in-picture',
         allowFullscreen: true,
     },
@@ -579,10 +580,11 @@ const toStyleObject = ( pairs ) =>
  * @param {string} mediaTitle
  * @param {Object} config - MEDIA_CONFIG entry.
  * @param {string} styleString - Serialized iframe style.
+ * @param {string} scrolling - Iframe scrolling attribute ('yes' | 'no').
  * @returns {string}
  */
-const buildIframeHtml = ( src, mediaTitle, config, styleString ) =>
-    `<iframe src="${ escapeAttr( src ) }" title="${ escapeAttr( mediaTitle ) }" scrolling="no" frameborder="0" allow="${ escapeAttr( config.allow ) }" referrerpolicy="strict-origin-when-cross-origin" style="${ escapeAttr( styleString ) }" loading="lazy"${ config.allowFullscreen ? ' allowfullscreen' : '' }></iframe>`;
+const buildIframeHtml = ( src, mediaTitle, config, styleString, scrolling ) =>
+    `<iframe src="${ escapeAttr( src ) }" title="${ escapeAttr( mediaTitle ) }" scrolling="${ scrolling }" frameborder="0" allow="${ escapeAttr( config.allow ) }" referrerpolicy="strict-origin-when-cross-origin" style="${ escapeAttr( styleString ) }" loading="lazy"${ config.allowFullscreen ? ' allowfullscreen' : '' }></iframe>`;
 
 /**
  * Renders a media embed iframe. The media type is derived from the source URL
@@ -602,6 +604,7 @@ const buildIframeHtml = ( src, mediaTitle, config, styleString ) =>
  * @param {string} [props.minHeight] - Minimum height px.
  * @param {string} [props.maxWidth] - Maximum width px.
  * @param {string} [props.maxHeight] - Maximum height px.
+ * @param {string} [props.verticalScroll] - Scroll override ('' = per-type default | 'yes' | 'no').
  * @param {boolean} [props.preview=false] - Render through SandBox for the editor.
  * @returns {JSX.Element|null} The embed markup, or null when not configured.
  */
@@ -615,6 +618,7 @@ export const MediaEmbed = ( {
     minHeight,
     maxWidth,
     maxHeight,
+    verticalScroll = '',
     preview = false,
 } ) => {
     const type = classifyUrl( mediaSource );
@@ -625,6 +629,9 @@ export const MediaEmbed = ( {
     }
 
     const src = config.buildSrc( mediaSource );
+
+    // Empty override falls back to the per-type default; explicit 'no' wins.
+    const scrolling = verticalScroll || ( config.scroll ? 'yes' : 'no' );
 
     const effectiveWidth = toPx( width ) ?? config.width;
     const effectiveHeight = toPx( height ) ?? config.height;
@@ -700,7 +707,7 @@ export const MediaEmbed = ( {
     // Editor preview: render the same markup through SandBox so third-party
     // embeds get a valid browsing context instead of the editor's srcdoc canvas.
     if ( preview ) {
-        const iframeHtml = buildIframeHtml( src, mediaTitle, config, toStyleString( iframePairs ) );
+        const iframeHtml = buildIframeHtml( src, mediaTitle, config, toStyleString( iframePairs ), scrolling );
         const html = useAspectBox
             ? `<div style="${ toStyleString( wrapperPairs ) }"><div style="${ toStyleString( innerPairs ) }">${ iframeHtml }</div></div>`
             : iframeHtml;
@@ -712,7 +719,7 @@ export const MediaEmbed = ( {
         <iframe
             src={ src }
             title={ mediaTitle }
-            scrolling="no"
+            scrolling={ scrolling }
             frameBorder="0"
             allow={ config.allow }
             referrerPolicy="strict-origin-when-cross-origin"

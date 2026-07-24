@@ -14,11 +14,11 @@ const TYPE_LABELS = {
     generic: 'Generic Embed',
 };
 
-const SOURCE_HELP = 'Paste a YouTube link, an Excelsior player/.xml URL, or a network/SMB file path. The type is detected automatically.';
+const SOURCE_HELP = 'Paste a YouTube link, an Excelsior player/.xml URL, or a network/SMB file path.';
 
 export default function Edit( { attributes, setAttributes } ) {
 
-    const { mediaTitle, mediaSource, responsive, width, height, minWidth, minHeight, maxWidth, maxHeight, floatingClasses } = attributes;
+    const { mediaTitle, mediaSource, responsive, verticalScroll, width, height, minWidth, minHeight, maxWidth, maxHeight, floatingClasses } = attributes;
 
     // Raw editable text; committed to mediaSource on blur/Enter.
     const [ tempSource, setTempSource ] = useState( mediaSource );
@@ -59,6 +59,11 @@ export default function Edit( { attributes, setAttributes } ) {
     const showWidth = ! responsive;
     const showHeight = ! responsive || detectedType === 'generic';
 
+    // Scrolling is only meaningful for a fixed-height embed; mirror the
+    // render-time default ( generic scrolls, others don't ) when unset.
+    const showScroll = showHeight;
+    const scrollOn = verticalScroll !== '' ? verticalScroll === 'yes' : detectedType === 'generic';
+
     return (
         <>
         <InspectorControls>
@@ -90,6 +95,14 @@ export default function Edit( { attributes, setAttributes } ) {
                     checked={ responsive }
                     onChange={ ( value ) => setAttributes( { responsive: value } ) }
                 />
+                { showScroll && (
+                    <ToggleControl
+                        label="Vertical scrolling"
+                        help="Allow the embedded content to scroll when it's taller than the frame."
+                        checked={ scrollOn }
+                        onChange={ ( value ) => setAttributes( { verticalScroll: value ? 'yes' : 'no' } ) }
+                    />
+                ) }
                 <VStack spacing={ 4 }>
                     { ( showWidth || showHeight ) && (
                         <Flex gap={ 3 } align="flex-start">
@@ -167,6 +180,7 @@ export default function Edit( { attributes, setAttributes } ) {
                     <MediaEmbed
                         mediaSource={ mediaSource }
                         responsive={ responsive }
+                        verticalScroll={ verticalScroll }
                         width={ width }
                         height={ height }
                         minWidth={ minWidth }

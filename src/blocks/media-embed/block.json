@@ -21,6 +21,10 @@
             "type": "boolean",
             "default": true
         },
+        "verticalScroll": {
+            "type": "string",
+            "default": ""
+        },
         "width": {
             "type": "string",
             "default": ""

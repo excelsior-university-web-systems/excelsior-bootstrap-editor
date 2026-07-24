@@ -3,7 +3,7 @@ import { MediaEmbed } from '../../commons';
 
 export default function Save( { attributes } ) {
 
-    const { mediaTitle, mediaSource, responsive, width, height, minWidth, minHeight, maxWidth, maxHeight, floatingClasses } = attributes;
+    const { mediaTitle, mediaSource, responsive, verticalScroll, width, height, minWidth, minHeight, maxWidth, maxHeight, floatingClasses } = attributes;
     const blockProps = useBlockProps.save( {
         className: `${ floatingClasses.length ? floatingClasses : 'mb-3'}`
     } );
@@ -14,6 +14,7 @@ export default function Save( { attributes } ) {
                 mediaSource={ mediaSource }
                 mediaTitle={ mediaTitle }
                 responsive={ responsive }
+                verticalScroll={ verticalScroll }
                 width={ width }
                 height={ height }
                 minWidth={ minWidth }
