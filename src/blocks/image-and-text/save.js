@@ -1,9 +1,10 @@
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 
-export default function Save() {
+export default function Save( { attributes } ) {
 
+    const { repositioned } = attributes;
     const blockProps = useBlockProps.save( {
-        className: 'clearfix'
+        className: repositioned ? 'd-flex flex-column d-md-block clearfix' : 'clearfix'
     } );
 
     return (

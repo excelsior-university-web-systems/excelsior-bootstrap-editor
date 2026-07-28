@@ -2,7 +2,7 @@ import { useBlockProps } from "@wordpress/block-editor";
 import { isValidUrl } from '../../commons';
 
 export default function Save({ attributes }) {
-    const { url, alignmentEnabled, alignment, alignmentSize, centerAlignment, caption, altText, sourceUrl, mobileResponsive, useDiv, enlargeable } = attributes;
+    const { url, alignmentEnabled, alignment, alignmentSize, centerAlignment, repositioned, order, caption, altText, sourceUrl, mobileResponsive, useDiv, enlargeable } = attributes;
 
     if (!url) return null;
 
@@ -11,11 +11,12 @@ export default function Save({ attributes }) {
     const hasSourceUrl = !!sourceUrl;
 
     const alignmentClass = alignmentEnabled && alignment && alignmentSize ? `${alignment} ${alignmentSize}` : "";
+    const orderClass = alignmentEnabled && repositioned ? `order-${order}` : '';
     const centerClass = centerAlignment ? "center-aligned" : "";
     const fluidClass = mobileResponsive ? "img-fluid" : "";
     const marginBottomClass = !useDiv ? "mb-3" : "";
     const enlargeableClass = enlargeable ? "enlargeable" : "";
-    const baseClasses = `${marginBottomClass} ${alignmentClass} ${centerClass}`.trim();
+    const baseClasses = `${marginBottomClass} ${alignmentClass} ${orderClass} ${centerClass}`.trim();
 
     if (hasAltText || hasCaption || hasSourceUrl || enlargeable) {
         if (useDiv) {

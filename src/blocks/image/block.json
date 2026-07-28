@@ -35,6 +35,14 @@
             "type": "boolean",
             "default": false
         },
+        "repositioned": {
+            "type": "boolean",
+            "default": false
+        },
+        "order": {
+            "type": "string",
+            "default": "first"
+        },
         "mobileResponsive": {
             "type": "boolean",
             "default": true
