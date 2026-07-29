@@ -2,7 +2,7 @@ import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 
 export default function Save( { attributes } ) {
 
-    const { imgUrl, imgAltText, useImg, enlargeable, bgColor } = attributes;
+    const { imgUrl, imgAltText, useImg, enlargeable, bgColor, aspectRatio } = attributes;
     const blockProps = useBlockProps.save( {
         className: 'col'
     } );
@@ -13,11 +13,15 @@ export default function Save( { attributes } ) {
                 { useImg ? (
                     <>
                     { enlargeable ? (
-                        <div class="figure w-full enlargeable mb-0">
-                            <img class="card-img-top" src={imgUrl} alt={imgAltText} />
+                        <div className="figure w-full enlargeable mb-0">
+                            <div className={`ratio ratio-${aspectRatio}`}>
+                                <img className="card-img-top object-fit-cover" src={imgUrl} alt={imgAltText} />
+                            </div>
                         </div>
                     ) : (
-                        <img class="card-img-top" src={imgUrl} alt={imgAltText} />
+                        <div className={`ratio ratio-${aspectRatio}`}>
+                            <img className="card-img-top object-fit-cover" src={imgUrl} alt={imgAltText} />
+                        </div>
                     )}
                     </>
                     

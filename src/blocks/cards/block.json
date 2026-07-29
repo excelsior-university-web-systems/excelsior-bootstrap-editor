@@ -14,7 +14,8 @@
         }
     },
     "providesContext": {
-        "excelsior-bootstrap-editor/cardBgColor": "bgColor"
+        "excelsior-bootstrap-editor/cardBgColor": "bgColor",
+        "excelsior-bootstrap-editor/cardAspectRatio": "aspectRatio"
     },
     "attributes": {
         "colSize": {
@@ -24,6 +25,10 @@
         "bgColor": {
             "type": "string",
             "default": ""
+        },
+        "aspectRatio": {
+            "type": "string",
+            "default": "16x9"
         }
     }
 }

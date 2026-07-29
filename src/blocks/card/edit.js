@@ -42,12 +42,13 @@ export default function Edit( {attributes, setAttributes, context} ) {
         ['core/heading', { placeholder: "Card Title", level: 4, headingSizeClass: "h5", className: "card-title" }],
         ['core/paragraph', { placeholder: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." }]
     ];
-    const { imgUrl, imgAltText, useImg, enlargeable, bgColor } = attributes;
+    const { imgUrl, imgAltText, useImg, enlargeable, bgColor, aspectRatio } = attributes;
     const [tempUrl, setTempUrl] = useState('');
     const [tempAltTxt, setTempAltTxt] = useState('');
     const [hasError, setHasError] = useState(false);
 
     const cardBgColor = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/cardBgColor'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/cardBgColor'] : '';
+    const cardAspectRatio = context[XCLSR_BTSTRP_EDITOR_PREFIX+'/cardAspectRatio'] ? context[XCLSR_BTSTRP_EDITOR_PREFIX+'/cardAspectRatio'] : '16x9';
 
     const blockProps = useBlockProps( {
         className: 'col'
@@ -61,7 +62,15 @@ export default function Edit( {attributes, setAttributes, context} ) {
         } else if (bgColor !== '') {
             setAttributes({ bgColor: '' });
         }
-    }, [cardBgColor, bgColor, setAttributes]);
+    }, [cardBgColor, bgColor]);
+
+    useEffect(() => {
+        if (cardAspectRatio) {
+            if (aspectRatio !== cardAspectRatio) {
+                setAttributes({ aspectRatio: cardAspectRatio });
+            }
+        }
+    }, [cardAspectRatio, aspectRatio]);
 
     const onInsertUrl = () => {
         if ( tempUrl ) {
@@ -134,11 +143,16 @@ export default function Edit( {attributes, setAttributes, context} ) {
 
                         <>
                         { enlargeable ? (
-                            <div class="figure w-full enlargeable mb-0">
-                                <img class="card-img-top" src={imgUrl} alt={imgAltText} onError={handleImageError} />
+                            <div className="figure w-full enlargeable mb-0">
+                                <div className={`ratio ratio-${aspectRatio}`}>
+                                    <img className="card-img-top object-fit-cover" src={imgUrl} alt={imgAltText} onError={handleImageError} />
+                                </div>
                             </div>
                         ) : (
-                            <img class="card-img-top" src={imgUrl} alt={imgAltText} onError={handleImageError} />
+                            <div className={`ratio ratio-${aspectRatio}`}>
+                                <img className="card-img-top object-fit-cover" src={imgUrl} alt={imgAltText} onError={handleImageError} />
+                            </div>
+                            
                         )}
                         </>
                         

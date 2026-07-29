@@ -1,5 +1,5 @@
 import { InnerBlocks, InspectorControls, useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, Notice } from '@wordpress/components';
+import { PanelBody, SelectControl, Notice, __experimentalSpacer as Spacer } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { createBlock } from '@wordpress/blocks';
@@ -20,7 +20,7 @@ const TEMPLATE = [
 
 export default function Edit( {attributes, setAttributes, clientId} ) {
 
-    const { colSize, bgColor } = attributes;
+    const { colSize, bgColor, aspectRatio } = attributes;
     const previewImage = metadata?.example?.attributes?.cover || '';
     const isPreview = useSelect(
         ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
@@ -118,7 +118,7 @@ export default function Edit( {attributes, setAttributes, clientId} ) {
                     <ToggleGroupControlOption value="4" label="4" />
                 </ToggleGroupControl>
                 <SelectControl
-                className="deprecated"
+                    className="deprecated"
                     label="Background Color"
                     value={bgColor}
                     options={[
@@ -133,6 +133,21 @@ export default function Edit( {attributes, setAttributes, clientId} ) {
                     __next40pxDefaultSize
                 />
                 <Notice status="warning" isDismissible={false}>All color choices, except Light, are deprecated. Do not use. They will be removed in the near future.</Notice>
+                <Spacer />
+                <SelectControl
+                        label="Image Aspect Ratio"
+                        help="Choose a consistent aspect ratio for card images. Images are automatically cropped to fit the selected ratio."
+                        value={aspectRatio}
+                        options={[
+                            { label: '1:1', value: '1x1' },
+                            { label: '4:3', value: '4x3' },
+                            { label: '16:9', value: '16x9' },
+                            { label: '21:9', value: '21x9' },
+                        ]}
+                        onChange={(value) => setAttributes({ aspectRatio: value })}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
+                    />
             </PanelBody>
         </InspectorControls>
         <div {...blockProps}>
