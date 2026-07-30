@@ -7,7 +7,7 @@
     "parent": ["excelsior-bootstrap-editor/required-resources"],
     "supports": {
         "html": false,
-        "multiple": false
+        "inserter": false
     },
     "example": {
         "attributes": {
