@@ -1,12 +1,11 @@
 import { InnerBlocks, InspectorControls, useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, Notice, __experimentalSpacer as Spacer } from '@wordpress/components';
-import { useDispatch, useSelect } from '@wordpress/data';
-import { useEffect } from '@wordpress/element';
-import { createBlock } from '@wordpress/blocks';
 import {
     __experimentalToggleGroupControl as ToggleGroupControl,
     __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
+import { useMinimumChildBlocks } from '../../commons';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 import metadata from './block.json';
 
@@ -30,58 +29,13 @@ export default function Edit( {attributes, setAttributes, clientId} ) {
     const blockProps = useBlockProps( {
         className: '',
     } );
-    const childBlocks = useSelect(
-        ( select ) => select( 'core/block-editor' ).getBlocks( clientId ) || [],
-        [ clientId ]
-    );
-    const { insertBlocks, updateBlockAttributes } = useDispatch( 'core/block-editor' );
-    const cardBlocks = childBlocks.filter(
-        ( block ) => block.name === CARD_BLOCK
-    );
 
-    useEffect( () => {
-        if ( isPreview ) {
-            return;
-        }
-
-        const missingCardCount = MIN_CARDS - cardBlocks.length;
-
-        if ( missingCardCount > 0 ) {
-            insertBlocks(
-                Array.from(
-                    { length: missingCardCount },
-                    () => createBlock( CARD_BLOCK )
-                ),
-                childBlocks.length,
-                clientId
-            );
-            return;
-        }
-
-        const lockRemove = cardBlocks.length <= MIN_CARDS;
-
-        cardBlocks.forEach( ( block ) => {
-            const currentLock = block.attributes?.lock || {};
-
-            if ( currentLock.remove === lockRemove ) {
-                return;
-            }
-
-            updateBlockAttributes( block.clientId, {
-                lock: {
-                    ...currentLock,
-                    remove: lockRemove,
-                },
-            } );
-        } );
-    }, [
-        cardBlocks,
-        childBlocks.length,
+    useMinimumChildBlocks( {
         clientId,
-        insertBlocks,
+        blockName: CARD_BLOCK,
+        minimum: MIN_CARDS,
         isPreview,
-        updateBlockAttributes,
-    ] );
+    } );
 
     const innerBlocksProps = useInnerBlocksProps(
         {

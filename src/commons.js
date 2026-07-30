@@ -1,7 +1,77 @@
 import { Notice, SandBox } from '@wordpress/components';
+import { useDispatch, useSelect } from '@wordpress/data';
+import { useEffect, useMemo } from '@wordpress/element';
+import { createBlock } from '@wordpress/blocks';
 
 export const ALT_TEXT_LIMIT = 150;
 export const CAPTION_LIMIT = 250;
+
+/**
+ * Keeps a container block populated with a minimum number of child blocks.
+ *
+ * Inserts the missing children whenever the count falls below `minimum`, then
+ * toggles each child's `lock.remove` so the required children cannot be deleted
+ * while the container is at (or below) the minimum. No-ops in preview mode.
+ *
+ * @param {Object} options - Hook options.
+ * @param {string} options.clientId - Client ID of the container block.
+ * @param {string} options.blockName - Block name of the child to enforce.
+ * @param {number} [options.minimum=1] - Minimum number of child blocks.
+ * @param {boolean} [options.isPreview=false] - Skip while rendering block previews.
+ * @returns {Array} The container's child blocks matching `blockName`.
+ */
+export const useMinimumChildBlocks = ( { clientId, blockName, minimum = 1, isPreview = false } ) => {
+
+    const childBlocks = useSelect(
+        ( select ) => select( 'core/block-editor' ).getBlocks( clientId ) || [],
+        [ clientId ]
+    );
+    const { insertBlocks, updateBlockAttributes } = useDispatch( 'core/block-editor' );
+
+    const matchingBlocks = useMemo(
+        () => childBlocks.filter( ( block ) => block.name === blockName ),
+        [ childBlocks, blockName ]
+    );
+
+    useEffect( () => {
+        if ( isPreview ) {
+            return;
+        }
+
+        const missingCount = minimum - matchingBlocks.length;
+
+        if ( missingCount > 0 ) {
+            insertBlocks(
+                Array.from( { length: missingCount }, () => createBlock( blockName ) ),
+                childBlocks.length,
+                clientId
+            );
+            return;
+        }
+
+        const lockRemove = matchingBlocks.length <= minimum;
+
+        matchingBlocks.forEach( ( block ) => {
+            const currentLock = block.attributes?.lock || {};
+
+            if ( currentLock.remove === lockRemove ) {
+                return;
+            }
+
+            updateBlockAttributes( block.clientId, {
+                lock: {
+                    ...currentLock,
+                    remove: lockRemove,
+                },
+            } );
+        } );
+    }, [ blockName, childBlocks.length, clientId, insertBlocks,
+        isPreview, matchingBlocks, minimum, updateBlockAttributes,
+    ] );
+
+    return matchingBlocks;
+
+};
 
 /**
  * Converts a 24-hour time string to 12-hour format.
