@@ -5,7 +5,7 @@ import metadata from './block.json';
 
 export default function Edit( { attributes, setAttributes} ) {
     
-    const { name, material } = attributes;
+    const { resource, source } = attributes;
     const previewImage = metadata?.example?.attributes?.cover || '';
     const isPreview = useSelect(
         ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
@@ -21,23 +21,23 @@ export default function Edit( { attributes, setAttributes} ) {
 
     return (
         <>
-        <li {...blockProps}>
+        <div {...blockProps}>
             <RichText
                 tagName='p'
-                placeholder="Chapter name..."
-                value={name}
-                onChange={(value) => setAttributes({ name: value })}
-                allowedFormats={['core/bold', 'core/italic', 'core/link', 'core/math', 'glyphwell/inline-equation"']}
+                placeholder="Resource Name..."
+                value={resource}
+                onChange={(value) => setAttributes({ resource: value })}
+                allowedFormats={['core/italic', 'core/link', 'core/math', 'glyphwell/inline-equation"']}
             />
             <RichText
                 tagName='p'
-                placeholder="Material name..."
+                placeholder="Source Name..."
                 className='secondary'
-                value={material}
-                onChange={(value) => setAttributes({ material: value })}
+                value={source}
+                onChange={(value) => setAttributes({ source: value })}
                 allowedFormats={['core/math', 'glyphwell/inline-equation"']}
             />
-        </li>
+        </div>
         </>
         
     );

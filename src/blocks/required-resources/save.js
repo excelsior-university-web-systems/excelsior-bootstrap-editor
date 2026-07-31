@@ -18,15 +18,19 @@ export default function Save( { attributes } ) {
                     </div>
                     <div class="heading">
                         <HeadingTag className="title h5">Required Resources</HeadingTag>
-                        <p class="estimated-time">Estimated Time: {estimatedTime}</p>
+                        { estimatedTime && (
+                            <p class="estimated-time">Estimated Time: {estimatedTime}</p>
+                        )}
                     </div>
                 </div>
-                <div class="context-content">
-                    <RichText.Content
-                        tagName="p"
-                        value={contextContent}
-                    />
-                </div>
+                { contextContent && (
+                    <div class="context-content">
+                        <RichText.Content
+                            tagName="p"
+                            value={contextContent}
+                        />
+                    </div>
+                )}
                 <InnerBlocks.Content />
             </div>
             

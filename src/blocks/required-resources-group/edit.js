@@ -33,14 +33,14 @@ export default function Edit( { clientId } ) {
 
     return (
         <>
-        <ul {...blockProps}>
+        <div {...blockProps}>
             <InnerBlocks
                 allowedBlocks={[XCLSR_BTSTRP_EDITOR_PREFIX + '/required-resources-group-item']}
                 template={[[XCLSR_BTSTRP_EDITOR_PREFIX + '/required-resources-group-item']]}
                 templateLock={false}
                 renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
             />
-        </ul>
+        </div>
         </>
         
     );

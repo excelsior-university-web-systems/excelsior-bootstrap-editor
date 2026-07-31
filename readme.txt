@@ -42,7 +42,7 @@ This section describes how to install and activate the plugin.
 * NEW - Media Embed block. Instead of using the iFrame Embed block to enter a raw HTML embed code, the Media Embed block makes it easier to insert media just by pasting a source: a YouTube link, an Excelsior player (Storybook+, generic video player, or audio player) or .xml URL, or a network/SMB file path. The media type is detected automatically and the correct embed code is applied. Embeds are responsive by default, with optional fixed width/height and min/max size controls.
 * NEW - Image block in Image and Text block now support the option to place the floated image before or after the text content on devices with narrow screens.
 * NEW - Cards block now has an aspect ratio constraint. The default aspect ratio is 16:9. A setting option is also available to change the aspect ratio.
-* NEW - Required Resource block. Create a collection of required resources including context.
+* NEW - Required Resources block. Create a collection of required resources including context.
 * Update block icons for accordion, accordion item, tabs, and tab. Block editor only. No effects on Excelsior Bootstrap framework.
 * Remove most of WordPress classes when get the HTML code.
 * Rename "Get Code" button texts to "Get HTML Code"

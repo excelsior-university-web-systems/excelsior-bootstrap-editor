@@ -10,15 +10,15 @@
     },
     "example": {
         "attributes": {
-            "cover": "admin/images/required-resources-group-item.webp"
+            "cover": "admin/images/required-resources-group.webp"
         }
     },
     "attributes": {
-        "name": {
+        "resource": {
             "type": "string",
             "default": ""
         },
-        "material": {
+        "source": {
             "type": "string",
             "default": ""
         }
