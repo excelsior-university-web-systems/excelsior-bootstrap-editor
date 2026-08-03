@@ -5,7 +5,6 @@ import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 import metadata from './block.json';
 
 const ITEM_BLOCK = XCLSR_BTSTRP_EDITOR_PREFIX + '/required-resources-group-item';
-const MIN_ITEMS = 1;
 
 export default function Edit( { clientId } ) {
     
@@ -23,7 +22,7 @@ export default function Edit( { clientId } ) {
     useMinimumChildBlocks( {
         clientId,
         blockName: ITEM_BLOCK,
-        minimum: MIN_ITEMS,
+        minimum: 1,
         isPreview,
     } );
 
@@ -35,8 +34,8 @@ export default function Edit( { clientId } ) {
         <>
         <div {...blockProps}>
             <InnerBlocks
-                allowedBlocks={[XCLSR_BTSTRP_EDITOR_PREFIX + '/required-resources-group-item']}
-                template={[[XCLSR_BTSTRP_EDITOR_PREFIX + '/required-resources-group-item']]}
+                allowedBlocks={[ITEM_BLOCK]}
+                template={[[ITEM_BLOCK]]}
                 templateLock={false}
                 renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
             />

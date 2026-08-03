@@ -2,9 +2,12 @@ import { InnerBlocks, InspectorControls, useBlockProps } from '@wordpress/block-
 import { PanelBody, ToggleControl } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
+import { useMinimumChildBlocks } from '../../commons';
 import metadata from './block.json';
 
-export default function Edit ( { attributes, setAttributes } ) {
+const ITEM_BLOCK = XCLSR_BTSTRP_EDITOR_PREFIX + '/definition-term';
+
+export default function Edit ( { attributes, setAttributes, clientId } ) {
     
     const previewImage = metadata?.example?.attributes?.cover || '';
     const { useIndentation } = attributes;
@@ -17,6 +20,13 @@ export default function Edit ( { attributes, setAttributes } ) {
     const blockProps = useBlockProps({
         className: 'excelsior-definitions',
     });
+
+    useMinimumChildBlocks( {
+        clientId,
+        blockName: ITEM_BLOCK,
+        minimum: 1,
+        isPreview,
+    } );
 
     if ( isPreview && previewImage ) {
         return <img src={xclsr_btstrp_block_preview.pluginUrl + previewImage} width='100%' height='auto' />;
@@ -36,8 +46,8 @@ export default function Edit ( { attributes, setAttributes } ) {
         </InspectorControls>
         <dl {...blockProps}>
             <InnerBlocks
-                allowedBlocks={[XCLSR_BTSTRP_EDITOR_PREFIX + '/definition-term']}
-                template={[[XCLSR_BTSTRP_EDITOR_PREFIX + '/definition-term']]}
+                allowedBlocks={[ITEM_BLOCK]}
+                template={[[ITEM_BLOCK]]}
                 templateLock={false}
                 renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
             />
