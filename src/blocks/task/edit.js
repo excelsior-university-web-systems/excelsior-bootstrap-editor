@@ -1,7 +1,7 @@
 import { useBlockProps, RichText, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
-import { convertTo12HourFormat } from '../../commons';
+import { convertTo12HourFormat, preventLineBreaks } from '../../commons';
 import { TimeInput } from '@mantine/dates';
 import { MantineProvider } from '@mantine/core';
 
@@ -74,6 +74,8 @@ export default function Edit( { attributes, setAttributes } ) {
                     placeholder='Task description...'
                     onChange={(value) => setAttributes({ task: value })}
                     allowedFormats={['core/bold', 'core/italic', XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
+                    multiline={false}
+                    onKeyDown={preventLineBreaks}
                 />
                 {!noDueDate && (
                     <>

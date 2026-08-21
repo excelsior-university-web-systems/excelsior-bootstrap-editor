@@ -1,6 +1,7 @@
 import { useBlockProps, RichText, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, TextControl, SelectControl } from '@wordpress/components';
+import { PanelBody, TextControl, } from '@wordpress/components';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
+import { preventLineBreaks } from '../../commons';
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
 
@@ -51,6 +52,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                 placeholder='Button Text'
                 onChange={(value) => setAttributes({ text: value })}
                 allowedFormats={[XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
+                multiline={false}
+                onKeyDown={preventLineBreaks}
             />
         </>
     );

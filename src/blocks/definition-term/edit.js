@@ -1,8 +1,7 @@
 import { useBlockProps, RichText } from '@wordpress/block-editor';
-import { PanelBody, ToggleControl } from '@wordpress/components';
 import { useEffect } from '@wordpress/element';
-import { ALLOWED_BLOCKS } from './allowed-blocks';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
+import { preventLineBreaks } from '../../commons';
 
 export default function Edit( { attributes, setAttributes, context } ) {
 
@@ -31,6 +30,8 @@ export default function Edit( { attributes, setAttributes, context } ) {
                 className='term'
                 onChange={(value) => setAttributes({ termName: value })}
                 allowedFormats={['core/bold', 'core/italic']}
+                multiline={false}
+                onKeyDown={preventLineBreaks}
             />
             <RichText
                 className={`definition mb-3 ${hasIndentation ? 'ms-3' : ''}`}
@@ -38,6 +39,8 @@ export default function Edit( { attributes, setAttributes, context } ) {
                 value={termDefinition}
                 onChange={(value) => setAttributes({ termDefinition: value })}
                 allowedFormats={['core/bold', 'core/italic', 'core/math', 'glyphwell/inline-equation']}
+                multiline={false}
+                onKeyDown={preventLineBreaks}
             />
         </div>
         </>

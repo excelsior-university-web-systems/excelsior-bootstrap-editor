@@ -2,7 +2,7 @@ import { useBlockProps, InnerBlocks, InspectorControls, RichText } from '@wordpr
 import { PanelBody, ToggleControl } from '@wordpress/components';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
-import { generateHtmlId, getBlocksOfType } from '../../commons';
+import { generateHtmlId, getBlocksOfType, preventLineBreaks } from '../../commons';
 import { useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 
@@ -82,6 +82,8 @@ export default function Edit({ attributes, setAttributes, clientId, context }) {
                         data-bs-target={'#' + uniqueId}
                         onChange={(value) => setAttributes({ title: value })}
                         allowedFormats={['core/bold', 'core/italic', XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
+                        multiline={false}
+                        onKeyDown={preventLineBreaks}
                     />
                 </HeadingLevel>
                 <div id={uniqueId} class={`accordion-collapse collapse ${openForEditing ? 'show' : ''}`}>

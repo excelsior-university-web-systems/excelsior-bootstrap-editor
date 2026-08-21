@@ -1,7 +1,7 @@
 import { useBlockProps, InspectorControls, RichText } from '@wordpress/block-editor';
 import { TextControl, Button, PanelBody } from '@wordpress/components';
 import { useState } from '@wordpress/element';
-import { formatAsHtmlId, removeScriptTags } from '../../commons';
+import { formatAsHtmlId, removeScriptTags, preventLineBreaks } from '../../commons';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 
 export default function Edit( { attributes, setAttributes} ) {
@@ -85,6 +85,8 @@ export default function Edit( { attributes, setAttributes} ) {
                     value={item.label}
                     allowedFormats={[XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
                     onChange={(value) => updateItem(index, 'label', value)}
+                    multiline={false}
+                    onKeyDown={preventLineBreaks}
                 />
                 <TextControl
                     label='Nav Item ID (for anchor)'

@@ -2,6 +2,7 @@ import { RichText, useBlockProps, InspectorControls } from '@wordpress/block-edi
 import { PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import metadata from './block.json';
+import { preventLineBreaks } from '../../commons';
 
 const STYLE_LABELS = {
     tip: {
@@ -73,6 +74,8 @@ export default function Edit ({ attributes, setAttributes }) {
                     value={content}
                     placeholder="Lorem ipsum dolor, sit amet consectetur adipisicing elit."
                     onChange={(value) => setAttributes({ content: value })}
+                    multiline={false}
+                    onKeyDown={preventLineBreaks}
                 />
             </p>
         </div>

@@ -2,6 +2,7 @@ import { InnerBlocks, useBlockProps, RichText } from '@wordpress/block-editor';
 import { useEffect } from '@wordpress/element';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
+import { preventLineBreaks } from '../../commons';
 
 export default function Edit( {attributes, setAttributes, context} ) {
 
@@ -28,6 +29,8 @@ export default function Edit( {attributes, setAttributes, context} ) {
                 value={buttonText}
                 placeholder='enter button name...'
                 onChange={(value) => setAttributes({ buttonText: value })}
+                multiline={false}
+                onKeyDown={preventLineBreaks}
             />
             &nbsp;
             <i class="bi bi-chevron-up" aria-hidden="true"></i>

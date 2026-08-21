@@ -51,6 +51,7 @@ This section describes how to install and activate the plugin.
 * Add created and updated timestamp in the HTML retrieved by the "Get HTML Code" button.
 * Add a loading state to "Get HTML Code" button. When user click the button, the button texts will be changed to "Retrieving code..." and be disabled. Button texts will revert back to "Get HTML Code" after the HTML code modal is closed.
 * Update the Homepage template to use the new Media Embed block instead of iFrame Embed block.
+* Prevent line breaks in several one-line RichText fields (stop `Enter` and `Shift + Enter` from inserting newlines).
 
 
 ### 1.2.3 (2026-07-22) ###
