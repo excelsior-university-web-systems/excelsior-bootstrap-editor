@@ -49,7 +49,7 @@ This section describes how to install and activate the plugin.
 * Update block icons for accordion, accordion item, tabs, and tab. Block editor only. No effects on Excelsior Bootstrap framework.
 * Remove most of WordPress classes when get the HTML code.
 * Rename "Get Code" button texts to "Get HTML Code".
-* Add created and updated timestamp in the HTML retrieved by the "Get HTML Code" button.
+* Add created and updated timestamp and learning path version in the HTML retrieved by the "Get HTML Code" button.
 * Add a loading state to "Get HTML Code" button. When user click the button, the button texts will be changed to "Retrieving code..." and be disabled. Button texts will revert back to "Get HTML Code" after the HTML code modal is closed.
 * Update the Homepage template to use the new Media Embed block instead of iFrame Embed block.
 * Prevent line breaks in several one-line RichText fields (stop `Enter` and `Shift + Enter` from inserting newlines).

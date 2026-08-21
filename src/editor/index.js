@@ -513,15 +513,16 @@ const removeWordPressClasses = ( html ) => {
 };
 
 /**
- * Adds post timestamps to the exported Excelsior Bootstrap wrapper.
+ * Adds post data attributes to the exported Excelsior Bootstrap wrapper.
  *
  * @param {string} html Rendered HTML to update.
- * @param {Object} timestamps Post timestamps from the REST API response.
- * @param {string} [timestamps.createdOn] Site-local timestamp for when the post was created.
- * @param {string} [timestamps.updatedOn] Site-local timestamp for when the post was last modified.
- * @returns {string} Rendered HTML with timestamp data attributes when the wrapper exists.
+ * @param {Object} attributes Post attributes from the REST API response.
+ * @param {string} [attributes.createdOn] Site-local timestamp for when the post was created.
+ * @param {string} [attributes.updatedOn] Site-local timestamp for when the post was last modified.
+ * @param {string} [attributes.learningPath] Selected learning path version term.
+ * @returns {string} Rendered HTML with data attributes when the wrapper exists.
  */
-const addExportedHtmlTimestamps = ( html, { createdOn, updatedOn } = {} ) => {
+const addExportedHtmlAttributes = ( html, { createdOn, updatedOn, learningPath = '' } = {} ) => {
     const template = document.createElement( 'template' );
     template.innerHTML = html;
 
@@ -539,7 +540,39 @@ const addExportedHtmlTimestamps = ( html, { createdOn, updatedOn } = {} ) => {
         bootstrapWrapper.setAttribute( 'data-updated-on', updatedOn );
     }
 
+    if ( learningPath ) {
+        bootstrapWrapper.setAttribute( 'data-learning-path', learningPath );
+    }
+
     return template.innerHTML;
+};
+
+/**
+ * Gets the selected learning path version term name for the post.
+ *
+ * @param {Object} post Excelsior Bootstrap REST API post response.
+ * @returns {Promise<string>} Selected learning path version term name.
+ */
+const getSelectedLearningPathTermName = ( post ) => {
+    const learningPathTermIds = post?.[ XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY ] || [];
+    const learningPathTermId = learningPathTermIds[ 0 ];
+
+    if ( ! learningPathTermId ) {
+        return Promise.resolve( '' );
+    }
+
+    return fetch( `${ wpApiSettings.root }wp/v2/${ XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY }/${ learningPathTermId }?context=edit`, {
+        headers: {
+            'X-WP-Nonce': wpApiSettings.nonce,
+        },
+    } )
+        .then( ( response ) => response.ok ? response.json() : Promise.reject( response ) )
+        .then( ( term ) => term.name || '' )
+        .catch( ( error ) => {
+            console.error( 'Error fetching the learning path version:', error );
+
+            return '';
+        } );
 };
 
 /**
@@ -608,13 +641,15 @@ const GetCodeButton = () => {
             },
         })
             .then((response) => response.json())
-            .then((post) => {
+            .then((post) => getSelectedLearningPathTermName( post ).then( ( learningPath ) => ( { post, learningPath } ) ) )
+            .then(({ post, learningPath }) => {
                 const filteredContent = removeWordPressClasses( post.content.rendered );
-                const timestampedContent = addExportedHtmlTimestamps( filteredContent, {
+                const attributedContent = addExportedHtmlAttributes( filteredContent, {
                     createdOn: post.date,
                     updatedOn: post.modified,
+                    learningPath,
                 } );
-                const htmlCode = normalizeExportedHtmlSpaces( timestampedContent );
+                const htmlCode = normalizeExportedHtmlSpaces( attributedContent );
     
                 setRenderedHTML(beautify.html(htmlCode, { preserve_newlines: false }));
                 setIsModalOpen(true);
