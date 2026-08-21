@@ -45,6 +45,7 @@ This section describes how to install and activate the plugin.
 * NEW - Image block in Image and Text block now support the option to place the floated image before or after the text content on devices with narrow screens.
 * NEW - Cards block now has an aspect ratio constraint. The default aspect ratio is 16:9. A setting option is also available to change the aspect ratio.
 * NEW - Required Resources block. Create a collection of required resources including context.
+* NEW - Add learning path taxonomy support. Also add a Learning Path Version selector to the editor sidebar.
 * Update block icons for accordion, accordion item, tabs, and tab. Block editor only. No effects on Excelsior Bootstrap framework.
 * Remove most of WordPress classes when get the HTML code.
 * Rename "Get Code" button texts to "Get HTML Code".

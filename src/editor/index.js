@@ -1,5 +1,5 @@
 import { addFilter } from '@wordpress/hooks';
-import { XCLSR_BTSTRP_EDITOR_PREFIX, XCLSR_BTSTRP_POST_TYPE } from '../constants';
+import { XCLSR_BTSTRP_EDITOR_PREFIX, XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY, XCLSR_BTSTRP_POST_TYPE } from '../constants';
 import { registerPlugin } from '@wordpress/plugins';
 import { PluginPostStatusInfo } from '@wordpress/editor';
 import { InspectorControls } from '@wordpress/block-editor';
@@ -22,6 +22,7 @@ const BOOTSTRAP_TABLE_VARIATION_ATTRIBUTES = {
     isStriped: false,
     border: 'table-bordered',
 };
+const LEARNING_PATH_TAXONOMY_PANEL = `taxonomy-panel-${ XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY }`;
 
 /**
  * Recursively checks whether a block tree contains the Excelsior namespace block.
@@ -111,6 +112,54 @@ const isBootstrapEditorActive = () => {
 };
 
 const useIsExcelsiorBootstrapPostType = () => useSelect( () => isExcelsiorBootstrapPostType(), [] );
+
+/**
+ * Renders a single-term Learning Path selector for Excelsior Bootstrap posts.
+ *
+ * @returns {JSX.Element} The taxonomy dropdown.
+ */
+const LearningPathSelector = () => {
+    const { editPost } = useDispatch( 'core/editor' );
+    const learningPathTerms = useSelect( ( select ) => {
+        return select( 'core' ).getEntityRecords(
+            'taxonomy',
+            XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY,
+            {
+                per_page: 100,
+                orderby: 'name',
+                order: 'asc',
+            }
+        );
+    }, [] );
+    const selectedLearningPath = useSelect( ( select ) => {
+        const selectedTerms = select( 'core/editor' ).getEditedPostAttribute( XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY ) || [];
+
+        return selectedTerms.length ? selectedTerms[ 0 ].toString() : '';
+    }, [] );
+    const learningPathOptions = [
+        { label: 'No Learning Path', value: '' },
+        ...( learningPathTerms || [] ).map( ( term ) => ( {
+            label: term.name,
+            value: term.id.toString(),
+        } ) ),
+    ];
+
+    return (
+        <SelectControl
+            label="Learning Path Version"
+            value={ selectedLearningPath }
+            options={ learningPathOptions }
+            onChange={ ( value ) => {
+                editPost( {
+                    [ XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY ]: value ? [ Number( value ) ] : [],
+                } );
+            } }
+            disabled={ ! Array.isArray( learningPathTerms ) }
+            __next40pxDefaultSize
+            __nextHasNoMarginBottom
+        />
+    );
+};
 
 /**
  * Checks whether a block is nested anywhere inside the namespace block.
@@ -288,6 +337,14 @@ const CourseMetaFields = () => {
     const pageTitle = meta[XCLSR_BTSTRP_POST_TYPE+'_post_page_title'] || '';
     let year = meta[XCLSR_BTSTRP_POST_TYPE+'_post_year'];
 
+    useEffect( () => {
+        const editPostStore = dispatch( 'core/edit-post' );
+
+        if ( editPostStore?.removeEditorPanel ) {
+            editPostStore.removeEditorPanel( LEARNING_PATH_TAXONOMY_PANEL );
+        }
+    }, [] );
+
     if ( year == '' ) {
         year = new Date().getFullYear().toString();
         editPost({ meta: { ...meta, excelsior_bootstrap_post_year: year } });
@@ -346,6 +403,7 @@ const CourseMetaFields = () => {
                     __next40pxDefaultSize
                     __nextHasNoMarginBottom
                 />
+                <LearningPathSelector />
             </PanelBody>
         </PluginPostStatusInfo>
         </>
