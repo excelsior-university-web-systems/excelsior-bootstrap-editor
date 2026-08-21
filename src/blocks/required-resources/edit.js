@@ -1,7 +1,7 @@
 import { InnerBlocks, useBlockProps, InspectorControls, RichText } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, __experimentalHeading as Heading } from '@wordpress/components';
+import { PanelBody, SelectControl } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
-import { useMinimumChildBlocks } from '../../commons';
+import { useMinimumChildBlocks, preventLineBreaks } from '../../commons';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 import metadata from './block.json';
 
@@ -10,7 +10,7 @@ const MIN_GROUPS = 1;
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
     
-    const { headingLevel, estimatedTime, contextContent } = attributes;
+    const { headingLevel, headingText, estimatedTime, contextContent } = attributes;
     const previewImage = metadata?.example?.attributes?.cover || '';
     const isPreview = useSelect(
         ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
@@ -39,11 +39,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                     label="Heading Level"
                     value={headingLevel}
                     options={[
-                        { label: 'H2', value: '2' },
-                        { label: 'H3', value: '3' },
-                        { label: 'H4', value: '4' },
-                        { label: 'H5', value: '5' },
-                        { label: 'H6', value: '6' },
+                        { label: 'H2', value: 'h2' },
+                        { label: 'H3', value: 'h3' },
+                        { label: 'H4', value: 'h4' },
+                        { label: 'H5', value: 'h5' },
+                        { label: 'H6', value: 'h6' },
                     ]}
                     onChange={(value) => setAttributes({ headingLevel: value })}
                     __nextHasNoMarginBottom
@@ -55,10 +55,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
             <div class="context-container">
                 <div class="context-header">
                     <div class="icon">
-                        <i class="bi bi-check2-circle" aria-hidden="true">&nbsp;</i>
+                        <i class="bi bi-check2-circle" aria-hidden="true"></i>
                     </div>
                     <div class="heading">
-                        <Heading level={ headingLevel } className="title h5">Required Resources</Heading>
+                        <RichText
+                            tagName={headingLevel}
+                            value={headingText}
+                            className='title h5'
+                            onChange={(value) => setAttributes({ headingText: value })}
+                            allowedFormats={[]}
+                            multiline={false}
+                            onKeyDown={preventLineBreaks}
+                        />
                         <p class="estimated-time">Estimated Time:&nbsp;
                             <RichText
                                 tagName="span"
@@ -66,6 +74,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                 value={estimatedTime}
                                 onChange={(value) => setAttributes({ estimatedTime: value })}
                                 allowedFormats={[]}
+                                multiline={false}
+                                onKeyDown={preventLineBreaks}
                             />
                         </p>
                     </div>
@@ -77,6 +87,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                         value={contextContent}
                         onChange={(value) => setAttributes({ contextContent: value })}
                         allowedFormats={['core/bold', 'core/italic', 'core/math', 'glyphwell/inline-equation"']}
+                        multiline={false}
+                        onKeyDown={preventLineBreaks}
                     />
                 </div>
                 <InnerBlocks

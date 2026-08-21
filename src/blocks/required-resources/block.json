@@ -6,7 +6,8 @@
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/container", "core/group"],
     "supports": {
-        "html": false
+        "html": false,
+        "splitting": false
     },
     "example": {
         "attributes": {
@@ -16,7 +17,11 @@
     "attributes": {
         "headingLevel": {
             "type": "string",
-            "default": "3"
+            "default": "h3"
+        },
+        "headingText": {
+            "type": "string",
+            "default": "Required Resources"
         },
         "estimatedTime": {
             "type": "string",

@@ -250,6 +250,18 @@ export const CharacterLimitFeedback = ( { value, limit, message, showCount = tru
 };
 
 /**
+ * Prevents Enter from inserting a line break or propagating the event.
+ *
+ * @param {KeyboardEvent} event - Keyboard event to handle.
+ */
+export const preventLineBreaks = ( event ) => {
+    if ( event.key === 'Enter' ) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+};
+
+/**
  * Checks whether a value is a valid HTTP or HTTPS URL.
  *
  * @param {string} value - URL value to validate.
