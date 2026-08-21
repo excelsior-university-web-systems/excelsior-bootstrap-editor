@@ -436,7 +436,7 @@ const removeWordPressClasses = ( html ) => {
     ] );
 
     const template = document.createElement( 'template' );
-    template.innerHTML = html;
+    template.innerHTML = html.replace(/<!--\s*\/?wp:[^>]+-->/g, '');
 
     template.content.querySelectorAll( '[class]' ).forEach( ( element ) => {
         const classes = Array.from( element.classList ).filter( ( className ) => {
@@ -452,6 +452,62 @@ const removeWordPressClasses = ( html ) => {
     } );
 
     return template.innerHTML;
+};
+
+/**
+ * Adds post timestamps to the exported Excelsior Bootstrap wrapper.
+ *
+ * @param {string} html Rendered HTML to update.
+ * @param {Object} timestamps Post timestamps from the REST API response.
+ * @param {string} [timestamps.createdOn] Site-local timestamp for when the post was created.
+ * @param {string} [timestamps.updatedOn] Site-local timestamp for when the post was last modified.
+ * @returns {string} Rendered HTML with timestamp data attributes when the wrapper exists.
+ */
+const addExportedHtmlTimestamps = ( html, { createdOn, updatedOn } = {} ) => {
+    const template = document.createElement( 'template' );
+    template.innerHTML = html;
+
+    const bootstrapWrapper = template.content.querySelector( '#excelsior-bootstrap' );
+
+    if ( ! bootstrapWrapper ) {
+        return html;
+    }
+
+    if ( createdOn ) {
+        bootstrapWrapper.setAttribute( 'data-created-on', createdOn );
+    }
+
+    if ( updatedOn ) {
+        bootstrapWrapper.setAttribute( 'data-updated-on', updatedOn );
+    }
+
+    return template.innerHTML;
+};
+
+/**
+ * Normalizes non-breaking spaces in exported HTML while emptying icon tags.
+ *
+ * @param {string} html Rendered HTML to normalize.
+ * @returns {string} HTML with regular spaces outside icons and empty icon tags.
+ */
+const normalizeExportedHtmlSpaces = ( html ) => {
+    const iconTagPattern = /<i([^>]*)>(.*?)<\/i>/g;
+    let normalizedHtml = '';
+    let lastMatchEnd = 0;
+    let match;
+
+    while ( ( match = iconTagPattern.exec( html ) ) !== null ) {
+        const [ fullMatch, attrs ] = match;
+        const outsideIconHtml = html.slice( lastMatchEnd, match.index );
+
+        normalizedHtml += outsideIconHtml.replace( /&nbsp;/g, ' ' );
+        normalizedHtml += `<i${ attrs }></i>`;
+        lastMatchEnd = match.index + fullMatch.length;
+    }
+
+    normalizedHtml += html.slice( lastMatchEnd ).replace( /&nbsp;/g, ' ' );
+
+    return normalizedHtml;
 };
 
 /**
@@ -495,16 +551,12 @@ const GetCodeButton = () => {
         })
             .then((response) => response.json())
             .then((post) => {
-                const rawContent = post.content.rendered.replace(/<!--\s*\/?wp:[^>]+-->/g, '');
-                const filteredContent = removeWordPressClasses( rawContent );
-                const htmlCode = filteredContent.replace(
-                    /<i([^>]*)>(.*?)<\/i>/g,
-                    (match, attrs, innerText) => {
-                        // Preserve icon spacing when rendered HTML is copied out of the editor.
-                        const nonBreakingText = innerText.replace(/ /g, '&nbsp;');
-                        return `<i${attrs}>${nonBreakingText}</i>`;
-                    }
-                );
+                const filteredContent = removeWordPressClasses( post.content.rendered );
+                const timestampedContent = addExportedHtmlTimestamps( filteredContent, {
+                    createdOn: post.date,
+                    updatedOn: post.modified,
+                } );
+                const htmlCode = normalizeExportedHtmlSpaces( timestampedContent );
     
                 setRenderedHTML(beautify.html(htmlCode, { preserve_newlines: false }));
                 setIsModalOpen(true);
