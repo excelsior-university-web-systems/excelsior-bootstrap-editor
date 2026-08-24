@@ -338,10 +338,10 @@ const CourseMetaFields = () => {
     let year = meta[XCLSR_BTSTRP_POST_TYPE+'_post_year'];
 
     useEffect( () => {
-        const editPostStore = dispatch( 'core/edit-post' );
+        const editorStore = dispatch( 'core/editor' );
 
-        if ( editPostStore?.removeEditorPanel ) {
-            editPostStore.removeEditorPanel( LEARNING_PATH_TAXONOMY_PANEL );
+        if ( editorStore?.removeEditorPanel ) {
+            editorStore.removeEditorPanel( LEARNING_PATH_TAXONOMY_PANEL );
         }
     }, [] );
 
@@ -403,7 +403,7 @@ const CourseMetaFields = () => {
                     __next40pxDefaultSize
                     __nextHasNoMarginBottom
                 />
-                <LearningPathSelector />
+                {/* <LearningPathSelector /> */}
             </PanelBody>
         </PluginPostStatusInfo>
         </>

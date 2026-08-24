@@ -46,7 +46,8 @@ function add_learning_path_taxonomy() {
     );
 }
 
-add_action( 'init', __NAMESPACE__ . '\\add_learning_path_taxonomy' );
+// feature not ready for use; temporarily "disable"
+// add_action( 'init', __NAMESPACE__ . '\\add_learning_path_taxonomy' );
 
 function limit_learning_path_to_one_term( $object_id, $terms, $tt_ids, $taxonomy ) {
     static $is_enforcing = false;
@@ -80,4 +81,5 @@ function limit_learning_path_to_one_term( $object_id, $terms, $tt_ids, $taxonomy
     $is_enforcing = false;
 }
 
-add_action( 'set_object_terms', __NAMESPACE__ . '\\limit_learning_path_to_one_term', 10, 4 );
+// feature not ready for use; temporarily "disable"
+// add_action( 'set_object_terms', __NAMESPACE__ . '\\limit_learning_path_to_one_term', 10, 4 );
