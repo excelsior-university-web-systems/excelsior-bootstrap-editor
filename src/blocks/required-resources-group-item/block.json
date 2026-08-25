@@ -18,10 +18,6 @@
         "resource": {
             "type": "string",
             "default": ""
-        },
-        "source": {
-            "type": "string",
-            "default": ""
         }
     }
 }

@@ -2,7 +2,7 @@ import { useBlockProps, RichText } from '@wordpress/block-editor';
 
 export default function Save( { attributes } ) {
 
-    const { resource, source } = attributes;
+    const { resource } = attributes;
 
     const blockProps = useBlockProps.save({
         className: 'list-group-item',
@@ -15,13 +15,6 @@ export default function Save( { attributes } ) {
                 tagName='p'
                 value={resource}
             />
-            { source && (
-                <RichText.Content
-                    tagName='p'
-                    value={source}
-                    className='secondary'
-                />
-            )}
             
         </li>
     );
