@@ -30,18 +30,18 @@ add_action( 'current_screen', function() {
         // Register deprecated patterns
         $deprecatedPatternsDirectory = plugin_dir_path( __FILE__ ) . 'patterns/deprecated/';
         $excelsiorEditorDeprecatedPatterns = array(
-            array( 'slug' => 'homepage', 'title' => 'Homepage', 'file' => 'home.html' ),
-            array( 'slug' => 'overview', 'title' => 'Overview', 'file' => 'overview.html' ),
-            array( 'slug' => 'lesson', 'title' => 'Lesson', 'file' => 'lesson.html' ),
-            array( 'slug' => 'discussion', 'title' => 'Discussion', 'file' => 'discussion.html' ),
-            array( 'slug' => 'fivetabdiscussion', 'title' => '5-Tab Discussion', 'file' => '5-tab-discussion.html' ),
-            array( 'slug' => 'assignment', 'title' => 'Assignment', 'file' => 'assignment.html' ),
-            array( 'slug' => 'fivetabassignment', 'title' => '5-Tab Assignment', 'file' => '5-tab-assignment.html' ),
-            array( 'slug' => 'livesession', 'title' => 'Live Session', 'file' => 'live-session.html' ),
-            array( 'slug' => 'knowledgecheck', 'title' => 'Knowledge Check', 'file' => 'knowledge-check.html' ),
-            array( 'slug' => 'quiztestexam', 'title' => 'Quiz / Test / Exam', 'file' => 'quiz-test-exam.html' ),
-            array( 'slug' => 'modulereflection', 'title' => 'Module Reflection', 'file' => 'module-reflection.html' ),
-            array( 'slug' => 'instructornotes', 'title' => 'Instructor Notes', 'file' => 'instructor-notes.html' )
+            array( 'slug' => 'homepage', 'title' => 'Homepage (Deprecated)', 'file' => 'home.html' ),
+            array( 'slug' => 'overview', 'title' => 'Overview (Deprecated)', 'file' => 'overview.html' ),
+            array( 'slug' => 'lesson', 'title' => 'Lesson (Deprecated)', 'file' => 'lesson.html' ),
+            array( 'slug' => 'discussion', 'title' => 'Discussion (Deprecated)', 'file' => 'discussion.html' ),
+            array( 'slug' => 'fivetabdiscussion', 'title' => '5-Tab Discussion (Deprecated)', 'file' => '5-tab-discussion.html' ),
+            array( 'slug' => 'assignment', 'title' => 'Assignment (Deprecated)', 'file' => 'assignment.html' ),
+            array( 'slug' => 'fivetabassignment', 'title' => '5-Tab Assignment (Deprecated)', 'file' => '5-tab-assignment.html' ),
+            array( 'slug' => 'livesession', 'title' => 'Live Session (Deprecated)', 'file' => 'live-session.html' ),
+            array( 'slug' => 'knowledgecheck', 'title' => 'Knowledge Check (Deprecated)', 'file' => 'knowledge-check.html' ),
+            array( 'slug' => 'quiztestexam', 'title' => 'Quiz / Test / Exam (Deprecated)', 'file' => 'quiz-test-exam.html' ),
+            array( 'slug' => 'modulereflection', 'title' => 'Module Reflection (Deprecated)', 'file' => 'module-reflection.html' ),
+            array( 'slug' => 'instructornotes', 'title' => 'Instructor Notes (Deprecated)', 'file' => 'instructor-notes.html' )
         );
 
         foreach ( $excelsiorEditorDeprecatedPatterns as $pattern ) {
@@ -49,11 +49,13 @@ add_action( 'current_screen', function() {
             register_block_pattern(
                 XCLSR_BTSTRP_EDITOR_PREFIX.'/'.$pattern['slug'],
                 array(
-                    'title'      => __( $pattern['title'], XCLSR_BTSTRP_POST_TYPE ),
+                    'title'      => $pattern['title'],
+                    'description' => $pattern['title'],
                     'categories' => array( XCLSR_BTSTRP_EDITOR_PREFIX.'-patterns-deprecated' ),
                     'postTypes'  => array( XCLSR_BTSTRP_POST_TYPE ),
                     'blockTypes' => array( XCLSR_BTSTRP_EDITOR_PREFIX.'/container' ),
-                    'filePath'   => $deprecatedPatternsDirectory.$pattern['file']
+                    'filePath'   => $deprecatedPatternsDirectory.$pattern['file'],
+                    'inserter'   => true
                 )
             );
 
@@ -82,11 +84,13 @@ add_action( 'current_screen', function() {
             register_block_pattern(
                 XCLSR_BTSTRP_EDITOR_PREFIX.'/'.$pattern['slug'],
                 array(
-                    'title'      => __( $pattern['title'], XCLSR_BTSTRP_POST_TYPE ),
+                    'title'      => $pattern['title'],
+                    'description'=> $pattern['title'],
                     'categories' => array( XCLSR_BTSTRP_EDITOR_PREFIX.'-patterns-new' ),
                     'postTypes'  => array( XCLSR_BTSTRP_POST_TYPE ),
                     'blockTypes' => array( XCLSR_BTSTRP_EDITOR_PREFIX.'/container' ),
-                    'filePath'   => $newPatternsDirectory.$pattern['file']
+                    'filePath'   => $newPatternsDirectory.$pattern['file'],
+                    'inserter'   => true
                 )
             );
 
