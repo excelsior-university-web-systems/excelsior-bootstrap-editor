@@ -813,7 +813,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				<PanelBody title="Table" initialOpen={ true }>
 					<ToggleControl
 						label="Header row"
-						help="Adds a row at the top of the table, saved as a thead."
 						checked={ hasHeader }
 						onChange={ ( value ) =>
 							toggleSection( 'hasHeader', 0, value )
@@ -821,7 +820,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					/>
 					<ToggleControl
 						label="Footer row"
-						help="Adds a row at the bottom of the table, saved as a tfoot."
 						checked={ hasFooter }
 						onChange={ ( value ) =>
 							toggleSection(
@@ -896,7 +894,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					/>
 					<RangeControl
 						label="Border thickness (px)"
-						help="Applies to the whole table. Zero hides the borders of a bordered table; reset to use the framework default."
+						help="Applies to the whole table and its cells."
 						value={
 							borderWidth === ''
 								? undefined
