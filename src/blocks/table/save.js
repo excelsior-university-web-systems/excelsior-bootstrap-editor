@@ -9,6 +9,7 @@ import {
 	getMergeSpan,
 	getTableSections,
 	getTableStyle,
+	hasExplicitColumnWidths,
 	normalizeColumns,
 	normalizeData,
 	resolveCellVariant,
@@ -130,14 +131,26 @@ export default function Save( { attributes } ) {
 						borderColor,
 					} ) }
 				>
-					<colgroup>
-						{ normalizedColumns.map( ( column, columnIndex ) => (
-							<col
-								key={ columnIndex }
-								style={ { width: `${ column.width }px` } }
-							/>
-						) ) }
-					</colgroup>
+					{ /* Omitted entirely when every column sizes itself, so
+					     the table keeps Bootstrap's automatic layout. */ }
+					{ hasExplicitColumnWidths( normalizedColumns ) && (
+						<colgroup>
+							{ normalizedColumns.map(
+								( column, columnIndex ) => (
+									<col
+										key={ columnIndex }
+										style={
+											column.width
+												? {
+														width: `${ column.width }px`,
+												  }
+												: undefined
+										}
+									/>
+								)
+							) }
+						</colgroup>
+					) }
 					{ sections.head && (
 						<thead>
 							{ renderRows(

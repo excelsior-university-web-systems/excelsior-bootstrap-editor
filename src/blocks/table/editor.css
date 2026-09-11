@@ -2,29 +2,100 @@
   Editor-only styles for the Jspreadsheet authoring grid. Nothing here reaches
   the frontend, which gets plain Bootstrap table markup instead.
 
-  The column letters and row numbers are left visible on purpose: dragging a
-  column header edge is how a column is resized, and clicking a header or row
-  number is how a whole column or row is selected for coloring.
+  The grid itself carries the same Bootstrap table classes as the saved markup
+  (see syncTableChrome in edit.js), so striping, compact padding, borders, and
+  cell colors come from the framework stylesheet. These rules only remove the
+  spreadsheet chrome and add editing affordances on top.
 */
 .excelsior-table-editor .jss_container,
 .excelsior-table-editor .jss_content {
 	max-width: 100%;
 }
 
+/*
+  Authoring a table should look like editing a table, not a spreadsheet: the
+  column letters, the select-all corner, and the library credit all go. The row
+  numbers are hidden by the library's own hideIndex().
+*/
+.excelsior-table-editor .jss_worksheet > thead,
 .excelsior-table-editor .jss_about {
 	display: none;
 }
 
-.excelsior-table-editor .jss_worksheet {
-	border-collapse: collapse;
+/*
+  Cell padding, borders, striping, and colors are all left to Bootstrap. Its
+  rules are scoped under #excelsior-bootstrap, which the Namespace block renders
+  in the editor too, so they already outrank Jspreadsheet's own cell styling.
+
+  Two things do have to be reclaimed. Jspreadsheet sets line-height to 1em and
+  wrapping to nowrap, and an empty cell with no line box collapses to nothing
+  but its padding, so a new table would start out as a row of slivers. The
+  height acts as a minimum on a table cell, so it holds an empty row open at the
+  same height a filled one settles at without capping a wrapped cell.
+*/
+.excelsior-table-editor .jss_worksheet > tbody > tr > td {
+	height: 2.5rem;
+	line-height: 1.5;
+	white-space: normal;
 }
 
-.excelsior-table-editor .jss_worksheet > tbody > tr > td {
-	min-width: 80px;
-	white-space: normal;
+.excelsior-table-editor .jss_worksheet.table-sm > tbody > tr > td {
+	height: 2rem;
+}
+
+/*
+  A borderless table is hard to edit when the cell edges are invisible, so its
+  cells get a dotted guide. A bordered table already shows them. Outline is used
+  rather than a border so it never shifts the layout, and so it is not defeated
+  by Bootstrap's own border rules, which carry an id and outrank anything here.
+*/
+.excelsior-table-editor
+	.jss_worksheet:not(.table-bordered)
+	> tbody
+	> tr
+	> td:not(.highlight) {
+	outline: 1px dotted rgba(0, 0, 0, 0.25);
+	outline-offset: -1px;
+}
+
+/*
+  The library marks the selection with a faint background tint and thin black
+  edges, which a cell color paints straight over and a colored border hides. An
+  outline sits above both and cannot be overridden by the framework.
+*/
+.excelsior-table-editor .jss_worksheet > tbody > tr > td.highlight {
+	outline: 2px solid #3858e9;
+	outline-offset: -2px;
+}
+
+.excelsior-table-editor .jss_worksheet > tbody > tr > td.highlight-selected {
+	outline-color: #1d2327;
+	outline-width: 3px;
+	outline-offset: -3px;
+}
+
+/* Bootstrap styles th as bold, so preview the header and footer rows the same way. */
+.excelsior-table-editor.has-header-row
+	.jss_worksheet
+	> tbody
+	> tr:first-child
+	> td,
+.excelsior-table-editor.has-footer-row
+	.jss_worksheet
+	> tbody
+	> tr:last-child
+	> td {
+	font-weight: 700;
 }
 
 .excelsior-table-editor__grid {
 	max-width: 100%;
 	overflow-x: auto;
+}
+
+/* Mirrors the figure-caption the saved markup emits below the table. */
+.excelsior-table-editor__caption {
+	color: #6c757d;
+	font-size: 0.875em;
+	padding-top: 0.5rem;
 }

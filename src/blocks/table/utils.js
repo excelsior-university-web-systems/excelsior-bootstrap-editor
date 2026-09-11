@@ -1,6 +1,6 @@
 export const TABLE_BORDERED = 'table-bordered';
 export const TABLE_BORDERLESS = 'table-borderless';
-export const DEFAULT_COLUMN_WIDTH = 160;
+export const MIN_COLUMN_WIDTH = 80;
 export const DEFAULT_COLUMN_COUNT = 3;
 export const DEFAULT_ROW_COUNT = 3;
 
@@ -8,58 +8,58 @@ export const DEFAULT_ROW_COUNT = 3;
   Bootstrap ships table variants designed for tr/th/td, so row, column, and cell
   colors are stored as class names rather than inline styles.
 
-  The "preview" value is only used to tint cells inside the Jspreadsheet grid,
-  which can take inline styles but not classes. It points at Bootstrap's own
-  custom properties so the editor preview tracks the framework (and its dark
-  mode overrides) instead of hardcoding hex values. The "-bg-subtle" properties
-  hold the same values the matching .table-* class assigns to --bs-table-bg.
+  The literal colors are what each .table-* class assigns to --bs-table-bg and
+  --bs-table-color in the bundled framework build. They are duplicated here
+  because they are needed in two places CSS classes cannot reach: the color
+  swatches in the inspector, which render outside the editor canvas where the
+  framework stylesheet is not loaded, and the Jspreadsheet grid, which accepts
+  inline styles but not class names. Re-derive them with:
+  grep -o "\.table-primary{[^}]*}" public/css/excelsior-bootstrap.css
 */
 export const TABLE_VARIANTS = [
-	{ label: 'None', className: '', preview: '' },
 	{
 		label: 'Light',
 		className: 'table-light',
-		preview: 'background-color: var(--bs-light); color: #000',
+		color: '#f8f9fa',
+		text: '#000',
 	},
 	{
 		label: 'Primary',
 		className: 'table-primary',
-		preview: 'background-color: var(--bs-primary-bg-subtle); color: #000',
+		color: '#cfe2ff',
+		text: '#000',
 	},
 	{
 		label: 'Secondary',
 		className: 'table-secondary',
-		preview: 'background-color: var(--bs-secondary-bg-subtle); color: #000',
+		color: '#e2e3e5',
+		text: '#000',
 	},
 	{
 		label: 'Success',
 		className: 'table-success',
-		preview: 'background-color: var(--bs-success-bg-subtle); color: #000',
+		color: '#d1e7dd',
+		text: '#000',
 	},
 	{
 		label: 'Danger',
 		className: 'table-danger',
-		preview: 'background-color: var(--bs-danger-bg-subtle); color: #000',
+		color: '#f8d7da',
+		text: '#000',
 	},
 	{
 		label: 'Warning',
 		className: 'table-warning',
-		preview: 'background-color: var(--bs-warning-bg-subtle); color: #000',
+		color: '#fff3cd',
+		text: '#000',
 	},
-	{
-		label: 'Info',
-		className: 'table-info',
-		preview: 'background-color: var(--bs-info-bg-subtle); color: #000',
-	},
-	{
-		label: 'Dark',
-		className: 'table-dark',
-		preview: 'background-color: var(--bs-dark); color: var(--bs-light)',
-	},
+	{ label: 'Info', className: 'table-info', color: '#cff4fc', text: '#000' },
+	{ label: 'Dark', className: 'table-dark', color: '#212529', text: '#fff' },
 	{
 		label: 'Highlight',
 		className: 'table-active',
-		preview: 'background-color: rgba(var(--bs-emphasis-color-rgb), 0.1)',
+		color: 'rgba(0, 0, 0, 0.1)',
+		text: '',
 	},
 ];
 
@@ -67,13 +67,30 @@ const VARIANT_CLASS_NAMES = TABLE_VARIANTS.map(
 	( variant ) => variant.className
 );
 
+/*
+  The grid gets the color twice over: the plain properties so it shows no matter
+  how Jspreadsheet's own cell rules are written, and the Bootstrap custom
+  properties so striping and hover compose the way they do on the frontend.
+*/
 const VARIANT_PREVIEWS = TABLE_VARIANTS.reduce( ( previews, variant ) => {
-	if ( variant.className ) {
-		previews[ variant.className ] = variant.preview;
-	}
+	previews[ variant.className ] = [
+		`background-color: ${ variant.color }`,
+		`--bs-table-bg: ${ variant.color }`,
+		variant.text ? `color: ${ variant.text }` : '',
+		variant.text ? `--bs-table-color: ${ variant.text }` : '',
+	]
+		.filter( Boolean )
+		.join( '; ' );
 
 	return previews;
 }, {} );
+
+export const getVariantByColor = ( color ) =>
+	TABLE_VARIANTS.find( ( variant ) => variant.color === color ) || null;
+
+export const getVariantByClassName = ( className ) =>
+	TABLE_VARIANTS.find( ( variant ) => variant.className === className ) ||
+	null;
 
 /*
   Bootstrap's .table-bordered reads --bs-border-width, and the table variants
@@ -176,6 +193,11 @@ export const normalizeData = ( data = [], columns = [] ) => {
 	} );
 };
 
+/*
+  A width of null means "let the table size this column". Tables default to full
+  width with automatic column sizing, so a width is only ever recorded when the
+  author sets one.
+*/
 export const normalizeColumns = ( data = [], columns = [] ) => {
 	const columnCount = getColumnCount( data, columns );
 
@@ -184,15 +206,42 @@ export const normalizeColumns = ( data = [], columns = [] ) => {
 		const parsedWidth = parseInt( column.width, 10 );
 
 		return {
-			...column,
-			type: 'text',
-			title: column.title || getColumnName( index ),
+			title: getColumnName( index ),
 			width:
 				Number.isFinite( parsedWidth ) && parsedWidth > 0
 					? parsedWidth
-					: DEFAULT_COLUMN_WIDTH,
+					: null,
 		};
 	} );
+};
+
+export const hasExplicitColumnWidths = ( columns = [] ) =>
+	columns.some( ( column ) => Boolean( column?.width ) );
+
+/*
+  Jspreadsheet needs a pixel width for every column, so automatic columns share
+  out whatever width the block has left over. This keeps the grid as wide as the
+  block, which is how a default full-width table renders on the frontend.
+*/
+export const getGridColumns = ( columns = [], availableWidth = 0 ) => {
+	const autoColumns = columns.filter( ( column ) => ! column.width );
+	const explicitWidth = columns.reduce(
+		( total, column ) => total + ( column.width || 0 ),
+		0
+	);
+	const shared = autoColumns.length
+		? Math.floor(
+				Math.max( 0, availableWidth - explicitWidth ) /
+					autoColumns.length
+		  )
+		: 0;
+	const autoWidth = Math.max( MIN_COLUMN_WIDTH, shared );
+
+	return columns.map( ( column ) => ( {
+		type: 'text',
+		title: column.title,
+		width: column.width || autoWidth,
+	} ) );
 };
 
 export const normalizeVariants = ( variants = {} ) => ( {
@@ -219,6 +268,112 @@ export const resolveCellVariant = ( variants, rowIndex, columnIndex ) => {
 			normalizedVariants.columns[ columnIndex ] ||
 			''
 	);
+};
+
+/*
+  Row-indexed colors and merge anchors both have to move when a row is added or
+  removed above them, or a header row would inherit the color and merges of
+  whatever used to be the first row.
+*/
+const shiftRowKeys = ( map, fromIndex, delta ) => {
+	const shifted = {};
+
+	Object.entries( map || {} ).forEach( ( [ key, value ] ) => {
+		const index = Number( key );
+
+		if ( ! Number.isFinite( index ) ) {
+			return;
+		}
+
+		if ( index < fromIndex ) {
+			shifted[ index ] = value;
+			return;
+		}
+
+		if ( delta < 0 && index === fromIndex ) {
+			return;
+		}
+
+		shifted[ index + delta ] = value;
+	} );
+
+	return shifted;
+};
+
+// Used for both cell colors and merge anchors, which are keyed the same way.
+const shiftCellKeys = ( map, fromIndex, delta ) => {
+	const shifted = {};
+
+	Object.entries( map || {} ).forEach( ( [ cellName, value ] ) => {
+		const coords = getCoordsFromCellName( cellName );
+
+		if ( ! coords ) {
+			return;
+		}
+
+		if ( coords.rowIndex < fromIndex ) {
+			shifted[ cellName ] = value;
+			return;
+		}
+
+		if ( delta < 0 && coords.rowIndex === fromIndex ) {
+			return;
+		}
+
+		shifted[ getCellName( coords.columnIndex, coords.rowIndex + delta ) ] =
+			value;
+	} );
+
+	return shifted;
+};
+
+export const insertTableRow = (
+	{ data, columns, variants, mergeCells },
+	rowIndex
+) => {
+	const normalizedData = normalizeData( data, columns );
+	const columnCount = getColumnCount( normalizedData, columns );
+	const normalizedVariants = normalizeVariants( variants );
+	const rows = [ ...normalizedData ];
+
+	rows.splice(
+		rowIndex,
+		0,
+		Array.from( { length: columnCount }, () => '' )
+	);
+
+	return {
+		data: rows,
+		variants: {
+			...normalizedVariants,
+			cells: shiftCellKeys( normalizedVariants.cells, rowIndex, 1 ),
+			rows: shiftRowKeys( normalizedVariants.rows, rowIndex, 1 ),
+		},
+		mergeCells: shiftCellKeys( mergeCells, rowIndex, 1 ),
+	};
+};
+
+export const removeTableRow = (
+	{ data, columns, variants, mergeCells },
+	rowIndex
+) => {
+	const normalizedData = normalizeData( data, columns );
+
+	if ( normalizedData.length <= 1 || rowIndex >= normalizedData.length ) {
+		return null;
+	}
+
+	const normalizedVariants = normalizeVariants( variants );
+
+	return {
+		data: normalizedData.filter( ( _, index ) => index !== rowIndex ),
+		variants: {
+			...normalizedVariants,
+			cells: shiftCellKeys( normalizedVariants.cells, rowIndex, -1 ),
+			rows: shiftRowKeys( normalizedVariants.rows, rowIndex, -1 ),
+		},
+		mergeCells: shiftCellKeys( mergeCells, rowIndex, -1 ),
+	};
 };
 
 export const getVariantPreviewStyles = (

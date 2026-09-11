@@ -5,8 +5,11 @@ import {
 	useBlockProps,
 } from '@wordpress/block-editor';
 import {
+	BaseControl,
+	ColorPalette,
 	Notice,
 	PanelBody,
+	RangeControl,
 	SelectControl,
 	TextControl,
 	ToggleControl,
@@ -22,40 +25,93 @@ import {
 } from '@wordpress/icons';
 import {
 	BORDER_COLORS,
-	DEFAULT_COLUMN_WIDTH,
 	MAX_BORDER_WIDTH,
 	TABLE_BORDERED,
 	TABLE_BORDERLESS,
 	TABLE_VARIANTS,
+	getBootstrapTableClasses,
 	getCellName,
 	getColumnName,
 	getCoordsFromCellName,
+	getGridColumns,
 	getTableSections,
+	getTableStyle,
+	getVariantByClassName,
+	getVariantByColor,
 	getVariantPreviewStyles,
+	insertTableRow,
 	normalizeColumns,
 	normalizeData,
 	normalizeVariants,
+	removeTableRow,
 } from './utils';
 
 const STYLE_SCOPE_CELL = 'cell';
 const STYLE_SCOPE_ROW = 'row';
 const STYLE_SCOPE_COLUMN = 'column';
 
+const MANAGED_TABLE_CLASSES = [
+	'table',
+	'table-sm',
+	'table-striped',
+	TABLE_BORDERED,
+	TABLE_BORDERLESS,
+];
+
+const MANAGED_TABLE_PROPERTIES = [
+	'width',
+	'--bs-border-width',
+	'--bs-table-border-color',
+];
+
 const cloneData = ( data ) => data.map( ( row ) => [ ...row ] );
 
-const getSignature = ( { data, columns, mergeCells, variants } ) =>
-	JSON.stringify( {
-		data,
-		columns: normalizeColumns( data, columns ).map(
-			( column ) => column.width
-		),
-		mergeCells,
-		variants: normalizeVariants( variants ),
-	} );
+const stringify = ( value ) => JSON.stringify( value );
 
 /*
-  Jspreadsheet takes inline styles rather than classes, so a variant with no
-  color has to be reset instead of set to an empty declaration.
+  Jspreadsheet renders a real table, so giving it the same Bootstrap classes and
+  custom properties the saved markup gets makes the grid preview the finished
+  table: striping, compact padding, borders, width, and variant colors all come
+  from the framework stylesheet the editor canvas already loads.
+*/
+const syncTableChrome = ( worksheet, attributes ) => {
+	const table = worksheet?.table;
+
+	if ( ! table ) {
+		return;
+	}
+
+	const {
+		border,
+		isStriped,
+		isCompact,
+		tableWidth,
+		borderWidth,
+		borderColor,
+	} = attributes;
+	const style = getTableStyle( { tableWidth, borderWidth, borderColor } );
+
+	table.classList.remove( ...MANAGED_TABLE_CLASSES );
+	table.classList.add(
+		...getBootstrapTableClasses( { border, isStriped, isCompact } )
+	);
+
+	MANAGED_TABLE_PROPERTIES.forEach( ( property ) =>
+		table.style.removeProperty( property )
+	);
+	Object.entries( style ).forEach( ( [ property, value ] ) =>
+		table.style.setProperty( property, value )
+	);
+
+	// A table with no explicit width fills the block, as it will on the frontend.
+	if ( ! style.width ) {
+		table.style.setProperty( 'width', '100%' );
+	}
+};
+
+/*
+  Jspreadsheet takes inline styles rather than classes, so a cell with no variant
+  has to have its style reset instead of set to an empty declaration.
 */
 const applyPreviewStyles = ( worksheet, previewStyles ) => {
 	const styled = {};
@@ -97,14 +153,45 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const containerRef = useRef( null );
 	const worksheetRef = useRef( null );
 	const attributesRef = useRef( attributes );
-	const lastSignatureRef = useRef( null );
+	const appliedRef = useRef( {} );
 	const isApplyingRemoteRef = useRef( false );
+	const [ isReady, setIsReady ] = useState( false );
 	const [ selectedRange, setSelectedRange ] = useState( [ 0, 0, 0, 0 ] );
 	const [ styleScope, setStyleScope ] = useState( STYLE_SCOPE_CELL );
 	const [ mergeWarning, setMergeWarning ] = useState( '' );
-	const blockProps = useBlockProps( { className: 'excelsior-table-editor' } );
+	const blockProps = useBlockProps( {
+		className: [
+			'excelsior-table-editor',
+			hasHeader ? 'has-header-row' : '',
+			hasFooter ? 'has-footer-row' : '',
+		]
+			.filter( Boolean )
+			.join( ' ' ),
+	} );
 
 	attributesRef.current = attributes;
+
+	const setColumnWidth = useCallback(
+		( columnIndex, width ) => {
+			const parsedWidth = parseInt( width, 10 );
+
+			setAttributes( {
+				columns: normalizeColumns(
+					attributesRef.current.data,
+					attributesRef.current.columns
+				).map( ( column, index ) => ( {
+					width:
+						index === columnIndex
+							? ( Number.isFinite( parsedWidth ) &&
+									parsedWidth > 0 &&
+									parsedWidth ) ||
+							  null
+							: column.width,
+				} ) ),
+			} );
+		},
+		[ setAttributes ]
+	);
 
 	const syncFromWorksheet = useCallback(
 		( worksheet = worksheetRef.current ) => {
@@ -122,25 +209,26 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				worksheet.getData( false, true ) || [],
 				attributesRef.current.columns
 			);
-			const widths = worksheet.getWidth() || [];
-			const nextColumns = normalizeColumns(
-				nextData,
-				attributesRef.current.columns
-			).map( ( column, index ) => ( {
-				width:
-					parseInt( widths[ index ], 10 ) ||
-					column.width ||
-					DEFAULT_COLUMN_WIDTH,
-			} ) );
-			const nextAttributes = {
-				data: nextData,
-				columns: nextColumns,
-				mergeCells: worksheet.getMerge() || {},
-				variants: normalizeVariants( attributesRef.current.variants ),
+
+			/*
+			  Column widths deliberately are not read back from the grid. The
+			  grid always has a pixel width for every column, but the block only
+			  records one where the author asked for it.
+			*/
+			appliedRef.current = {
+				...appliedRef.current,
+				data: stringify( nextData ),
+				mergeCells: stringify( worksheet.getMerge() || {} ),
 			};
 
-			lastSignatureRef.current = getSignature( nextAttributes );
-			setAttributes( nextAttributes );
+			setAttributes( {
+				data: nextData,
+				columns: normalizeColumns(
+					nextData,
+					attributesRef.current.columns
+				).map( ( column ) => ( { width: column.width } ) ),
+				mergeCells: worksheet.getMerge() || {},
+			} );
 		},
 		[ setAttributes ]
 	);
@@ -161,9 +249,72 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			attributesRef.current.columns
 		);
 
-		lastSignatureRef.current = getSignature( attributesRef.current );
+		/*
+		  Jspreadsheet binds its keydown handler to the document its script was
+		  loaded in. The block editor renders blocks inside a canvas iframe, so
+		  that is the wrong document and no keystroke ever reaches the grid.
+		  Replay the event on the document it listens to, then mirror any
+		  preventDefault back onto the real event.
 
-		jspreadsheet( container, {
+		  Modified keys are left alone so the editor keeps its own shortcuts,
+		  including undo and redo, which the resync effect below picks up.
+		*/
+		const bridgeKeyDown = ( event ) => {
+			if ( container.ownerDocument === document ) {
+				return;
+			}
+
+			if ( event.ctrlKey || event.metaKey ) {
+				return;
+			}
+
+			const replay = new window.KeyboardEvent( 'keydown', {
+				altKey: event.altKey,
+				bubbles: true,
+				cancelable: true,
+				code: event.code,
+				key: event.key,
+				shiftKey: event.shiftKey,
+			} );
+
+			// which and keyCode cannot be passed through KeyboardEventInit, and
+			// Jspreadsheet reads them for every shortcut.
+			[ 'which', 'keyCode' ].forEach( ( property ) =>
+				Object.defineProperty( replay, property, {
+					get: () => event[ property ],
+				} )
+			);
+
+			document.dispatchEvent( replay );
+
+			if ( replay.defaultPrevented ) {
+				event.preventDefault();
+			}
+		};
+
+		container.addEventListener( 'keydown', bridgeKeyDown );
+
+		/*
+		  Jspreadsheet keeps a single module-level pointer at the worksheet it
+		  considers focused, and its keydown handler acts on that pointer no
+		  matter where the keystroke came from. The inspector lives in the same
+		  document as that handler, so typing in a field like Caption would be
+		  captured by the grid instead. Releasing the pointer whenever something
+		  outside the grid takes focus keeps the two apart.
+
+		  Events raised inside the canvas iframe never reach this document, so
+		  this only ever fires for the sidebar, toolbar, and the rest of the UI.
+		*/
+		const releaseWorksheet = () => {
+			if ( jspreadsheet.current === worksheetRef.current ) {
+				jspreadsheet.current = null;
+			}
+		};
+
+		document.addEventListener( 'focusin', releaseWorksheet );
+		document.addEventListener( 'mousedown', releaseWorksheet );
+
+		const instances = jspreadsheet( container, {
 			about: false,
 			allowExport: false,
 			contextMenu: ( instance, columnIndex, rowIndex, event, items ) =>
@@ -172,6 +323,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						! /sort|filter/i.test( item.title || item.text || '' )
 				),
 			parseFormulas: false,
+			// Bind mouse, touch, and clipboard events inside the canvas iframe
+			// rather than the document this script was loaded in.
+			root: container,
 			tabs: false,
 			toolbar: false,
 			worksheets: [
@@ -182,8 +336,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					// spreadsheet options, so they have to be set here.
 					columnSorting: false,
 					columnDrag: false,
-					columnResize: true,
-					columns: normalizedColumns,
+					columnResize: false,
+					columns: getGridColumns(
+						normalizedColumns,
+						container.clientWidth
+					),
 					data: cloneData( normalizedData ),
 					filters: false,
 					mergeCells: attributesRef.current.mergeCells || {},
@@ -210,7 +367,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			ondeleterow: syncFromWorksheet,
 			oninsertcolumn: syncFromWorksheet,
 			oninsertrow: syncFromWorksheet,
-			onresizecolumn: syncFromWorksheet,
 			onselection: ( worksheet, left, top, right, bottom ) => {
 				setSelectedRange( [
 					Number( left ) || 0,
@@ -219,12 +375,67 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					Number( bottom ) || 0,
 				] );
 			},
-			onload: ( spreadsheet ) => {
-				worksheetRef.current = spreadsheet?.worksheets?.[ 0 ] || null;
-			},
+			onload: ( spreadsheet ) =>
+				attachWorksheet( spreadsheet?.worksheets?.[ 0 ] ),
 		} );
 
+		/*
+		  jspreadsheet() fills the instances array from an async factory and
+		  dispatches onload from a promise callback, so neither is available
+		  when the call returns. Whichever arrives first wins; the other is a
+		  no-op. Nothing may depend on onload alone, because until the worksheet
+		  is attached the toolbar, the resync, and the Bootstrap classes are all
+		  inert.
+		*/
+		let frames = 0;
+		let frameId = null;
+
+		function attachWorksheet( worksheet ) {
+			if ( ! worksheet || worksheetRef.current ) {
+				return;
+			}
+
+			worksheetRef.current = worksheet;
+
+			// Record what the grid was built from, so the resync effect below
+			// sees no difference and leaves the fresh grid alone.
+			appliedRef.current = {
+				data: stringify( normalizedData ),
+				mergeCells: stringify( attributesRef.current.mergeCells || {} ),
+				columns: stringify( normalizedColumns ),
+				variants: stringify(
+					normalizeVariants( attributesRef.current.variants )
+				),
+			};
+
+			// The column letters and row numbers are spreadsheet chrome;
+			// authoring a table should look like editing a table.
+			if ( worksheet.hideIndex ) {
+				worksheet.hideIndex();
+			}
+
+			setIsReady( true );
+		}
+
+		const pollForWorksheet = () => {
+			attachWorksheet( instances?.[ 0 ] );
+
+			if ( ! worksheetRef.current && frames++ < 120 ) {
+				frameId = window.requestAnimationFrame( pollForWorksheet );
+			}
+		};
+
+		pollForWorksheet();
+
 		return () => {
+			if ( frameId !== null ) {
+				window.cancelAnimationFrame( frameId );
+			}
+
+			container.removeEventListener( 'keydown', bridgeKeyDown );
+			document.removeEventListener( 'focusin', releaseWorksheet );
+			document.removeEventListener( 'mousedown', releaseWorksheet );
+
 			if ( jspreadsheet.destroy ) {
 				jspreadsheet.destroy( container, true );
 			} else {
@@ -232,53 +443,70 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			}
 
 			worksheetRef.current = null;
+			setIsReady( false );
 		};
 	}, [ clientId, syncFromWorksheet ] );
 
 	/*
 	  Data otherwise flows one way, from the grid into attributes, so an undo or
 	  any other external attribute change would leave a stale grid on screen.
+	  Each part is compared on its own so that, for example, recoloring a cell
+	  does not rebuild the data and close an open cell editor.
 	*/
 	useEffect( () => {
 		const worksheet = worksheetRef.current;
-		const signature = getSignature( {
-			data,
-			columns,
-			mergeCells,
-			variants,
-		} );
 
-		if ( ! worksheet || signature === lastSignatureRef.current ) {
+		if ( ! worksheet || ! isReady ) {
 			return;
 		}
 
-		lastSignatureRef.current = signature;
+		const normalizedData = normalizeData( data, columns );
+		const normalizedColumns = normalizeColumns( normalizedData, columns );
+		const applied = appliedRef.current;
+		const next = {
+			data: stringify( normalizedData ),
+			mergeCells: stringify( mergeCells || {} ),
+			columns: stringify( normalizedColumns ),
+			variants: stringify( normalizeVariants( variants ) ),
+		};
+
 		isApplyingRemoteRef.current = true;
 
 		try {
-			const normalizedData = normalizeData( data, columns );
-			const normalizedColumns = normalizeColumns(
-				normalizedData,
-				columns
-			);
+			if ( next.data !== applied.data ) {
+				worksheet.setData( cloneData( normalizedData ) );
+			}
 
-			worksheet.setData( cloneData( normalizedData ) );
-
-			Object.keys( worksheet.getMerge() || {} ).forEach( ( cellName ) =>
-				worksheet.removeMerge( cellName )
-			);
-			Object.entries( mergeCells || {} ).forEach(
-				( [ cellName, span ] ) => {
-					if ( Array.isArray( span ) ) {
-						worksheet.setMerge( cellName, span[ 0 ], span[ 1 ] );
+			if ( next.mergeCells !== applied.mergeCells ) {
+				Object.keys( worksheet.getMerge() || {} ).forEach(
+					( cellName ) => worksheet.removeMerge( cellName )
+				);
+				Object.entries( mergeCells || {} ).forEach(
+					( [ cellName, span ] ) => {
+						if ( Array.isArray( span ) ) {
+							worksheet.setMerge(
+								cellName,
+								span[ 0 ],
+								span[ 1 ]
+							);
+						}
 					}
-				}
-			);
+				);
+			}
 
-			normalizedColumns.forEach( ( column, columnIndex ) =>
-				worksheet.setWidth( columnIndex, column.width )
-			);
+			if ( next.columns !== applied.columns ) {
+				getGridColumns(
+					normalizedColumns,
+					containerRef.current?.clientWidth || 0
+				).forEach( ( column, columnIndex ) =>
+					worksheet.setWidth( columnIndex, column.width )
+				);
+			}
 
+			/*
+			  Data and merge rebuilds drop inline cell styles, so the variant
+			  preview is reapplied whenever anything changed, not only colors.
+			*/
 			applyPreviewStyles(
 				worksheet,
 				getVariantPreviewStyles(
@@ -288,9 +516,35 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				)
 			);
 		} finally {
+			appliedRef.current = next;
 			isApplyingRemoteRef.current = false;
 		}
-	}, [ data, columns, mergeCells, variants ] );
+	}, [ data, columns, mergeCells, variants, isReady ] );
+
+	// Bootstrap table settings are presentation only, so they are pushed
+	// straight onto the grid rather than going through the data resync above.
+	useEffect( () => {
+		if ( ! isReady ) {
+			return;
+		}
+
+		syncTableChrome( worksheetRef.current, {
+			border,
+			isStriped,
+			isCompact,
+			tableWidth,
+			borderWidth,
+			borderColor,
+		} );
+	}, [
+		border,
+		isStriped,
+		isCompact,
+		tableWidth,
+		borderWidth,
+		borderColor,
+		isReady,
+	] );
 
 	const runWorksheetAction = ( action ) => {
 		const worksheet = worksheetRef.current;
@@ -323,9 +577,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 	const insertColumn = () =>
 		runWorksheetAction( ( worksheet ) => {
-			worksheet.insertColumn( 1, columnEnd, false, [
-				{ type: 'text', width: DEFAULT_COLUMN_WIDTH },
-			] );
+			worksheet.insertColumn( 1, columnEnd, false, [ { type: 'text' } ] );
 		} );
 
 	const deleteColumn = () =>
@@ -339,12 +591,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		  reach across them. Clamp here rather than letting save quietly shrink
 		  a merge the author can see in the grid.
 		*/
-		const sections = Object.values(
+		const section = Object.values(
 			getTableSections( normalizedData.length, hasHeader, hasFooter )
-		).filter( Boolean );
-		const section = sections.find(
-			( { start, end } ) => rowStart >= start && rowStart <= end
-		);
+		)
+			.filter( Boolean )
+			.find( ( { start, end } ) => rowStart >= start && rowStart <= end );
 		const colspan = columnEnd - columnStart + 1;
 		const requestedRowspan = rowEnd - rowStart + 1;
 		const rowspan = section
@@ -458,6 +709,24 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		setAttributes( { variants: nextVariants } );
 	};
 
+	const selectedVariant = getScopedVariant();
+
+	/*
+	  A header or footer is a row, not just a reinterpretation of an existing
+	  one, so turning either on adds a row and turning it off takes that row
+	  away. The last remaining row is never removed; the toggle just flips.
+	*/
+	const toggleSection = ( attributeName, rowIndex, isEnabled ) => {
+		const change = isEnabled
+			? insertTableRow( attributesRef.current, rowIndex )
+			: removeTableRow( attributesRef.current, rowIndex );
+
+		setAttributes( {
+			...( change || {} ),
+			[ attributeName ]: isEnabled,
+		} );
+	};
+
 	return (
 		<div { ...blockProps }>
 			<BlockControls>
@@ -502,16 +771,24 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				<PanelBody title="Table" initialOpen={ true }>
 					<ToggleControl
 						label="Header row"
+						help="Adds a row at the top of the table, saved as a thead."
 						checked={ hasHeader }
 						onChange={ ( value ) =>
-							setAttributes( { hasHeader: value } )
+							toggleSection( 'hasHeader', 0, value )
 						}
 					/>
 					<ToggleControl
 						label="Footer row"
+						help="Adds a row at the bottom of the table, saved as a tfoot."
 						checked={ hasFooter }
 						onChange={ ( value ) =>
-							setAttributes( { hasFooter: value } )
+							toggleSection(
+								'hasFooter',
+								value
+									? normalizedData.length
+									: normalizedData.length - 1,
+								value
+							)
 						}
 					/>
 					<ToggleControl
@@ -553,7 +830,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				<PanelBody title="Dimensions and borders" initialOpen={ false }>
 					<TextControl
 						label="Table width"
-						help="Use CSS values such as 640px or 80%, or leave blank for full width."
+						help="Leave blank for full width. Accepts CSS values such as 640px or 80%."
+						placeholder="Full width"
 						value={ tableWidth }
 						onChange={ ( value ) =>
 							setAttributes( { tableWidth: value } )
@@ -564,38 +842,38 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						label={ `Column ${ getColumnName(
 							columnStart
 						) } width (px)` }
+						help="Leave blank to size this column automatically."
+						placeholder="Automatic"
 						type="number"
-						value={
-							normalizedColumns[ columnStart ]?.width ||
-							DEFAULT_COLUMN_WIDTH
-						}
+						value={ normalizedColumns[ columnStart ]?.width || '' }
 						min={ 40 }
-						onChange={ ( value ) => {
-							const nextColumns = normalizedColumns.map(
-								( column, index ) => ( {
-									width:
-										index === columnStart
-											? parseInt( value, 10 ) ||
-											  DEFAULT_COLUMN_WIDTH
-											: column.width,
-								} )
-							);
-
-							setAttributes( { columns: nextColumns } );
-						} }
+						onChange={ ( value ) =>
+							setColumnWidth( columnStart, value )
+						}
 						__next40pxDefaultSize
 					/>
-					<TextControl
+					<RangeControl
 						label="Border thickness (px)"
-						help="Applies to the whole table."
-						type="number"
-						value={ borderWidth }
-						min={ 0 }
-						max={ MAX_BORDER_WIDTH }
-						onChange={ ( value ) =>
-							setAttributes( { borderWidth: value || '' } )
+						help="Applies to the whole table. Zero hides the borders of a bordered table; reset to use the framework default."
+						value={
+							borderWidth === ''
+								? undefined
+								: Number( borderWidth )
 						}
+						min={ 1 }
+						max={ MAX_BORDER_WIDTH }
+						allowReset
+						onChange={ ( value ) =>
+							setAttributes( {
+								borderWidth:
+									value === undefined || value === null
+										? ''
+										: String( value ),
+							} )
+						}
+						disabled = { border === TABLE_BORDERLESS }
 						__next40pxDefaultSize
+						__nextHasNoMarginBottom
 					/>
 					<SelectControl
 						label="Border color"
@@ -617,10 +895,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								label: 'Selected cells',
 								value: STYLE_SCOPE_CELL,
 							},
-							{
-								label: 'Selected rows',
-								value: STYLE_SCOPE_ROW,
-							},
+							{ label: 'Selected rows', value: STYLE_SCOPE_ROW },
 							{
 								label: 'Selected columns',
 								value: STYLE_SCOPE_COLUMN,
@@ -629,18 +904,30 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						onChange={ setStyleScope }
 						__next40pxDefaultSize
 					/>
-					<SelectControl
+					<BaseControl
+						id={ `excelsior-table-color-${ clientId }` }
 						label="Color"
 						help="A cell color overrides a row color, which overrides a column color."
-						value={ getScopedVariant() }
-						options={ TABLE_VARIANTS.map( ( variant ) => ( {
-							label: variant.label,
-							value: variant.className,
-						} ) ) }
-						onChange={ applyVariant }
-						__next40pxDefaultSize
 						__nextHasNoMarginBottom
-					/>
+					>
+						<ColorPalette
+							colors={ TABLE_VARIANTS.map( ( variant ) => ( {
+								name: variant.label,
+								color: variant.color,
+							} ) ) }
+							value={
+								getVariantByClassName( selectedVariant )?.color
+							}
+							onChange={ ( color ) =>
+								applyVariant(
+									getVariantByColor( color )?.className || ''
+								)
+							}
+							clearable
+							disableCustomColors
+							__experimentalIsRenderedInSidebar
+						/>
+					</BaseControl>
 				</PanelBody>
 			</InspectorControls>
 			{ mergeWarning && (
@@ -655,17 +942,25 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			<div
 				className="excelsior-table-editor__grid"
 				/*
-				  The grid owns its own keys and clipboard, or Backspace in an
-				  empty cell would delete the whole block. Gutenberg's undo
-				  shortcut therefore does not fire while focus is in the grid;
-				  Jspreadsheet's own undo handles it. Mouse events are left to
-				  propagate so Gutenberg can still select the block, which is
-				  what reveals the toolbar and these inspector panels.
+				  Plain keys stay inside the grid, or Backspace in an empty cell
+				  would delete the whole block. Modified keys are let through so
+				  the editor keeps its own shortcuts, including undo and redo.
+				  Mouse events propagate so Gutenberg can still select the
+				  block, which is what reveals the toolbar and these panels.
 				*/
-				onKeyDown={ ( event ) => event.stopPropagation() }
+				onKeyDown={ ( event ) => {
+					if ( ! event.ctrlKey && ! event.metaKey ) {
+						event.stopPropagation();
+					}
+				} }
 				onPaste={ ( event ) => event.stopPropagation() }
 				ref={ containerRef }
 			/>
+			{ caption && (
+				<div className="excelsior-table-editor__caption">
+					{ caption }
+				</div>
+			) }
 		</div>
 	);
 }

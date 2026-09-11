@@ -19,7 +19,7 @@
 		},
 		"columns": {
 			"type": "array",
-			"default": [ { "width": 160 }, { "width": 160 }, { "width": 160 } ]
+			"default": []
 		},
 		"mergeCells": {
 			"type": "object",
@@ -63,7 +63,7 @@
 		},
 		"borderWidth": {
 			"type": "string",
-			"default": ""
+			"default": "1"
 		},
 		"borderColor": {
 			"type": "string",
