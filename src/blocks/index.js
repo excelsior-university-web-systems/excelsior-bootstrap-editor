@@ -36,3 +36,4 @@ import './task-group';
 import './task';
 import './tabs';
 import './tab';
+import './table';

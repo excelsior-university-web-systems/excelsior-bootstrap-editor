@@ -1,11 +1,29 @@
 import { addFilter } from '@wordpress/hooks';
-import { XCLSR_BTSTRP_EDITOR_PREFIX, XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY, XCLSR_BTSTRP_POST_TYPE } from '../constants';
+import {
+	XCLSR_BTSTRP_EDITOR_PREFIX,
+	XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY,
+	XCLSR_BTSTRP_POST_TYPE,
+} from '../constants';
 import { registerPlugin } from '@wordpress/plugins';
 import { PluginPostStatusInfo } from '@wordpress/editor';
 import { InspectorControls } from '@wordpress/block-editor';
-import { Button, Modal, TextControl, Notice, __experimentalText as Text, PanelBody, SelectControl } from '@wordpress/components';
+import {
+	Button,
+	Modal,
+	TextControl,
+	Notice,
+	__experimentalText as Text,
+	PanelBody,
+	SelectControl,
+} from '@wordpress/components';
 import { createHigherOrderComponent } from '@wordpress/compose';
-import { select, dispatch, useSelect, useDispatch, subscribe } from '@wordpress/data';
+import {
+	select,
+	dispatch,
+	useSelect,
+	useDispatch,
+	subscribe,
+} from '@wordpress/data';
 import { useState, useEffect, Fragment } from '@wordpress/element';
 import { observeElement } from '../commons';
 import beautify from 'js-beautify';
@@ -13,61 +31,58 @@ import beautify from 'js-beautify';
 window.Prism = window.Prism || {};
 Prism.manual = true;
 
-const NAMESPACE_BLOCK = `${XCLSR_BTSTRP_EDITOR_PREFIX}/namespace`;
+const NAMESPACE_BLOCK = `${ XCLSR_BTSTRP_EDITOR_PREFIX }/namespace`;
 const CORE_HEADING_BLOCK = 'core/heading';
-const CORE_TABLE_BLOCK = 'core/table';
-const BOOTSTRAP_TABLE_VARIATION_ATTRIBUTES = {
-    isBootstrapTableVariant: true,
-    isCompact: false,
-    isStriped: false,
-    border: 'table-bordered',
-};
 const LEARNING_PATH_TAXONOMY_PANEL = `taxonomy-panel-${ XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY }`;
 
 /**
  * Recursively checks whether a block tree contains the Excelsior namespace block.
  *
  * @param {Array<Object>} [blocks=[]] Registered editor blocks to scan.
- * @returns {boolean} True when the namespace block exists anywhere in the tree.
+ * @return {boolean} True when the namespace block exists anywhere in the tree.
  */
 const blockTreeHasExcelsiorBootstrapNamespace = ( blocks = [] ) => {
-    return blocks.some( ( block ) => {
-        if ( block.name === NAMESPACE_BLOCK ) {
-            return true;
-        }
+	return blocks.some( ( block ) => {
+		if ( block.name === NAMESPACE_BLOCK ) {
+			return true;
+		}
 
-        return blockTreeHasExcelsiorBootstrapNamespace( block.innerBlocks || [] );
-    } );
+		return blockTreeHasExcelsiorBootstrapNamespace(
+			block.innerBlocks || []
+		);
+	} );
 };
 
 /**
  * Determines whether the current editor session contains the namespace block.
  *
- * @returns {boolean} True when the block editor currently contains the namespace block.
+ * @return {boolean} True when the block editor currently contains the namespace block.
  */
 const hasExcelsiorBootstrapNamespaceBlockInEditor = () => {
-    const blockEditorStore = select( 'core/block-editor' );
+	const blockEditorStore = select( 'core/block-editor' );
 
-    if ( ! blockEditorStore || ! blockEditorStore.getBlocks ) {
-        return false;
-    }
+	if ( ! blockEditorStore || ! blockEditorStore.getBlocks ) {
+		return false;
+	}
 
-    return blockTreeHasExcelsiorBootstrapNamespace( blockEditorStore.getBlocks() );
+	return blockTreeHasExcelsiorBootstrapNamespace(
+		blockEditorStore.getBlocks()
+	);
 };
 
 /**
  * Checks whether the current editor is loading the Excelsior custom post type.
  *
- * @returns {boolean} True when the current post type matches `excelsior_bootstrap`.
+ * @return {boolean} True when the current post type matches `excelsior_bootstrap`.
  */
 const isExcelsiorBootstrapPostType = () => {
-    const editorStore = select( 'core/editor' );
+	const editorStore = select( 'core/editor' );
 
-    if ( ! editorStore || ! editorStore.getCurrentPostType ) {
-        return false;
-    }
+	if ( ! editorStore || ! editorStore.getCurrentPostType ) {
+		return false;
+	}
 
-    return editorStore.getCurrentPostType() === XCLSR_BTSTRP_POST_TYPE;
+	return editorStore.getCurrentPostType() === XCLSR_BTSTRP_POST_TYPE;
 };
 
 /**
@@ -76,165 +91,135 @@ const isExcelsiorBootstrapPostType = () => {
  * Block registration can run before the editor store has the current post type,
  * so this falls back to the admin body class and post type query parameter.
  *
- * @returns {boolean} True when the current editor screen is for the Excelsior post type.
+ * @return {boolean} True when the current editor screen is for the Excelsior post type.
  */
 const isExcelsiorBootstrapPostTypeDuringBlockRegistration = () => {
-    if ( isExcelsiorBootstrapPostType() ) {
-        return true;
-    }
+	if ( isExcelsiorBootstrapPostType() ) {
+		return true;
+	}
 
-    if ( typeof document !== 'undefined' && document.body ) {
-        if ( document.body.classList.contains( `post-type-${ XCLSR_BTSTRP_POST_TYPE }` ) ) {
-            return true;
-        }
-    }
+	if ( typeof document !== 'undefined' && document.body ) {
+		if (
+			document.body.classList.contains(
+				`post-type-${ XCLSR_BTSTRP_POST_TYPE }`
+			)
+		) {
+			return true;
+		}
+	}
 
-    if ( typeof window !== 'undefined' && window.typenow === XCLSR_BTSTRP_POST_TYPE ) {
-        return true;
-    }
+	if (
+		typeof window !== 'undefined' &&
+		window.typenow === XCLSR_BTSTRP_POST_TYPE
+	) {
+		return true;
+	}
 
-    if ( typeof window !== 'undefined' && window.location?.search ) {
-        const searchParams = new URLSearchParams( window.location.search );
+	if ( typeof window !== 'undefined' && window.location?.search ) {
+		const searchParams = new URLSearchParams( window.location.search );
 
-        return searchParams.get( 'post_type' ) === XCLSR_BTSTRP_POST_TYPE;
-    }
+		return searchParams.get( 'post_type' ) === XCLSR_BTSTRP_POST_TYPE;
+	}
 
-    return false;
+	return false;
 };
 
 /**
  * Determines whether Excelsior editor enhancements should be active at all.
  *
- * @returns {boolean} True for the Excelsior post type or when the namespace block exists in the editor.
+ * @return {boolean} True for the Excelsior post type or when the namespace block exists in the editor.
  */
 const isBootstrapEditorActive = () => {
-    return isExcelsiorBootstrapPostType() || hasExcelsiorBootstrapNamespaceBlockInEditor();
+	return (
+		isExcelsiorBootstrapPostType() ||
+		hasExcelsiorBootstrapNamespaceBlockInEditor()
+	);
 };
 
-const useIsExcelsiorBootstrapPostType = () => useSelect( () => isExcelsiorBootstrapPostType(), [] );
+const useIsExcelsiorBootstrapPostType = () =>
+	useSelect( () => isExcelsiorBootstrapPostType(), [] );
 
 /**
  * Renders a single-term Learning Path selector for Excelsior Bootstrap posts.
  *
- * @returns {JSX.Element} The taxonomy dropdown.
+ * @return {JSX.Element} The taxonomy dropdown.
  */
 const LearningPathSelector = () => {
-    const { editPost } = useDispatch( 'core/editor' );
-    const learningPathTerms = useSelect( ( select ) => {
-        return select( 'core' ).getEntityRecords(
-            'taxonomy',
-            XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY,
-            {
-                per_page: 100,
-                orderby: 'name',
-                order: 'asc',
-            }
-        );
-    }, [] );
-    const selectedLearningPath = useSelect( ( select ) => {
-        const selectedTerms = select( 'core/editor' ).getEditedPostAttribute( XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY ) || [];
+	const { editPost } = useDispatch( 'core/editor' );
+	const learningPathTerms = useSelect( ( select ) => {
+		return select( 'core' ).getEntityRecords(
+			'taxonomy',
+			XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY,
+			{
+				per_page: 100,
+				orderby: 'name',
+				order: 'asc',
+			}
+		);
+	}, [] );
+	const selectedLearningPath = useSelect( ( select ) => {
+		const selectedTerms =
+			select( 'core/editor' ).getEditedPostAttribute(
+				XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY
+			) || [];
 
-        return selectedTerms.length ? selectedTerms[ 0 ].toString() : '';
-    }, [] );
-    const learningPathOptions = [
-        { label: 'No Learning Path', value: '' },
-        ...( learningPathTerms || [] ).map( ( term ) => ( {
-            label: term.name,
-            value: term.id.toString(),
-        } ) ),
-    ];
+		return selectedTerms.length ? selectedTerms[ 0 ].toString() : '';
+	}, [] );
+	const learningPathOptions = [
+		{ label: 'No Learning Path', value: '' },
+		...( learningPathTerms || [] ).map( ( term ) => ( {
+			label: term.name,
+			value: term.id.toString(),
+		} ) ),
+	];
 
-    return (
-        <SelectControl
-            label="Learning Path Version"
-            value={ selectedLearningPath }
-            options={ learningPathOptions }
-            onChange={ ( value ) => {
-                editPost( {
-                    [ XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY ]: value ? [ Number( value ) ] : [],
-                } );
-            } }
-            disabled={ ! Array.isArray( learningPathTerms ) }
-            __next40pxDefaultSize
-            __nextHasNoMarginBottom
-        />
-    );
+	return (
+		<SelectControl
+			label="Learning Path Version"
+			value={ selectedLearningPath }
+			options={ learningPathOptions }
+			onChange={ ( value ) => {
+				editPost( {
+					[ XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY ]: value
+						? [ Number( value ) ]
+						: [],
+				} );
+			} }
+			disabled={ ! Array.isArray( learningPathTerms ) }
+			__next40pxDefaultSize
+			__nextHasNoMarginBottom
+		/>
+	);
 };
 
 /**
  * Checks whether a block is nested anywhere inside the namespace block.
  *
  * @param {string} clientId Gutenberg client ID for the block being inspected.
- * @returns {boolean} True when one of the block's parents is the namespace block.
+ * @return {boolean} True when one of the block's parents is the namespace block.
  */
 const isBlockInsideNamespace = ( clientId ) => {
-    if ( ! clientId ) {
-        return false;
-    }
+	if ( ! clientId ) {
+		return false;
+	}
 
-    const blockEditorStore = select( 'core/block-editor' );
+	const blockEditorStore = select( 'core/block-editor' );
 
-    if ( ! blockEditorStore || ! blockEditorStore.getBlockParents || ! blockEditorStore.getBlockName ) {
-        return false;
-    }
+	if (
+		! blockEditorStore ||
+		! blockEditorStore.getBlockParents ||
+		! blockEditorStore.getBlockName
+	) {
+		return false;
+	}
 
-    const parentClientIds = blockEditorStore.getBlockParents( clientId );
+	const parentClientIds = blockEditorStore.getBlockParents( clientId );
 
-    return parentClientIds.some( ( parentClientId ) => {
-        return blockEditorStore.getBlockName( parentClientId ) === NAMESPACE_BLOCK;
-    } );
-};
-
-/**
- * Recursively collects core table blocks nested within the Excelsior namespace block.
- *
- * @param {Array<Object>} [blocks=[]] Block tree to scan.
- * @param {boolean} [isInsideNamespace=false] Whether the current recursion branch is inside the namespace.
- * @returns {Array<Object>} Matching table blocks that should use the Bootstrap variation.
- */
-const getNamespaceTableBlocks = ( blocks = [], isInsideNamespace = false ) => {
-    return blocks.flatMap( ( block ) => {
-        const nextIsInsideNamespace =
-            isInsideNamespace || block.name === NAMESPACE_BLOCK;
-        const matchingBlocks =
-            nextIsInsideNamespace && block.name === CORE_TABLE_BLOCK ? [ block ] : [];
-
-        return [
-            ...matchingBlocks,
-            ...getNamespaceTableBlocks( block.innerBlocks || [], nextIsInsideNamespace ),
-        ];
-    } );
-};
-
-/**
- * Converts namespace-scoped core table blocks to the Bootstrap table variation once.
- *
- * @returns {void}
- */
-const convertNamespaceTablesToBootstrapVariation = () => {
-    if ( ! isExcelsiorBootstrapPostType() ) {
-        return;
-    }
-
-    const blockEditorStore = select( 'core/block-editor' );
-
-    if ( ! blockEditorStore?.getBlocks ) {
-        return;
-    }
-
-    const namespaceTableBlocks = getNamespaceTableBlocks( blockEditorStore.getBlocks() );
-    const blocksNeedingConversion = namespaceTableBlocks.filter( ( block ) => {
-        return block.attributes?.isBootstrapTableVariant !== true;
-    } );
-
-    if ( ! blocksNeedingConversion.length ) {
-        return;
-    }
-
-    dispatch( 'core/block-editor' ).updateBlockAttributes(
-        blocksNeedingConversion.map( ( block ) => block.clientId ),
-        BOOTSTRAP_TABLE_VARIATION_ATTRIBUTES
-    );
+	return parentClientIds.some( ( parentClientId ) => {
+		return (
+			blockEditorStore.getBlockName( parentClientId ) === NAMESPACE_BLOCK
+		);
+	} );
 };
 
 let hasActivatedNamespaceEnhancements = false;
@@ -246,495 +231,591 @@ let hasActivatedPostTypeEnhancements = false;
  * These APIs unregister editor features globally, so they cannot be scoped to an
  * individual block instance after they run.
  *
- * @returns {void}
+ * @return {void}
  */
 const activateNamespaceEnhancements = () => {
-    if ( hasActivatedNamespaceEnhancements ) {
-        return;
-    }
+	if ( hasActivatedNamespaceEnhancements ) {
+		return;
+	}
 
-    hasActivatedNamespaceEnhancements = true;
+	hasActivatedNamespaceEnhancements = true;
 
-    wp.richText.unregisterFormatType('core/image');        // Remove inline image
-    wp.richText.unregisterFormatType('core/text-color');   // Remove text color/highlight
-    wp.richText.unregisterFormatType('core/language');     // Remove language button
-    wp.richText.unregisterFormatType('core/keyboard');     // Remove keyboard input button
-    wp.richText.unregisterFormatType('core/footnote');   // Remove footnote button
+	wp.richText.unregisterFormatType( 'core/image' ); // Remove inline image
+	wp.richText.unregisterFormatType( 'core/text-color' ); // Remove text color/highlight
+	wp.richText.unregisterFormatType( 'core/language' ); // Remove language button
+	wp.richText.unregisterFormatType( 'core/keyboard' ); // Remove keyboard input button
+	wp.richText.unregisterFormatType( 'core/footnote' ); // Remove footnote button
 
-    wp.blocks.unregisterBlockVariation( 'core/paragraph', 'stretchy-paragraph' ); // Remove stretchy paragraph
-    wp.blocks.unregisterBlockVariation( 'core/heading', 'stretchy-heading' ); // Remove stretchy heading
+	wp.blocks.unregisterBlockVariation(
+		'core/paragraph',
+		'stretchy-paragraph'
+	); // Remove stretchy paragraph
+	wp.blocks.unregisterBlockVariation( 'core/heading', 'stretchy-heading' ); // Remove stretchy heading
 };
 
 /**
  * Applies Excelsior post-type-only editor changes once per editor session.
  *
- * @returns {void}
+ * @return {void}
  */
 const activatePostTypeEnhancements = () => {
-    if ( hasActivatedPostTypeEnhancements ) {
-        return;
-    }
+	if ( hasActivatedPostTypeEnhancements ) {
+		return;
+	}
 
-    hasActivatedPostTypeEnhancements = true;
+	hasActivatedPostTypeEnhancements = true;
 
-    // Make the post title not editable and change the placeholder to an instruction
-    observeElement( '.editor-post-title', ( element ) => {
-        element.setAttribute( 'contenteditable', false );
-    } );
+	// Make the post title not editable and change the placeholder to an instruction
+	observeElement( '.editor-post-title', ( element ) => {
+		element.setAttribute( 'contenteditable', false );
+	} );
 };
 
 const unregisterBlockStyleVariations = () => {
-    const blockStyles = {
-        'core/heading': ['text-shadow-sm', 'text-shadow', 'text-shadow-lg'],
-        'core/paragraph': ['text-shadow-sm', 'text-shadow', 'text-shadow-lg'],
-    };
+	const blockStyles = {
+		'core/heading': [ 'text-shadow-sm', 'text-shadow', 'text-shadow-lg' ],
+		'core/paragraph': [ 'text-shadow-sm', 'text-shadow', 'text-shadow-lg' ],
+	};
 
-    Object.entries( blockStyles ).forEach( ([blockName, styleNames] ) => {
-        styleNames.forEach( ( styleName ) => {
-            wp.blocks.unregisterBlockStyle( blockName, styleName );
-        } );
-    } );
+	Object.entries( blockStyles ).forEach( ( [ blockName, styleNames ] ) => {
+		styleNames.forEach( ( styleName ) => {
+			wp.blocks.unregisterBlockStyle( blockName, styleName );
+		} );
+	} );
 };
 
-wp.domReady(() => {
-    const maybeActivateEditorEnhancements = () => {
-        if ( isBootstrapEditorActive() ) {
-            activateNamespaceEnhancements();
-        }
+wp.domReady( () => {
+	const maybeActivateEditorEnhancements = () => {
+		if ( isBootstrapEditorActive() ) {
+			activateNamespaceEnhancements();
+		}
 
-        if ( isExcelsiorBootstrapPostType() ) {
-            activatePostTypeEnhancements();
-            convertNamespaceTablesToBootstrapVariation();
-        }
-    };
+		if ( isExcelsiorBootstrapPostType() ) {
+			activatePostTypeEnhancements();
+		}
+	};
 
-    maybeActivateEditorEnhancements();
-    subscribe( maybeActivateEditorEnhancements );
+	maybeActivateEditorEnhancements();
+	subscribe( maybeActivateEditorEnhancements );
 
-    if ( isExcelsiorBootstrapPostTypeDuringBlockRegistration() ) {
-        unregisterBlockStyleVariations();
-    }
-    
-});
+	if ( isExcelsiorBootstrapPostTypeDuringBlockRegistration() ) {
+		unregisterBlockStyleVariations();
+	}
+} );
 
 /**
  * Renders the Excelsior course metadata sidebar panel.
  *
- * @returns {JSX.Element|null} The sidebar panel for the Excelsior post type only.
+ * @return {JSX.Element|null} The sidebar panel for the Excelsior post type only.
  */
 const CourseMetaFields = () => {
-    const isExcelsiorBootstrap = useIsExcelsiorBootstrapPostType();
+	const isExcelsiorBootstrap = useIsExcelsiorBootstrapPostType();
 
-    if ( ! isExcelsiorBootstrap ) {
-        return null;
-    }
+	if ( ! isExcelsiorBootstrap ) {
+		return null;
+	}
 
-    const { unlockPostSaving, lockPostSaving } = dispatch('core/editor');
-    const meta = useSelect( (select) => select('core/editor').getEditedPostAttribute('meta') );
-    const currentTitle = useSelect((select) => select('core/editor').getEditedPostAttribute('title'));
-    const { editPost } = useDispatch('core/editor');
-    const courseNumber = meta[XCLSR_BTSTRP_POST_TYPE+'_post_course_number'] || '';
-    const pageTitle = meta[XCLSR_BTSTRP_POST_TYPE+'_post_page_title'] || '';
-    let year = meta[XCLSR_BTSTRP_POST_TYPE+'_post_year'];
+	const { unlockPostSaving, lockPostSaving } = dispatch( 'core/editor' );
+	const meta = useSelect( ( select ) =>
+		select( 'core/editor' ).getEditedPostAttribute( 'meta' )
+	);
+	const currentTitle = useSelect( ( select ) =>
+		select( 'core/editor' ).getEditedPostAttribute( 'title' )
+	);
+	const { editPost } = useDispatch( 'core/editor' );
+	const courseNumber =
+		meta[ XCLSR_BTSTRP_POST_TYPE + '_post_course_number' ] || '';
+	const pageTitle = meta[ XCLSR_BTSTRP_POST_TYPE + '_post_page_title' ] || '';
+	let year = meta[ XCLSR_BTSTRP_POST_TYPE + '_post_year' ];
 
-    useEffect( () => {
-        const editorStore = dispatch( 'core/editor' );
+	useEffect( () => {
+		const editorStore = dispatch( 'core/editor' );
 
-        if ( editorStore?.removeEditorPanel ) {
-            editorStore.removeEditorPanel( LEARNING_PATH_TAXONOMY_PANEL );
-        }
-    }, [] );
+		if ( editorStore?.removeEditorPanel ) {
+			editorStore.removeEditorPanel( LEARNING_PATH_TAXONOMY_PANEL );
+		}
+	}, [] );
 
-    if ( year == '' ) {
-        year = new Date().getFullYear().toString();
-        editPost({ meta: { ...meta, excelsior_bootstrap_post_year: year } });
-    }
+	if ( year == '' ) {
+		year = new Date().getFullYear().toString();
+		editPost( { meta: { ...meta, excelsior_bootstrap_post_year: year } } );
+	}
 
-    const combinedTitle = `${courseNumber} - ${pageTitle} - ${year}`;
+	const combinedTitle = `${ courseNumber } - ${ pageTitle } - ${ year }`;
 
-    // Removes spaces and makes uppercase
-    const formatCourseNumber = (value) => {
-        return value.replace(/\s+/g, '').toUpperCase(); 
-    };
+	// Removes spaces and makes uppercase
+	const formatCourseNumber = ( value ) => {
+		return value.replace( /\s+/g, '' ).toUpperCase();
+	};
 
-    // Clear the post title if all fields are empty
-    if ( (!courseNumber || !pageTitle || !year) && currentTitle ) {
-        editPost({ title: '' });
-        lockPostSaving('required-fields');
-    }
+	// Clear the post title if all fields are empty
+	if ( ( ! courseNumber || ! pageTitle || ! year ) && currentTitle ) {
+		editPost( { title: '' } );
+		lockPostSaving( 'required-fields' );
+	}
 
-    // Otherwise, update the title if the fields are filled 
-    else if ( courseNumber && pageTitle && year && combinedTitle !== currentTitle ) {
-        editPost({ title: combinedTitle });
-        unlockPostSaving('required-fields');
-    }
+	// Otherwise, update the title if the fields are filled
+	else if (
+		courseNumber &&
+		pageTitle &&
+		year &&
+		combinedTitle !== currentTitle
+	) {
+		editPost( { title: combinedTitle } );
+		unlockPostSaving( 'required-fields' );
+	}
 
-    return (
-        <>
-        <PluginPostStatusInfo>
-            <PanelBody className='course-meta-panel'>
-                <TextControl
-                    isBlock
-                    label="Course Number"
-                    className='required'
-                    help="Example: EGR290, NUR104, etc."
-                    value={courseNumber}
-                    onChange={(value) => editPost({ meta: { ...meta, excelsior_bootstrap_post_course_number: formatCourseNumber(value) } })}
-                    __next40pxDefaultSize
-                    __nextHasNoMarginBottom
-                />
-                <TextControl
-                    isBlock
-                    label="Page Title"
-                    className='required'
-                    help="Example: M1.1 - Exploring Computer Science Career Paths"
-                    value={pageTitle}
-                    onChange={(value) => editPost({ meta: { ...meta, excelsior_bootstrap_post_page_title: value } })}
-                    __next40pxDefaultSize
-                    __nextHasNoMarginBottom
-                />
-                <TextControl
-                    isBlock
-                    label="Year"
-                    className='required'
-                    type='number'
-                    value={year}
-                    onChange={(value) => editPost({ meta: { ...meta, excelsior_bootstrap_post_year: value } })}
-                    __next40pxDefaultSize
-                    __nextHasNoMarginBottom
-                />
-                {/* <LearningPathSelector /> */}
-            </PanelBody>
-        </PluginPostStatusInfo>
-        </>
-    );
+	return (
+		<>
+			<PluginPostStatusInfo>
+				<PanelBody className="course-meta-panel">
+					<TextControl
+						isBlock
+						label="Course Number"
+						className="required"
+						help="Example: EGR290, NUR104, etc."
+						value={ courseNumber }
+						onChange={ ( value ) =>
+							editPost( {
+								meta: {
+									...meta,
+									excelsior_bootstrap_post_course_number:
+										formatCourseNumber( value ),
+								},
+							} )
+						}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+					/>
+					<TextControl
+						isBlock
+						label="Page Title"
+						className="required"
+						help="Example: M1.1 - Exploring Computer Science Career Paths"
+						value={ pageTitle }
+						onChange={ ( value ) =>
+							editPost( {
+								meta: {
+									...meta,
+									excelsior_bootstrap_post_page_title: value,
+								},
+							} )
+						}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+					/>
+					<TextControl
+						isBlock
+						label="Year"
+						className="required"
+						type="number"
+						value={ year }
+						onChange={ ( value ) =>
+							editPost( {
+								meta: {
+									...meta,
+									excelsior_bootstrap_post_year: value,
+								},
+							} )
+						}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+					/>
+					{ /* <LearningPathSelector /> */ }
+				</PanelBody>
+			</PluginPostStatusInfo>
+		</>
+	);
 };
 
 /**
  * Validates the required Excelsior metadata fields used to construct the title.
  *
- * @returns {boolean} True when the required fields are complete or the post type does not apply.
+ * @return {boolean} True when the required fields are complete or the post type does not apply.
  */
 const validateFields = () => {
-    if ( ! isExcelsiorBootstrapPostType() ) {
-        return true;
-    }
+	if ( ! isExcelsiorBootstrapPostType() ) {
+		return true;
+	}
 
-    const { getEditedPostAttribute } = select('core/editor');
-    const meta = getEditedPostAttribute('meta') || {};
-    const courseNumber = meta[XCLSR_BTSTRP_POST_TYPE+'_post_course_number'] || '';
-    const pageTitle = meta[XCLSR_BTSTRP_POST_TYPE+'_post_page_title'] || '';
-    const year = meta[XCLSR_BTSTRP_POST_TYPE+'_post_year'] || '';
+	const { getEditedPostAttribute } = select( 'core/editor' );
+	const meta = getEditedPostAttribute( 'meta' ) || {};
+	const courseNumber =
+		meta[ XCLSR_BTSTRP_POST_TYPE + '_post_course_number' ] || '';
+	const pageTitle = meta[ XCLSR_BTSTRP_POST_TYPE + '_post_page_title' ] || '';
+	const year = meta[ XCLSR_BTSTRP_POST_TYPE + '_post_year' ] || '';
 
-    return courseNumber && pageTitle && year;
-
+	return courseNumber && pageTitle && year;
 };
 
 let isSavingLocked = false;
 
 subscribe( () => {
-    const { isSavingPost, hasChangedContent, getCurrentPostType, isPublishSidebarEnabled } = select('core/editor');
-    const { lockPostSaving, unlockPostSaving, lockPostAutosaving, unlockPostAutosaving, disablePublishSidebar } = dispatch('core/editor');
-    const isSaving = isSavingPost();
-    const contentChanged = hasChangedContent();
-    const postType = getCurrentPostType();
-    const isExcelsiorBootstrap = postType === XCLSR_BTSTRP_POST_TYPE;
-    const isValid = validateFields();
+	const {
+		isSavingPost,
+		hasChangedContent,
+		getCurrentPostType,
+		isPublishSidebarEnabled,
+	} = select( 'core/editor' );
+	const {
+		lockPostSaving,
+		unlockPostSaving,
+		lockPostAutosaving,
+		unlockPostAutosaving,
+		disablePublishSidebar,
+	} = dispatch( 'core/editor' );
+	const isSaving = isSavingPost();
+	const contentChanged = hasChangedContent();
+	const postType = getCurrentPostType();
+	const isExcelsiorBootstrap = postType === XCLSR_BTSTRP_POST_TYPE;
+	const isValid = validateFields();
 
-    if ( ! isExcelsiorBootstrap ) {
-        if ( isSavingLocked ) {
-            isSavingLocked = false;
-            unlockPostSaving('required-fields');
-            unlockPostAutosaving('required-fields');
-            dispatch('core/notices').removeNotice('required-fields');
-        }
+	if ( ! isExcelsiorBootstrap ) {
+		if ( isSavingLocked ) {
+			isSavingLocked = false;
+			unlockPostSaving( 'required-fields' );
+			unlockPostAutosaving( 'required-fields' );
+			dispatch( 'core/notices' ).removeNotice( 'required-fields' );
+		}
 
-        return;
-    }
+		return;
+	}
 
-    // The custom publish flow replaces the default pre-publish sidebar for this post type.
-    if ( isPublishSidebarEnabled() ) {
-        disablePublishSidebar();
-    }
+	// The custom publish flow replaces the default pre-publish sidebar for this post type.
+	if ( isPublishSidebarEnabled() ) {
+		disablePublishSidebar();
+	}
 
-    if ((isSaving && !isValid) || (contentChanged && !isValid)) {
-        if (!isSavingLocked) {
-            isSavingLocked = true;
-            lockPostSaving('required-fields');
-            lockPostAutosaving('required-fields');
-            dispatch('core/notices').createNotice(
-                'error',
-                'Please fill in all required fields: Course Number, Page Title, and Year.',
-                { id: 'required-fields', isDismissible: true }
-            );
-        }
-    } else if (isValid && isSavingLocked) {
-        isSavingLocked = false;
-        unlockPostSaving('required-fields');
-        unlockPostAutosaving('required-fields');
-        dispatch('core/notices').removeNotice('required-fields');
-    }
+	if ( ( isSaving && ! isValid ) || ( contentChanged && ! isValid ) ) {
+		if ( ! isSavingLocked ) {
+			isSavingLocked = true;
+			lockPostSaving( 'required-fields' );
+			lockPostAutosaving( 'required-fields' );
+			dispatch( 'core/notices' ).createNotice(
+				'error',
+				'Please fill in all required fields: Course Number, Page Title, and Year.',
+				{ id: 'required-fields', isDismissible: true }
+			);
+		}
+	} else if ( isValid && isSavingLocked ) {
+		isSavingLocked = false;
+		unlockPostSaving( 'required-fields' );
+		unlockPostAutosaving( 'required-fields' );
+		dispatch( 'core/notices' ).removeNotice( 'required-fields' );
+	}
 } );
 
 registerPlugin( XCLSR_BTSTRP_EDITOR_PREFIX + '-course-meta-fields', {
-    render: CourseMetaFields,
-    icon: null,
+	render: CourseMetaFields,
+	icon: null,
 } );
 
 /**
  * Removes WordPress-generated classes from rendered HTML output.
  *
  * @param {string} html Rendered HTML to clean.
- * @returns {string} Rendered HTML without class tokens beginning with `wp-`.
+ * @return {string} Rendered HTML without class tokens beginning with `wp-`.
  */
 const removeWordPressClasses = ( html ) => {
+	const PRESERVED_WORDPRESS_CLASSES = new Set( [ 'wp-block-group' ] );
 
-    const PRESERVED_WORDPRESS_CLASSES = new Set( [
-        'wp-block-group',
-    ] );
+	const template = document.createElement( 'template' );
+	template.innerHTML = html.replace( /<!--\s*\/?wp:[^>]+-->/g, '' );
 
-    const template = document.createElement( 'template' );
-    template.innerHTML = html.replace(/<!--\s*\/?wp:[^>]+-->/g, '');
+	template.content.querySelectorAll( '[class]' ).forEach( ( element ) => {
+		const classes = Array.from( element.classList ).filter(
+			( className ) => {
+				return (
+					! className.startsWith( 'wp-' ) ||
+					PRESERVED_WORDPRESS_CLASSES.has( className )
+				);
+			}
+		);
 
-    template.content.querySelectorAll( '[class]' ).forEach( ( element ) => {
-        const classes = Array.from( element.classList ).filter( ( className ) => {
-            return ! className.startsWith( 'wp-' ) || PRESERVED_WORDPRESS_CLASSES.has( className );
-        } );
+		if ( classes.length ) {
+			element.setAttribute( 'class', classes.join( ' ' ) );
+			return;
+		}
 
-        if ( classes.length ) {
-            element.setAttribute( 'class', classes.join( ' ' ) );
-            return;
-        }
+		element.removeAttribute( 'class' );
+	} );
 
-        element.removeAttribute( 'class' );
-    } );
-
-    return template.innerHTML;
+	return template.innerHTML;
 };
 
 /**
  * Adds post data attributes to the exported Excelsior Bootstrap wrapper.
  *
- * @param {string} html Rendered HTML to update.
- * @param {Object} attributes Post attributes from the REST API response.
- * @param {string} [attributes.createdOn] Site-local timestamp for when the post was created.
- * @param {string} [attributes.updatedOn] Site-local timestamp for when the post was last modified.
+ * @param {string} html                      Rendered HTML to update.
+ * @param {Object} attributes                Post attributes from the REST API response.
+ * @param {string} [attributes.createdOn]    Site-local timestamp for when the post was created.
+ * @param {string} [attributes.updatedOn]    Site-local timestamp for when the post was last modified.
  * @param {string} [attributes.learningPath] Selected learning path version term.
- * @returns {string} Rendered HTML with data attributes when the wrapper exists.
+ * @return {string} Rendered HTML with data attributes when the wrapper exists.
  */
-const addExportedHtmlAttributes = ( html, { createdOn, updatedOn, learningPath = '' } = {} ) => {
-    const template = document.createElement( 'template' );
-    template.innerHTML = html;
+const addExportedHtmlAttributes = (
+	html,
+	{ createdOn, updatedOn, learningPath = '' } = {}
+) => {
+	const template = document.createElement( 'template' );
+	template.innerHTML = html;
 
-    const bootstrapWrapper = template.content.querySelector( '#excelsior-bootstrap' );
+	const bootstrapWrapper = template.content.querySelector(
+		'#excelsior-bootstrap'
+	);
 
-    if ( ! bootstrapWrapper ) {
-        return html;
-    }
+	if ( ! bootstrapWrapper ) {
+		return html;
+	}
 
-    if ( createdOn ) {
-        bootstrapWrapper.setAttribute( 'data-created-on', createdOn );
-    }
+	if ( createdOn ) {
+		bootstrapWrapper.setAttribute( 'data-created-on', createdOn );
+	}
 
-    if ( updatedOn ) {
-        bootstrapWrapper.setAttribute( 'data-updated-on', updatedOn );
-    }
+	if ( updatedOn ) {
+		bootstrapWrapper.setAttribute( 'data-updated-on', updatedOn );
+	}
 
-    if ( learningPath ) {
-        bootstrapWrapper.setAttribute( 'data-learning-path', learningPath );
-    }
+	if ( learningPath ) {
+		bootstrapWrapper.setAttribute( 'data-learning-path', learningPath );
+	}
 
-    return template.innerHTML;
+	return template.innerHTML;
 };
 
 /**
  * Gets the selected learning path version term name for the post.
  *
  * @param {Object} post Excelsior Bootstrap REST API post response.
- * @returns {Promise<string>} Selected learning path version term name.
+ * @return {Promise<string>} Selected learning path version term name.
  */
 const getSelectedLearningPathTermName = ( post ) => {
-    const learningPathTermIds = post?.[ XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY ] || [];
-    const learningPathTermId = learningPathTermIds[ 0 ];
+	const learningPathTermIds =
+		post?.[ XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY ] || [];
+	const learningPathTermId = learningPathTermIds[ 0 ];
 
-    if ( ! learningPathTermId ) {
-        return Promise.resolve( '' );
-    }
+	if ( ! learningPathTermId ) {
+		return Promise.resolve( '' );
+	}
 
-    return fetch( `${ wpApiSettings.root }wp/v2/${ XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY }/${ learningPathTermId }?context=edit`, {
-        headers: {
-            'X-WP-Nonce': wpApiSettings.nonce,
-        },
-    } )
-        .then( ( response ) => response.ok ? response.json() : Promise.reject( response ) )
-        .then( ( term ) => term.name || '' )
-        .catch( ( error ) => {
-            console.error( 'Error fetching the learning path version:', error );
+	return fetch(
+		`${ wpApiSettings.root }wp/v2/${ XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY }/${ learningPathTermId }?context=edit`,
+		{
+			headers: {
+				'X-WP-Nonce': wpApiSettings.nonce,
+			},
+		}
+	)
+		.then( ( response ) =>
+			response.ok ? response.json() : Promise.reject( response )
+		)
+		.then( ( term ) => term.name || '' )
+		.catch( ( error ) => {
+			console.error( 'Error fetching the learning path version:', error );
 
-            return '';
-        } );
+			return '';
+		} );
 };
 
 /**
  * Normalizes non-breaking spaces in exported HTML while emptying icon tags.
  *
  * @param {string} html Rendered HTML to normalize.
- * @returns {string} HTML with regular spaces outside icons and empty icon tags.
+ * @return {string} HTML with regular spaces outside icons and empty icon tags.
  */
 const normalizeExportedHtmlSpaces = ( html ) => {
-    const iconTagPattern = /<i([^>]*)>(.*?)<\/i>/g;
-    let normalizedHtml = '';
-    let lastMatchEnd = 0;
-    let match;
+	const iconTagPattern = /<i([^>]*)>(.*?)<\/i>/g;
+	let normalizedHtml = '';
+	let lastMatchEnd = 0;
+	let match;
 
-    while ( ( match = iconTagPattern.exec( html ) ) !== null ) {
-        const [ fullMatch, attrs ] = match;
-        const outsideIconHtml = html.slice( lastMatchEnd, match.index );
+	while ( ( match = iconTagPattern.exec( html ) ) !== null ) {
+		const [ fullMatch, attrs ] = match;
+		const outsideIconHtml = html.slice( lastMatchEnd, match.index );
 
-        normalizedHtml += outsideIconHtml.replace( /&nbsp;/g, ' ' );
-        normalizedHtml += `<i${ attrs }></i>`;
-        lastMatchEnd = match.index + fullMatch.length;
-    }
+		normalizedHtml += outsideIconHtml.replace( /&nbsp;/g, ' ' );
+		normalizedHtml += `<i${ attrs }></i>`;
+		lastMatchEnd = match.index + fullMatch.length;
+	}
 
-    normalizedHtml += html.slice( lastMatchEnd ).replace( /&nbsp;/g, ' ' );
+	normalizedHtml += html.slice( lastMatchEnd ).replace( /&nbsp;/g, ' ' );
 
-    return normalizedHtml;
+	return normalizedHtml;
 };
 
 /**
  * Renders the "Get Code" sidebar action for published Excelsior posts.
  *
- * @returns {JSX.Element|null} Sidebar UI for published Excelsior posts only.
+ * @return {JSX.Element|null} Sidebar UI for published Excelsior posts only.
  */
 const GetCodeButton = () => {
-    const isExcelsiorBootstrap = useIsExcelsiorBootstrapPostType();
+	const isExcelsiorBootstrap = useIsExcelsiorBootstrapPostType();
 
-    if ( ! isExcelsiorBootstrap ) {
-        return null;
-    }
+	if ( ! isExcelsiorBootstrap ) {
+		return null;
+	}
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [renderedHTML, setRenderedHTML] = useState('');
-    const [copySuccess, setCopySuccess] = useState(false);
-    const [isRetrievingHTML, setIsRetrievingHTML] = useState(false);
-    const { isSaving, hasUnsavedChanges, unsavedMeta, postStatus } = useSelect((select) => {
-        const editorStore = select('core/editor');
-        return {
-            isSaving: editorStore.isSavingPost(),
-            unsavedMeta: editorStore.getPostEdits().meta !== undefined,
-            hasUnsavedChanges: editorStore.hasChangedContent(),
-            postStatus: editorStore.getEditedPostAttribute('status'),
-        };
-    });
-    const isDisabled = isSaving || hasUnsavedChanges || unsavedMeta || postStatus !== 'publish';
+	const [ isModalOpen, setIsModalOpen ] = useState( false );
+	const [ renderedHTML, setRenderedHTML ] = useState( '' );
+	const [ copySuccess, setCopySuccess ] = useState( false );
+	const [ isRetrievingHTML, setIsRetrievingHTML ] = useState( false );
+	const { isSaving, hasUnsavedChanges, unsavedMeta, postStatus } = useSelect(
+		( select ) => {
+			const editorStore = select( 'core/editor' );
+			return {
+				isSaving: editorStore.isSavingPost(),
+				unsavedMeta: editorStore.getPostEdits().meta !== undefined,
+				hasUnsavedChanges: editorStore.hasChangedContent(),
+				postStatus: editorStore.getEditedPostAttribute( 'status' ),
+			};
+		}
+	);
+	const isDisabled =
+		isSaving ||
+		hasUnsavedChanges ||
+		unsavedMeta ||
+		postStatus !== 'publish';
 
-    // Define the function that will execute when the button is clicked
-    const getRenderedHTML = () => {
-        const postId = select('core/editor').getCurrentPostId();
-        const restUrl = `${wpApiSettings.root}wp/v2/excelsior_bootstrap/${postId}?context=edit&t=${new Date().getTime()}`;
-        setIsRetrievingHTML(true);
-    
-        // Fetch the raw content via REST API
-        fetch(restUrl, {
-            headers: {
-                'X-WP-Nonce': wpApiSettings.nonce,
-            },
-        })
-            .then((response) => response.json())
-            .then((post) => getSelectedLearningPathTermName( post ).then( ( learningPath ) => ( { post, learningPath } ) ) )
-            .then(({ post, learningPath }) => {
-                const filteredContent = removeWordPressClasses( post.content.rendered );
-                const attributedContent = addExportedHtmlAttributes( filteredContent, {
-                    createdOn: post.date,
-                    updatedOn: post.modified,
-                    learningPath,
-                } );
-                const htmlCode = normalizeExportedHtmlSpaces( attributedContent );
-    
-                setRenderedHTML(beautify.html(htmlCode, { preserve_newlines: false }));
-                setIsModalOpen(true);
-            })
-            .catch((error) => {
-                console.error('Error fetching the post content:', error);
-                setIsRetrievingHTML(false);
-            });
-    };    
+	// Define the function that will execute when the button is clicked
+	const getRenderedHTML = () => {
+		const postId = select( 'core/editor' ).getCurrentPostId();
+		const restUrl = `${
+			wpApiSettings.root
+		}wp/v2/excelsior_bootstrap/${ postId }?context=edit&t=${ new Date().getTime() }`;
+		setIsRetrievingHTML( true );
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setIsRetrievingHTML(false);
-    };
+		// Fetch the raw content via REST API
+		fetch( restUrl, {
+			headers: {
+				'X-WP-Nonce': wpApiSettings.nonce,
+			},
+		} )
+			.then( ( response ) => response.json() )
+			.then( ( post ) =>
+				getSelectedLearningPathTermName( post ).then(
+					( learningPath ) => ( {
+						post,
+						learningPath,
+					} )
+				)
+			)
+			.then( ( { post, learningPath } ) => {
+				const filteredContent = removeWordPressClasses(
+					post.content.rendered
+				);
+				const attributedContent = addExportedHtmlAttributes(
+					filteredContent,
+					{
+						createdOn: post.date,
+						updatedOn: post.modified,
+						learningPath,
+					}
+				);
+				const htmlCode =
+					normalizeExportedHtmlSpaces( attributedContent );
 
-    const copyToClipboard = () => {
-        navigator.clipboard.writeText(renderedHTML)
-            .then(() => {
-                setCopySuccess(true);
-                setTimeout(() => setCopySuccess(false), 6000);
-            })
-            .catch(err => {
-                console.error('Failed to copy code: ', err);
-            });
-    };
+				setRenderedHTML(
+					beautify.html( htmlCode, { preserve_newlines: false } )
+				);
+				setIsModalOpen( true );
+			} )
+			.catch( ( error ) => {
+				console.error( 'Error fetching the post content:', error );
+				setIsRetrievingHTML( false );
+			} );
+	};
 
-    useEffect(() => {
-        if (isModalOpen) {
-            const codeElement = document.querySelector('.get-code-modal');
-            if (codeElement) {
-                Prism.highlightAllUnder(codeElement);
-            }
-        }
-    }, [isModalOpen]);
+	const closeModal = () => {
+		setIsModalOpen( false );
+		setIsRetrievingHTML( false );
+	};
 
-    return (
-        <>
-        <PluginPostStatusInfo>
-            <PanelBody className='get-code-btn-panel'>
-            <Button className='get-code-btn' onClick={getRenderedHTML} disabled={isDisabled || isRetrievingHTML} __next40pxDefaultSize>
-                {isRetrievingHTML ? 'Retrieving HTML...' : 'Get HTML Code'}
-            </Button>
-            {isDisabled && (
-                <Text as='p' variant='muted' isBlock style={{marginTop: '8px'}}>
-                    The Get Code button will be enabled when all changes are saved or published.
-                </Text>
-            )}
-            </PanelBody>
-        </PluginPostStatusInfo>
-        {isModalOpen && (
-            <Modal
-                title="HTML Code"
-                className='get-code-modal'
-                onRequestClose={closeModal}
-                shouldCloseOnClickOutside={false}
-                size='fill'
-            >
-                {copySuccess && (
-                    <Notice status="success" isDismissible={true}>
-                        HTML code copied to clipboard!
-                    </Notice>
-                )}
-                <div className='cta-wrapper'>
-                    <Button
-                        variant="primary"
-                        onClick={copyToClipboard}
-                        style={{ marginTop: '15px' }}
-                        __next40pxDefaultSize
-                    >
-                        Copy Code
-                    </Button>
-                </div>
-                <pre style={{ whiteSpace: 'pre-wrap' }}>
-                    <code class="language-html line-numbers">{renderedHTML}</code>
-                </pre>
-            </Modal>
-        )}
-        </>
-    );
+	const copyToClipboard = () => {
+		navigator.clipboard
+			.writeText( renderedHTML )
+			.then( () => {
+				setCopySuccess( true );
+				setTimeout( () => setCopySuccess( false ), 6000 );
+			} )
+			.catch( ( err ) => {
+				console.error( 'Failed to copy code: ', err );
+			} );
+	};
+
+	useEffect( () => {
+		if ( isModalOpen ) {
+			const codeElement = document.querySelector( '.get-code-modal' );
+			if ( codeElement ) {
+				Prism.highlightAllUnder( codeElement );
+			}
+		}
+	}, [ isModalOpen ] );
+
+	return (
+		<>
+			<PluginPostStatusInfo>
+				<PanelBody className="get-code-btn-panel">
+					<Button
+						className="get-code-btn"
+						onClick={ getRenderedHTML }
+						disabled={ isDisabled || isRetrievingHTML }
+						__next40pxDefaultSize
+					>
+						{ isRetrievingHTML
+							? 'Retrieving HTML...'
+							: 'Get HTML Code' }
+					</Button>
+					{ isDisabled && (
+						<Text
+							as="p"
+							variant="muted"
+							isBlock
+							style={ { marginTop: '8px' } }
+						>
+							The Get Code button will be enabled when all changes
+							are saved or published.
+						</Text>
+					) }
+				</PanelBody>
+			</PluginPostStatusInfo>
+			{ isModalOpen && (
+				<Modal
+					title="HTML Code"
+					className="get-code-modal"
+					onRequestClose={ closeModal }
+					shouldCloseOnClickOutside={ false }
+					size="fill"
+				>
+					{ copySuccess && (
+						<Notice status="success" isDismissible={ true }>
+							HTML code copied to clipboard!
+						</Notice>
+					) }
+					<div className="cta-wrapper">
+						<Button
+							variant="primary"
+							onClick={ copyToClipboard }
+							style={ { marginTop: '15px' } }
+							__next40pxDefaultSize
+						>
+							Copy Code
+						</Button>
+					</div>
+					<pre style={ { whiteSpace: 'pre-wrap' } }>
+						<code className="language-html line-numbers">
+							{ renderedHTML }
+						</code>
+					</pre>
+				</Modal>
+			) }
+		</>
+	);
 };
 
-registerPlugin (XCLSR_BTSTRP_EDITOR_PREFIX + '-get-code-button', {
-    render: GetCodeButton,
-    icon: null,
-});
+registerPlugin( XCLSR_BTSTRP_EDITOR_PREFIX + '-get-code-button', {
+	render: GetCodeButton,
+	icon: null,
+} );
 
 /**
  * Extends `core/heading` with Excelsior-only styling attributes.
@@ -744,236 +825,307 @@ registerPlugin (XCLSR_BTSTRP_EDITOR_PREFIX + '-get-code-button', {
  * to headings nested under the namespace block.
  *
  * @param {Object} settings Block settings being registered.
- * @param {string} name Block name being registered.
- * @returns {Object} Updated block settings.
+ * @param {string} name     Block name being registered.
+ * @return {Object} Updated block settings.
  */
-const addingBlockSizeAndStyle = (settings, name) => {
-    if (name === 'core/heading') {
-        const updatedSettings = {
-            ...settings,
-            attributes: {
-                ...settings.attributes,
-                headingSizeClass: {
-                    type: 'string',
-                    default: ''
-                },
-                headingStyleClasses: {
-                    type: 'string',
-                    default: ''
-                },
-                isInExcelsiorNamespace: {
-                    type: 'boolean',
-                    default: false
-                }
-            }
-        };
+const addingBlockSizeAndStyle = ( settings, name ) => {
+	if ( name === 'core/heading' ) {
+		const updatedSettings = {
+			...settings,
+			attributes: {
+				...settings.attributes,
+				headingSizeClass: {
+					type: 'string',
+					default: '',
+				},
+				headingStyleClasses: {
+					type: 'string',
+					default: '',
+				},
+				isInExcelsiorNamespace: {
+					type: 'boolean',
+					default: false,
+				},
+			},
+		};
 
-        if ( isExcelsiorBootstrapPostTypeDuringBlockRegistration() ) {
-            const existingColorSupport = settings.supports?.color;
+		if ( isExcelsiorBootstrapPostTypeDuringBlockRegistration() ) {
+			const existingColorSupport = settings.supports?.color;
 
-            updatedSettings.supports = {
-                ...settings.supports,
-                color: {
-                    ...( existingColorSupport && typeof existingColorSupport === 'object' ? existingColorSupport : {} ),
-                    text: false,
-                    __experimentalDefaultControls: {
-                        ...( existingColorSupport?.__experimentalDefaultControls || {} ),
-                        text: false
-                    }
-                }
-            };
-        }
+			updatedSettings.supports = {
+				...settings.supports,
+				color: {
+					...( existingColorSupport &&
+					typeof existingColorSupport === 'object'
+						? existingColorSupport
+						: {} ),
+					text: false,
+					__experimentalDefaultControls: {
+						...( existingColorSupport?.__experimentalDefaultControls ||
+							{} ),
+						text: false,
+					},
+				},
+			};
+		}
 
-        return updatedSettings;
-    }
+		return updatedSettings;
+	}
 
-    return settings;
+	return settings;
 };
 
-addFilter( 'blocks.registerBlockType', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-settings', addingBlockSizeAndStyle);
+addFilter(
+	'blocks.registerBlockType',
+	XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-settings',
+	addingBlockSizeAndStyle
+);
 
 /**
  * Adds an explanatory notice to the heading Styles tab for Excelsior posts.
  *
  * @param {Function} BlockEdit Original block edit component.
- * @returns {Function} Wrapped block edit component.
+ * @return {Function} Wrapped block edit component.
  */
-const addHeadingStylesNotice = createHigherOrderComponent((BlockEdit) => {
-    return (props) => {
-        const isExcelsiorBootstrap = useIsExcelsiorBootstrapPostType();
+const addHeadingStylesNotice = createHigherOrderComponent( ( BlockEdit ) => {
+	return ( props ) => {
+		const isExcelsiorBootstrap = useIsExcelsiorBootstrapPostType();
 
-        if ( props.name !== CORE_HEADING_BLOCK || ! isExcelsiorBootstrap ) {
-            return <BlockEdit {...props} />;
-        }
+		if ( props.name !== CORE_HEADING_BLOCK || ! isExcelsiorBootstrap ) {
+			return <BlockEdit { ...props } />;
+		}
 
-        return (
-            <Fragment>
-                <BlockEdit {...props} />
-                <InspectorControls group="styles">
-                    <PanelBody>
-                        <Notice status="info" isDismissible={false}>
-                            Additional style options have been disabled.
-                        </Notice>
-                    </PanelBody>
-                </InspectorControls>
-            </Fragment>
-        );
-    };
-}, 'addHeadingStylesNotice');
+		return (
+			<Fragment>
+				<BlockEdit { ...props } />
+				<InspectorControls group="styles">
+					<PanelBody>
+						<Notice status="info" isDismissible={ false }>
+							Additional style options have been disabled.
+						</Notice>
+					</PanelBody>
+				</InspectorControls>
+			</Fragment>
+		);
+	};
+}, 'addHeadingStylesNotice' );
 
-addFilter('editor.BlockEdit', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-styles-notice', addHeadingStylesNotice);
+addFilter(
+	'editor.BlockEdit',
+	XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-styles-notice',
+	addHeadingStylesNotice
+);
 
 /**
  * Mirrors heading style classes in the editor preview only for namespace headings.
  *
  * @param {Function} BlockListBlock Original editor block list component.
- * @returns {Function} Wrapped component with conditional preview classes.
+ * @return {Function} Wrapped component with conditional preview classes.
  */
-const addBlockSizePreviewClass = (BlockListBlock) => {
-    return (props) => {
-        const isInsideNamespace = useSelect( (select) => {
-            if ( props.name !== 'core/heading' ) {
-                return false;
-            }
+const addBlockSizePreviewClass = ( BlockListBlock ) => {
+	return ( props ) => {
+		const isInsideNamespace = useSelect(
+			( select ) => {
+				if ( props.name !== 'core/heading' ) {
+					return false;
+				}
 
-            const blockEditorStore = select( 'core/block-editor' );
+				const blockEditorStore = select( 'core/block-editor' );
 
-            if ( ! blockEditorStore || ! blockEditorStore.getBlockParents || ! blockEditorStore.getBlockName ) {
-                return false;
-            }
+				if (
+					! blockEditorStore ||
+					! blockEditorStore.getBlockParents ||
+					! blockEditorStore.getBlockName
+				) {
+					return false;
+				}
 
-            const parentClientIds = blockEditorStore.getBlockParents( props.clientId );
+				const parentClientIds = blockEditorStore.getBlockParents(
+					props.clientId
+				);
 
-            // A heading is eligible only when one of its ancestors is the namespace block.
-            return parentClientIds.some( ( parentClientId ) => {
-                return blockEditorStore.getBlockName( parentClientId ) === NAMESPACE_BLOCK;
-            } );
-        }, [ props.clientId, props.name ] );
+				// A heading is eligible only when one of its ancestors is the namespace block.
+				return parentClientIds.some( ( parentClientId ) => {
+					return (
+						blockEditorStore.getBlockName( parentClientId ) ===
+						NAMESPACE_BLOCK
+					);
+				} );
+			},
+			[ props.clientId, props.name ]
+		);
 
-        if (isInsideNamespace && props.name === 'core/heading') {
-            let additionalClasses = [];
+		if ( isInsideNamespace && props.name === 'core/heading' ) {
+			const additionalClasses = [];
 
-            if (props.attributes.headingSizeClass && props.attributes.headingSizeClass.trim().length) {
-                additionalClasses.push(props.attributes.headingSizeClass);
-            }
+			if (
+				props.attributes.headingSizeClass &&
+				props.attributes.headingSizeClass.trim().length
+			) {
+				additionalClasses.push( props.attributes.headingSizeClass );
+			}
 
-            if (props.attributes.headingStyleClasses && props.attributes.headingStyleClasses.trim().length) {
-                additionalClasses.push(props.attributes.headingStyleClasses);
-            }
+			if (
+				props.attributes.headingStyleClasses &&
+				props.attributes.headingStyleClasses.trim().length
+			) {
+				additionalClasses.push( props.attributes.headingStyleClasses );
+			}
 
-            return <BlockListBlock {...props} className={`${props.className} ${additionalClasses.join(' ')}`} />;
-        }
+			return (
+				<BlockListBlock
+					{ ...props }
+					className={ `${ props.className } ${ additionalClasses.join(
+						' '
+					) }` }
+				/>
+			);
+		}
 
-        return <BlockListBlock {...props} />;
-    };
+		return <BlockListBlock { ...props } />;
+	};
 };
 
-addFilter('editor.BlockListBlock', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-preview-class', addBlockSizePreviewClass);
+addFilter(
+	'editor.BlockListBlock',
+	XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-preview-class',
+	addBlockSizePreviewClass
+);
 
 /**
  * Applies saved heading classes only when the heading was nested in the namespace.
  *
  * @param {Object} extraProps Save props generated for the block.
- * @param {Object} blockType Registered block type object.
+ * @param {Object} blockType  Registered block type object.
  * @param {Object} attributes Block attributes being saved.
- * @returns {Object} Updated save props.
+ * @return {Object} Updated save props.
  */
-const saveBlockSizeAndStyle = (extraProps, blockType, attributes) => {
-    if (attributes.isInExcelsiorNamespace && blockType.name === 'core/heading') {
-        let additionalClasses = [];
+const saveBlockSizeAndStyle = ( extraProps, blockType, attributes ) => {
+	if (
+		attributes.isInExcelsiorNamespace &&
+		blockType.name === 'core/heading'
+	) {
+		const additionalClasses = [];
 
-        if (attributes.headingSizeClass && attributes.headingSizeClass.trim().length) {
-            additionalClasses.push(attributes.headingSizeClass);
-        }
+		if (
+			attributes.headingSizeClass &&
+			attributes.headingSizeClass.trim().length
+		) {
+			additionalClasses.push( attributes.headingSizeClass );
+		}
 
-        if (attributes.headingStyleClasses && attributes.headingStyleClasses.trim().length) {
-            additionalClasses.push(attributes.headingStyleClasses);
-        }
+		if (
+			attributes.headingStyleClasses &&
+			attributes.headingStyleClasses.trim().length
+		) {
+			additionalClasses.push( attributes.headingStyleClasses );
+		}
 
-        extraProps.className = `${extraProps.className || ''} ${additionalClasses.join(' ')}`.trim();
-    }
+		extraProps.className = `${
+			extraProps.className || ''
+		} ${ additionalClasses.join( ' ' ) }`.trim();
+	}
 
-    return extraProps;
+	return extraProps;
 };
 
-addFilter('blocks.getSaveContent.extraProps', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-class', saveBlockSizeAndStyle);
+addFilter(
+	'blocks.getSaveContent.extraProps',
+	XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-class',
+	saveBlockSizeAndStyle
+);
 
 /**
  * Adds the heading inspector controls only when the heading lives inside the namespace.
  *
  * @param {Function} BlockEdit Original block edit component.
- * @returns {Function} Wrapped block edit component.
+ * @return {Function} Wrapped block edit component.
  */
-const addHeadingSizeControl = createHigherOrderComponent((BlockEdit) => {
-    return (props) => {
-        const isInsideNamespace = useSelect( () => {
-            if ( props.name !== 'core/heading' ) {
-                return false;
-            }
+const addHeadingSizeControl = createHigherOrderComponent( ( BlockEdit ) => {
+	return ( props ) => {
+		const isInsideNamespace = useSelect( () => {
+			if ( props.name !== 'core/heading' ) {
+				return false;
+			}
 
-            return isBlockInsideNamespace( props.clientId );
-        }, [ props.clientId, props.name ] );
+			return isBlockInsideNamespace( props.clientId );
+		}, [ props.clientId, props.name ] );
 
-        useEffect( () => {
-            if ( props.name !== 'core/heading' ) {
-                return;
-            }
+		useEffect( () => {
+			if ( props.name !== 'core/heading' ) {
+				return;
+			}
 
-            // Persist namespace ancestry so save-time filters can stay context-aware.
-            if ( props.attributes.isInExcelsiorNamespace !== isInsideNamespace ) {
-                props.setAttributes( { isInExcelsiorNamespace: isInsideNamespace } );
-            }
-        }, [ isInsideNamespace, props ] );
+			// Persist namespace ancestry so save-time filters can stay context-aware.
+			if (
+				props.attributes.isInExcelsiorNamespace !== isInsideNamespace
+			) {
+				props.setAttributes( {
+					isInExcelsiorNamespace: isInsideNamespace,
+				} );
+			}
+		}, [ isInsideNamespace, props ] );
 
-        if (props.name !== 'core/heading' || ! isInsideNamespace) {
-            return <BlockEdit {...props} />;
-        }
+		if ( props.name !== 'core/heading' || ! isInsideNamespace ) {
+			return <BlockEdit { ...props } />;
+		}
 
-        const headingLevelSizeOptions = [
-            { label: 'Default', value: '' },
-            { label: 'H1', value: 'h1' },
-            { label: 'H2', value: 'h2' },
-            { label: 'H3', value: 'h3' },
-            { label: 'H4', value: 'h4' },
-            { label: 'H5', value: 'h5' },
-            { label: 'H6', value: 'h6' }
-        ];
+		const headingLevelSizeOptions = [
+			{ label: 'Default', value: '' },
+			{ label: 'H1', value: 'h1' },
+			{ label: 'H2', value: 'h2' },
+			{ label: 'H3', value: 'h3' },
+			{ label: 'H4', value: 'h4' },
+			{ label: 'H5', value: 'h5' },
+			{ label: 'H6', value: 'h6' },
+		];
 
-        const headingStyleOptions = [
-            { label: 'Default', value: '' },
-            { label: 'Underline', value: 'fw-semibold pb-1 mb-3 border-bottom border-2 border-secondary-subtle' }
-        ];
+		const headingStyleOptions = [
+			{ label: 'Default', value: '' },
+			{
+				label: 'Underline',
+				value: 'fw-semibold pb-1 mb-3 border-bottom border-2 border-secondary-subtle',
+			},
+		];
 
-        const { attributes, setAttributes } = props;
-        const { headingSizeClass, headingStyleClasses } = attributes;
-        
-        return (
-            <Fragment>
-                <BlockEdit {...props} />
-                <InspectorControls>
-                    <PanelBody title="Settings" initialOpen={true}>
-                        <SelectControl
-                            label="Heading Level Size"
-                            help="Set the font size of the heading to use the size of a different heading level."
-                            value={headingSizeClass}
-                            options={headingLevelSizeOptions}
-                            onChange={(value) => setAttributes({ headingSizeClass: value })}
-                            __next40pxDefaultSize
-                            __nextHasNoMarginBottom
-                        />
-                        <SelectControl
-                            label="Heading Style"
-                            value={headingStyleClasses}
-                            options={headingStyleOptions}
-                            onChange={(value) => setAttributes({ headingStyleClasses: value })}
-                            __next40pxDefaultSize
-                            __nextHasNoMarginBottom
-                        />
-                    </PanelBody>
-                </InspectorControls>
-            </Fragment>
-        );
-    };
-}, 'addHeadingSizeControl');
+		const { attributes, setAttributes } = props;
+		const { headingSizeClass, headingStyleClasses } = attributes;
 
-addFilter('editor.BlockEdit', XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-inspector-control', addHeadingSizeControl);
+		return (
+			<Fragment>
+				<BlockEdit { ...props } />
+				<InspectorControls>
+					<PanelBody title="Settings" initialOpen={ true }>
+						<SelectControl
+							label="Heading Level Size"
+							help="Set the font size of the heading to use the size of a different heading level."
+							value={ headingSizeClass }
+							options={ headingLevelSizeOptions }
+							onChange={ ( value ) =>
+								setAttributes( { headingSizeClass: value } )
+							}
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
+						/>
+						<SelectControl
+							label="Heading Style"
+							value={ headingStyleClasses }
+							options={ headingStyleOptions }
+							onChange={ ( value ) =>
+								setAttributes( { headingStyleClasses: value } )
+							}
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
+						/>
+					</PanelBody>
+				</InspectorControls>
+			</Fragment>
+		);
+	};
+}, 'addHeadingSizeControl' );
+
+addFilter(
+	'editor.BlockEdit',
+	XCLSR_BTSTRP_EDITOR_PREFIX + '/heading-block-size-inspector-control',
+	addHeadingSizeControl
+);

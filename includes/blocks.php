@@ -67,15 +67,34 @@ add_action( 'enqueue_block_editor_assets', function() {
         XCLSR_BTSTRP_EDITOR_VERSION
     );
 
+    $blocks_editor_style_handle = XCLSR_BTSTRP_EDITOR_PREFIX.'-blocks-editor-style';
+    $blocks_editor_style_path = plugin_dir_path(__FILE__) . '../build/blocks.css';
+
+    if ( file_exists( $blocks_editor_style_path ) ) {
+        wp_register_style(
+            $blocks_editor_style_handle,
+            plugins_url( '/build/blocks.css', dirname(__FILE__) ),
+            array(),
+            XCLSR_BTSTRP_EDITOR_VERSION
+        );
+        wp_style_add_data( $blocks_editor_style_handle, 'rtl', 'replace' );
+    }
+
     $blocks_file = plugin_dir_path(__FILE__) . '../build/blocks/blocks.json';
     $blocks = json_decode( file_get_contents( $blocks_file ), true );
     
     // register each blocks 
     if ( !empty( $blocks['blocks'] ) ) {
         foreach ( $blocks['blocks'] as $block ) {
+            $editor_style_handles = [XCLSR_BTSTRP_EDITOR_PREFIX.'-style', XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend'];
+
+            if ( wp_style_is( $blocks_editor_style_handle, 'registered' ) ) {
+                $editor_style_handles[] = $blocks_editor_style_handle;
+            }
+
             register_block_type( plugin_dir_path(__FILE__) . '../build/blocks/' . $block, array(
                 'editor_script_handles' => [XCLSR_BTSTRP_EDITOR_PREFIX.'-blocks-script'],
-                'editor_style_handles'  => [XCLSR_BTSTRP_EDITOR_PREFIX.'-style', XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend']
+                'editor_style_handles'  => $editor_style_handles
             ) );
         }
     }

@@ -1,0 +1,73 @@
+{
+	"apiVersion": 3,
+	"name": "excelsior-bootstrap-editor/table",
+	"title": "Table",
+	"description": "Create a responsive Bootstrap table with merged cells, column widths, and row, column, or cell colors.",
+	"category": "excelsior-bootstrap-editor-blocks",
+	"supports": {
+		"html": false,
+		"lock": true
+	},
+	"attributes": {
+		"data": {
+			"type": "array",
+			"default": [
+				[ "", "", "" ],
+				[ "", "", "" ],
+				[ "", "", "" ]
+			]
+		},
+		"columns": {
+			"type": "array",
+			"default": [ { "width": 160 }, { "width": 160 }, { "width": 160 } ]
+		},
+		"mergeCells": {
+			"type": "object",
+			"default": {}
+		},
+		"variants": {
+			"type": "object",
+			"default": {
+				"cells": {},
+				"rows": {},
+				"columns": {}
+			}
+		},
+		"caption": {
+			"type": "string",
+			"default": ""
+		},
+		"hasHeader": {
+			"type": "boolean",
+			"default": false
+		},
+		"hasFooter": {
+			"type": "boolean",
+			"default": false
+		},
+		"isStriped": {
+			"type": "boolean",
+			"default": false
+		},
+		"isCompact": {
+			"type": "boolean",
+			"default": false
+		},
+		"border": {
+			"type": "string",
+			"default": "table-bordered"
+		},
+		"tableWidth": {
+			"type": "string",
+			"default": ""
+		},
+		"borderWidth": {
+			"type": "string",
+			"default": ""
+		},
+		"borderColor": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}

@@ -1,0 +1,30 @@
+/*
+  Editor-only styles for the Jspreadsheet authoring grid. Nothing here reaches
+  the frontend, which gets plain Bootstrap table markup instead.
+
+  The column letters and row numbers are left visible on purpose: dragging a
+  column header edge is how a column is resized, and clicking a header or row
+  number is how a whole column or row is selected for coloring.
+*/
+.excelsior-table-editor .jss_container,
+.excelsior-table-editor .jss_content {
+	max-width: 100%;
+}
+
+.excelsior-table-editor .jss_about {
+	display: none;
+}
+
+.excelsior-table-editor .jss_worksheet {
+	border-collapse: collapse;
+}
+
+.excelsior-table-editor .jss_worksheet > tbody > tr > td {
+	min-width: 80px;
+	white-space: normal;
+}
+
+.excelsior-table-editor__grid {
+	max-width: 100%;
+	overflow-x: auto;
+}
