@@ -6,7 +6,7 @@ import {
 } from '@wordpress/block-editor';
 import {
 	BaseControl,
-	ColorPalette,
+	Button,
 	Notice,
 	PanelBody,
 	RangeControl,
@@ -36,8 +36,6 @@ import {
 	getGridColumns,
 	getTableSections,
 	getTableStyle,
-	getVariantByClassName,
-	getVariantByColor,
 	getVariantPreviewStyles,
 	insertTableRow,
 	normalizeColumns,
@@ -108,6 +106,45 @@ const syncTableChrome = ( worksheet, attributes ) => {
 		table.style.setProperty( 'width', '100%' );
 	}
 };
+
+/*
+  Colors are Bootstrap class names and custom property references, not color
+  strings, so ColorPalette is the wrong shape: it reports back a normalized
+  color that has to be matched to an option to recover the class. These swatches
+  carry the value itself, so nothing has to survive a round trip through a color
+  format. An empty value is the option that clears the color.
+*/
+const SwatchControl = ( { help, id, label, onSelect, options, value } ) => (
+	<BaseControl
+		id={ id }
+		help={ help }
+		label={ label }
+		__nextHasNoMarginBottom
+	>
+		<div className="excelsior-table-swatches">
+			{ options.map( ( option ) => (
+				<Button
+					key={ option.value || 'none' }
+					className={ [
+						'excelsior-table-swatches__swatch',
+						option.value ? '' : 'is-none',
+					]
+						.filter( Boolean )
+						.join( ' ' ) }
+					isPressed={ value === option.value }
+					label={ option.label }
+					onClick={ () => onSelect( option.value ) }
+					showTooltip
+					style={
+						option.value
+							? { backgroundColor: option.color }
+							: undefined
+					}
+				/>
+			) ) }
+		</div>
+	</BaseControl>
+);
 
 /*
   Jspreadsheet takes inline styles rather than classes, so a cell with no variant
@@ -356,8 +393,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						normalizedData,
 						normalizedColumns
 					),
-					tableOverflow: true,
-					tableWidth: '100%',
+					/*
+					  Jspreadsheet's own scroll container would nest a second
+					  scrollbar inside the block's. The grid wrapper is the
+					  only scroller, mirroring the .table-responsive the saved
+					  markup uses.
+					*/
+					tableOverflow: false,
 					textOverflow: false,
 					wordWrap: true,
 				},
@@ -871,19 +913,18 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 										: String( value ),
 							} )
 						}
-						disabled = { border === TABLE_BORDERLESS }
+						disabled={ border === TABLE_BORDERLESS }
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
 					/>
-					<SelectControl
+					<SwatchControl
+						id={ `excelsior-table-border-color-${ clientId }` }
 						label="Border color"
-						value={ borderColor }
 						options={ BORDER_COLORS }
-						onChange={ ( value ) =>
+						value={ borderColor }
+						onSelect={ ( value ) =>
 							setAttributes( { borderColor: value } )
 						}
-						__next40pxDefaultSize
-						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 				<PanelBody title="Color" initialOpen={ false }>
@@ -904,30 +945,21 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						onChange={ setStyleScope }
 						__next40pxDefaultSize
 					/>
-					<BaseControl
+					<SwatchControl
 						id={ `excelsior-table-color-${ clientId }` }
 						label="Color"
 						help="A cell color overrides a row color, which overrides a column color."
-						__nextHasNoMarginBottom
-					>
-						<ColorPalette
-							colors={ TABLE_VARIANTS.map( ( variant ) => ( {
-								name: variant.label,
+						options={ [
+							{ label: 'None', value: '' },
+							...TABLE_VARIANTS.map( ( variant ) => ( {
+								label: variant.label,
+								value: variant.className,
 								color: variant.color,
-							} ) ) }
-							value={
-								getVariantByClassName( selectedVariant )?.color
-							}
-							onChange={ ( color ) =>
-								applyVariant(
-									getVariantByColor( color )?.className || ''
-								)
-							}
-							clearable
-							disableCustomColors
-							__experimentalIsRenderedInSidebar
-						/>
-					</BaseControl>
+							} ) ),
+						] }
+						value={ selectedVariant }
+						onSelect={ applyVariant }
+					/>
 				</PanelBody>
 			</InspectorControls>
 			{ mergeWarning && (

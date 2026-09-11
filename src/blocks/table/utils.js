@@ -85,28 +85,28 @@ const VARIANT_PREVIEWS = TABLE_VARIANTS.reduce( ( previews, variant ) => {
 	return previews;
 }, {} );
 
-export const getVariantByColor = ( color ) =>
-	TABLE_VARIANTS.find( ( variant ) => variant.color === color ) || null;
-
-export const getVariantByClassName = ( className ) =>
-	TABLE_VARIANTS.find( ( variant ) => variant.className === className ) ||
-	null;
-
 /*
   Bootstrap's .table-bordered reads --bs-border-width, and the table variants
   read --bs-table-border-color, so border thickness and color can be set once on
   the table element and cascade to every cell.
 */
+/*
+  The saved value stays a custom property so the border tracks the framework,
+  while "color" is the literal value that property resolves to, for the swatch
+  in the inspector. The inspector renders outside the editor canvas, and the
+  framework defines these properties on #excelsior-bootstrap rather than on the
+  root, so var() does not resolve there.
+*/
 export const BORDER_COLORS = [
-	{ label: 'Default', value: '' },
-	{ label: 'Primary', value: 'var(--bs-primary)' },
-	{ label: 'Secondary', value: 'var(--bs-secondary)' },
-	{ label: 'Success', value: 'var(--bs-success)' },
-	{ label: 'Danger', value: 'var(--bs-danger)' },
-	{ label: 'Warning', value: 'var(--bs-warning)' },
-	{ label: 'Info', value: 'var(--bs-info)' },
-	{ label: 'Dark', value: 'var(--bs-dark)' },
-	{ label: 'Light', value: 'var(--bs-light)' },
+	{ label: 'Default', value: '', color: '#dee2e6' },
+	{ label: 'Primary', value: 'var(--bs-primary)', color: '#0d6efd' },
+	{ label: 'Secondary', value: 'var(--bs-secondary)', color: '#6c757d' },
+	{ label: 'Success', value: 'var(--bs-success)', color: '#198754' },
+	{ label: 'Danger', value: 'var(--bs-danger)', color: '#dc3545' },
+	{ label: 'Warning', value: 'var(--bs-warning)', color: '#ffc107' },
+	{ label: 'Info', value: 'var(--bs-info)', color: '#0dcaf0' },
+	{ label: 'Dark', value: 'var(--bs-dark)', color: '#212529' },
+	{ label: 'Light', value: 'var(--bs-light)', color: '#f8f9fa' },
 ];
 
 export const MAX_BORDER_WIDTH = 5;

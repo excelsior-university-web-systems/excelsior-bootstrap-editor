@@ -7,9 +7,32 @@
   cell colors come from the framework stylesheet. These rules only remove the
   spreadsheet chrome and add editing affordances on top.
 */
-.excelsior-table-editor .jss_container,
-.excelsior-table-editor .jss_content {
+/*
+  The library's content wrapper is an inline-block with 3px of padding on two
+  sides, so a table sized to the full block width ends up wider than the block
+  and forces a horizontal scrollbar. Squaring it off lets the table fit.
+*/
+.excelsior-table-editor .jss_container {
 	max-width: 100%;
+}
+
+.excelsior-table-editor .jss_content {
+	display: block;
+	max-width: 100%;
+	padding-bottom: 0;
+	padding-right: 0;
+}
+
+/*
+  Automatic layout, so a full-width table divides the space it has instead of
+  overflowing the sum of the pixel widths the grid needs internally. This also
+  matches how the saved table lays out, which has no colgroup unless the author
+  set a column width.
+*/
+.excelsior-table-editor .jss_worksheet {
+	table-layout: auto;
+	/* A custom table width is set inline by syncTableChrome and wins over this. */
+	width: 100%;
 }
 
 /*
@@ -98,4 +121,42 @@
 	color: #6c757d;
 	font-size: 0.875em;
 	padding-top: 0.5rem;
+}
+
+/*
+  Inspector color swatches. Deliberately not scoped to .excelsior-table-editor:
+  the inspector renders in the admin page, outside the block wrapper and outside
+  the editor canvas, so a descendant selector would never match.
+*/
+.excelsior-table-swatches {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	padding-top: 4px;
+}
+
+.excelsior-table-swatches__swatch.components-button {
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	border-radius: 50%;
+	box-shadow: none;
+	height: 28px;
+	min-width: 28px;
+	padding: 0;
+	width: 28px;
+}
+
+/* The option that clears the color, drawn as an empty swatch with a slash. */
+.excelsior-table-swatches__swatch.is-none {
+	background-image: linear-gradient(
+		to bottom right,
+		transparent calc(50% - 1px),
+		#cc1818 calc(50% - 1px),
+		#cc1818 calc(50% + 1px),
+		transparent calc(50% + 1px)
+	);
+}
+
+.excelsior-table-swatches__swatch.components-button.is-pressed {
+	outline: 2px solid #3858e9;
+	outline-offset: 2px;
 }
