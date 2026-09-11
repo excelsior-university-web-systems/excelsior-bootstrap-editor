@@ -1,9 +1,7 @@
 import { useBlockProps, RichText, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
+import { PanelBody, SelectControl, TextControl, ToggleControl } from '@wordpress/components';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 import { convertTo12HourFormat, preventLineBreaks } from '../../commons';
-import { TimeInput } from '@mantine/dates';
-import { MantineProvider } from '@mantine/core';
 
 export default function Edit( { attributes, setAttributes } ) {
 
@@ -42,14 +40,15 @@ export default function Edit( { attributes, setAttributes } ) {
                             __next40pxDefaultSize
                             __nextHasNoMarginBottom
                         />
-                        <MantineProvider>
-                            <TimeInput
-                                variant="unstyled"
-                                label="Time"
-                                value={dueTime}
-                                onChange={(event) => setAttributes({dueTime: event.currentTarget.value})}
-                            />
-                        </MantineProvider>
+                        <TextControl
+                            type="time"
+                            step={60}
+                            label="Time"
+                            value={dueTime}
+                            onChange={(value) => setAttributes({ dueTime: value })}
+                            __next40pxDefaultSize
+                            __nextHasNoMarginBottom
+                        />
                         <SelectControl
                             label="Time Zone"
                             value={timezone}

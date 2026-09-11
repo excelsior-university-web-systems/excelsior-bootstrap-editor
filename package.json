@@ -30,8 +30,6 @@
         "webpack-shell-plugin-next": "^2.3.3"
     },
     "dependencies": {
-        "@mantine/core": "^9.6.1",
-        "@mantine/dates": "^9.6.1",
         "@wordpress/icons": "^16.0.0",
         "js-beautify": "^2.0.3",
         "prismjs": "^1.30.0"
