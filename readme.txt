@@ -37,6 +37,10 @@ This section describes how to install and activate the plugin.
 
 = 1.3.1 (2026-09-16) =
 * Add "deprecated" to old template pattern titles.
+* Remove Mantine library usage in Task block. Replace Mantine with WordPress's default time picker.
+* Update Excelsior Bootstrap to version 1.1.1.
+* Enable bold formatting on the floating toolbar for resource item name in the Required Resources block.
+* Prevent multi-line (or line breaks) from pasting into single line RichText controls.
 
 = 1.3.0 (2026-08-26) =
 * NEW - Definitions block. Create a collection of key terms and their corresponding definitions.
