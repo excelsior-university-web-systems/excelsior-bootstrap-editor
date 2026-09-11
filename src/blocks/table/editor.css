@@ -13,7 +13,9 @@
   and forces a horizontal scrollbar. Squaring it off lets the table fit.
 */
 .excelsior-table-editor .jss_container {
+	display: block;
 	max-width: 100%;
+	padding-right: 0;
 }
 
 .excelsior-table-editor .jss_content {

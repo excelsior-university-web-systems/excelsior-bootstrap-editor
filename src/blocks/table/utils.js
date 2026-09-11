@@ -402,6 +402,17 @@ export const getVariantPreviewStyles = (
 	return previewStyles;
 };
 
+/*
+  Every property getTableStyle can emit. The editor clears all of them before
+  reapplying, so a setting the author turned off leaves nothing behind.
+*/
+export const TABLE_STYLE_PROPERTIES = [
+	'width',
+	'border-color',
+	'--bs-border-width',
+	'--bs-table-border-color',
+];
+
 export const getTableStyle = ( {
 	tableWidth = '',
 	borderWidth = '',
@@ -422,7 +433,16 @@ export const getTableStyle = ( {
 		) }px`;
 	}
 
+	/*
+	  The framework gives every row group, row, and cell "border-color: inherit",
+	  so an explicit border-color on the table reaches all of them. Setting only
+	  the custom property would leave the color to be re-resolved through the
+	  class rules, which is what let a cleared color keep painting the outer edge.
+	  A variant class on a cell still sets its own border-color locally, so it
+	  continues to win over this inherited value.
+	*/
 	if ( borderColor ) {
+		style[ 'border-color' ] = borderColor;
 		style[ '--bs-table-border-color' ] = borderColor;
 	}
 

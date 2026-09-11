@@ -28,6 +28,7 @@ import {
 	MAX_BORDER_WIDTH,
 	TABLE_BORDERED,
 	TABLE_BORDERLESS,
+	TABLE_STYLE_PROPERTIES,
 	TABLE_VARIANTS,
 	getBootstrapTableClasses,
 	getCellName,
@@ -54,12 +55,6 @@ const MANAGED_TABLE_CLASSES = [
 	'table-striped',
 	TABLE_BORDERED,
 	TABLE_BORDERLESS,
-];
-
-const MANAGED_TABLE_PROPERTIES = [
-	'width',
-	'--bs-border-width',
-	'--bs-table-border-color',
 ];
 
 const cloneData = ( data ) => data.map( ( row ) => [ ...row ] );
@@ -94,7 +89,7 @@ const syncTableChrome = ( worksheet, attributes ) => {
 		...getBootstrapTableClasses( { border, isStriped, isCompact } )
 	);
 
-	MANAGED_TABLE_PROPERTIES.forEach( ( property ) =>
+	TABLE_STYLE_PROPERTIES.forEach( ( property ) =>
 		table.style.removeProperty( property )
 	);
 	Object.entries( style ).forEach( ( [ property, value ] ) =>
