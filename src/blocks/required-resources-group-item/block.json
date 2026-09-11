@@ -17,7 +17,7 @@
     "attributes": {
         "resource": {
             "type": "string",
-            "default": ""
+            "default": "<strong data-rich-text-format-boundary='true'>Resource Name...</strong>"
         }
     }
 }

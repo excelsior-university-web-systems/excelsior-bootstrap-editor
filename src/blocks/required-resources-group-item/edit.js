@@ -27,7 +27,7 @@ export default function Edit( { attributes, setAttributes} ) {
                 placeholder="Resource Name..."
                 value={resource}
                 onChange={(value) => setAttributes({ resource: value })}
-                allowedFormats={['core/italic', 'core/link', 'core/math', 'glyphwell/inline-equation"']}
+                allowedFormats={['core/bold', 'core/italic', 'core/link', 'core/math', 'glyphwell/inline-equation"']}
                 multiline={false}
                 onKeyDown={preventLineBreaks}
             />
