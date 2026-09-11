@@ -66,6 +66,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                             allowedFormats={[]}
                             multiline={false}
                             onKeyDown={preventLineBreaks}
+                            onPaste={preventLineBreaks}
                         />
                         <p class="estimated-time">Estimated Time:&nbsp;
                             <RichText
@@ -76,6 +77,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                                 allowedFormats={[]}
                                 multiline={false}
                                 onKeyDown={preventLineBreaks}
+                                onPaste={preventLineBreaks}
                             />
                         </p>
                     </div>
@@ -89,6 +91,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                         allowedFormats={['core/bold', 'core/italic', 'core/math', 'glyphwell/inline-equation"']}
                         multiline={false}
                         onKeyDown={preventLineBreaks}
+                        onPaste={preventLineBreaks}
                     />
                 </div>
                 <InnerBlocks

@@ -76,6 +76,7 @@ export default function Edit ({ attributes, setAttributes }) {
                     onChange={(value) => setAttributes({ content: value })}
                     multiline={false}
                     onKeyDown={preventLineBreaks}
+                    onPaste={preventLineBreaks}
                 />
             </p>
         </div>

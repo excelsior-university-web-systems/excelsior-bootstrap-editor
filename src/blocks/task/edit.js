@@ -75,6 +75,7 @@ export default function Edit( { attributes, setAttributes } ) {
                     allowedFormats={['core/bold', 'core/italic', XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
                     multiline={false}
                     onKeyDown={preventLineBreaks}
+                    onPaste={preventLineBreaks}
                 />
                 {!noDueDate && (
                     <>

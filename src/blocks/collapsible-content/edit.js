@@ -31,6 +31,7 @@ export default function Edit( {attributes, setAttributes, context} ) {
                 onChange={(value) => setAttributes({ buttonText: value })}
                 multiline={false}
                 onKeyDown={preventLineBreaks}
+                onPaste={preventLineBreaks}
             />
             &nbsp;
             <i class="bi bi-chevron-up" aria-hidden="true"></i>

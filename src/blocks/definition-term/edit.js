@@ -32,6 +32,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
                 allowedFormats={['core/bold', 'core/italic']}
                 multiline={false}
                 onKeyDown={preventLineBreaks}
+                onPaste={preventLineBreaks}
             />
             <RichText
                 className={`definition mb-3 ${hasIndentation ? 'ms-3' : ''}`}
@@ -41,6 +42,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
                 allowedFormats={['core/bold', 'core/italic', 'core/math', 'glyphwell/inline-equation']}
                 multiline={false}
                 onKeyDown={preventLineBreaks}
+                onPaste={preventLineBreaks}
             />
         </div>
         </>

@@ -30,6 +30,7 @@ export default function Edit( { attributes, setAttributes} ) {
                 allowedFormats={['core/bold', 'core/italic', 'core/link', 'core/math', 'glyphwell/inline-equation"']}
                 multiline={false}
                 onKeyDown={preventLineBreaks}
+                onPaste={preventLineBreaks}
             />
         </div>
         </>

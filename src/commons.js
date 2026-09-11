@@ -250,14 +250,48 @@ export const CharacterLimitFeedback = ( { value, limit, message, showCount = tru
 };
 
 /**
- * Prevents Enter from inserting a line break or propagating the event.
+ * Prevents line breaks from being inserted by Enter or pasted text.
  *
- * @param {KeyboardEvent} event - Keyboard event to handle.
+ * @param {KeyboardEvent|ClipboardEvent} event - Event to handle.
  */
 export const preventLineBreaks = ( event ) => {
     if ( event.key === 'Enter' ) {
         event.preventDefault();
         event.stopPropagation();
+    }
+
+    const clipboardText = event.clipboardData?.getData( 'text/plain' );
+
+    if ( typeof clipboardText === 'string' && /[\r\n]/.test( clipboardText ) ) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const target = event.currentTarget;
+        const ownerDocument = target?.ownerDocument || document;
+        const ownerWindow = ownerDocument.defaultView || window;
+        const selection = ownerWindow.getSelection();
+
+        if ( !selection?.rangeCount ) {
+            return;
+        }
+
+        const sanitizedText = clipboardText.replace( /[\r\n]+/g, ' ' );
+        const range = selection.getRangeAt( 0 );
+        const textNode = ownerDocument.createTextNode( sanitizedText );
+
+        range.deleteContents();
+        range.insertNode( textNode );
+        range.setStartAfter( textNode );
+        range.collapse( true );
+        selection.removeAllRanges();
+        selection.addRange( range );
+        target.dispatchEvent(
+            new ownerWindow.InputEvent( 'input', {
+                bubbles: true,
+                data: sanitizedText,
+                inputType: 'insertText',
+            } )
+        );
     }
 };
 

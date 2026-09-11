@@ -53,6 +53,7 @@ export default function Edit({ attributes, setAttributes, clientId, context }) {
                 allowedFormats={[XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
                 multiline={false}
                 onKeyDown={preventLineBreaks}
+                onPaste={preventLineBreaks}
             />
             <InnerBlocks template={[['core/heading', {headingSizeClass: "h4"}],['core/paragraph']]} allowedBlocks={ALLOWED_BLOCKS} templateLock={false} />
         </div>

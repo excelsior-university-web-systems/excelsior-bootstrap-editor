@@ -54,6 +54,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                 allowedFormats={[XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
                 multiline={false}
                 onKeyDown={preventLineBreaks}
+                onPaste={preventLineBreaks}
             />
         </>
     );

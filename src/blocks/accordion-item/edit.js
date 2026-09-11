@@ -84,6 +84,7 @@ export default function Edit({ attributes, setAttributes, clientId, context }) {
                         allowedFormats={['core/bold', 'core/italic', XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
                         multiline={false}
                         onKeyDown={preventLineBreaks}
+                        onPaste={preventLineBreaks}
                     />
                 </HeadingLevel>
                 <div id={uniqueId} class={`accordion-collapse collapse ${openForEditing ? 'show' : ''}`}>

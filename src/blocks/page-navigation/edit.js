@@ -87,6 +87,7 @@ export default function Edit( { attributes, setAttributes} ) {
                     onChange={(value) => updateItem(index, 'label', value)}
                     multiline={false}
                     onKeyDown={preventLineBreaks}
+                    onPaste={preventLineBreaks}
                 />
                 <TextControl
                     label='Nav Item ID (for anchor)'
