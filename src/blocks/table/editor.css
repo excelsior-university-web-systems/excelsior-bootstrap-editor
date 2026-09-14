@@ -89,13 +89,7 @@
   outline sits above both and cannot be overridden by the framework.
 */
 .excelsior-table-editor .jss_worksheet > tbody > tr > td.highlight {
-	outline: 2px solid #3858e9;
-	outline-offset: -2px;
-}
-
-.excelsior-table-editor .jss_worksheet > tbody > tr > td.highlight-selected {
-	outline-color: #1d2327;
-	outline-width: 3px;
+	outline: 3px solid #1d2327;
 	outline-offset: -3px;
 }
 
@@ -115,7 +109,7 @@
 
 .excelsior-table-editor__grid {
 	max-width: 100%;
-	overflow-x: auto;
+	overflow: hidden;
 }
 
 /* Mirrors the figure-caption the saved markup emits below the table. */
