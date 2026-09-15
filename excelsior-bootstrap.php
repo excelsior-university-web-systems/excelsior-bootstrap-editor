@@ -5,7 +5,7 @@
  * Description:       Excelsior Bootstrap enhances the editing experience by providing blocks specifically designed for Excelsior Bootstrap-based content.
  * Author:            Ethan Lin
  * Author URI:        https://profiles.wordpress.org/eslin87/
- * Version:           1.3.0
+ * Version:           1.4.0
  * Requires PHP:      8.0
  * Requires at least: 6.6
  * License:           GPLv2 or later
