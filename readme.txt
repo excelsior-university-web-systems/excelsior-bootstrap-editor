@@ -36,7 +36,7 @@ This section describes how to install and activate the plugin.
 == Changelog ==
 
 = 1.3.2 (2026-10-14) =
-* 
+* Add "Group Resources with Introductions" to the required-resources block to support multiple resource groups, each with its own introduction.
 
 = 1.3.1 (2026-09-16) =
 * Add "deprecated" to old template pattern titles.

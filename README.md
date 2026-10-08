@@ -4,7 +4,7 @@
 **Requires at least:** 6.6  
 **Requires PHP:** 8.0  
 **Tested up to:** 7.1  
-**Stable tag:** 1.3.1  
+**Stable tag:** 1.3.2  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -36,6 +36,9 @@ This section describes how to install and activate the plugin.
 
 
 ## Changelog ##
+
+### 1.3.2 (2026-10-14) ###
+* Add "Group Resources with Introductions" to the required-resources block to support multiple resource groups, each with its own introduction.
 
 ### 1.3.1 (2026-09-16) ###
 * Add "deprecated" to old template pattern titles.
