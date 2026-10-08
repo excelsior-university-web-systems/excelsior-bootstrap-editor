@@ -24,6 +24,7 @@ export default function Edit( { attributes, setAttributes} ) {
         <div {...blockProps}>
             <RichText
                 tagName='p'
+                identifier="resource"
                 placeholder="Resource Name..."
                 value={resource}
                 onChange={(value) => setAttributes({ resource: value })}

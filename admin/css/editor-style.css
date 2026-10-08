@@ -175,6 +175,14 @@ p.is-selected:focus code[data-rich-text-format-boundary] {
     margin-bottom: 0 !important;
 }
 
+/* Reserve a footer row for adding advanced resource groups. */
+.excelsior-required-resources > .required-resources-group-actions {
+    display: flex;
+    position: relative;
+    clear: both;
+    margin-top: 16px !important;
+}
+
 /* EXCELSIOR BOOTSTRAP EDITOR
    COLUMNS */
 .wp-block-excelsior-bootstrap-editor-columns .col {

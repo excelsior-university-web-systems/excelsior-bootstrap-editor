@@ -10,6 +10,16 @@
         "inserter": false,
         "splitting": false
     },
+    "attributes": {
+        "mode": {
+            "type": "string",
+            "default": "simple"
+        },
+        "contextContent": {
+            "type": "string",
+            "default": ""
+        }
+    },
     "example": {
         "attributes": {
             "cover": "admin/images/required-resources-group.webp"

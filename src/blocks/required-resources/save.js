@@ -2,7 +2,7 @@ import { InnerBlocks, useBlockProps, RichText } from '@wordpress/block-editor';
 
 export default function Save( { attributes } ) {
 
-    const { headingLevel, headingText, estimatedTime, contextContent } = attributes;
+    const { mode = 'simple', headingLevel, headingText, estimatedTime, contextContent } = attributes;
     const blockProps = useBlockProps.save({
         className: 'excelsior-required-resources',
     });
@@ -25,7 +25,7 @@ export default function Save( { attributes } ) {
                         )}
                     </div>
                 </div>
-                { contextContent && (
+                { mode !== 'advanced' && contextContent && (
                     <div class="context-content">
                         <RichText.Content
                             tagName="p"
@@ -33,7 +33,9 @@ export default function Save( { attributes } ) {
                         />
                     </div>
                 )}
-                <InnerBlocks.Content />
+                { mode === 'advanced' ? (
+                    <div className="grouped-resources"><InnerBlocks.Content /></div>
+                ) : <InnerBlocks.Content /> }
             </div>
             
         </div>

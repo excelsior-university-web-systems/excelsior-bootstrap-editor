@@ -1,12 +1,14 @@
-import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+import { InnerBlocks, RichText, useBlockProps } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
-import { useMinimumChildBlocks } from '../../commons';
+import { preventLineBreaks, useMinimumChildBlocks } from '../../commons';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 import metadata from './block.json';
 
 const ITEM_BLOCK = XCLSR_BTSTRP_EDITOR_PREFIX + '/required-resources-group-item';
 
-export default function Edit( { clientId } ) {
+export default function Edit( { attributes, setAttributes, clientId } ) {
+    const { mode = 'simple', contextContent } = attributes;
+    const isAdvanced = mode === 'advanced';
     
     const previewImage = metadata?.example?.attributes?.cover || '';
     
@@ -16,7 +18,7 @@ export default function Edit( { clientId } ) {
     );
 
     const blockProps = useBlockProps({
-        className: 'list-group',
+        className: isAdvanced ? 'grouped-item' : 'list-group',
     });
 
     useMinimumChildBlocks( {
@@ -30,15 +32,33 @@ export default function Edit( { clientId } ) {
         return <img src={xclsr_btstrp_block_preview.pluginUrl + previewImage} width='100%' height='auto' />;
     }
 
+    const resources = (
+        <InnerBlocks
+            allowedBlocks={[ITEM_BLOCK]}
+            template={[[ITEM_BLOCK]]}
+            templateLock={false}
+            renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
+        />
+    );
+
     return (
         <>
         <div {...blockProps}>
-            <InnerBlocks
-                allowedBlocks={[ITEM_BLOCK]}
-                template={[[ITEM_BLOCK]]}
-                templateLock={false}
-                renderAppender={() => <InnerBlocks.DefaultBlockAppender />}
-            />
+            { isAdvanced && (
+                <div className="context-content">
+                    <RichText
+                        tagName="p"
+                        placeholder="Context for these resources..."
+                        value={contextContent}
+                        onChange={(value) => setAttributes({ contextContent: value })}
+                        allowedFormats={['core/bold', 'core/italic', 'core/math', 'glyphwell/inline-equation"']}
+                        multiline={false}
+                        onKeyDown={preventLineBreaks}
+                        onPaste={preventLineBreaks}
+                    />
+                </div>
+            ) }
+            { isAdvanced ? <div className="list-group">{resources}</div> : resources }
         </div>
         </>
         

@@ -15,6 +15,10 @@
         }
     },
     "attributes": {
+        "mode": {
+            "type": "string",
+            "default": "simple"
+        },
         "headingLevel": {
             "type": "string",
             "default": "h3"
