@@ -1,6 +1,5 @@
 import { useBlockProps, RichText } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
-import { Notice } from '@wordpress/components';
 import metadata from './block.json';
 import { preventLineBreaks } from '../../commons';
 import { hasRichTextContent } from '../required-resources/validation';
@@ -46,11 +45,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                 onKeyDown={preventLineBreaks}
                 onPaste={preventLineBreaks}
             />
-            { missingResource && (
-                <Notice id={resourceErrorId} status="error" isDismissible={false}>
-                    Resource content is required.
-                </Notice>
-            ) }
         </div>
         </>
         

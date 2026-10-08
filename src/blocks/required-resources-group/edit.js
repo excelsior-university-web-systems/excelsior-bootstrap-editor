@@ -1,5 +1,4 @@
 import { InnerBlocks, RichText, useBlockProps } from '@wordpress/block-editor';
-import { Notice } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { preventLineBreaks, useMinimumChildBlocks } from '../../commons';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
@@ -66,11 +65,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                         onKeyDown={preventLineBreaks}
                         onPaste={preventLineBreaks}
                     />
-                    { missingContext && (
-                        <Notice id={contextErrorId} status="error" isDismissible={false}>
-                            An introduction is required for this resource group.
-                        </Notice>
-                    ) }
                 </div>
             ) }
             { isAdvanced ? <div className="list-group">{resources}</div> : resources }
