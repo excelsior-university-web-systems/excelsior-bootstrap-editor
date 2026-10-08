@@ -28,7 +28,7 @@ add_action( 'init', function() {
 
     wp_register_script(
         XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend',
-        plugin_dir_url(__FILE__) . '../public/js/excelsior-bootstrap.js',
+        plugin_dir_url(__FILE__) . '../public/framework/excelsior-bootstrap.js',
         array(),
         XCLSR_BTSTRP_FRAMEWORK_VERSION,
         array(
@@ -39,7 +39,7 @@ add_action( 'init', function() {
 
     wp_register_style(
         XCLSR_BTSTRP_EDITOR_PREFIX.'-frontend',
-        plugin_dir_url(__FILE__) . '../public/css/excelsior-bootstrap.css',
+        plugin_dir_url(__FILE__) . '../public/framework/excelsior-bootstrap.css',
         array(),
         XCLSR_BTSTRP_FRAMEWORK_VERSION
     );
