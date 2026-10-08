@@ -8,6 +8,7 @@ import { createHigherOrderComponent } from '@wordpress/compose';
 import { select, dispatch, useSelect, useDispatch, subscribe } from '@wordpress/data';
 import { useState, useEffect, Fragment } from '@wordpress/element';
 import { observeElement } from '../commons';
+import { hasMissingRequiredResourceContent } from '../blocks/required-resources/validation';
 import beautify from 'js-beautify';
 
 window.Prism = window.Prism || {};
@@ -429,6 +430,33 @@ const validateFields = () => {
     return courseNumber && pageTitle && year;
 
 };
+
+let isResourceContentSavingLocked = false;
+
+subscribe( () => {
+    const hasMissingContent = hasMissingRequiredResourceContent( select( 'core/block-editor' ).getBlocks() );
+    if ( hasMissingContent === isResourceContentSavingLocked ) {
+        return;
+    }
+
+    // Update the flag before dispatching, since dispatch invokes subscribers again.
+    isResourceContentSavingLocked = hasMissingContent;
+    const lockKey = 'required-resources-content';
+    const { lockPostSaving, unlockPostSaving, lockPostAutosaving, unlockPostAutosaving } = dispatch( 'core/editor' );
+    const { createNotice, removeNotice } = dispatch( 'core/notices' );
+    if ( hasMissingContent ) {
+        lockPostSaving( lockKey );
+        lockPostAutosaving( lockKey );
+        createNotice( 'error', 'Each resource group needs an introduction and at least one resource. All resource items must be nonempty before saving.', {
+            id: lockKey,
+            isDismissible: false,
+        } );
+    } else {
+        unlockPostSaving( lockKey );
+        unlockPostAutosaving( lockKey );
+        removeNotice( lockKey );
+    }
+} );
 
 let isSavingLocked = false;
 

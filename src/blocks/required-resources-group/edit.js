@@ -1,8 +1,10 @@
 import { InnerBlocks, RichText, useBlockProps } from '@wordpress/block-editor';
+import { Notice } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { preventLineBreaks, useMinimumChildBlocks } from '../../commons';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 import metadata from './block.json';
+import { hasRichTextContent } from '../required-resources/validation';
 
 const ITEM_BLOCK = XCLSR_BTSTRP_EDITOR_PREFIX + '/required-resources-group-item';
 
@@ -32,6 +34,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         return <img src={xclsr_btstrp_block_preview.pluginUrl + previewImage} width='100%' height='auto' />;
     }
 
+    const missingContext = isAdvanced && !hasRichTextContent( contextContent );
+    const contextErrorId = `required-resources-context-error-${ clientId }`;
+
     const resources = (
         <InnerBlocks
             allowedBlocks={[ITEM_BLOCK]}
@@ -48,7 +53,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                 <div className="context-content">
                     <RichText
                         tagName="p"
-                        placeholder="Context for these resources..."
+                        identifier="contextContent"
+                        aria-required="true"
+                        aria-invalid={missingContext}
+                        aria-describedby={missingContext ? contextErrorId : undefined}
+                        aria-label="Group introduction"
+                        placeholder="Group introduction..."
                         value={contextContent}
                         onChange={(value) => setAttributes({ contextContent: value })}
                         allowedFormats={['core/bold', 'core/italic', 'core/math', 'glyphwell/inline-equation"']}
@@ -56,6 +66,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                         onKeyDown={preventLineBreaks}
                         onPaste={preventLineBreaks}
                     />
+                    { missingContext && (
+                        <Notice id={contextErrorId} status="error" isDismissible={false}>
+                            An introduction is required for this resource group.
+                        </Notice>
+                    ) }
                 </div>
             ) }
             { isAdvanced ? <div className="list-group">{resources}</div> : resources }

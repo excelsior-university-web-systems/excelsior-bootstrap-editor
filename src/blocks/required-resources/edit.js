@@ -73,12 +73,6 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
         <>
         <InspectorControls>
             <PanelBody title='Settings'>
-                <ToggleControl
-                    label="Advanced Mode"
-                    checked={isAdvanced}
-                    onChange={changeMode}
-                    __nextHasNoMarginBottom
-                />
                 <SelectControl
                     label="Heading Level"
                     value={headingLevel}
@@ -92,6 +86,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                     onChange={(value) => setAttributes({ headingLevel: value })}
                     __nextHasNoMarginBottom
                     __next40pxDefaultSize
+                />
+                <ToggleControl
+                    label="Group Resources with Introductions"
+                    checked={isAdvanced}
+                    onChange={changeMode}
+                    __nextHasNoMarginBottom
                 />
             </PanelBody>
         </InspectorControls>
