@@ -17,7 +17,6 @@ import './definitions';
 import './definition-term';
 import './homepage-content';
 import './horizontal-rule';
-import './iframe-embed';
 import './image-banner';
 import './image';
 import './image-and-text';

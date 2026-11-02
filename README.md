@@ -45,6 +45,7 @@ This section describes how to install and activate the plugin.
 * Remove deprecated styles in `callout` block.
 * Remove deprecated `tipbox` block.
 * Remove deprecated icons.
+* Remove deprecated `iframe-embed` block.
 * Cleanup up the `button` block styles.
 
 ### 1.3.2 (2026-10-14) ###
