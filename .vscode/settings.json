@@ -3,7 +3,9 @@
         "BORDERLESS",
         "BTSTRP",
         "contenteditable",
-        "tipbox",
+        "pagenow",
+        "postarr",
+        "typenow",
         "XCLSR"
     ]
 }

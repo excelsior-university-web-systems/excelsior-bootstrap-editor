@@ -1,0 +1,57 @@
+{
+    "apiVersion": 3,
+    "name": "excelsior-bootstrap-editor/media-embed",
+    "title": "Media Embed",
+    "description": "Embed media such as Storybook+, video player, and YouTube video.",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container", "core/group"],
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "mediaTitle": {
+            "type": "string",
+            "default": ""
+        },
+        "mediaSource": {
+            "type": "string",
+            "default": ""
+        },
+        "responsive": {
+            "type": "boolean",
+            "default": true
+        },
+        "verticalScroll": {
+            "type": "string",
+            "default": ""
+        },
+        "width": {
+            "type": "string",
+            "default": ""
+        },
+        "height": {
+            "type": "string",
+            "default": ""
+        },
+        "minWidth": {
+            "type": "string",
+            "default": ""
+        },
+        "minHeight": {
+            "type": "string",
+            "default": ""
+        },
+        "maxWidth": {
+            "type": "string",
+            "default": ""
+        },
+        "maxHeight": {
+            "type": "string",
+            "default": ""
+        },
+        "floatingClasses": {
+            "type": "string",
+            "default": ""
+        }
+    }
+}

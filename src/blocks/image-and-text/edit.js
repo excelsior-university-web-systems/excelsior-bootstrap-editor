@@ -4,8 +4,9 @@ import { ALLOWED_BLOCKS } from './allowed-blocks';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 import metadata from './block.json';
 
-export default function Edit( {attributes} ) {
+export default function Edit( { attributes } ) {
 
+    const { repositioned } = attributes;
     const previewImage = metadata?.example?.attributes?.cover || '';
     const isPreview = useSelect(
         ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
@@ -18,7 +19,7 @@ export default function Edit( {attributes} ) {
     ];
 
     const blockProps = useBlockProps( {
-        className: 'clearfix'
+        className: repositioned ? 'd-flex flex-column d-md-block clearfix' : 'clearfix'
     } );
 
     if ( isPreview && previewImage ) {

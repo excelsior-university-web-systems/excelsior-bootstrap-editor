@@ -1,7 +1,8 @@
 import { useBlockProps, InspectorControls, RichText } from '@wordpress/block-editor';
 import { TextControl, Button, PanelBody } from '@wordpress/components';
 import { useState } from '@wordpress/element';
-import { formatAsHtmlId, removeScriptTags } from '../../commons';
+import { escapeHTML } from '@wordpress/escape-html';
+import { formatAsHtmlId, sanitizeHTML, preventLineBreaks } from '../../commons';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 
 export default function Edit( { attributes, setAttributes} ) {
@@ -17,7 +18,8 @@ export default function Edit( { attributes, setAttributes} ) {
     const addItem = () => {
 
         const formattedId = formatAsHtmlId(newLinkId);
-        const sanitizedLabel = removeScriptTags(newLinkLabel);
+        // Labels are stored as HTML; the text field is plain text, so escape it.
+        const sanitizedLabel = escapeHTML(newLinkLabel);
 
         if ( newLinkLabel && newLinkId ) {
           setAttributes({
@@ -35,7 +37,7 @@ export default function Edit( { attributes, setAttributes} ) {
         if (key === 'id') {
           newItems[index][key] = formatAsHtmlId(value);
         } else {
-          newItems[index][key] = removeScriptTags(value);
+          newItems[index][key] = sanitizeHTML(value);
         }
         setAttributes({ items: newItems });
     };
@@ -85,6 +87,9 @@ export default function Edit( { attributes, setAttributes} ) {
                     value={item.label}
                     allowedFormats={[XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
                     onChange={(value) => updateItem(index, 'label', value)}
+                    multiline={false}
+                    onKeyDown={preventLineBreaks}
+                    onPaste={preventLineBreaks}
                 />
                 <TextControl
                     label='Nav Item ID (for anchor)'

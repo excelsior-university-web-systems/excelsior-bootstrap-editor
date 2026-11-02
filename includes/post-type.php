@@ -4,14 +4,43 @@ namespace ExcelsiorBootstrapEditor;
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 require_once plugin_dir_path( __FILE__ ) . 'constants.php';
+require_once plugin_dir_path( __FILE__ ) . 'class-rest-posts-controller.php';
+
+function is_public() {
+    return get_option( 'boots_editor_is_public', false ) == '1';
+}
+
+function is_unlisted() {
+    return is_public() && (bool) get_option( 'boots_editor_hash_slug_option', false );
+}
+
+// A REST listing would reveal every unlisted URL, so only public, listed pages are open.
+function rest_reads_require_auth() {
+    return ! is_public() || is_unlisted();
+}
+
+function current_user_can_read_rest() {
+    return ! rest_reads_require_auth() || current_user_can( 'edit_'.XCLSR_BTSTRP_POST_TYPE.'s' );
+}
+
+function rest_read_permission_error() {
+    if ( current_user_can_read_rest() ) {
+        return null;
+    }
+
+    return new \WP_Error(
+        'rest_forbidden',
+        'Sorry, you are not allowed to view these pages.',
+        array( 'status' => rest_authorization_required_code() )
+    );
+}
 
 function add_excelsior_bootstrap_post_type() {
 
-    $visibility     = get_option( 'boots_editor_is_public', false );
-    $is_public      = ( $visibility == '1' );
+    $is_public      = is_public();
 
     $searchability  = get_option( 'boots_editor_is_searchable', false );
-    $is_searchable  = ( $searchability == '1' );
+    $is_searchable  = ( $searchability == '1' ) && ! is_unlisted();
 
     $args = array(
         'labels'                    => array(
@@ -61,6 +90,7 @@ function add_excelsior_bootstrap_post_type() {
         'show_in_nav_menus'   => false,
         'show_in_admin_bar'   => false,
         'show_in_rest'        => true,
+        'rest_controller_class' => __NAMESPACE__.'\\REST_Posts_Controller',
         'menu_icon'           => 'dashicons-welcome-widgets-menus',
         'delete_with_user'    => false,
         'template'            => array(
@@ -76,6 +106,8 @@ function add_excelsior_bootstrap_post_type() {
         'show_in_rest' => true,
         'single' => true,
         'default' => '',
+        'sanitize_callback' => __NAMESPACE__.'\\sanitize_course_number_meta',
+        'auth_callback' => __NAMESPACE__.'\\can_edit_post_meta',
     ) );
 
     \register_post_meta( XCLSR_BTSTRP_POST_TYPE, XCLSR_BTSTRP_POST_TYPE.'_post_page_title', array(
@@ -83,6 +115,8 @@ function add_excelsior_bootstrap_post_type() {
         'show_in_rest' => true,
         'single' => true,
         'default' => '',
+        'sanitize_callback' => 'sanitize_text_field',
+        'auth_callback' => __NAMESPACE__.'\\can_edit_post_meta',
     ) );
 
     \register_post_meta( XCLSR_BTSTRP_POST_TYPE, XCLSR_BTSTRP_POST_TYPE.'_post_year', array(
@@ -90,16 +124,52 @@ function add_excelsior_bootstrap_post_type() {
         'show_in_rest' => true,
         'single' => true,
         'default' => '',
+        'sanitize_callback' => __NAMESPACE__.'\\sanitize_year_meta',
+        'auth_callback' => __NAMESPACE__.'\\can_edit_post_meta',
     ) );
-
-    \ExcelsiorBootstrapEditor\add_excelsior_bootstrap_capabilities();
 }
 
 add_action( 'init', __NAMESPACE__.'\\add_excelsior_bootstrap_post_type' );
 
+function can_edit_post_meta( $allowed, $meta_key, $post_id ) {
+    return current_user_can( 'edit_post', $post_id );
+}
+
+// Mirrors formatCourseNumber() in the editor: no whitespace, uppercase.
+function sanitize_course_number_meta( $value ) {
+    return strtoupper( preg_replace( '/\s+/', '', sanitize_text_field( (string) $value ) ) );
+}
+
+function sanitize_year_meta( $value ) {
+    $value = trim( (string) $value );
+
+    if ( preg_match( '/^\d{4}$/', $value ) && (int) $value >= 2000 && (int) $value <= 2100 ) {
+        return $value;
+    }
+
+    return '';
+}
+
+function get_excelsior_bootstrap_capabilities() {
+    $type = XCLSR_BTSTRP_POST_TYPE.'s';
+
+    return array(
+        'delete_'.$type,
+        'edit_'.$type,
+        'edit_others_'.$type,
+        'publish_'.$type,
+        'read_private_'.$type,
+        'delete_private_'.$type,
+        'delete_published_'.$type,
+        'delete_others_'.$type,
+        'edit_private_'.$type,
+        'edit_published_'.$type,
+    );
+}
+
 /*
   Assign custom capabilities (defined during post type registration)
-  to administrator and editor user roles
+  to the administrator role
 */
 function add_excelsior_bootstrap_capabilities() {
     $roles = array( 'administrator' );
@@ -107,22 +177,40 @@ function add_excelsior_bootstrap_capabilities() {
     foreach ( $roles as $role_name ) {
 
         $role = \get_role($role_name );
-        
+
         if ( !$role ) continue;
 
-        $role->add_cap( 'read' );
-        $role->add_cap( 'delete_'.XCLSR_BTSTRP_POST_TYPE.'s' );
-        $role->add_cap( 'edit_'.XCLSR_BTSTRP_POST_TYPE.'s' );
-        $role->add_cap( 'edit_others_'.XCLSR_BTSTRP_POST_TYPE.'s' );
-        $role->add_cap( 'publish_'.XCLSR_BTSTRP_POST_TYPE.'s' );
-        $role->add_cap( 'read_private_'.XCLSR_BTSTRP_POST_TYPE.'s' );
-        $role->add_cap( 'delete_private_'.XCLSR_BTSTRP_POST_TYPE.'s' );
-        $role->add_cap( 'delete_published_'.XCLSR_BTSTRP_POST_TYPE.'s' );
-        $role->add_cap( 'delete_others_'.XCLSR_BTSTRP_POST_TYPE.'s' );
-        $role->add_cap( 'edit_private_'.XCLSR_BTSTRP_POST_TYPE.'s' );
-        $role->add_cap( 'edit_published_'.XCLSR_BTSTRP_POST_TYPE.'s' );
+        foreach ( get_excelsior_bootstrap_capabilities() as $cap ) {
+            $role->add_cap( $cap );
+        }
 
     }
+}
+
+// Covers sites updated without reactivation and subsites of a network activation.
+function maybe_upgrade_capabilities() {
+    if ( get_option( 'boots_editor_caps_version' ) === XCLSR_BTSTRP_CAPS_VERSION ) {
+        return;
+    }
+
+    add_excelsior_bootstrap_capabilities();
+    update_option( 'boots_editor_caps_version', XCLSR_BTSTRP_CAPS_VERSION );
+    schedule_rewrite_flush();
+}
+
+add_action( 'admin_init', __NAMESPACE__.'\\maybe_upgrade_capabilities' );
+
+function on_activation() {
+    add_excelsior_bootstrap_post_type();
+    add_excelsior_bootstrap_capabilities();
+    update_option( 'boots_editor_caps_version', XCLSR_BTSTRP_CAPS_VERSION );
+    flush_rewrite_rules();
+}
+
+// Capabilities are kept so a temporary deactivation does not remove access; uninstall.php removes them.
+function on_deactivation() {
+    unregister_post_type( XCLSR_BTSTRP_POST_TYPE );
+    flush_rewrite_rules();
 }
 
 function set_empty_title_post_to_draft( $data ) {
@@ -143,8 +231,9 @@ add_filter( 'wp_insert_post_data', __NAMESPACE__.'\\set_empty_title_post_to_draf
  *
  * - Applies only to posts of the excelsior_bootstrap post type.
  * - Checks the plugin option `editor_hash_slug_option` before applying.
- * - For new posts, generates a unique slug using microtime and a random password.
- * - Hashes the base string using MD5 to ensure a unique, fixed-length slug.
+ * - Generates a random 32-character hex slug for new posts or posts without a slug.
+ * - Hashed slugs cannot be replaced, apart from WordPress's `__trashed` suffix.
+ * - Readable slugs are left unchanged so shared links keep working.
  *
  * @param array $data    Sanitized post data.
  * @param array $postarr Raw post data.
@@ -159,15 +248,20 @@ function editor_hash_slug( $data, $postarr ) {
         return $data;
     }
 
-    // Only generate slug if it's a new post
     $is_new_post = empty( $postarr['ID'] ) || get_post_status( $postarr['ID'] ) === false;
+    $stored_slug = $is_new_post ? '' : (string) get_post_field( 'post_name', $postarr['ID'], 'raw' );
 
-    if ( $is_new_post ) {
-        $time = microtime( true );
-        $rand = wp_generate_password( 6, false );
-        $base = 'boots-editor-' . $time . '-' . $rand;
+    if ( $stored_slug === '' ) {
+        $data['post_name'] = bin2hex( random_bytes( 16 ) );
+        return $data;
+    }
 
-        $data['post_name'] = md5( $base );
+    $without_trash_suffix = function( $slug ) {
+        return preg_replace( '/__trashed$/', '', (string) $slug );
+    };
+
+    if ( preg_match( '/^[a-f0-9]{32}(__trashed)?$/', $stored_slug ) && $without_trash_suffix( $data['post_name'] ) !== $without_trash_suffix( $stored_slug ) ) {
+        $data['post_name'] = $stored_slug;
     }
 
     return $data;
@@ -195,8 +289,8 @@ function course_and_year_filtering_dropdown() {
         $year_meta_key
     ) );
 
-    $selected_course = isset( $_GET['course_number'] ) ? sanitize_text_field( $_GET['course_number'] ) : '';
-    $selected_year = isset( $_GET['year'] ) ? sanitize_text_field( $_GET['year'] ) : '';
+    $selected_course = isset( $_GET['course_number'] ) ? sanitize_text_field( wp_unslash( $_GET['course_number'] ) ) : '';
+    $selected_year = isset( $_GET['year'] ) ? sanitize_text_field( wp_unslash( $_GET['year'] ) ) : '';
 
     ?>
     <select name="course_number">
@@ -234,7 +328,7 @@ function filter_posts_by_course_number_and_year( $query ) {
         if ( !empty( $_GET['course_number'] ) ) {
             $meta_query[] = array(
                 'key'     => XCLSR_BTSTRP_POST_TYPE.'_post_course_number',
-                'value'   => sanitize_text_field( $_GET['course_number'] ),
+                'value'   => sanitize_text_field( wp_unslash( $_GET['course_number'] ) ),
                 'compare' => '='
             );
         }
@@ -243,7 +337,7 @@ function filter_posts_by_course_number_and_year( $query ) {
         if ( !empty( $_GET['year'] ) ) {
             $meta_query[] = array(
                 'key'     => XCLSR_BTSTRP_POST_TYPE.'_post_year',
-                'value'   => sanitize_text_field( $_GET['year'] ),
+                'value'   => sanitize_text_field( wp_unslash( $_GET['year'] ) ),
                 'compare' => '='
             );
         }
@@ -367,4 +461,106 @@ function blank_single_template( $template ) {
 }
 
 add_filter( 'single_template', __NAMESPACE__.'\\blank_single_template', 11 );
+
+/*
+  Returns a 404 for unlisted pages requested without their exact slug (e.g., `?p=123`,
+  listings, feeds). Runs before `redirect_canonical`, which would otherwise redirect an
+  ID-based request to the hashed URL. Users who can edit the page (e.g., previews) are exempt.
+*/
+function enforce_unlisted_urls() {
+    if ( ! is_unlisted() ) {
+        return;
+    }
+
+    global $wp_query;
+
+    $requested_post_types = (array) $wp_query->get( 'post_type' );
+
+    if ( ! is_singular( XCLSR_BTSTRP_POST_TYPE ) && ! in_array( XCLSR_BTSTRP_POST_TYPE, $requested_post_types, true ) ) {
+        return;
+    }
+
+    if ( is_singular( XCLSR_BTSTRP_POST_TYPE ) && ! is_feed() ) {
+        $post = get_queried_object();
+
+        if ( $post instanceof \WP_Post ) {
+            if ( current_user_can( 'edit_post', $post->ID ) ) {
+                return;
+            }
+
+            $requested_slug = sanitize_title_for_query( (string) $wp_query->get( 'name' ) );
+
+            if ( $requested_slug !== '' && $requested_slug === $post->post_name ) {
+                return;
+            }
+        }
+    }
+
+    $wp_query->set_404();
+    status_header( 404 );
+    nocache_headers();
+    remove_action( 'template_redirect', 'redirect_canonical' );
+}
+
+add_action( 'template_redirect', __NAMESPACE__.'\\enforce_unlisted_urls', 0 );
+
+// These links and headers reveal post IDs or neighboring pages.
+function remove_identifying_head_links() {
+    if ( ! is_singular( XCLSR_BTSTRP_POST_TYPE ) ) {
+        return;
+    }
+
+    remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head', 10 );
+    remove_action( 'wp_head', 'wp_shortlink_wp_head', 10 );
+    remove_action( 'wp_head', 'rest_output_link_wp_head', 10 );
+    remove_action( 'template_redirect', 'wp_shortlink_header', 11 );
+    remove_action( 'template_redirect', 'rest_output_link_header', 11 );
+}
+
+add_action( 'template_redirect', __NAMESPACE__.'\\remove_identifying_head_links', 1 );
+
+function exclude_unlisted_from_sitemaps( $post_types ) {
+    if ( is_unlisted() ) {
+        unset( $post_types[ XCLSR_BTSTRP_POST_TYPE ] );
+    }
+
+    return $post_types;
+}
+
+add_filter( 'wp_sitemaps_post_types', __NAMESPACE__.'\\exclude_unlisted_from_sitemaps' );
+
+function exclude_from_rest_search( $query_args ) {
+    if ( current_user_can_read_rest() ) {
+        return $query_args;
+    }
+
+    $post_types = array_values( array_diff( (array) $query_args['post_type'], array( XCLSR_BTSTRP_POST_TYPE ) ) );
+
+    if ( empty( $post_types ) ) {
+        $query_args['post__in'] = array( 0 );
+    } else {
+        $query_args['post_type'] = $post_types;
+    }
+
+    return $query_args;
+}
+
+add_filter( 'rest_post_search_query', __NAMESPACE__.'\\exclude_from_rest_search' );
+
+// Stops /wp/v2/users from listing authors only because they published pages.
+function exclude_from_rest_author_listing( $prepared_args ) {
+    if ( current_user_can_read_rest() || empty( $prepared_args['has_published_posts'] ) || ! is_array( $prepared_args['has_published_posts'] ) ) {
+        return $prepared_args;
+    }
+
+    $post_types = array_values( array_diff( $prepared_args['has_published_posts'], array( XCLSR_BTSTRP_POST_TYPE ) ) );
+
+    if ( ! empty( $post_types ) ) {
+        $prepared_args['has_published_posts'] = $post_types;
+    }
+
+    return $prepared_args;
+}
+
+add_filter( 'rest_user_query', __NAMESPACE__.'\\exclude_from_rest_author_listing' );
 ?>

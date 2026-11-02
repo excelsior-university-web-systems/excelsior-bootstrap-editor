@@ -1,0 +1,40 @@
+{
+    "apiVersion": 3,
+    "name": "excelsior-bootstrap-editor/required-resources",
+    "title": "Required Resources",
+    "description": "Create a collection of required resources.",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/container", "core/group"],
+    "supports": {
+        "html": false,
+        "splitting": false
+    },
+    "example": {
+        "attributes": {
+            "cover": "admin/images/required-resources.webp"
+        }
+    },
+    "attributes": {
+        "mode": {
+            "type": "string",
+            "default": "simple"
+        },
+        "headingLevel": {
+            "type": "string",
+            "enum": ["h2", "h3", "h4", "h5", "h6"],
+            "default": "h3"
+        },
+        "headingText": {
+            "type": "string",
+            "default": "Required Resources"
+        },
+        "estimatedTime": {
+            "type": "string",
+            "default": ""
+        },
+        "contextContent": {
+            "type": "string",
+            "default": ""
+        }
+    }
+}

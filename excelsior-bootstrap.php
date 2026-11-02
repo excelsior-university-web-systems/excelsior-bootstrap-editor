@@ -1,17 +1,24 @@
 <?php
 /**
- * Plugin Name: Excelsior Bootstrap
- * Plugin URI:  https://github.com/excelsior-university-web-systems/excelsior-bootstrap-editor
- * Description: Excelsior Bootstrap enhances the editing experience by providing blocks specifically designed for Excelsior Bootstrap-based content.
- * Author:      Ethan Lin
- * Author URI:  https://profiles.wordpress.org/eslin87/
- * Version:     1.2.1
- * License:     GPLv2 or later
+ * Plugin Name:       Excelsior Bootstrap
+ * Plugin URI:        https://github.com/excelsior-university-web-systems/excelsior-bootstrap-editor
+ * Description:       Excelsior Bootstrap enhances the editing experience by providing blocks specifically designed for Excelsior Bootstrap-based content.
+ * Author:            Ethan Lin
+ * Author URI:        https://profiles.wordpress.org/eslin87/
+ * Version:           1.3.3
+ * Requires PHP:      8.0
+ * Requires at least: 7.0
+ * License:           GPLv2 or later
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/post-type.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/taxonomies.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/blocks.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/patterns.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/options.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/security.php';
+
+register_activation_hook( __FILE__, 'ExcelsiorBootstrapEditor\\on_activation' );
+register_deactivation_hook( __FILE__, 'ExcelsiorBootstrapEditor\\on_deactivation' );

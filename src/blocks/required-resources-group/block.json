@@ -1,0 +1,29 @@
+{
+    "apiVersion": 3,
+    "name": "excelsior-bootstrap-editor/required-resources-group",
+    "title": "Required Resources Group",
+    "description": "A collection of required resources.",
+    "category": "excelsior-bootstrap-editor-blocks",
+    "parent": ["excelsior-bootstrap-editor/required-resources"],
+    "supports": {
+        "html": false,
+        "inserter": false,
+        "splitting": false
+    },
+    "attributes": {
+        "mode": {
+            "type": "string",
+            "default": "simple"
+        },
+        "contextContent": {
+            "type": "string",
+            "default": ""
+        }
+    },
+    "example": {
+        "attributes": {
+            "cover": "admin/images/required-resources-group.webp"
+        }
+    }
+
+}

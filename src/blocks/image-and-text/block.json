@@ -20,6 +20,10 @@
         "alignmentEnabled": {
             "type": "boolean",
             "default": true
+        },
+        "repositioned": {
+            "type": "boolean",
+            "default": false
         }
     }
 }

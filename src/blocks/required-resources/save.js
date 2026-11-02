@@ -1,0 +1,44 @@
+import { InnerBlocks, useBlockProps, RichText } from '@wordpress/block-editor';
+import { getSafeHeadingTag } from '../../commons';
+
+export default function Save( { attributes } ) {
+
+    const { mode = 'simple', headingLevel, headingText, estimatedTime, contextContent } = attributes;
+    const blockProps = useBlockProps.save({
+        className: 'excelsior-required-resources',
+    });
+
+    return (
+        <div {...blockProps}>
+            <div class="context-container">
+                <div class="context-header">
+                    <div class="icon">
+                        <i class="bi bi-check2-circle" aria-hidden="true"></i>
+                    </div>
+                    <div class="heading">
+                        <RichText.Content
+                            tagName={getSafeHeadingTag( headingLevel, 'h3' )}
+                            value={headingText}
+                            className='title h5'
+                        />
+                        { estimatedTime && (
+                            <p class="estimated-time">Estimated Time: {estimatedTime}</p>
+                        )}
+                    </div>
+                </div>
+                { mode !== 'advanced' && contextContent && (
+                    <div class="context-content">
+                        <RichText.Content
+                            tagName="p"
+                            value={contextContent}
+                        />
+                    </div>
+                )}
+                { mode === 'advanced' ? (
+                    <div className="grouped-resources"><InnerBlocks.Content /></div>
+                ) : <InnerBlocks.Content /> }
+            </div>
+            
+        </div>
+    );
+}

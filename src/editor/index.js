@@ -1,5 +1,5 @@
 import { addFilter } from '@wordpress/hooks';
-import { XCLSR_BTSTRP_EDITOR_PREFIX, XCLSR_BTSTRP_POST_TYPE } from '../constants';
+import { XCLSR_BTSTRP_EDITOR_PREFIX, XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY, XCLSR_BTSTRP_POST_TYPE } from '../constants';
 import { registerPlugin } from '@wordpress/plugins';
 import { PluginPostStatusInfo } from '@wordpress/editor';
 import { InspectorControls } from '@wordpress/block-editor';
@@ -8,6 +8,7 @@ import { createHigherOrderComponent } from '@wordpress/compose';
 import { select, dispatch, useSelect, useDispatch, subscribe } from '@wordpress/data';
 import { useState, useEffect, Fragment } from '@wordpress/element';
 import { observeElement } from '../commons';
+import { hasMissingRequiredResourceContent } from '../blocks/required-resources/validation';
 import beautify from 'js-beautify';
 
 window.Prism = window.Prism || {};
@@ -22,6 +23,7 @@ const BOOTSTRAP_TABLE_VARIATION_ATTRIBUTES = {
     isStriped: false,
     border: 'table-bordered',
 };
+const LEARNING_PATH_TAXONOMY_PANEL = `taxonomy-panel-${ XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY }`;
 
 /**
  * Recursively checks whether a block tree contains the Excelsior namespace block.
@@ -111,6 +113,54 @@ const isBootstrapEditorActive = () => {
 };
 
 const useIsExcelsiorBootstrapPostType = () => useSelect( () => isExcelsiorBootstrapPostType(), [] );
+
+/**
+ * Renders a single-term Learning Path selector for Excelsior Bootstrap posts.
+ *
+ * @returns {JSX.Element} The taxonomy dropdown.
+ */
+const LearningPathSelector = () => {
+    const { editPost } = useDispatch( 'core/editor' );
+    const learningPathTerms = useSelect( ( select ) => {
+        return select( 'core' ).getEntityRecords(
+            'taxonomy',
+            XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY,
+            {
+                per_page: 100,
+                orderby: 'name',
+                order: 'asc',
+            }
+        );
+    }, [] );
+    const selectedLearningPath = useSelect( ( select ) => {
+        const selectedTerms = select( 'core/editor' ).getEditedPostAttribute( XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY ) || [];
+
+        return selectedTerms.length ? selectedTerms[ 0 ].toString() : '';
+    }, [] );
+    const learningPathOptions = [
+        { label: 'No Learning Path', value: '' },
+        ...( learningPathTerms || [] ).map( ( term ) => ( {
+            label: term.name,
+            value: term.id.toString(),
+        } ) ),
+    ];
+
+    return (
+        <SelectControl
+            label="Learning Path Version"
+            value={ selectedLearningPath }
+            options={ learningPathOptions }
+            onChange={ ( value ) => {
+                editPost( {
+                    [ XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY ]: value ? [ Number( value ) ] : [],
+                } );
+            } }
+            disabled={ ! Array.isArray( learningPathTerms ) }
+            __next40pxDefaultSize
+            __nextHasNoMarginBottom
+        />
+    );
+};
 
 /**
  * Checks whether a block is nested anywhere inside the namespace block.
@@ -234,6 +284,19 @@ const activatePostTypeEnhancements = () => {
     } );
 };
 
+const unregisterBlockStyleVariations = () => {
+    const blockStyles = {
+        'core/heading': ['text-shadow-sm', 'text-shadow', 'text-shadow-lg'],
+        'core/paragraph': ['text-shadow-sm', 'text-shadow', 'text-shadow-lg'],
+    };
+
+    Object.entries( blockStyles ).forEach( ([blockName, styleNames] ) => {
+        styleNames.forEach( ( styleName ) => {
+            wp.blocks.unregisterBlockStyle( blockName, styleName );
+        } );
+    } );
+};
+
 wp.domReady(() => {
     const maybeActivateEditorEnhancements = () => {
         if ( isBootstrapEditorActive() ) {
@@ -248,6 +311,11 @@ wp.domReady(() => {
 
     maybeActivateEditorEnhancements();
     subscribe( maybeActivateEditorEnhancements );
+
+    if ( isExcelsiorBootstrapPostTypeDuringBlockRegistration() ) {
+        unregisterBlockStyleVariations();
+    }
+    
 });
 
 /**
@@ -269,6 +337,14 @@ const CourseMetaFields = () => {
     const courseNumber = meta[XCLSR_BTSTRP_POST_TYPE+'_post_course_number'] || '';
     const pageTitle = meta[XCLSR_BTSTRP_POST_TYPE+'_post_page_title'] || '';
     let year = meta[XCLSR_BTSTRP_POST_TYPE+'_post_year'];
+
+    useEffect( () => {
+        const editorStore = dispatch( 'core/editor' );
+
+        if ( editorStore?.removeEditorPanel ) {
+            editorStore.removeEditorPanel( LEARNING_PATH_TAXONOMY_PANEL );
+        }
+    }, [] );
 
     if ( year == '' ) {
         year = new Date().getFullYear().toString();
@@ -328,6 +404,7 @@ const CourseMetaFields = () => {
                     __next40pxDefaultSize
                     __nextHasNoMarginBottom
                 />
+                {/* <LearningPathSelector /> */}
             </PanelBody>
         </PluginPostStatusInfo>
         </>
@@ -350,9 +427,39 @@ const validateFields = () => {
     const pageTitle = meta[XCLSR_BTSTRP_POST_TYPE+'_post_page_title'] || '';
     const year = meta[XCLSR_BTSTRP_POST_TYPE+'_post_year'] || '';
 
-    return courseNumber && pageTitle && year;
+    // Matches the server-side sanitizer, which stores any other year as empty.
+    const isValidYear = /^\d{4}$/.test( year ) && Number( year ) >= 2000 && Number( year ) <= 2100;
+
+    return courseNumber && pageTitle && isValidYear;
 
 };
+
+let isResourceContentSavingLocked = false;
+
+subscribe( () => {
+    const hasMissingContent = hasMissingRequiredResourceContent( select( 'core/block-editor' ).getBlocks() );
+    if ( hasMissingContent === isResourceContentSavingLocked ) {
+        return;
+    }
+
+    // Update the flag before dispatching, since dispatch invokes subscribers again.
+    isResourceContentSavingLocked = hasMissingContent;
+    const lockKey = 'required-resources-content';
+    const { lockPostSaving, unlockPostSaving, lockPostAutosaving, unlockPostAutosaving } = dispatch( 'core/editor' );
+    const { createNotice, removeNotice } = dispatch( 'core/notices' );
+    if ( hasMissingContent ) {
+        lockPostSaving( lockKey );
+        lockPostAutosaving( lockKey );
+        createNotice( 'error', 'Each resource group needs an introduction and at least one resource. All resource items must be nonempty before saving.', {
+            id: lockKey,
+            isDismissible: false,
+        } );
+    } else {
+        unlockPostSaving( lockKey );
+        unlockPostAutosaving( lockKey );
+        removeNotice( lockKey );
+    }
+} );
 
 let isSavingLocked = false;
 
@@ -388,7 +495,7 @@ subscribe( () => {
             lockPostAutosaving('required-fields');
             dispatch('core/notices').createNotice(
                 'error',
-                'Please fill in all required fields: Course Number, Page Title, and Year.',
+                'Please fill in all required fields: Course Number, Page Title, and Year (four digits).',
                 { id: 'required-fields', isDismissible: true }
             );
         }
@@ -406,6 +513,126 @@ registerPlugin( XCLSR_BTSTRP_EDITOR_PREFIX + '-course-meta-fields', {
 } );
 
 /**
+ * Removes WordPress-generated classes from rendered HTML output.
+ *
+ * @param {string} html Rendered HTML to clean.
+ * @returns {string} Rendered HTML without class tokens beginning with `wp-`.
+ */
+const removeWordPressClasses = ( html ) => {
+
+    const PRESERVED_WORDPRESS_CLASSES = new Set( [
+        'wp-block-group',
+    ] );
+
+    const template = document.createElement( 'template' );
+    template.innerHTML = html.replace(/<!--\s*\/?wp:[^>]+-->/g, '');
+
+    template.content.querySelectorAll( '[class]' ).forEach( ( element ) => {
+        const classes = Array.from( element.classList ).filter( ( className ) => {
+            return ! className.startsWith( 'wp-' ) || PRESERVED_WORDPRESS_CLASSES.has( className );
+        } );
+
+        if ( classes.length ) {
+            element.setAttribute( 'class', classes.join( ' ' ) );
+            return;
+        }
+
+        element.removeAttribute( 'class' );
+    } );
+
+    return template.innerHTML;
+};
+
+/**
+ * Adds post data attributes to the exported Excelsior Bootstrap wrapper.
+ *
+ * @param {string} html Rendered HTML to update.
+ * @param {Object} attributes Post attributes from the REST API response.
+ * @param {string} [attributes.createdOn] Site-local timestamp for when the post was created.
+ * @param {string} [attributes.updatedOn] Site-local timestamp for when the post was last modified.
+ * @param {string} [attributes.learningPath] Selected learning path version term.
+ * @returns {string} Rendered HTML with data attributes when the wrapper exists.
+ */
+const addExportedHtmlAttributes = ( html, { createdOn, updatedOn, learningPath = '' } = {} ) => {
+    const template = document.createElement( 'template' );
+    template.innerHTML = html;
+
+    const bootstrapWrapper = template.content.querySelector( '#excelsior-bootstrap' );
+
+    if ( ! bootstrapWrapper ) {
+        return html;
+    }
+
+    if ( createdOn ) {
+        bootstrapWrapper.setAttribute( 'data-created-on', createdOn );
+    }
+
+    if ( updatedOn ) {
+        bootstrapWrapper.setAttribute( 'data-updated-on', updatedOn );
+    }
+
+    if ( learningPath ) {
+        bootstrapWrapper.setAttribute( 'data-learning-path', learningPath );
+    }
+
+    return template.innerHTML;
+};
+
+/**
+ * Gets the selected learning path version term name for the post.
+ *
+ * @param {Object} post Excelsior Bootstrap REST API post response.
+ * @returns {Promise<string>} Selected learning path version term name.
+ */
+const getSelectedLearningPathTermName = ( post ) => {
+    const learningPathTermIds = post?.[ XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY ] || [];
+    const learningPathTermId = learningPathTermIds[ 0 ];
+
+    if ( ! learningPathTermId ) {
+        return Promise.resolve( '' );
+    }
+
+    return fetch( `${ wpApiSettings.root }wp/v2/${ XCLSR_BTSTRP_LEARNING_PATH_TAXONOMY }/${ learningPathTermId }?context=edit`, {
+        headers: {
+            'X-WP-Nonce': wpApiSettings.nonce,
+        },
+    } )
+        .then( ( response ) => response.ok ? response.json() : Promise.reject( response ) )
+        .then( ( term ) => term.name || '' )
+        .catch( ( error ) => {
+            console.error( 'Error fetching the learning path version:', error );
+
+            return '';
+        } );
+};
+
+/**
+ * Normalizes non-breaking spaces in exported HTML while emptying icon tags.
+ *
+ * @param {string} html Rendered HTML to normalize.
+ * @returns {string} HTML with regular spaces outside icons and empty icon tags.
+ */
+const normalizeExportedHtmlSpaces = ( html ) => {
+    const iconTagPattern = /<i([^>]*)>(.*?)<\/i>/g;
+    let normalizedHtml = '';
+    let lastMatchEnd = 0;
+    let match;
+
+    while ( ( match = iconTagPattern.exec( html ) ) !== null ) {
+        const [ fullMatch, attrs ] = match;
+        const outsideIconHtml = html.slice( lastMatchEnd, match.index );
+
+        normalizedHtml += outsideIconHtml.replace( /&nbsp;/g, ' ' );
+        normalizedHtml += `<i${ attrs }></i>`;
+        lastMatchEnd = match.index + fullMatch.length;
+    }
+
+    normalizedHtml += html.slice( lastMatchEnd ).replace( /&nbsp;/g, ' ' );
+
+    return normalizedHtml;
+};
+
+/**
  * Renders the "Get Code" sidebar action for published Excelsior posts.
  *
  * @returns {JSX.Element|null} Sidebar UI for published Excelsior posts only.
@@ -420,6 +647,7 @@ const GetCodeButton = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [renderedHTML, setRenderedHTML] = useState('');
     const [copySuccess, setCopySuccess] = useState(false);
+    const [isRetrievingHTML, setIsRetrievingHTML] = useState(false);
     const { isSaving, hasUnsavedChanges, unsavedMeta, postStatus } = useSelect((select) => {
         const editorStore = select('core/editor');
         return {
@@ -435,6 +663,7 @@ const GetCodeButton = () => {
     const getRenderedHTML = () => {
         const postId = select('core/editor').getCurrentPostId();
         const restUrl = `${wpApiSettings.root}wp/v2/excelsior_bootstrap/${postId}?context=edit&t=${new Date().getTime()}`;
+        setIsRetrievingHTML(true);
     
         // Fetch the raw content via REST API
         fetch(restUrl, {
@@ -443,24 +672,29 @@ const GetCodeButton = () => {
             },
         })
             .then((response) => response.json())
-            .then((post) => {
-                const rawContent = post.content.rendered.replace(/<!--\s*\/?wp:[^>]+-->/g, '');
-                const htmlCode = rawContent.replace(
-                    /<i([^>]*)>(.*?)<\/i>/g,
-                    (match, attrs, innerText) => {
-                        // Preserve icon spacing when rendered HTML is copied out of the editor.
-                        const nonBreakingText = innerText.replace(/ /g, '&nbsp;');
-                        return `<i${attrs}>${nonBreakingText}</i>`;
-                    }
-                );
+            .then((post) => getSelectedLearningPathTermName( post ).then( ( learningPath ) => ( { post, learningPath } ) ) )
+            .then(({ post, learningPath }) => {
+                const filteredContent = removeWordPressClasses( post.content.rendered );
+                const attributedContent = addExportedHtmlAttributes( filteredContent, {
+                    createdOn: post.date,
+                    updatedOn: post.modified,
+                    learningPath,
+                } );
+                const htmlCode = normalizeExportedHtmlSpaces( attributedContent );
     
                 setRenderedHTML(beautify.html(htmlCode, { preserve_newlines: false }));
                 setIsModalOpen(true);
             })
             .catch((error) => {
                 console.error('Error fetching the post content:', error);
+                setIsRetrievingHTML(false);
             });
     };    
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setIsRetrievingHTML(false);
+    };
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(renderedHTML)
@@ -486,8 +720,8 @@ const GetCodeButton = () => {
         <>
         <PluginPostStatusInfo>
             <PanelBody className='get-code-btn-panel'>
-            <Button className='get-code-btn' onClick={getRenderedHTML} disabled={isDisabled} __next40pxDefaultSize>
-                Get Code
+            <Button className='get-code-btn' onClick={getRenderedHTML} disabled={isDisabled || isRetrievingHTML} __next40pxDefaultSize>
+                {isRetrievingHTML ? 'Retrieving HTML...' : 'Get HTML Code'}
             </Button>
             {isDisabled && (
                 <Text as='p' variant='muted' isBlock style={{marginTop: '8px'}}>
@@ -500,7 +734,7 @@ const GetCodeButton = () => {
             <Modal
                 title="HTML Code"
                 className='get-code-modal'
-                onRequestClose={() => setIsModalOpen(false)}
+                onRequestClose={closeModal}
                 shouldCloseOnClickOutside={false}
                 size='fill'
             >

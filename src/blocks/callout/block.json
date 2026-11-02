@@ -16,7 +16,7 @@
     "attributes": {
         "styleType": {
             "type": "string",
-            "default": "guide"
+            "default": "spotlight"
         }
     }
 }

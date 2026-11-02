@@ -2,7 +2,7 @@ import { useBlockProps, InnerBlocks, InspectorControls, RichText } from '@wordpr
 import { PanelBody, ToggleControl } from '@wordpress/components';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
-import { generateHtmlId, getBlocksOfType } from '../../commons';
+import { generateHtmlId, getBlocksOfType, getSafeHeadingTag, preventLineBreaks } from '../../commons';
 import { useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 
@@ -11,6 +11,7 @@ export default function Edit({ attributes, setAttributes, clientId, context }) {
     const { title, uniqueId, open, openForEditing, HeadingLevel, headingSize } = attributes;
     const accordionHeadingLevel = context?.[XCLSR_BTSTRP_EDITOR_PREFIX + '/accordionHeadingLevel'];
     const accordionHeadingSize = context?.[XCLSR_BTSTRP_EDITOR_PREFIX + '/accordionHeadingSize'];
+    const HeadingTag = getSafeHeadingTag( HeadingLevel );
     const blockProps = useBlockProps({
         className: 'accordion-item',
     });
@@ -69,7 +70,7 @@ export default function Edit({ attributes, setAttributes, clientId, context }) {
                 </PanelBody>
             </InspectorControls>
             <div {...blockProps}>
-                <HeadingLevel className={`accordion-header ${accordionHeadingSize}`}>
+                <HeadingTag className={`accordion-header ${accordionHeadingSize}`}>
                     <RichText
                         tagName="a"
                         placeholder="Accordion Item Title"
@@ -82,8 +83,11 @@ export default function Edit({ attributes, setAttributes, clientId, context }) {
                         data-bs-target={'#' + uniqueId}
                         onChange={(value) => setAttributes({ title: value })}
                         allowedFormats={['core/bold', 'core/italic', XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
+                        multiline={false}
+                        onKeyDown={preventLineBreaks}
+                        onPaste={preventLineBreaks}
                     />
-                </HeadingLevel>
+                </HeadingTag>
                 <div id={uniqueId} class={`accordion-collapse collapse ${openForEditing ? 'show' : ''}`}>
                     <div class="accordion-body">
                         <InnerBlocks

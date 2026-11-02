@@ -17,7 +17,7 @@
         },
         "open": {
             "type": "boolean",
-            "default": false
+            "default": true
         },
         "openForEditing": {
             "type": "boolean",
@@ -25,10 +25,12 @@
         },
         "HeadingLevel": {
             "type": "string",
+            "enum": ["h2", "h3", "h4", "h5", "h6"],
             "default": "h2"
         },
         "headingSize": {
             "type": "string",
+            "enum": ["h1", "h2", "h3", "h4", "h5", "h6"],
             "default": "h4"
         }
     },

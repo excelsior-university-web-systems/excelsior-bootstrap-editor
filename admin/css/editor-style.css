@@ -122,21 +122,12 @@ p.is-selected:focus code[data-rich-text-format-boundary] {
 }
 
 /* EXCELSIOR BOOTSTRAP EDITOR
-   IFRAME EMBED */
+   MEDIA EMBED */
 
-.excelsior-iframe-embed-insert {
+.excelsior-media-embed-insert {
     border: 1px dashed #ccc;
-    padding: 10px;
-    margin-bottom: 1rem;
-}
-
-.homepage-content .wp-block-excelsior-bootstrap-editor-iframe-embed {
-    margin-top: 0 !important;
-}
-
-.wp-block-excelsior-bootstrap-editor-columns .wp-block-excelsior-bootstrap-editor-iframe-embed {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 /* EXCELSIOR BOOTSTRAP EDITOR
@@ -155,13 +146,6 @@ p.is-selected:focus code[data-rich-text-format-boundary] {
 }
 
 /* EXCELSIOR BOOTSTRAP EDITOR
-   TIP BOX */
-
-.wp-block-excelsior-bootstrap-editor-tipbox > .block-editor-inner-blocks > .block-editor-block-list__layout > *:nth-last-child(2) {
-    margin-bottom: 0 !important;
-}
-
-/* EXCELSIOR BOOTSTRAP EDITOR
    INFO BOX */
 
 .wp-block-excelsior-bootstrap-editor-info-box > .block-editor-inner-blocks > .block-editor-block-list__layout > *:nth-last-child(2) {
@@ -174,24 +158,12 @@ p.is-selected:focus code[data-rich-text-format-boundary] {
     margin-bottom: 0 !important;
 }
 
-/* EXCELSIOR BOOTSTRAP EDITOR
-   COLUMNS */
-.wp-block-excelsior-bootstrap-editor-columns .col {
-    margin-bottom: 0 !important;
-    margin-left: unset !important;
-    margin-right: unset !important;
-}
-
-.wp-block-excelsior-bootstrap-editor-columns > .block-editor-inner-blocks > .block-editor-block-list__layout > .block-list-appender {
-    width: fit-content !important;
-    margin-top: unset !important;
+/* Reserve a footer row for adding advanced resource groups. */
+.excelsior-required-resources > .required-resources-group-actions {
     display: flex;
-    justify-content: end;
-}
-
-.wp-block-excelsior-bootstrap-editor-columns > .block-editor-inner-blocks > .block-editor-block-list__layout > .block-list-appender > .block-editor-default-block-appender {
-    margin-left: unset !important;
-    margin-right: unset !important;
+    position: relative;
+    clear: both;
+    margin-top: 16px !important;
 }
 
 /* EXCELSIOR BOOTSTRAP EDITOR

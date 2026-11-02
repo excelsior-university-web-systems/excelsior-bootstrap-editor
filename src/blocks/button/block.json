@@ -6,24 +6,17 @@
     "category": "excelsior-bootstrap-editor-blocks",
     "parent": ["excelsior-bootstrap-editor/buttons"],
     "supports": {
-        "html": false
+        "html": false,
+        "splitting": false
     },
     "attributes": {
         "href": {
             "type": "string",
             "default": "#"
         },
-        "target": {
-            "type": "string",
-            "default": ""
-        },
         "text": {
             "type": "string",
             "default": ""
-        },
-        "styleType": {
-            "type": "string",
-            "default": "btn-resource"
         },
         "subsequent": {
             "type": "boolean",

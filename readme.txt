@@ -1,10 +1,10 @@
 === Excelsior Bootstrap ===
 Contributors: eslin87
 Tags: bootstrap, css, js, editor, block
-Requires at least: 6.0
+Requires at least: 7.0
 Requires PHP: 8.0
-Tested up to: 7.0
-Stable tag: 1.2.1
+Tested up to: 7.1
+Stable tag: 1.3.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,61 @@ This section describes how to install and activate the plugin.
 1. Example Excelsior Bootstrap Editor blocks in use.
 
 == Changelog ==
+
+= 1.3.3 (2026-11-04) =
+* Remove deprecated patterns.
+* Remove deprecated `columns` and its child `column` blocks.
+* Remove deprecated icons in `horizontal-rule` block.
+* Remove deprecated background colors option in `cards` block.
+* Remove deprecated styles in `callout` block.
+* Remove deprecated `tipbox` block.
+* Remove deprecated icons.
+* Remove deprecated `iframe-embed` block.
+* Cleanup up the `button` block styles.
+* Security: Straight double quotes in image alt text are now converted to typographic quotes, both in the editor (`image` and `card` blocks) and when pages containing the Excelsior Bootstrap block are rendered (including "Get HTML Code" output).
+* Security: The REST API now requires the Excelsior Bootstrap edit capability to read pages, unless pages are public and not unlisted. Authors of pages are no longer listed by the REST users endpoint for visitors who cannot read them.
+* Security: Unlisted pages are now only reachable through their exact URL. They are excluded from sitemaps, search, feeds, REST search, and ID-based URLs (e.g., `?p=`). Shortlink, REST, and previous/next page links are no longer output on Excelsior Bootstrap pages.
+* Security: Unlisted URLs are now generated from 128 bits of cryptographically secure randomness, and an unlisted page's hashed URL can no longer be changed. Existing readable URLs are not changed.
+* Security: Heading level attributes in the `accordion`, `accordion-item`, and `required-resources` blocks are now restricted to valid heading tags.
+* Security: HTML in tab titles and page navigation labels is now sanitized in an inert document, removing scripts and inline event handlers. Text typed into the page navigation "Nav Item Label" field is now escaped.
+* Security: `button` block URLs must start with `http://`, `https://`, `mailto:`, or `#`; the page cannot be saved otherwise. Buttons now include `rel="noopener noreferrer"`.
+* Security: Course number, page title, and year meta values are now sanitized on save, and only users who can edit the page can change them. The year must be four digits between 2000 and 2100.
+* Fix rewrite rules not being refreshed when the Visibility setting changes.
+* Custom capabilities are now added on activation (and on update) instead of on every page load. Uninstalling the plugin now removes its capabilities and settings; Excelsior Bootstrap pages are kept.
+
+= 1.3.2 (2026-10-14) =
+* Add "Group Resources with Introductions" to the required-resources block to support multiple resource groups, each with its own introduction.
+
+= 1.3.1 (2026-09-16) =
+* Add "deprecated" to old template pattern titles.
+* Remove Mantine library usage in Task block. Replace Mantine with WordPress's default time picker.
+* Update Excelsior Bootstrap to version 1.1.1.
+* Enable bold formatting on the floating toolbar for resource item name in the Required Resources block.
+* Prevent multi-line (or line breaks) from pasting into single line RichText controls.
+
+= 1.3.0 (2026-08-26) =
+* NEW - Definitions block. Create a collection of key terms and their corresponding definitions.
+* NEW - Key Terms and Definition template
+* NEW - `alphabet-uppercase` icon is now available and is used as the page type icon for the Key Terms and Definitions page.
+* NEW - Media Embed block. Instead of using the iFrame Embed block to enter a raw HTML embed code, the Media Embed block makes it easier to insert media just by pasting a source: a YouTube link, an Excelsior player (Storybook+, generic video player, or audio player) or .xml URL, or a network/SMB file path. The media type is detected automatically and the correct embed code is applied. Embeds are responsive by default, with optional fixed width/height and min/max size controls.
+* NEW - Image block in Image and Text block now support the option to place the floated image before or after the text content on devices with narrow screens.
+* NEW - Cards block now has an aspect ratio constraint. The default aspect ratio is 16:9. A setting option is also available to change the aspect ratio.
+* NEW - Required Resources block. Create a collection of required resources including context.
+* Update block icons for accordion, accordion item, tabs, and tab. Block editor only. No effects on Excelsior Bootstrap framework.
+* Remove most of WordPress classes when get the HTML code.
+* Rename "Get Code" button texts to "Get HTML Code".
+* Add created and updated timestamps as `data` attributes in the HTML retrieved by the "Get HTML Code" button.
+* Add a loading state to "Get HTML Code" button. When user click the button, the button texts will be changed to "Retrieving code..." and be disabled. Button texts will revert back to "Get HTML Code" after the HTML code modal is closed.
+* Update the Homepage template to use the new Media Embed block instead of iFrame Embed block.
+* Prevent line breaks in several one-line RichText fields (stop `Enter` and `Shift + Enter` from inserting newlines).
+
+
+= 1.2.3 (2026-07-22) =
+* Allow the equation block from Glyphwell - Visual Equation Editor plugin.
+
+= 1.2.2 (2026-07-15) =
+* Allow equation block from Equation Editor plugin.
+* Default accordions to open state on page load.
 
 = 1.2.1 (2026-06-17) =
 * Revert restrictions placed on the accordions block.

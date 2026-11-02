@@ -2,11 +2,10 @@ import { registerBlockType } from '@wordpress/blocks';
 import edit from './edit';
 import save from './save';
 import metadata from './block.json';
+import { tabs } from '@wordpress/icons';
 
 registerBlockType(metadata, {
-    icon: {
-        src: <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36"><path d="M32.03,16l-1.45,1.09c.07.1.11.21.11.33v10.88c0,.33-.27.6-.6.6H13.17s-.05-.01-.08-.02l-1.56,1.18c.43.4,1,.65,1.64.65h16.92c1.33,0,2.42-1.08,2.42-2.42v-10.88c0-.54-.18-1.03-.47-1.43Z" style={{fillRule: 'evenodd'}}/><path d="M16.09,10.09c.23.51.73.84,1.29.84h8.67c.39,0,.7.32.7.7v12.69c0,.39-.32.7-.7.7H6.32c-.39,0-.7-.32-.7-.7V8.11c0-.39.32-.7.7-.7h8.13c.27,0,.51.15.63.39,0,0,1.02,2.3,1.02,2.3ZM17.59,8.37c.11.26.37.44.65.44h7.81c1.56,0,2.82,1.26,2.82,2.82v12.69c0,1.56-1.26,2.82-2.82,2.82H6.32c-1.56,0-2.82-1.26-2.82-2.82V8.11c0-1.56,1.26-2.82,2.82-2.82h8.13c1.07,0,2.04.6,2.52,1.56,0,0,.63,1.53.63,1.53ZM11.25,14.45h9.87v2.11h-9.87v-2.11ZM21.12,19.38h-9.87v2.11h9.87v-2.11Z" style={{fillRule: 'evenodd'}}/></svg>
-    },
+    icon: tabs,
     edit,
     save
 });

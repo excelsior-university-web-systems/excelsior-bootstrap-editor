@@ -1,12 +1,11 @@
 import { InnerBlocks, InspectorControls, useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, Notice } from '@wordpress/components';
-import { useDispatch, useSelect } from '@wordpress/data';
-import { useEffect } from '@wordpress/element';
-import { createBlock } from '@wordpress/blocks';
+import { PanelBody, SelectControl, __experimentalSpacer as Spacer } from '@wordpress/components';
 import {
     __experimentalToggleGroupControl as ToggleGroupControl,
     __experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
+import { useMinimumChildBlocks } from '../../commons';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 import metadata from './block.json';
 
@@ -20,7 +19,7 @@ const TEMPLATE = [
 
 export default function Edit( {attributes, setAttributes, clientId} ) {
 
-    const { colSize, bgColor } = attributes;
+    const { colSize, bgColor, aspectRatio } = attributes;
     const previewImage = metadata?.example?.attributes?.cover || '';
     const isPreview = useSelect(
         ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
@@ -30,58 +29,13 @@ export default function Edit( {attributes, setAttributes, clientId} ) {
     const blockProps = useBlockProps( {
         className: '',
     } );
-    const childBlocks = useSelect(
-        ( select ) => select( 'core/block-editor' ).getBlocks( clientId ) || [],
-        [ clientId ]
-    );
-    const { insertBlocks, updateBlockAttributes } = useDispatch( 'core/block-editor' );
-    const cardBlocks = childBlocks.filter(
-        ( block ) => block.name === CARD_BLOCK
-    );
 
-    useEffect( () => {
-        if ( isPreview ) {
-            return;
-        }
-
-        const missingCardCount = MIN_CARDS - cardBlocks.length;
-
-        if ( missingCardCount > 0 ) {
-            insertBlocks(
-                Array.from(
-                    { length: missingCardCount },
-                    () => createBlock( CARD_BLOCK )
-                ),
-                childBlocks.length,
-                clientId
-            );
-            return;
-        }
-
-        const lockRemove = cardBlocks.length <= MIN_CARDS;
-
-        cardBlocks.forEach( ( block ) => {
-            const currentLock = block.attributes?.lock || {};
-
-            if ( currentLock.remove === lockRemove ) {
-                return;
-            }
-
-            updateBlockAttributes( block.clientId, {
-                lock: {
-                    ...currentLock,
-                    remove: lockRemove,
-                },
-            } );
-        } );
-    }, [
-        cardBlocks,
-        childBlocks.length,
+    useMinimumChildBlocks( {
         clientId,
-        insertBlocks,
+        blockName: CARD_BLOCK,
+        minimum: MIN_CARDS,
         isPreview,
-        updateBlockAttributes,
-    ] );
+    } );
 
     const innerBlocksProps = useInnerBlocksProps(
         {
@@ -118,21 +72,31 @@ export default function Edit( {attributes, setAttributes, clientId} ) {
                     <ToggleGroupControlOption value="4" label="4" />
                 </ToggleGroupControl>
                 <SelectControl
-                className="deprecated"
                     label="Background Color"
                     value={bgColor}
                     options={[
                         { label: 'None', value: '' },
-                        { label: 'Light Subtle (DEPRECATED)', value: 'bg-light-subtle' },
-                        { label: 'Light', value: 'bg-light' },
-                        { label: 'Secondary (DEPRECATED)', value: 'bg-body-secondary' },
-                        { label: 'Dark Subtle (DEPRECATED)', value: 'bg-dark-subtle' },
+                        { label: 'Light', value: 'bg-light' }
                     ]}
                     onChange={(value) => setAttributes({ bgColor: value })}
                     __nextHasNoMarginBottom
                     __next40pxDefaultSize
                 />
-                <Notice status="warning" isDismissible={false}>All color choices, except Light, are deprecated. Do not use. They will be removed in the near future.</Notice>
+                <Spacer />
+                <SelectControl
+                        label="Image Aspect Ratio"
+                        help="Choose a consistent aspect ratio for card images. Images are automatically cropped to fit the selected ratio."
+                        value={aspectRatio}
+                        options={[
+                            { label: '1:1', value: '1x1' },
+                            { label: '4:3', value: '4x3' },
+                            { label: '16:9', value: '16x9' },
+                            { label: '21:9', value: '21x9' },
+                        ]}
+                        onChange={(value) => setAttributes({ aspectRatio: value })}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
+                    />
             </PanelBody>
         </InspectorControls>
         <div {...blockProps}>

@@ -8,7 +8,10 @@
     "supports": {
         "html": false
     },
-    "usesContext": ["excelsior-bootstrap-editor/cardBgColor"],
+    "usesContext": [
+        "excelsior-bootstrap-editor/cardBgColor",
+        "excelsior-bootstrap-editor/cardAspectRatio"
+    ],
     "attributes": {
         "useImg": {
             "type": "boolean",
@@ -28,6 +31,10 @@
         "bgColor": {
             "type": "string",
             "default": ""
-        }   
+        },
+        "aspectRatio": {
+            "type": "string",
+            "default": "16x9"
+        }
     }
 }
