@@ -22,7 +22,7 @@ add_action( 'current_screen', function() {
         );
 
         // Register patterns
-        $patternsDirectory = plugin_dir_path( __FILE__ ) . 'patterns';
+        $patternsDirectory = plugin_dir_path( __FILE__ ) . 'patterns/';
         $excelsiorEditorPatterns = array(
             array( 'slug' => 'homepage', 'title' => 'Homepage', 'file' => 'home.html' ),
             array( 'slug' => 'overview', 'title' => 'Overview', 'file' => 'overview.html' ),
@@ -45,12 +45,10 @@ add_action( 'current_screen', function() {
                 XCLSR_BTSTRP_EDITOR_PREFIX.'/'.$pattern['slug'],
                 array(
                     'title'      => $pattern['title'],
-                    'description'=> $pattern['title'],
                     'categories' => array( XCLSR_BTSTRP_EDITOR_PREFIX.'-patterns' ),
                     'postTypes'  => array( XCLSR_BTSTRP_POST_TYPE ),
                     'blockTypes' => array( XCLSR_BTSTRP_EDITOR_PREFIX.'/container' ),
-                    'filePath'   => $patternsDirectory.$pattern['file'],
-                    'inserter'   => true
+                    'filePath'   => $patternsDirectory.$pattern['file']
                 )
             );
 
