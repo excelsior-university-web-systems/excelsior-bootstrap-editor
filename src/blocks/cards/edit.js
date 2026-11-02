@@ -1,5 +1,5 @@
 import { InnerBlocks, InspectorControls, useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, Notice, __experimentalSpacer as Spacer } from '@wordpress/components';
+import { PanelBody, SelectControl, __experimentalSpacer as Spacer } from '@wordpress/components';
 import {
     __experimentalToggleGroupControl as ToggleGroupControl,
     __experimentalToggleGroupControlOption as ToggleGroupControlOption,
@@ -72,21 +72,16 @@ export default function Edit( {attributes, setAttributes, clientId} ) {
                     <ToggleGroupControlOption value="4" label="4" />
                 </ToggleGroupControl>
                 <SelectControl
-                    className="deprecated"
                     label="Background Color"
                     value={bgColor}
                     options={[
                         { label: 'None', value: '' },
-                        { label: 'Light Subtle (DEPRECATED)', value: 'bg-light-subtle' },
-                        { label: 'Light', value: 'bg-light' },
-                        { label: 'Secondary (DEPRECATED)', value: 'bg-body-secondary' },
-                        { label: 'Dark Subtle (DEPRECATED)', value: 'bg-dark-subtle' },
+                        { label: 'Light', value: 'bg-light' }
                     ]}
                     onChange={(value) => setAttributes({ bgColor: value })}
                     __nextHasNoMarginBottom
                     __next40pxDefaultSize
                 />
-                <Notice status="warning" isDismissible={false}>All color choices, except Light, are deprecated. Do not use. They will be removed in the near future.</Notice>
                 <Spacer />
                 <SelectControl
                         label="Image Aspect Ratio"
