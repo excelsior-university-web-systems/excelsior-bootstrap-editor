@@ -5,6 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 const XCLSR_BTSTRP_FRAMEWORK_VERSION = '1.1.2';
 const XCLSR_BTSTRP_EDITOR_VERSION = '1.3.3';
+// Increment when the custom capability list changes so existing installs re-apply it.
+const XCLSR_BTSTRP_CAPS_VERSION = '1';
 const XCLSR_BTSTRP_EDITOR_PREFIX = 'excelsior-bootstrap-editor';
 const XCLSR_BTSTRP_POST_TYPE_NAME = 'Excelsior Bootstrap';
 const XCLSR_BTSTRP_POST_TYPE = 'excelsior_bootstrap';

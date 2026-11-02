@@ -1,8 +1,10 @@
 import { useBlockProps, InnerBlocks, RichText } from '@wordpress/block-editor';
+import { getSafeHeadingTag } from '../../commons';
 
 export default function Save({ attributes }) {
 
-    const { title, uniqueId, open, HeadingLevel, headingSize } = attributes;
+    const { title, uniqueId, open, headingSize } = attributes;
+    const HeadingLevel = getSafeHeadingTag( attributes.HeadingLevel );
     const blockProps = useBlockProps.save( {
         className: 'accordion-item'
     });

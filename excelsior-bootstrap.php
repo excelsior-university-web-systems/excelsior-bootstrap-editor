@@ -18,3 +18,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/taxonomies.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/blocks.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/patterns.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/options.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/security.php';
+
+register_activation_hook( __FILE__, 'ExcelsiorBootstrapEditor\\on_activation' );
+register_deactivation_hook( __FILE__, 'ExcelsiorBootstrapEditor\\on_deactivation' );

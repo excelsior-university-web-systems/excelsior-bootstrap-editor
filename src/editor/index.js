@@ -427,7 +427,10 @@ const validateFields = () => {
     const pageTitle = meta[XCLSR_BTSTRP_POST_TYPE+'_post_page_title'] || '';
     const year = meta[XCLSR_BTSTRP_POST_TYPE+'_post_year'] || '';
 
-    return courseNumber && pageTitle && year;
+    // Matches the server-side sanitizer, which stores any other year as empty.
+    const isValidYear = /^\d{4}$/.test( year ) && Number( year ) >= 2000 && Number( year ) <= 2100;
+
+    return courseNumber && pageTitle && isValidYear;
 
 };
 
@@ -492,7 +495,7 @@ subscribe( () => {
             lockPostAutosaving('required-fields');
             dispatch('core/notices').createNotice(
                 'error',
-                'Please fill in all required fields: Course Number, Page Title, and Year.',
+                'Please fill in all required fields: Course Number, Page Title, and Year (four digits).',
                 { id: 'required-fields', isDismissible: true }
             );
         }

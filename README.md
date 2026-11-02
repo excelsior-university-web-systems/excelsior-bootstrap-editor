@@ -47,6 +47,16 @@ This section describes how to install and activate the plugin.
 * Remove deprecated icons.
 * Remove deprecated `iframe-embed` block.
 * Cleanup up the `button` block styles.
+* Security: Straight double quotes in image alt text are now converted to typographic quotes, both in the editor (`image` and `card` blocks) and when pages containing the Excelsior Bootstrap block are rendered (including "Get HTML Code" output).
+* Security: The REST API now requires the Excelsior Bootstrap edit capability to read pages, unless pages are public and not unlisted. Authors of pages are no longer listed by the REST users endpoint for visitors who cannot read them.
+* Security: Unlisted pages are now only reachable through their exact URL. They are excluded from sitemaps, search, feeds, REST search, and ID-based URLs (e.g., `?p=`). Shortlink, REST, and previous/next page links are no longer output on Excelsior Bootstrap pages.
+* Security: Unlisted URLs are now generated from 128 bits of cryptographically secure randomness, and an unlisted page's hashed URL can no longer be changed. Existing readable URLs are not changed.
+* Security: Heading level attributes in the `accordion`, `accordion-item`, and `required-resources` blocks are now restricted to valid heading tags.
+* Security: HTML in tab titles and page navigation labels is now sanitized in an inert document, removing scripts and inline event handlers. Text typed into the page navigation "Nav Item Label" field is now escaped.
+* Security: `button` block URLs must start with `http://`, `https://`, `mailto:`, or `#`; the page cannot be saved otherwise. Buttons now include `rel="noopener noreferrer"`.
+* Security: Course number, page title, and year meta values are now sanitized on save, and only users who can edit the page can change them. The year must be four digits between 2000 and 2100.
+* Fix rewrite rules not being refreshed when the Visibility setting changes.
+* Custom capabilities are now added on activation (and on update) instead of on every page load. Uninstalling the plugin now removes its capabilities and settings; Excelsior Bootstrap pages are kept.
 
 ### 1.3.2 (2026-10-14) ###
 * Add "Group Resources with Introductions" to the required-resources block to support multiple resource groups, each with its own introduction.

@@ -1,4 +1,5 @@
 import { InnerBlocks, useBlockProps, RichText } from '@wordpress/block-editor';
+import { getSafeHeadingTag } from '../../commons';
 
 export default function Save( { attributes } ) {
 
@@ -16,7 +17,7 @@ export default function Save( { attributes } ) {
                     </div>
                     <div class="heading">
                         <RichText.Content
-                            tagName={headingLevel}
+                            tagName={getSafeHeadingTag( headingLevel, 'h3' )}
                             value={headingText}
                             className='title h5'
                         />

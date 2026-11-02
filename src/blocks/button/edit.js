@@ -1,11 +1,26 @@
 import { useBlockProps, RichText, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, TextControl, } from '@wordpress/components';
+import { PanelBody, TextControl, Notice } from '@wordpress/components';
+import { useDispatch } from '@wordpress/data';
+import { useEffect } from '@wordpress/element';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
-import { preventLineBreaks } from '../../commons';
+import { isAllowedLinkUrl, preventLineBreaks } from '../../commons';
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
 
     const { href, text, subsequent } = attributes;
+    const isHrefAllowed = isAllowedLinkUrl( href );
+    const { lockPostSaving, unlockPostSaving } = useDispatch( 'core/editor' );
+
+    useEffect( () => {
+        if ( isHrefAllowed ) {
+            return;
+        }
+
+        const lockKey = `invalid-button-url-${ clientId }`;
+        lockPostSaving( lockKey );
+
+        return () => unlockPostSaving( lockKey );
+    }, [ isHrefAllowed, clientId, lockPostSaving, unlockPostSaving ] );
 
     // Get the parent container (excelsior-bootstrap-editor/buttons)
     const parents = wp.data.select( 'core/block-editor' ).getBlockParents( clientId );
@@ -42,6 +57,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                         __next40pxDefaultSize
                         __nextHasNoMarginBottom
                     />
+                    { !isHrefAllowed && (
+                        <Notice status="error" isDismissible={false}>
+                            Enter a URL that starts with http://, https://, or mailto:, or an anchor that starts with #. The page cannot be saved until this is fixed.
+                        </Notice>
+                    )}
                 </PanelBody>
             </InspectorControls>
             <RichText

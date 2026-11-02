@@ -16,10 +16,12 @@
     "attributes": {
         "accordionHeadingLevel": {
             "type": "string",
+            "enum": ["h2", "h3", "h4", "h5", "h6"],
             "default": "h2"
         },
         "accordionHeadingSize": {
             "type": "string",
+            "enum": ["h1", "h2", "h3", "h4", "h5", "h6"],
             "default": "h4"
         }
     },

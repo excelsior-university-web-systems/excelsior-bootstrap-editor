@@ -7,7 +7,7 @@ import { useState, useEffect } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
 import metadata from './block.json';
-import { ALT_TEXT_LIMIT, CAPTION_LIMIT, getCharacterLimitLabel, CharacterLimitFeedback, isValidUrl } from '../../commons';
+import { ALT_TEXT_LIMIT, CAPTION_LIMIT, getCharacterLimitLabel, CharacterLimitFeedback, isValidUrl, normalizeAltText } from '../../commons';
 
 const ALT_TEXT_PLACEHOLDER = 'Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration.';
 const ALT_TEXT_LIMIT_MESSAGE = 'Keep it under 150 characters so screen reader users get a concise description without unnecessary detail.';
@@ -73,7 +73,7 @@ export default function Edit ( { attributes, setAttributes, context, clientId } 
 
     const onInsertUrl = () => {
         if ( tempUrl ) {
-            setAttributes({ url: tempUrl.trim(), altText: tempAltText.trim(), caption: tempCaption.trim(), sourceUrl: tempSourceUrl.trim() });
+            setAttributes({ url: tempUrl.trim(), altText: normalizeAltText( tempAltText.trim() ), caption: tempCaption.trim(), sourceUrl: tempSourceUrl.trim() });
         }
     };
 
@@ -124,7 +124,7 @@ export default function Edit ( { attributes, setAttributes, context, clientId } 
                         placeholder={ALT_TEXT_PLACEHOLDER}
                         value={altText}
                         onChange={(value) => {
-                            setAttributes( { altText: value } );
+                            setAttributes( { altText: normalizeAltText( value ) } );
                             setHasError( false );
                         } }
                         __nextHasNoMarginBottom

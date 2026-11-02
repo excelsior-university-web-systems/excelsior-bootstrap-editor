@@ -4,9 +4,9 @@ const REQUIRED_RESOURCES = XCLSR_BTSTRP_EDITOR_PREFIX + '/required-resources';
 const RESOURCE_GROUP = XCLSR_BTSTRP_EDITOR_PREFIX + '/required-resources-group';
 const RESOURCE_ITEM = XCLSR_BTSTRP_EDITOR_PREFIX + '/required-resources-group-item';
 
+// DOMParser creates an inert document, so markup in the value never runs or loads.
 export const hasRichTextContent = ( html ) => {
-    const content = document.createElement( 'div' );
-    content.innerHTML = html || '';
+    const content = new DOMParser().parseFromString( html || '', 'text/html' ).body;
     return !!content.textContent.replace( /\u200B/g, '' ).trim();
 };
 

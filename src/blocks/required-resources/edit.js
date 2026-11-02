@@ -4,7 +4,7 @@ import { createBlock } from '@wordpress/blocks';
 import { useDispatch, useSelect, useRegistry } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { plus } from '@wordpress/icons';
-import { useMinimumChildBlocks, preventLineBreaks } from '../../commons';
+import { useMinimumChildBlocks, getSafeHeadingTag, preventLineBreaks } from '../../commons';
 import metadata from './block.json';
 import { convertRequiredResources, GROUP_BLOCK } from './mode';
 
@@ -103,7 +103,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
                     </div>
                     <div class="heading">
                         <RichText
-                            tagName={headingLevel}
+                            tagName={getSafeHeadingTag( headingLevel, 'h3' )}
                             value={headingText}
                             className='title h5'
                             onChange={(value) => setAttributes({ headingText: value })}

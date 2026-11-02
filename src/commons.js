@@ -2,6 +2,7 @@ import { Notice, SandBox } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect, useMemo } from '@wordpress/element';
 import { createBlock } from '@wordpress/blocks';
+import { safeHTML } from '@wordpress/dom';
 
 export const ALT_TEXT_LIMIT = 150;
 export const CAPTION_LIMIT = 250;
@@ -165,22 +166,32 @@ export const observeElement = ( selector, callback, options = { childList: true,
 }
 
 /**
- * Removes script tags from an HTML string.
+ * Removes script tags and inline event handlers, parsing in an inert document.
  *
  * @param {string} input - HTML string to sanitize.
- * @returns {string} HTML string without script tags.
+ * @returns {string} Sanitized HTML string.
  */
-export const removeScriptTags = ( input ) => {
-    
-    const tempElement = document.createElement( 'div' );
-    tempElement.innerHTML = input;
+export const sanitizeHTML = ( input ) => safeHTML( input || '' );
 
-    const scripts = tempElement.querySelectorAll( 'script' );
-    scripts.forEach( (script) => script.remove() );
-    
-    return tempElement.innerHTML;
+/**
+ * Replaces straight double quotes, which would break out of the framework's
+ * enlarge image modal markup, with typographic quotes.
+ *
+ * @param {string} value - Alt text.
+ * @returns {string} Alt text without straight double quotes.
+ */
+export const normalizeAltText = ( value ) => ( value || '' ).replace( /"/g, '”' );
 
-};
+export const HEADING_TAGS = [ 'h2', 'h3', 'h4', 'h5', 'h6' ];
+
+/**
+ * Returns the tag if it is an allowed heading tag, otherwise the fallback.
+ *
+ * @param {string} tag - Requested heading tag.
+ * @param {string} [fallback='h2'] - Fallback tag.
+ * @returns {string} Heading tag name.
+ */
+export const getSafeHeadingTag = ( tag, fallback = 'h2' ) => HEADING_TAGS.includes( tag ) ? tag : fallback;
 
 /**
  * Finds all nested blocks matching a block type.
@@ -309,6 +320,30 @@ export const isValidUrl = ( value ) => {
     try {
         const url = new URL( value );
         return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch {
+        return false;
+    }
+};
+
+/**
+ * Checks whether a value is an anchor (#...), HTTP(S), or mailto: URL.
+ *
+ * @param {string} value - URL value to validate.
+ * @returns {boolean} Whether the URL is allowed.
+ */
+export const isAllowedLinkUrl = ( value ) => {
+    if ( !value || typeof value !== 'string' ) {
+        return false;
+    }
+
+    const trimmed = value.trim();
+
+    if ( trimmed.startsWith( '#' ) || isValidUrl( trimmed ) ) {
+        return true;
+    }
+
+    try {
+        return new URL( trimmed ).protocol === 'mailto:';
     } catch {
         return false;
     }

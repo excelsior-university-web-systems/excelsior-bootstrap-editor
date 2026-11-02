@@ -5,7 +5,7 @@ import { addFilter } from '@wordpress/hooks';
 import { useState, useEffect } from '@wordpress/element';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
-import { ALT_TEXT_LIMIT, CAPTION_LIMIT, getCharacterCount, getCharacterLimitLabel, CharacterLimitFeedback } from '../../commons';
+import { ALT_TEXT_LIMIT, getCharacterLimitLabel, CharacterLimitFeedback, normalizeAltText } from '../../commons';
 
 const withCustomClasses = createHigherOrderComponent((BlockEdit) => {
     return (props) => {
@@ -74,7 +74,7 @@ export default function Edit( {attributes, setAttributes, context} ) {
 
     const onInsertUrl = () => {
         if ( tempUrl ) {
-            setAttributes({ imgUrl: tempUrl.trim(), imgAltText: tempAltTxt.trim() });
+            setAttributes({ imgUrl: tempUrl.trim(), imgAltText: normalizeAltText( tempAltTxt.trim() ) });
         }
     };
 
@@ -116,7 +116,7 @@ export default function Edit( {attributes, setAttributes, context} ) {
                         placeholder="Provides alternative text for screen readers and users with visual impairments. Leave it blank if image is for decoration."
                         value={imgAltText}
                         onChange={(value) => {
-                            setAttributes( { imgAltText: value } );
+                            setAttributes( { imgAltText: normalizeAltText( value ) } );
                             setHasError( false );
                         } }
                         __nextHasNoMarginBottom
@@ -161,7 +161,7 @@ export default function Edit( {attributes, setAttributes, context} ) {
                         <div>
                             { hasError ? (
                                 <div className="excelsior-image-error">
-                                    <div className="alert alert-warning my-0"><p className='my-0'><strong>Failed to load image.</strong> The image at <a href={imgUrl} target='_blank'>{imgUrl}</a> cannot be displayed. If it's from Canvas, sign in to Canvas first and refresh the editor. If the image still doesn't load, try signing out and back in to refresh the Canvas session. Canvas image URL should follow this format: <code>https://excelsior.instructure.com/courses/[<em>course_id</em>]/files/[<em>image_id</em>]/preview</code>.</p></div>
+                                    <div className="alert alert-warning my-0"><p className='my-0'><strong>Failed to load image.</strong> The image at <a href={imgUrl} target='_blank' rel='noopener noreferrer'>{imgUrl}</a> cannot be displayed. If it's from Canvas, sign in to Canvas first and refresh the editor. If the image still doesn't load, try signing out and back in to refresh the Canvas session. Canvas image URL should follow this format: <code>https://excelsior.instructure.com/courses/[<em>course_id</em>]/files/[<em>image_id</em>]/preview</code>.</p></div>
                                 </div>
                             ) : (
                                 <div className="excelsior-image-url-insert">

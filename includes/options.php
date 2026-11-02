@@ -166,7 +166,7 @@ function editor_hash_slug_option() {
     ?>
     <input id="boots_editor_hash_slug_option" type="checkbox" name="boots_editor_hash_slug_option" value="1" <?php checked( 1, $option, true ); ?> />
     <label for="boots_editor_hash_slug_option">Hash the last part of the URL (for Public only)</label>
-    <p class="description">Ensure only users with the exact URLs can access posts.</p>
+    <p class="description">Generates unguessable URLs for new pages and hides pages from search, sitemaps, feeds, and the REST API. Anyone with the link can view the page. Existing page URLs are not changed.</p>
     <?php
 }
 
@@ -174,7 +174,7 @@ function editor_is_searchable() {
     $option = get_option( 'boots_editor_is_searchable', false );
     ?>
     <input id="boots_editor_is_searchable" type="checkbox" name="boots_editor_is_searchable" value="1" <?php checked( 1, $option, true ); ?> />
-    <label for="boots_editor_is_searchable">Include Excelsior Bootstrap pages in the front end search results (for Public only)</label>
+    <label for="boots_editor_is_searchable">Include Excelsior Bootstrap pages in the front end search results (for Public only; ignored when Unlisted)</label>
     <?php
 }
 
@@ -237,10 +237,25 @@ function editor_allowed_styles_scripts() {
 
 /*** ON OPTIONS UPDATE */
 
-function editor_option_updated( $option, $old_value, $new_value ) {
-    if ( 'boots_editor_hash_slug_option' === $option && $old_value !== $new_value ) {
-        flush_rewrite_rules();
-    }
+/*
+  Flushing here would rebuild the old rules, since the post type was registered before
+  the option was saved. Flag it and flush on the next request after registration.
+  `add_option_*` covers the first save, when the option does not exist yet.
+*/
+function schedule_rewrite_flush() {
+    update_option( 'boots_editor_flush_rewrite', 1 );
 }
 
-add_action( 'updated_option', __NAMESPACE__.'\\editor_option_updated', 10, 3 );
+add_action( 'add_option_boots_editor_is_public', __NAMESPACE__.'\\schedule_rewrite_flush' );
+add_action( 'update_option_boots_editor_is_public', __NAMESPACE__.'\\schedule_rewrite_flush' );
+
+function maybe_flush_rewrite_rules() {
+    if ( ! get_option( 'boots_editor_flush_rewrite', false ) ) {
+        return;
+    }
+
+    delete_option( 'boots_editor_flush_rewrite' );
+    flush_rewrite_rules();
+}
+
+add_action( 'init', __NAMESPACE__.'\\maybe_flush_rewrite_rules', 20 );

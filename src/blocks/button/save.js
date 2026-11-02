@@ -13,6 +13,7 @@ export default function Save({ attributes }) {
             tagName="a"
             href={href}
             target="_blank"
+            rel="noopener noreferrer"
             value={text}
         />
     );

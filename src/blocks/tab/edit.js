@@ -2,7 +2,7 @@ import { useBlockProps, InnerBlocks, RichText } from '@wordpress/block-editor';
 import { useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../../constants';
-import { generateHtmlId, removeScriptTags, getBlocksOfType, preventLineBreaks } from '../../commons';
+import { generateHtmlId, sanitizeHTML, getBlocksOfType, preventLineBreaks } from '../../commons';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
 
 export default function Edit({ attributes, setAttributes, clientId, context }) {
@@ -49,7 +49,7 @@ export default function Edit({ attributes, setAttributes, clientId, context }) {
                 placeholder="Tab Title"
                 className='fw-bold text-body-secondary'
                 value={title}
-                onChange={(value) => setAttributes({ title: removeScriptTags(value) })}
+                onChange={(value) => setAttributes({ title: sanitizeHTML(value) })}
                 allowedFormats={[XCLSR_BTSTRP_EDITOR_PREFIX + '/inline-icon']}
                 multiline={false}
                 onKeyDown={preventLineBreaks}
