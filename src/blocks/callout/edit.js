@@ -5,10 +5,8 @@ import { ALLOWED_BLOCKS } from './allowed-blocks';
 import metadata from './block.json';
 
 const CALLOUT_HEADING_PREFIX = {
-    // supplemental: '<i class="bi bi-paperclip" role="presentation" aria-hidden="true">&nbsp;</i> Supplemental:',
-    guide: '<i class="bi bi-lamp-fill" role="presentation" aria-hidden="true">&nbsp;</i> Spotlight:',
-    skills: '<i class="bi bi-symmetry-vertical" role="presentation" aria-hidden="true">&nbsp;</i> Reflection:',
-    // quote: '<i class="bi bi-star-fill" role="presentation" aria-hidden="true">&nbsp;</i> Required Resources:'
+    spotlight: '<i class="bi bi-lamp-fill" role="presentation" aria-hidden="true">&nbsp;</i> Spotlight:',
+    reflection: '<i class="bi bi-symmetry-vertical" role="presentation" aria-hidden="true">&nbsp;</i> Reflection:',
 };
 
 const getCalloutHeadingContent = ( styleType, currentContent = '' ) => {
@@ -80,15 +78,13 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
     return (
         <>
         <InspectorControls>
-            <PanelBody title="Settings" className="deprecated">
+            <PanelBody title="Settings">
             <SelectControl
                 label="Styles"
                 value={styleType}
                 options={[
-                    // { label: 'Supplemental', value: 'supplemental' },
-                    { label: 'Spotlight (formerly, Guide)', value: 'guide' },
-                    { label: 'Quote (DEPRECATED)', value: 'quote' },
-                    { label: 'Reflection (formerly, Skills)', value: 'skills' },
+                    { label: 'Spotlight', value: 'spotlight' },
+                    { label: 'Reflection', value: 'reflection' },
                 ]}
                 onChange={updateStyleType}
                 __nextHasNoMarginBottom
