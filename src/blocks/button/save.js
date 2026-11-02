@@ -2,9 +2,9 @@ import { useBlockProps, RichText } from '@wordpress/block-editor';
 
 export default function Save({ attributes }) {
 
-    const { href, styleType, text, subsequent } = attributes;
+    const { href, text, subsequent } = attributes;
     const blockProps = useBlockProps.save( {
-        className: `btn ${styleType}${subsequent ? ' ms-2' : ''}`
+        className: `btn btn-resource${subsequent ? ' ms-2' : ''}`
     } );
 
     return (
@@ -12,7 +12,7 @@ export default function Save({ attributes }) {
             {...blockProps}
             tagName="a"
             href={href}
-            target={styleType === 'btn-resource' ? '_blank' : undefined}
+            target="_blank"
             value={text}
         />
     );

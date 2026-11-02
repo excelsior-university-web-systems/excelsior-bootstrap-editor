@@ -3,7 +3,7 @@ import { Fragment, useState, createElement } from '@wordpress/element';
 import { Modal, Button, __experimentalGrid as Grid } from '@wordpress/components';
 import { BlockControls } from '@wordpress/block-editor';
 import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
-import { ICONS, DEPRECATED_ICONS } from './icons';
+import { ICONS } from './icons';
 import { XCLSR_BTSTRP_EDITOR_PREFIX } from '../constants';
 import { useSelect } from '@wordpress/data';
 

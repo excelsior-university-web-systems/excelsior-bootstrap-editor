@@ -5,7 +5,7 @@ import { preventLineBreaks } from '../../commons';
 
 export default function Edit( { attributes, setAttributes, clientId } ) {
 
-    const { href, styleType, text, subsequent } = attributes;
+    const { href, text, subsequent } = attributes;
 
     // Get the parent container (excelsior-bootstrap-editor/buttons)
     const parents = wp.data.select( 'core/block-editor' ).getBlockParents( clientId );
@@ -27,7 +27,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
     }
 
     const blockProps = useBlockProps( {
-        className: `btn ${styleType}${subsequent ? ' ms-2' : ''}`
+        className: `btn btn-resource${subsequent ? ' ms-2' : ''}`
     } );
 
     return (

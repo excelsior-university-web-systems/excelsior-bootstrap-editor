@@ -43,6 +43,7 @@ This section describes how to install and activate the plugin.
 * Remove deprecated styles in `callout` block.
 * Remove deprecated `tipbox` block.
 * Remove deprecated icons.
+* Cleanup up the `button` block styles.
 
 = 1.3.2 (2026-10-14) =
 * Add "Group Resources with Introductions" to the required-resources block to support multiple resource groups, each with its own introduction.

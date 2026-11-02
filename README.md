@@ -37,6 +37,16 @@ This section describes how to install and activate the plugin.
 
 ## Changelog ##
 
+### 1.3.3 (2026-11-04) ###
+* Remove deprecated patterns.
+* Remove deprecated `columns` and its child `column` blocks.
+* Remove deprecated icons in `horizontal-rule` block.
+* Remove deprecated background colors option in `cards` block.
+* Remove deprecated styles in `callout` block.
+* Remove deprecated `tipbox` block.
+* Remove deprecated icons.
+* Cleanup up the `button` block styles.
+
 ### 1.3.2 (2026-10-14) ###
 * Add "Group Resources with Introductions" to the required-resources block to support multiple resource groups, each with its own introduction.
 
