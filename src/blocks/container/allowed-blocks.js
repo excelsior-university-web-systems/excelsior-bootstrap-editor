@@ -21,7 +21,6 @@ export const ALLOWED_BLOCKS = [
     XCLSR_BTSTRP_EDITOR_PREFIX + "/start-here-banner",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/tabs",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/task-group",
-    XCLSR_BTSTRP_EDITOR_PREFIX + "/tipbox",
     XCLSR_BTSTRP_EDITOR_PREFIX + "/page-navigation",
     "core/freeform",
     "core/heading",

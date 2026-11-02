@@ -29,7 +29,6 @@ import './required-resources';
 import './required-resources-group';
 import './required-resources-group-item';
 import './start-here-banner';
-import './tipbox';
 import './task-group';
 import './task';
 import './tabs';

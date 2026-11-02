@@ -41,6 +41,7 @@ This section describes how to install and activate the plugin.
 * Remove deprecated icons in `horizontal-rule` block.
 * Remove deprecated background colors option in `cards` block.
 * Remove deprecated styles in `callout` block.
+* Remove deprecated `tipbox` block.
 
 = 1.3.2 (2026-10-14) =
 * Add "Group Resources with Introductions" to the required-resources block to support multiple resource groups, each with its own introduction.
