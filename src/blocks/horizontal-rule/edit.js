@@ -25,28 +25,6 @@ const ICONS = [
     { name: 'bi-person-exclamation', label: 'Instructor Notes' },
 ];
 
-const DEPRECATED_ICONS = [
-    { name: 'bi-box', label: 'Immersive Page' },
-    { name: 'bi-bookmark-check-fill', label: 'Module Reflection Page' },
-    { name: 'bi-bookmark-star-fill', label: 'Getting Started Page' },
-    { name: 'bi-building-fill', label: 'Insight Industry' },
-    { name: 'bi-clipboard-check-fill', label: 'Quiz or Knowledge Check Page' },
-    { name: 'bi-chat-square-dots-fill', label: 'Discussion Page' },
-    { name: 'bi-compass', label: 'Orientation Page' },
-    { name: 'bi-easel', label: 'Verbal Competency Session Page' },
-    { name: 'bi-house-door-fill', label: 'Homepage' },
-    { name: 'bi-gear-fill', label: 'Technical Guide' },
-    { name: 'bi-globe', label: 'Real-World Examples' },
-    { name: 'bi-journal-text', label: 'Instructor Notes Page' },
-    { name: 'bi-lightbulb', label: 'Reflect' },
-    { name: 'bi-list-check', label: 'Session Sign Up Page' },
-    { name: 'bi-pencil-fill', label: 'Assignment Page' },
-    { name: 'bi-people-fill', label: 'Live Session Page' },
-    { name: 'bi-puzzle-fill', label: 'SkillSource Page'},
-    { name: 'bi-search', label: 'Lesson or Module Page' },
-    { name: 'bi-x-diamond-fill', label: 'Module Overview Page' },
-];
-
 export default function Edit ({ attributes, setAttributes }) {
     
     const { selectedIcon, size, decorative, noIcon, styleType } = attributes;
@@ -103,31 +81,6 @@ export default function Edit ({ attributes, setAttributes }) {
                     <BaseControl label="Page Type Icons" __nextHasNoMarginBottom>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
                         {ICONS.map((icon) => (
-                            <Tooltip text={icon.label} delay={500} placement='top'>
-                                <Button
-                                    key={icon.name}
-                                    isPressed={selectedIcon === icon.name}
-                                    onClick={() => handleIconSelect(icon.name)}
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        padding: '20px',
-                                        fontSize: '1.25rem',
-                                    }}
-                                    __nextHasNoMarginBottom
-                                    __next40pxDefaultSize
-                                >
-                                    {createElement('i', { className: `bi ${icon.name}` })}
-                                </Button>
-                            </Tooltip>
-                        ))}
-                    </div>
-                    </BaseControl>
-                    <BaseControl label="Deprecated Icons" className="deprecated" __nextHasNoMarginBottom>
-                    <p className='do-not-use-msg'><strong>DO NOT USE; WILL BE REMOVED IN THE NEAR FUTURE</strong></p>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
-                        {DEPRECATED_ICONS.map((icon) => (
                             <Tooltip text={icon.label} delay={500} placement='top'>
                                 <Button
                                     key={icon.name}
