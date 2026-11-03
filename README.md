@@ -4,7 +4,7 @@
 **Requires at least:** 7.0  
 **Requires PHP:** 8.0  
 **Tested up to:** 7.1  
-**Stable tag:** 1.3.3  
+**Stable tag:** 1.3.4  
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -37,7 +37,10 @@ This section describes how to install and activate the plugin.
 
 ## Changelog ##
 
-### 1.3.3 (2026-11-04) ###
+### 1.3.3.1 (2026-11-04) ###
+*Remove deprecated collapsible style variants
+
+### 1.3.3 (2026-11-02) ###
 * Remove deprecated patterns.
 * Remove deprecated `columns` and its child `column` blocks.
 * Remove deprecated icons in `horizontal-rule` block.
