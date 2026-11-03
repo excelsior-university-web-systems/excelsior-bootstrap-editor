@@ -1,5 +1,4 @@
-import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl } from '@wordpress/components';
+import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 import { useEffect, useRef } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { ALLOWED_BLOCKS } from './allowed-blocks';
@@ -14,7 +13,7 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
         ['excelsior-bootstrap-editor/collapsible-content', { lock: { remove: true, move: false } }]
     ];
     
-    const { uniqueId, styleType } = attributes;
+    const { uniqueId } = attributes;
     const previewImage = metadata?.example?.attributes?.cover || '';
     const isPreview = useSelect(
         ( select ) => !!select( 'core/block-editor' ).getSettings()?.isPreviewMode,
@@ -22,7 +21,7 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
     );
 
     const blockProps = useBlockProps( {
-        className: `excelsior-collapsible mb-3 ${styleType}`,
+        className: `excelsior-collapsible mb-3`,
     } );
 
     const sameTypeBlocks = useSelect((select) => {
@@ -197,27 +196,6 @@ export default function Edit ({ attributes, setAttributes, clientId }) {
 
     return (
         <>
-        <InspectorControls>
-            <PanelBody title="Settings" className="deprecated">
-            <SelectControl
-                label="Styles (DEPRECATED)"
-                help="DO NOT USE. WILL BE REMOVED IN THE NEAR FUTURE."
-                value={styleType}
-                options={[
-                    { label: 'Default', value: '' },
-                    { label: 'Purple (DEPRECATED)', value: 'purple' },
-                    { label: 'Blue (DEPRECATED)', value: 'blue' },
-                    { label: 'Green (DEPRECATED)', value: 'green' },
-                    { label: 'Red (DEPRECATED)', value: 'red' },
-                ]}
-                className="do-not-use-msg"
-                onChange={(value) => setAttributes({ styleType: value })}
-                __nextHasNoMarginBottom
-                __next40pxDefaultSize
-            />
-            </PanelBody>
-        </InspectorControls>
-
         <div {...blockProps}>
             <div className='content'>
                 <InnerBlocks
