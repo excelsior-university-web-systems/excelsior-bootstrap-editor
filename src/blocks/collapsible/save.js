@@ -1,9 +1,8 @@
 import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 
-export default function Save({ attributes }) {
-    const { styleType } = attributes;
+export default function Save() {
     const blockProps = useBlockProps.save( {
-        className: `excelsior-collapsible mb-3 ${styleType}`
+        className: `excelsior-collapsible mb-3`
     } );
 
     return (

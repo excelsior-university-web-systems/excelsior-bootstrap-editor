@@ -19,10 +19,6 @@
     "attributes": {
         "uniqueId": {
             "type": "string"
-        },
-        "styleType": {
-            "type": "string",
-            "default": ""
         }
     }
 }
